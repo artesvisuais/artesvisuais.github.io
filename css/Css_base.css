@@ -30,10 +30,10 @@ hyphens: auto;}
                         p.formata { padding:0 5% 0 5% ;color:#12263a; font-size:x-small;font-
 family:Freight_Neo_Pro, Monospace, courier new ;}
 
-                               p.combinado:first-letter { 
-				        padding:0 5% 0 5% ;
-	                                   color: #239981; 
-				       			
+                               p.combinado:first-letter {
+				              font-size: 100%;
+				               color: #239985; 
+				       		     float: left;	
 	                                               font-size:xx-large; 
 				                       font-weight: bold;
                                                         }
