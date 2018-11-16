@@ -31,8 +31,8 @@ hyphens: auto;}
 family:Freight_Neo_Pro, Monospace, courier new ;}
 
                                p.combinado:first-letter {
-				              font-size: 300%;
-				       float: right;
+				              font-size: 500%;
+				       float: left;
 				               color: #239985; 
 	                                               font-weight: bold;
                                                         }
