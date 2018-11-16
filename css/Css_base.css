@@ -33,6 +33,7 @@ family:Freight_Neo_Pro, Monospace, courier new ;}
                                p.combinado:first-letter { 
 	                                   color: #239985; 
 	                                               font-size:xx-large; 
+				                       font-weight: bold;
                                                         }
 
 
