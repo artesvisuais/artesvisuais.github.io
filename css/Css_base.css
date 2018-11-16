@@ -1,28 +1,27 @@
 @font-face {
-     font-family: Freight Neo Pro;
+     font-family: Freight_Neo_Pro;
        src: url('https://artesvisuais.github.io/fonts/Freight_Neo_Pro_Book.otf');
 }
 html, body {
- text-align: justify;font-family:Freight Neo Pro, 
+ text-align: justify;font-family:Freight_Neo_Pro, 
 Arial,Helvetica,sans-serif;font-size: 1.1em;overflow-wrap: break-word; word-wrap: break-word; -
 webkit-hyphens: auto; -ms-hyphens: auto; -moz-hyphens: auto; hyphens: auto;
   background: #413cae; }
 
              img {text-align:center;width:100%;}
-               h1 {color:#239985;font-weight: 500;font-family:Freight Neo Pro,Arial,Helvetica,sans-serif;font-style: italic;}
-                h2 {color:#239985;font-family:Freight Neo Pro,Arial,Helvetica,sans-serif; } 
-                 h3 {color:#239985;font-family:Freight Neo Pro,Arial,Helvetica,sans-serif;}
+               h1 {color:#239985;font-weight: 500;font-family:Freight_Neo_Pro,Arial,Helvetica,sans-serif;font-style: italic;}
+                h2 {color:#239985;font-family:Freight_Neo_Pro,Arial,Helvetica,sans-serif; } 
+                 h3 {color:#239985;font-family:Freight_Neo_Pro,Arial,Helvetica,sans-serif;}
                ul { text-align:left; color:#0b1182;}
-                p { margin: 5px 0 15px;text-align: justify;  text-indent: 2em; font-family:Freight Neo Pro,Arial,Helvetica,sans-serif; overflow-wrap: break-word; word-wrap: break-word; webkit-hyphens: auto; -ms-hyphens: auto; -moz-hyphens: auto; hyphens: auto;}
+                p { margin: 5px 0 15px;text-align: justify;  text-indent: 2em; font-family:Freight_Neo_Pro,Arial,Helvetica,sans-serif; overflow-wrap: break-word; word-wrap: break-word; webkit-hyphens: auto; -ms-hyphens: auto; -moz-hyphens: auto; hyphens: auto;}
                    p.base{ margin: 5px 0 15px;  text-align: justify;
-                            text-indent: 2em;font-family:Freight Neo Pro, Arial,Helvetica,sans-serif;font-size: 0.75em;overflow-wrap: break-word; word-wrap: break-word; -webkit-hyphens: auto; -ms-hyphens: 
+                            text-indent: 2em;font-family:Freight_Neo_Pro, Arial,Helvetica,sans-serif;font-size: 0.75em;overflow-wrap: break-word; word-wrap: break-word; -webkit-hyphens: auto; -ms-hyphens: 
 auto; -moz-hyphens: auto; hyphens: auto;}
-                      p.red { padding:0 8% 0 8% ;color:#b20000; font-size:small;font-family:Freight Neo Pro; 
-Monospace,Verdana,Arial,Helvetica,sans-serif; font-style: italic; overflow-wrap: break-word; word-wrap: break-word; -
+                      p.red { padding:0 8% 0 8% ;color:#b20000; font-size:small;font-family: Freight_Neo_Pro; Monospace,Verdana,Arial,Helvetica,sans-serif; font-style: italic; overflow-wrap: break-word; word-wrap: break-word; -
 webkit-hyphens: auto; -ms-hyphens: auto; -moz-hyphens: auto; hyphens: auto;}
 
                        p.ref { padding:0 5% 0 5% ;color:#135908; font-size:small;font-
-family: Freight Neo Pro, arial, helvetica, sans-serif ;font-family: Arial,Helvetica,sans-serif;overflow-wrap: break-
+family: Freight_Neo_Pro, arial, helvetica, sans-serif ;font-family: Arial,Helvetica,sans-serif;overflow-wrap: break-
 word; word-wrap: break-word; -webkit-hyphens: auto; -ms-hyphens: auto; -moz-hyphens: auto; 
 hyphens: auto;}
                                   
@@ -31,11 +30,11 @@ hyphens: auto;}
                                    p.pag { color:#ffffff; padding:0 8% 0 8%;}
 
                         p.formata { padding:0 5% 0 5% ;color:#12263a; font-size:x-small;font-
-family:Freight Neo Pro, Monospace, courier new ;}
+family:Freight_Neo_Pro, Monospace, courier new ;}
 
                          span.drop{ 
                                 float: left;
-                                font-family:Freight Neo Pro, Monospace, courier new ;
+                                font-family:Freight_Neo_Pro, Monospace, courier new ;
                                  font-style:italic;
                                    font-size: 550%;
                                        font-weight: bold; 
