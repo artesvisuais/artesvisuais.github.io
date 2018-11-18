@@ -6,18 +6,16 @@ html, body {
  text-align: justify;font-family:Freight_Neo_Pro, 
 Arial,Helvetica,sans-serif;font-size: 1.1em;overflow-wrap: break-word; word-wrap: break-word; -
 webkit-hyphens: auto; -ms-hyphens: auto; -moz-hyphens: auto; hyphens: auto;
-  background: #413cae; }
+background-image: radial-gradient(farthest-corner at 45px 45px , #6C333D 0%, #37566C 100%); /* background: #413cae;*/ }
 
              img {text-align:center;width:100%;}
                h1 {color:#239985;font-weight: 500;font-family:Freight_Neo_Pro,Arial,Helvetica,sans-serif;font-style: italic;}
                 h2 {color:#239985;font-family:Freight_Neo_Pro,Arial,Helvetica,sans-serif; } 
-                 h3 {color:#239985;font-family:Freight_Neo_Pro,Arial,Helvetica,sans-serif;}
+                 h3 {margin: 5px 0 15px ; color:#239985;font-family:Freight_Neo_Pro,Arial,Helvetica,sans-serif;}
                ul { text-align:left; color:#0b1182;}
-                p { margin: 5px 0 15px;text-align: justify;  text-indent: 2em; font-family:Freight_Neo_Pro,Arial,Helvetica,sans-serif; overflow-wrap: break-word; word-wrap: break-word; webkit-hyphens: auto; -ms-hyphens: auto; -moz-hyphens: auto; hyphens: auto;}
-                   p.base{ margin: 5px 0 15px;  text-align: justify;
-                            text-indent: 2em;font-family:Freight_Neo_Pro, Arial,Helvetica,sans-serif;font-size: 0.75em;overflow-wrap: break-word; word-wrap: break-word; -webkit-hyphens: auto; -ms-hyphens: 
-auto; -moz-hyphens: auto; hyphens: auto;}
-                      p.red { padding:0 8% 0 8% ;color:#b20000; font-size:small;font-family: Freight_Neo_Pro; Monospace,Verdana,Arial,Helvetica,sans-serif; font-style: italic; overflow-wrap: break-word; word-wrap: break-word; -
+                p { /*margin: 5px 0 15px ;*/text-align: justify;  margin-top: 1px; margin-bottom: 1px;  /*text-indent: 2em;*/ font-family:Freight_Neo_Pro,Arial,Helvetica,sans-serif; overflow-wrap: break-word; word-wrap: break-word; webkit-hyphens: auto; -ms-hyphens: auto; -moz-hyphens: auto; hyphens: auto;}
+                   p.base{ /*margin: 5px 0 15px;*/text-align: justify;  text-indent: 2em; font-family:Freight_Neo_Pro,Arial,Helvetica,sans-serif; overflow-wrap: break-word; word-wrap: break-word; webkit-hyphens: auto; -ms-hyphens: auto; -moz-hyphens: auto; hyphens: auto;}
+                      p.red { margin: 5px 0 15px ; padding:0 8% 0 8% ;color:#b20000; font-size:small;font-family: Freight_Neo_Pro; Monospace,Verdana,Arial,Helvetica,sans-serif; font-style: italic; overflow-wrap: break-word; word-wrap: break-word; -
 webkit-hyphens: auto; -ms-hyphens: auto; -moz-hyphens: auto; hyphens: auto;}
 
                        p.ref { padding:0 5% 0 5% ;color:#0645B1; font-size:small;font-family: Freight_Neo_Pro, arial, helvetica, sans-serif ; overflow-wrap: break-word; word-wrap: break-word; -webkit-hyphens: auto; -ms-hyphens: auto; -moz-hyphens: auto; 
@@ -25,7 +23,7 @@ hyphens: auto;}
                                   
       
                                p.gravu { padding:0 8% 0 8% ;color:#304561;background-color:#c2c8c3; font-size:small; text-transform: uppercase;font-family: Monospace,Verdana,Arial,Helvetica,sans-serif;overflow-wrap: break-word; word-wrap: break-word; -webkit-hyphens: auto; -ms-hyphens: auto; -moz-hyphens: auto; hyphens: auto;}
-                                   p.pag { color:#ffffff; padding:0 8% 0 8%;}
+                                   p.pag { text-align: right; color:#fff; padding:0 15% 0 8%;}
 
                         p.formata { padding:0 5% 0 5% ;color:#12263a; font-size:x-small;font-
 family:Freight_Neo_Pro, Monospace, courier new ;}
@@ -59,7 +57,7 @@ auto; -ms-hyphens: auto; -moz-hyphens: auto; hyphens: auto;}
                      #inteira { text-align:justify;background-color:#ffffff;width:91%;padding:2% 
 4% 2% 4%; overflow:hidden;overflow-wrap: break-word; word-wrap: break-word; -webkit-hyphens: 
 auto; -ms-hyphens: auto; -moz-hyphens: auto; hyphens: auto;}
-	          #caixa{text-align:justify;background-color:#c2c8c3;width:91%;padding:2% 4% 2% 
+	          #caixa{text-align:justify;background-color:#D6C89A/*#c2c8c3*/;width:91%;padding:2% 4% 2% 
 4%; overflow:hidden;overflow-wrap: break-word; word-wrap: break-word; -webkit-hyphens: auto; -ms-
 hyphens: auto; -moz-hyphens: auto; hyphens: auto;}
 
