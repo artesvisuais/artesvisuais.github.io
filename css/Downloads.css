@@ -1,0 +1,59 @@
+
+html, body {
+  background: #413cae; }
+
+             img {text-align:center;width:100%;}
+               h1 {font-family:Arial,Helvetica,sans-serif;}
+                h2 {color:#239985;font-family:Arial,Helvetica,sans-serif; } 
+                 h3 {color:#239985;font-family:Arial,Helvetica,sans-serif;}
+               
+                   p{ margin: 5px 0 15px;  text-align: justify;text-indent: 2em;font-family: Arial,Helvetica,sans-serif;font-size:0.95em;overflow-wrap: break-word; word-wrap: break-word; -webkit-hyphens: auto; -ms-hyphens: 
+auto; -moz-hyphens: auto; hyphens: auto;}
+                        p.base { margin: 5px 0 15px;  text-align: justify;font-family: 
+Arial,Helvetica,sans-serif;font-size: 0.75em;overflow-wrap: break-word; word-wrap: break-word; -
+webkit-hyphens: auto; -ms-hyphens: auto; -moz-hyphens: auto; hyphens: auto;}
+
+            
+
+                      p.red { padding:0 8% 0 8% ;color:#304561; font-size:small;font-family: 
+Monospace,Verdana,Arial,Helvetica,sans-serif;overflow-wrap: break-word; word-wrap: break-word; -
+webkit-hyphens: auto; -ms-hyphens: auto; -moz-hyphens: auto; hyphens: auto;}
+
+                       p.ref { padding:0 5% 0 5% ;color:#6C1010; font-size:small;font-
+family:arial, helvetica, sans-serif ;font-family: Arial,Helvetica,sans-serif;overflow-wrap: break-
+word; word-wrap: break-word; -webkit-hyphens: auto; -ms-hyphens: auto; -moz-hyphens: auto; 
+hyphens: auto;}
+                        p.formata { padding:0 5% 0 5% ;color:#12263a; font-size:x-small;font-
+family: Monospace, courier new ;}
+                #filete {border:0.1em solid;padding: 2% 2% 2% 2%;}
+                
+                #folha {text-align:left;background-color:#f9f9f9;width: 75%;margin: 0 
+auto;border:1px solid blue;overflow:hidden; padding: 2% 2% 2% 2%;}
+
+                   #meia { text-align:justify;width:41%;padding:5% 4% 5% 
+4%; overflow:hidden;float:left;overflow-wrap: break-word; word-wrap: break-word; -webkit-hyphens: 
+auto; -ms-hyphens: auto; -moz-hyphens: auto; hyphens: auto;}
+                     #inteira { text-align:justify;background-color:#ffffff;width:91%;padding:2% 
+4% 2% 4%; overflow:hidden;overflow-wrap: break-word; word-wrap: break-word; -webkit-hyphens: 
+auto; -ms-hyphens: auto; -moz-hyphens: auto; hyphens: auto;}
+	          #caixa{text-align:justify;background-color:#c2c8c3;width:91%;padding:2% 4% 2% 
+4%; overflow:hidden;overflow-wrap: break-word; word-wrap: break-word; -webkit-hyphens: auto; -ms-
+hyphens: auto; -moz-hyphens: auto; hyphens: auto;}
+
+
+/* max-width  */
+@media screen and (max-width: 600px) {
+
+#folha {text-align:left;background-color:#f9f9f9;width: 95%;margin: 0 
+auto;border:1px solid blue;overflow:hidden; padding: 2% 2% 2% 2%;}
+
+a{ margin: 5px 0 15px;  text-align: justify;text-indent: 1em;font-family: Arial,Helvetica,sans-serif;font-size: 1.5em;overflow-wrap: break-word; word-wrap: break-word; -webkit-hyphens: auto; -ms-hyphens: 
+auto; -moz-hyphens: auto; hyphens: auto;}
+
+p{ margin: 5px 0 15px;  text-align: justify;text-indent: 2em;font-family: Arial,Helvetica,sans-serif;font-size:2em;overflow-wrap: break-word; word-wrap: break-word; -webkit-hyphens: auto; -ms-hyphens: 
+auto; -moz-hyphens: auto; hyphens: auto;}
+
+}
+
+
+
