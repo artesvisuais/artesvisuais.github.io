@@ -4,7 +4,7 @@ var username=document.login.username.value;
 username=username.toLowerCase();
 var password=document.login.password.value;
 password=password.toLowerCase();
-if (username=="jessie" && password=="republica") { window.location="https://artesvisuais.github.io/JdRep/3serie/3anoDownloads.html"; done=1; }
+if (username=="jessie" && password=="republica") { window.location="https://artesvisuais.github.io/JdRep/1serie/1anoDownloads.html"; done=1; }
 if (username=="Bob" && password=="republica") { window.location="https://artesvisuais.github.io/JdRep/2serie/2anoDownloads.html"; done=1; }
 if (username=="Buzz" && password=="republica") { window.location="https://artesvisuais.github.io/JdRep/3serie/3anoDownloads.html"; done=1; }
 if (username=="Rex" && password=="republica") { window.location="https://artesvisuais.github.io/JdRep/3serie/3anoDownloads.html"; done=1; }
