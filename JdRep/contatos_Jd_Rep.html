@@ -1,0 +1,194 @@
+ <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html lang="pt-br">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Contato</title>
+     <link href="../style/font_icons.css" rel="stylesheet">
+     <link type="text/css" rel="stylesheet" href="../style/menu.css"/>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+ 
+<style type="text/css">
+html, body {
+  background: #ffffff; }
+             img {text-align:center;width:100%;}
+               h1 {color:#ffffff;font-family:Arial,Helvetica,sans-serif;}
+                h2 {color:#239985;font-family:Arial,Helvetica,sans-serif; } 
+                 h3 {color:#239985;font-family:Arial,Helvetica,sans-serif;}
+               
+                   
+                        
+                       
+                #filete {border:0.1em solid;padding: 2% 2% 2% 2%;}
+                
+                .imagemDeFundo{
+    border: 1px solid black;
+    background: url('https://raw.githubusercontent.com/artedom/artedom.github.io/master/img/bot.png') no-repeat; 
+   background-position: center; background-size: 100% 100%;}
+   
+     .letras {
+                font-size: 5vw; color:#000000;
+          }
+            
+            .blanco {
+                background: #ffffff;
+            }
+
+                   .bt {
+border:1px solid #25692A;
+border-radius:4px;
+display:inline-block;
+cursor:pointer;
+font-family:Verdana;
+font-weight:bold;
+font-size:13px;
+padding:6px 10px;
+text-decoration:none;
+}
+ 
+ .bt-az {
+border-color:#46a7f5;
+background:linear-gradient(to bottom, #86c6f8 5%, #46a7f5 100%);
+box-shadow:inset 0px 1px 0px 0px #d7ecfd;
+color:#fff;
+text-shadow:0px 1px 0px #528009;  
+}
+  
+   .bt-az:hover {
+background:linear-gradient(to bottom, #46a7f5 5%, #86c6f8 100%);
+}
+        
+                   
+                   #meia { text-align:justify;width:41%;padding:5% 4% 5% 
+4%; overflow:hidden;float:left;overflow-wrap: break-word; word-wrap: break-word; -webkit-hyphens: 
+auto; -ms-hyphens: auto; -moz-hyphens: auto; hyphens: auto;}
+                     #inteira { text-align:justify;background-color:#ffffff;width:91%;padding:2% 
+4% 2% 4%; overflow:hidden;overflow-wrap: break-word; word-wrap: break-word; -webkit-hyphens: 
+auto; -ms-hyphens: auto; -moz-hyphens: auto; hyphens: auto;}
+
+
+        @media (max-width: 768px) {
+      
+        .letras { font-size: 1.5vw;}
+        #folha {text-align:left;background-color:#d9dce0;width: 95%;margin: 0 auto;;overflow:hidden;padding: 2% 2% 2% 2%;  }
+      }
+
+      @media (min-width: 768px) {
+      
+        .letras { font-size: 1.3vw; color: #616160;}
+        #folha {text-align:left;background-color:#d9dce0;width: 75%;margin: 0 auto;border:1px solid #efbe5d ;overflow:hidden;padding: 2% 2% 2% 2%;  }
+      }
+	          
+
+</style>
+<script type="text/javascript">
+</script>
+</head>
+<body>
+ <label class="letras"><b>     Entre em contato direto com o professor:</b></label> <br>
+  <label class="letras"><b>    Essa mensagem será enviada por SMS, para ser respondida rapidamente, preencha corretamente abaixo:</b></label>  
+       
+    <script src="../js/jquery-2.1.1.min.js"></script>
+    <script src="../js/materialize.js"></script>
+    <script>
+    $(function(){
+        $(".button-collapse").sideNav();
+    });
+    </script>
+
+
+<DIV id="folha">
+<br>
+<form id="redir">
+ 
+ <label class="letras"><b>Informe seu nome completo:</b></label> <br><br>
+   <div id="filete">  <textarea class="blanco" name="T1"   /> </textarea>  </div><br>
+   <label class="letras"><b>Informe seu RA:</b></label> 
+   <div id="filete">  <textarea class="blanco" name="RA"   /> </textarea>  </div><br>
+   <label class="letras"><b>Informe sua série e turma (EX: 3ºF):</b></label> 
+   <div id="filete">  <textarea class="blanco" name="TU"   /> </textarea>  </div>
+ <br><br>
+  <label class="letras"><b>Informe seu email institucional (o mesmo que usa para o Centro de midias), ou outra forma para resposta:</b></label> <br><br>
+    <div id="filete">  <textarea class="blanco"  name="T2" /> </textarea> </div>
+ 
+ <br><br>
+<label class="letras"><b>Digite sua mensagem:</b></label> <br><br>
+<div id="filete"> <textarea class="blanco" name="code"   rows="10" cols="50" > </textarea> </div>
+  
+  <br><br> 
+  <div id="meia">   </div> <div id="meia"><button class="bt bt-az">   Enviar mensagem  </button></div>
+</form>
+
+<script>
+(function(){
+  'use strict';
+	// constante com o valor imutÃ¡vel, no caso, a url que vocÃª deseja usar
+  const url = "https://api.telegram.org/bot647898423:AAGJPakEKeG3iob5JUsVcHvXzd0OUOvJEus/sendMessage?chat_id=-1001290396284&text=";
+  
+        //Obtem o valor do elemento textfield e armazena na variÃ¡vel 
+  var nome = "nome: " ;
+  var RA = " -<br> RA: ";
+  var TU = " -<br> turma: ";
+  var email = " -<br> contato: " ;
+  var texto = " -<br> MENSAGEM:--> " ;
+        // variÃ¡vel que irÃ¡ armazenar o cÃ³digo que o usuÃ¡rio vai digitar
+  var codigo;
+  var aluno;
+  var turma;
+  var quem;
+  var msgm;
+            // cria o evento que dispara a funÃ§Ã£o
+  document.getElementById('redir').onsubmit = function(e) {
+  
+  	// previne a aÃ§Ã£o padrÃ£o do submit, que nesse caso Ã© recarregar a pÃ¡gina para enviar os dados
+    e.preventDefault();
+    
+         // pega o valor que o usuÃ¡rio digitou no input
+        // this = elemento que disparou o evento
+        // code = atributo 'name' do input
+        // value = adivinha?
+    codigo = this.code.value;
+    aluno = this.RA.value;
+    turma = this.TU.value;
+    quem = this.T1.value;
+    msgm = this.T2.value;
+    
+          // nÃ£o executar a aÃ§Ã£o caso o campo cÃ³digo esteja vazio
+    if (quem.trim() === '') {
+      alert('Por favor, insira seu nome por gentileza.');
+      return false;
+    }
+    
+     if (aluno.trim() === '') {
+      alert('Por favor, insira seu RA por gentileza.');
+      return false;
+    }
+    
+   if (msgm.trim() === '') {
+      alert('Por favor, insira seu email ou similar para contato.');
+      return false;
+    }
+    
+    if (codigo.trim() === '') {
+      alert('Por favor, insira uma mensagem antes de enviar.');
+      return false;
+    }
+    
+	// se o return false nÃ£o interromper a execuÃ§Ã£o do script, entÃ£o tudo foi um sucesso
+      window.open(url + nome + quem + RA + aluno + TU + turma + email + msgm + texto + codigo);
+    alert('Mensagem enviada com sucesso!');
+    
+    
+  }
+})();
+</script>
+
+
+
+
+	
+<br> <br><br>
+	
+	
+
+</div></body> 
+</html>
