@@ -74,9 +74,14 @@
         }
     }
      
-a:link { 
- text-decoration:none; 
-} 
+a:link, a:visited, a:active {
+	text-decoration: none;
+	}
+a:hover {text-decoration: underline;  
+	color:#000; 
+	font-size:150%; 
+	}
+
 
 /* Header */
 .capa {
