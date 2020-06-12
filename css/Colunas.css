@@ -75,7 +75,7 @@
     }
     
  
-                   p { margin: 5px 0 15px;  text-align: justify; text-indent: 2em;font-family: Monospace,Verdana,Arial,Helvetica,sans-serif;font-size: 1em;}
+                   p { margin: 5px 10px 15px;  text-align: justify; text-indent: 2em;font-family: Monospace,Verdana,Arial,Helvetica,sans-serif;font-size: 1em;}
      
 a.contato:link, a.contato:visited {
   background-color: #fff ;
@@ -122,3 +122,5 @@ a.ex1:hover, a.ex1:active {
 .big {
     height: 50px;
 }
+
+hr { color: #fff;}
