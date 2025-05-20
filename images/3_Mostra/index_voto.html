@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votação de Obras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 20px;
+            text-align: center;
+        }
+        .container-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .link-votacao {
+            padding: 15px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: background-color 0.3s;
+        }
+        .link-votacao:hover {
+            background-color: #1976D2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Selecione o Ano para Votar 🎨</h1>
+    <div class="container-links">
+        <a href="votacao.html?ano=1" class="link-votacao">Votar nas obras do 1º ano</a>
+        <a href="votacao.html?ano=2" class="link-votacao">Votar nas obras do 2º ano</a>
+        <a href="votacao.html?ano=3" class="link-votacao">Votar nas obras do 3º ano</a>
+        <a href="votacao.html?ano=4" class="link-votacao">Votar nas obras do 4º ano</a>
+        <a href="votacao.html?ano=5" class="link-votacao">Votar nas obras do 5º ano</a>
+    </div>
+</body>
+</html>
