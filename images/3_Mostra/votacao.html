@@ -1,208 +1,259 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Votação de Obras - Ano {{ano}}</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 20px;
-            text-align: center;
-        }
-        .obra {
-            background: white;
-            margin: 20px auto;
-            padding: 10px;
-            border: 1px solid #ccc;
-            width: 300px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .obra img {
-            width: 100%;
-            height: auto;
-            object-fit: contain;
-            aspect-ratio: 16/9;
-            max-height: 40vh;
-            margin: 0 auto;
-        }
-        @media (max-width: 768px) {
-            .obra img {
-                max-height: 50vh;
-            }
-        }
-        .lazy-load {
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .lazy-load.loaded {
-            opacity: 1;
-        }
-        .botao-votar {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin-top: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        .botao-votar:hover {
-            background-color: #218838;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Votação de Obras - Ano {{ano}}</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 20px;
+      text-align: center;
+    }
 
-        .legenda {
-            margin: 10px 0;
-            font-weight: bold;
-            color: #333;
-        }
+    .obra {
+      background: white;
+      margin: 20px auto;
+      padding: 10px;
+      border: 1px solid #ccc;
+      width: 300px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
 
-        .voltar-link {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #6c757d;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
+    .obra img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      aspect-ratio: 16/9;
+      max-height: 40vh;
+      margin: 0 auto;
+    }
 
-        .voltar-link:hover {
-            background-color: #545b62;
-        }
-    </style>
+    @media (max-width: 768px) {
+      .obra img {
+        max-height: 50vh;
+      }
+    }
+
+    .botao-votar {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .botao-votar:hover {
+      background-color: #218838;
+    }
+
+    .legenda {
+      margin: 10px 0;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .voltar-link {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #6c757d;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      margin: 20px 0;
+    }
+
+    .voltar-link:hover {
+      background-color: #545b62;
+    }
+
+    /* Modal */
+    #modal-autorizacao {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #modal-autorizacao .conteudo {
+      background-color: white;
+      padding: 20px;
+      max-width: 90%;
+      width: 400px;
+      border-radius: 10px;
+      text-align: center;
+      animation: aparecer 0.3s ease-out;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    #modal-autorizacao button {
+      margin: 10px 5px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #botao-sim {
+      background-color: #28a745;
+      color: white;
+    }
+
+    #botao-nao {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    @keyframes aparecer {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+  </style>
 </head>
 <body>
-    <h1>Vote em uma das obras 🎨</h1>
-    <div id="galeria"></div>
-    <a href="index_voto.html" class="voltar-link">Voltar</a>
-    <script>
-        // Substitua pelo seu próprio token e ID de grupo
-        const url = "https://api.telegram.org/bot647898423:AAGJPakEKeG3iob5JUsVcHvXzd0OUOvJEus/sendMessage?chat_id=-1001290396284&text=";
+  <h1>Vote em uma das obras 🎨</h1>
+  <div id="galeria"></div>
+  <a href="index_voto.html" class="voltar-link">Voltar</a>
 
-        // Obtém o ano da URL
-        const ano = parseInt(new URLSearchParams(window.location.search).get('ano')) || 1;
+  <!-- Modal de autorização -->
+  <div id="modal-autorizacao">
+    <div class="conteudo">
+      <h2>Autorização de envio</h2>
+      <p>Seu voto será enviado via Telegram para nossa equipe de registro.</p>
+      <p>Isso ajuda a manter a contagem segura e transparente.</p>
+      <p><strong>Você autoriza o envio?</strong></p>
+      <button id="botao-sim">Sim, enviar</button>
+      <button id="botao-nao">Não, cancelar</button>
+    </div>
+  </div>
 
-        // Substitui o título dinamicamente
-        document.title = `Votação de Obras - ${ano}º ano`;
+  !-- ... (mantém o início do HTML como no seu original) ... -->
+<script>
+    const url = "https://api.telegram.org/bot647898423:AAGJPakEKeG3iob5JUsVcHvXzd0OUOvJEus/sendMessage?chat_id=-1001290396284&text=";
 
-        // Array de imagens organizado por ano
-        const urlsImagens = {
-            1: [
-                'https://raw.githubusercontent.com/artesvisuais/artesvisuais.github.io/289936ac1884c3e85c964973df377e0db2262672/images/3_Mostra/11.jpg',
-                'https://raw.githubusercontent.com/artesvisuais/artesvisuais.github.io/refs/heads/master/images/3_Mostra/12.jpg',
+    const ano = parseInt(new URLSearchParams(window.location.search).get('ano')) || 1;
+    document.title = `Votação de Obras - ${ano}º ano`;
 
-                'https://raw.githubusercontent.com/artesvisuais/artesvisuais.github.io/refs/heads/master/images/3_Mostra/13.jpg',
-                'https://raw.githubusercontent.com/artesvisuais/artesvisuais.github.io/refs/heads/master/images/3_Mostra/14.jpg',
-              
-            ],
-            2: [
-               'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/21.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/22.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/23.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/24.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/25.jpg?raw=true',
+    const urlsImagens = {
+        1: [
+            'https://raw.githubusercontent.com/artesvisuais/artesvisuais.github.io/289936ac1884c3e85c964973df377e0db2262672/images/3_Mostra/11.jpg',
+            'https://raw.githubusercontent.com/artesvisuais/artesvisuais.github.io/refs/heads/master/images/3_Mostra/12.jpg',
+            'https://raw.githubusercontent.com/artesvisuais/artesvisuais.github.io/refs/heads/master/images/3_Mostra/13.jpg',
+            'https://raw.githubusercontent.com/artesvisuais/artesvisuais.github.io/refs/heads/master/images/3_Mostra/14.jpg'
+        ],
+        2: [
+            'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/21.jpg?raw=true',
+            'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/22.jpg?raw=true',
+            'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/23.jpg?raw=true',
+            'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/24.jpg?raw=true',
+            'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/25.jpg?raw=true',
+            'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/26.jpg?raw=true'
+        ],
+        3: [
+            'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/31.jpg?raw=true',
+            'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/32.jpg?raw=true',
+            'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/33.jpg?raw=true',
+            'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/34.jpg?raw=true'
+        ],
+        4: [
+            'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/41.jpg?raw=true',
+            'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/42.jpg?raw=true',
+            'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/43.jpg?raw=true',
+            'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/44.jpg?raw=true'
+        ],
+        5: [
+            'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/51.jpg?raw=true',
+            'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/52.jpg?raw=true',
+            'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/53.jpg?raw=true',
+            'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/54.jpg?raw=true',
+            'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/55.jpg?raw=true'
+        ]
+    };
 
-'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/26.jpg?raw=true',
-            ],
-            3: [
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/31.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/32.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/33.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/34.jpg?raw=true',
-                
-            ],
-            4: [
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/41.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/42.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/43.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/44.jpg?raw=true',
-               
-            ],
-            5: [
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/51.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/52.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/53.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/54.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/55.jpg?raw=true'
-            ]
-        };
+    const legendas = {
+        1: [
+            "1º ano: Obra numero 11",
+            "1º ano: Obra numero 12",
+            "1º ano: Obra numero 13",
+            "1º ano: Obra numero 14"
+        ],
+        2: [
+            "2º ano: Obra numero 21",
+            "2º ano: Obra numero 22",
+            "2º ano: Obra numero 23",
+            "2º ano: Obra numero 24",
+            "2º ano: Obra numero 25",
+            "2º ano: Obra numero 26"
+        ],
+        3: [
+            "3º ano: Obra numero 31",
+            "3º ano: Obra numero 32",
+            "3º ano: Obra numero 33",
+            "3º ano: Obra numero 34"
+        ],
+        4: [
+            "4º ano: Obra numero 41",
+            "4º ano: Obra numero 42",
+            "4º ano: Obra numero 43",
+            "4º ano: Obra numero 44"
+        ],
+        5: [
+            "5º ano: Obra numero 51",
+            "5º ano: Obra numero 52",
+            "5º ano: Obra numero 53",
+            "5º ano: Obra numero 54",
+            "5º ano: Obra numero 55"
+        ]
+    };
 
-        // Array de legendas personalizadas
-        const legendas = {
-            1: [
-                "1º ano: Obra numero 11",
-                "1º ano: Obra numero 12",
-                "1º ano: Obra numero 13",
-                "1º ano: Obra numero 14"
-            ],
-            2: [
-                "2º ano: Obra numero 21",
-                "2º ano: Obra numero 22",
-                "2º ano: Obra numero 23",
-                "2º ano: Obra numero 24",
-                "2º ano: Obra numero 25",
-                "2º ano: Obra numero 26"
-            ],
-            3: [
-                "3º ano: Obra numero 31",
-                "3º ano: Obra numero 32",
-                "3º ano: Obra numero 33",
-                "3º ano: Obra numero 34"
-            ],
-            4: [
-                "4º ano: Obra numero 41",
-                "4º ano: Obra numero 42",
-                "4º ano: Obra numero 43",
-                "4º ano: Obra numero 44"
-            ],
-            5: [
-                "5º ano: Obra numero 51",
-                "5º ano: Obra numero 52",
-                "5º ano: Obra numero 53",
-                "5º ano: Obra numero 54",
-                "5º ano: Obra numero 55"
-            ]
-        };
+    const imagensDoAno = urlsImagens[ano];
+    const galeria = document.getElementById('galeria');
 
-        // Usa apenas as imagens do ano selecionado
-        const imagensDoAno = urlsImagens[ano];
+    imagensDoAno.forEach((url, index) => {
+        const obra = document.createElement('div');
+        obra.className = 'obra';
+        obra.innerHTML = `
+            <img src="${url}" alt="Obra ${index + 1}">
+            <p class="legenda">${legendas[ano][index]}</p>
+            <button class="botao-votar" onclick="votar(${index + 1})">Votar</button>
+        `;
+        galeria.appendChild(obra);
+    });
 
-        const galeria = document.getElementById('galeria');
+    function votar(numero) {
+        const cookieName = `ja_votou_ano${ano}`;
 
-        imagensDoAno.forEach((url, index) => {
-            const obra = document.createElement('div');
-            obra.className = 'obra';
-            obra.innerHTML = `
-                <img src="${url}" alt="Obra ${index + 1}">
-                <p class="legenda">${legendas[ano][index]}</p>
-                <button class="botao-votar" onclick="votar(${index + 1})">Votar</button>
-            `;
-            galeria.appendChild(obra);
-        });
-
-        function votar(numero) {
-            const cookieName = `ja_votou_ano${ano}`;
-            
-            if (localStorage.getItem(cookieName)) {
-                alert(`⚠️ Você já votou no ${ano}º ano. Apenas um voto é permitido por ano.`);
-                return;
-            }
-
-            const nome = prompt("Informe seu nome completo:");
-            if (!nome || nome.trim().length < 3) {
-                alert("⚠️ Nome inválido.");
-                return;
-            }
-
-            const mensagem = `🗳️ NOVO VOTO\n\n👤Nome: ${nome.trim()}\n\n🖼️Obra escolhida: ${numero}\n\n✅Ano: ${ano}`;
-            const finalUrl = url + encodeURIComponent(mensagem);
-
-            window.open(finalUrl, '_blank', 'noopener,noreferrer');
-            localStorage.setItem(cookieName, 'true');
-            alert(`✅ Voto computado com sucesso no ${ano}º ano!`);
+        if (localStorage.getItem(cookieName)) {
+            alert(`⚠️ Você já votou no ${ano}º ano. Apenas um voto é permitido por ano.`);
+            return;
         }
-    </script>
+
+        const nome = prompt("Informe seu nome completo:");
+        if (!nome || nome.trim().length < 3) {
+            alert("⚠️ Nome inválido.");
+            return;
+        }
+
+        const mensagem = `🗳️ NOVO VOTO\n\n👤Nome: ${nome.trim()}\n\n🖼️Obra escolhida: ${numero}\n\n✅Ano: ${ano}`;
+        const finalUrl = url + encodeURIComponent(mensagem);
+
+        // Abre uma janela pequena e fecha automaticamente após 1 segundo
+        const popup = window.open(finalUrl, '_blank', 'width=10,height=10,left=9999,top=9999');
+        setTimeout(() => {
+            if (popup) popup.close();
+        }, 1000);
+
+        localStorage.setItem(cookieName, 'true');
+        alert(`✅ Voto computado com sucesso no ${ano}º ano!`);
+    }
+</script>
+  
 </body>
 </html>
