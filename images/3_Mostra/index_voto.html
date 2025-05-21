@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Votação de Obras - Ano {{ano}}</title>
+    <title>Votação de Obras</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,155 +11,37 @@
             margin: 20px;
             text-align: center;
         }
-        .obra {
-            background: white;
-            margin: 20px auto;
-            padding: 10px;
-            border: 1px solid #ccc;
-            width: 300px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .obra img {
-            width: 100%;
-            height: auto;
-            object-fit: contain;
-            aspect-ratio: 16/9;
-            max-height: 40vh;
+        .container-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 500px;
             margin: 0 auto;
         }
-        @media (max-width: 768px) {
-            .obra img {
-                max-height: 50vh;
-            }
-        }
-        .lazy-load {
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .lazy-load.loaded {
-            opacity: 1;
-        }
-        .botao-votar {
-            background-color: #28a745;
+        .link-votacao {
+            padding: 15px;
+            background-color: #2196F3;
             color: white;
             border: none;
-            padding: 10px 20px;
-            margin-top: 10px;
-            cursor: pointer;
             border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: background-color 0.3s;
         }
-        .botao-votar:hover {
-            background-color: #218838;
+        .link-votacao:hover {
+            background-color: #1976D2;
         }
-
-.voltar-link {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #6c757d;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    margin: 20px 0;
-}
-
-.voltar-link:hover {
-    background-color: #545b62;
-}
     </style>
 </head>
 <body>
-    <h1>Vote em uma das obras 🎨</h1>
-    <div id="galeria"></div>
-<a href="index.html" class="voltar-link">Voltar</a>
-    <script>
-        // Substitua pelo seu próprio token e ID de grupo
-        const url = "https://api.telegram.org/bot647898423:AAGJPakEKeG3iob5JUsVcHvXzd0OUOvJEus/sendMessage?chat_id=-1001290396284&text=";
-
-        // Obtém o ano da URL
-        const ano = parseInt(new URLSearchParams(window.location.search).get('ano')) || 1;
-
-        // Substitui o título dinamicamente
-        document.title = `Votação de Obras - ${ano}º ano`;
-
-        // Array de imagens organizado por ano
-        const urlsImagens = {
-            1: [
-                'https://raw.githubusercontent.com/artesvisuais/artesvisuais.github.io/289936ac1884c3e85c964973df377e0db2262672/images/3_Mostra/11.jpg',
-                'https://raw.githubusercontent.com/artesvisuais/artesvisuais.github.io/refs/heads/master/images/3_Mostra/12.jpg',
-
-                'https://raw.githubusercontent.com/artesvisuais/artesvisuais.github.io/refs/heads/master/images/3_Mostra/13.jpg',
-                'https://raw.githubusercontent.com/artesvisuais/artesvisuais.github.io/refs/heads/master/images/3_Mostra/14.jpg',
-              
-            ],
-            2: [
-               'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/21.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/22.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/23.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/24.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/25.jpg?raw=true',
-
-'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/26.jpg?raw=true',
-            ],
-            3: [
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/31.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/32.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/33.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/34.jpg?raw=true',
-                
-            ],
-            4: [
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/41.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/42.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/43.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/44.jpg?raw=true',
-               
-            ],
-            5: [
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/51.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/52.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/53.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/54.jpg?raw=true',
-                'https://github.com/artesvisuais/artesvisuais.github.io/blob/master/images/3_Mostra/55.jpg?raw=true'
-            ]
-        };
-
-
-        // Usa apenas as imagens do ano selecionado
-        const imagensDoAno = urlsImagens[ano];
-
-        const galeria = document.getElementById('galeria');
-
-        imagensDoAno.forEach((url, index) => {
-            const obra = document.createElement('div');
-            obra.className = 'obra';
-           obra.innerHTML = `
-    <img src="${url}" alt="Obra ${index + 1}">
-    <button class="botao-votar" onclick="votar(${index + 1})">Votar</button>
-`;
-            galeria.appendChild(obra);
-        });
-
-        function votar(numero) {
-            const cookieName = `ja_votou_ano${ano}`;
-            
-            if (localStorage.getItem(cookieName)) {
-                alert(`⚠️ Você já votou no ${ano}º ano. Apenas um voto é permitido por ano.`);
-                return;
-            }
-
-            const nome = prompt("Informe seu nome completo:");
-            if (!nome || nome.trim().length < 3) {
-                alert("⚠️ Nome inválido.");
-                return;
-            }
-
-            const mensagem = `🗳️ NOVO VOTO\\nNome: ${nome.trim()}\\nObra escolhida: ${numero}\\nAno: ${ano}`;
-            const finalUrl = url + encodeURIComponent(mensagem);
-
-            window.open(finalUrl, '_blank', 'noopener,noreferrer');
-            localStorage.setItem(cookieName, 'true');
-            alert(`✅ Voto computado com sucesso no ${ano}º ano!`);
-        }
-    </script>
+    <h1>Selecione o Ano para Votar 🎨</h1>
+    <div class="container-links">
+        <a href="votacao.html?ano=1" class="link-votacao">Votar nas obras do 1º ano</a>
+        <a href="votacao.html?ano=2" class="link-votacao">Votar nas obras do 2º ano</a>
+        <a href="votacao.html?ano=3" class="link-votacao">Votar nas obras do 3º ano</a>
+        <a href="votacao.html?ano=4" class="link-votacao">Votar nas obras do 4º ano</a>
+        <a href="votacao.html?ano=5" class="link-votacao">Votar nas obras do 5º ano</a>
+    </div>
 </body>
 </html>
