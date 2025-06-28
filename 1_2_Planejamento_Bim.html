@@ -72,15 +72,10 @@ line-height: 100%;text-align: left;margin-bottom: 0cm;background: transparent;
     background-color: #0056b3;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   }
-    .link-redondo {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 3.5em;
-    height: 3.5em;
-    min-width: 3.5em;
-    min-height: 3.5em;
-    border-radius: 50%;
+   .link-redondo {
+    display: inline-block;
+    padding: 0.7em 1.2em;         /* Espaçamento interno ajustável */
+    border-radius: 50em;           /* Deixa o botão oval/quase circular */
     background-color: #007bff;
     color: #fff;
     font-size: 1em;
@@ -91,6 +86,7 @@ line-height: 100%;text-align: left;margin-bottom: 0cm;background: transparent;
     margin: 0.3em;
     text-align: center;
     white-space: nowrap;
+    min-width: 3.5em;              /* Garante um tamanho mínimo */
   }
   .link-redondo:hover {
     background-color: #0056b3;
@@ -98,9 +94,9 @@ line-height: 100%;text-align: left;margin-bottom: 0cm;background: transparent;
   }
   @media (max-width: 600px) {
     .link-redondo {
-      width: 2.5em;
-      height: 2.5em;
       font-size: 0.9em;
+      padding: 0.6em 1em;
+      min-width: 2.5em;
     }
   }
   </style>
