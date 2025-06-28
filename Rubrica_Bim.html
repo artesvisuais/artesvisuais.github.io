@@ -69,13 +69,103 @@ line-height: 100%;text-align: left;margin-bottom: 0cm;background: transparent;
         border-radius: 4px;
         cursor: pointer;
     }
-
-
-    
+   
     #botaoTopo:hover {
         background-color: #45a049;
     }
+    .botoes-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7em; /* Espaço entre os botões */
+    justify-content: flex-start; /* Alinhe como preferir: flex-start, center, flex-end */
+  }
 
+  .botao-link {
+    display: inline-block;
+    padding: 10px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: background 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    min-width: 100px;
+    text-align: center;
+    margin: 0; /* Remove margem individual */
+    white-space: nowrap;
+  }
+  .botao-link:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  @media (max-width: 600px) {
+    .botao-link {
+      font-size: 0.95em;
+      padding: 8px 14px;
+      min-width: 80px;
+    }
+    .botoes-container {
+      gap: 0.4em;
+    }
+  }
+   .link-Oval {
+    display: inline-block;
+    padding: 0.7em 1.2em;         /* Espaçamento interno ajustável */
+    border-radius: 50em;           /* Deixa o botão oval/quase circular */
+   /* background-color: #4F4F4F;
+    color: #fff; */
+    font-size: 1em;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: background 0.2s, box-shadow 0.2s;
+    margin: 0.3em;
+    text-align: center;
+    white-space: nowrap;
+    min-width: 3.5em;              /* Garante um tamanho mínimo */
+  }
+  .link-Oval:hover {
+    background-color: #A9A9A9;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  @media (max-width: 600px) {
+    .link-Oval {
+      font-size: 0.9em;
+      padding: 0.6em 1em;
+      min-width: 2.5em;
+    }
+  }
+    .link-redondo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5em;
+    height: 3.5em;
+    min-width: 3.5em;
+    min-height: 3.5em;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 1em;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: background 0.2s, box-shadow 0.2s;
+    margin: 0.3em;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .link-redondo:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  @media (max-width: 600px) {
+    .link-redondo {
+      width: 2.5em;
+      height: 2.5em;
+      font-size: 0.9em;
+    }
+  }
 
   </style>
 
@@ -85,29 +175,32 @@ line-height: 100%;text-align: left;margin-bottom: 0cm;background: transparent;
 
 <header>
   <h1 id="Sitesatalhos">Sites atalhos</h1>
-  <nav>
-    &nbsp &nbsp
+  <nav class="botoes-container">       
 
-    <a href='https://artesvisuais.github.io/1_2_Planejamento_Bim.html'>1_2_Planejamento_Bim.html</a>/&nbsp &nbsp
+    <a href="https://artesvisuais.github.io/1_2_Planejamento_Bim.html"class="botao-link" style="background-color: #87CEEB; color: #222222;">1_2_Planejamento_Bim.html</a><br><br>   
 
-    <a href='https://artesvisuais.github.io/3_Planejamento_Bim.html'>3_Planejamento_Bim.html</a>/&nbsp &nbsp
+    <a href="https://artesvisuais.github.io/3_Planejamento_Bim.html"class="botao-link" style="background-color: #90EE90; color: #222222;">3_Planejamento_Bim.html</a><br><br>  
 
-<a href='https://artesvisuais.github.io/4_5_Planejamento_Bim.html'>4_5_Planejamento_Bim.html</a>/&nbsp &nbsp
+<a href="https://artesvisuais.github.io/4_Planejamento_Bim.html"class="botao-link" style="background-color: #DAA520; color: #FFFFFF;">4_Planejamento_Bim.html</a><br><br>
 
-<a href='https://artesvisuais.github.io/EJA_Planejamento_Bim.html'>EJA_Planejamento_Bim.html</a>/&nbsp &nbsp
+<a href="https://artesvisuais.github.io/5_Planejamento_Bim.html"class="botao-link" style="background-color: #FFD700; color: #222222;">5_Planejamento_Bim.html</a><br><br>
 
-<a href='https://artesvisuais.github.io/Rubrica_Bim.html'>Rubrica_Bim.html</a>/&nbsp &nbsp
+<a href="https://artesvisuais.github.io/EJA_Planejamento_Bim.html" class="botao-link" style="background-color: #DEB887; color: #222222;">EJA_Planejamento_Bim.html</a><br><br>   
+
+<a href="https://artesvisuais.github.io/4_5_Planejamento_Bim.html" class="botao-link" style="background-color: #FFFF00; color: #222222;">4_5_Planejamento_Bim.html</a><br><br>   
+
+    <a href="https://artesvisuais.github.io/Rubrica_Bim.html"class="botao-link" style="background-color: #F5F5DC; color: #007bff;">Rubrica_Bim.html</a>
 
   </nav>
 </header>
 <ul>
-<li><a href="#Semana1">Rubrica Desenvolvimento (S)</a></li>
+<li><a href="#Semana1"class="link-Oval" style="background-color: #FF0000; color: #FF6347;">Rubrica Desenvolvimento (S)</a></li>
 
-<li><a href="#Semana2">Rubrica Satisfatório (S)</a></li>
+<li><a href="#Semana2"class="link-Oval" style="background-color: #4169E1; color: #6495ED;">Rubrica Satisfatório (S)</a></li>
 
-<li><a href="#Semana3">Rubrica Bom (B)</a></li>
+<li><a href="#Semana3"class="link-Oval" style="background-color: #3CB371; color: #00FF7F;">Rubrica Bom (B)</a></li>
 
-<li><a href="#Semana4">Rubrica Otimo (B)</a></li>  
+<li><a href="#Semana4"class="link-Oval" style="background-color: #FFD700; color: #F0E68C;">Rubrica Otimo (B)</a></li>  
 
 </ul>
 
