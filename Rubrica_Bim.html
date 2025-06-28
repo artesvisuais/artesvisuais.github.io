@@ -183,7 +183,38 @@ line-height: 100%;text-align: left;margin-bottom: 0cm;background: transparent;
   .btnCopi:active { 
     background: #98e39d; 
     color: #fff; 
-}    
+}  
+   .link-redondo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5em;
+    height: 3.5em;
+    min-width: 3.5em;
+    min-height: 3.5em;
+    border-radius: 50%;
+   /* background-color: #007bff; */
+    color: #222222;
+    font-size: 1em;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: background 0.2s, box-shadow 0.2s;
+    margin: 0.3em;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .link-redondo:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  @media (max-width: 600px) {
+    .link-redondo {
+      width: 2.5em;
+      height: 2.5em;
+      font-size: 0.9em;
+    }
+  }
   </style>
 
  </head>
@@ -221,9 +252,10 @@ line-height: 100%;text-align: left;margin-bottom: 0cm;background: transparent;
 
 </ul>
 
- 
-   
-
+ <button class="link-redondo" style="background-color: #FF0000; color: #222222;" type="button" onclick="CopyTexto('h1a')">S</button>
+  <button class="link-redondo" style="background-color: #4169E1; color: #222222;" type="button" onclick="CopyTexto('h2a')">S</button>
+ <button class="link-redondo" style="background-color: #3CB371; color: #222222;" type="button" onclick="CopyTexto('h3a')">B</button>  
+<button class="link-redondo" style="background-color: #FFD700; color: #222222;" type="button" onclick="CopyTexto('h4a')">O</button>
 
 <!--  XXXXXXXXXXX  Inicio do Conteudo 1  XXXXXXX   --> 
   </div>  <hr> <div class="aula1"> <br>  Rubrica Bimestral Arte<br>
