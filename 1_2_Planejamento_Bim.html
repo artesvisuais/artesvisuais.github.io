@@ -56,21 +56,40 @@ text-align: left;
 p {
 line-height: 100%;text-align: left;margin-bottom: 0cm;background: transparent;
 } 
-    .botao-link {
+    .botoes-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7em; /* Espaço entre os botões */
+    justify-content: flex-start; /* Alinhe como preferir: flex-start, center, flex-end */
+  }
+
+  .botao-link {
     display: inline-block;
     padding: 10px 24px;
-   /* background-color: #007bff; <-- Removido */
-    /* color: #fff;  <-- Removido */
     border-radius: 6px;
     text-decoration: none;
     font-weight: 600;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     transition: background 0.2s, box-shadow 0.2s;
     cursor: pointer;
+    min-width: 100px;
+    text-align: center;
+    margin: 0; /* Remove margem individual */
+    white-space: nowrap;
   }
   .botao-link:hover {
     background-color: #0056b3;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  @media (max-width: 600px) {
+    .botao-link {
+      font-size: 0.95em;
+      padding: 8px 14px;
+      min-width: 80px;
+    }
+    .botoes-container {
+      gap: 0.4em;
+    }
   }
    .link-Oval {
     display: inline-block;
@@ -135,8 +154,8 @@ line-height: 100%;text-align: left;margin-bottom: 0cm;background: transparent;
 <body>
 <header>
 <h1 id="Sitesatalhos">Sites atalhos</h1>
-<nav>
-       
+
+<nav class="botoes-container">       
 
     <a href="https://artesvisuais.github.io/1_2_Planejamento_Bim.html"class="botao-link" style="background-color: #87CEEB; color: #222222;">1_2_Planejamento_Bim.html</a><br><br>   
 
@@ -162,14 +181,14 @@ line-height: 100%;text-align: left;margin-bottom: 0cm;background: transparent;
 <a href="#Semana2" class="link-redondo">2</a></li>
 <a href="#Semana3" class="link-redondo">3</a></li>
 <a href="#Semana4" class="link-redondo">4</a></li>
-<a href="#Semana5" class="link-redondo">Semana 5</a></li>
-<a href="#Semana6" class="link-redondo">Semana 6</a></li>
-<a href="#Semana7" class="link-redondo">Semana 7</a></li>
-<a href="#Semana8" class="link-redondo">Semana 8</a></li>
-<a href="#Semana9" class="link-redondo">Semana 9</a></li>
-<a href="#Semana10" class="link-redondo">Semana 10</a></li>
-<a href="#Semana11" class="link-redondo">Semana 11</a></li>
-<a href="#Semana12" class="link-redondo">Semana 12</a></li>
+<a href="#Semana5" class="link-redondo">5</a></li>
+<a href="#Semana6" class="link-redondo">6</a></li>
+<a href="#Semana7" class="link-redondo">7</a></li>
+<a href="#Semana8" class="link-redondo">8</a></li>
+<a href="#Semana9" class="link-redondo">9</a></li>
+<a href="#Semana10" class="link-redondo">10</a></li>
+<a href="#Semana11" class="link-redondo">11</a></li>
+<a href="#Semana12" class="link-redondo">12</a></li>
     <br>
 <!--  XXXXXXXXXXX  Inicio do Conteudo 1   XXXXXXX   -->
 <hr/><div class="aula1"> <br>  1 e 2 anos - Planejamento Bimestral <br>
