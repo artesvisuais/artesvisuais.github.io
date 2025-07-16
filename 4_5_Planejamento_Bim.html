@@ -1,11 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Planejamento</title>
- 
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="ie=edge" http-equiv="X-UA-Compatible"/>
+<title> 4_5_Planejamento</title>
 <style type="text/css">
 .aula1 {
 background-color: #FFFF00; 
@@ -31,16 +31,23 @@ text-align: center;
     width: 92%; 
     padding: 3px 0px; 
     font-style:italic; 
+      text-align: left; 
 }
 .box-frases .texto2   {
     float: left; 
     width: 92%; 
     padding: 3px 0px; 
     font-style:italic; 
+text-align: left;
 }
 .box-frases .btnCopi { 
-    background:#e3e3e3; 
-    color:#202020; 
+    /* Cores e aparência */
+            background-color: #2196F3;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            
+            /* Efeito hover */
+            transition: background-color 0.3s ease;
     float:right; 
     border:none; 
     padding:5px; 
@@ -54,265 +61,514 @@ text-align: center;
 p {
 line-height: 100%;text-align: left;margin-bottom: 0cm;background: transparent;
 } 
+
+
+#botaoTopo {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+   
+    #botaoTopo:hover {
+        background-color: #45a049;
+    }
+    .botoes-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7em; /* Espaço entre os botões */
+    justify-content: flex-start; /* Alinhe como preferir: flex-start, center, flex-end */
+  }
+
+  .botao-link {
+    display: inline-block;
+    padding: 10px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: background 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    min-width: 100px;
+    text-align: center;
+    margin: 0; /* Remove margem individual */
+    white-space: nowrap;
+  }
+  .botao-link:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  @media (max-width: 600px) {
+    .botao-link {
+      font-size: 0.95em;
+      padding: 8px 14px;
+      min-width: 80px;
+    }
+    .botoes-container {
+      gap: 0.4em;
+    }
+  }
+   .link-Oval {
+    display: inline-block;
+    padding: 0.7em 1.2em;         /* Espaçamento interno ajustável */
+    border-radius: 50em;           /* Deixa o botão oval/quase circular */
+    background-color: #4F4F4F;
+    color: #fff;
+    font-size: 1em;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: background 0.2s, box-shadow 0.2s;
+    margin: 0.3em;
+    text-align: center;
+    white-space: nowrap;
+    min-width: 3.5em;              /* Garante um tamanho mínimo */
+  }
+  .link-Oval:hover {
+    background-color: #A9A9A9;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  @media (max-width: 600px) {
+    .link-Oval {
+      font-size: 0.9em;
+      padding: 0.6em 1em;
+      min-width: 2.5em;
+    }
+  }
+    .link-redondo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5em;
+    height: 3.5em;
+    min-width: 3.5em;
+    min-height: 3.5em;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 1em;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: background 0.2s, box-shadow 0.2s;
+    margin: 0.3em;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .link-redondo:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  @media (max-width: 600px) {
+    .link-redondo {
+      width: 2.5em;
+      height: 2.5em;
+      font-size: 0.9em;
+    }
+  }
   </style>
-
- </head>
-
-  <body>
+</head>
+<body>
 <header>
 <h1 id="Sitesatalhos">Sites atalhos</h1>
-<nav>
-       
 
-    <a href="https://artesvisuais.github.io/1_2_Planejamento_Bim.html">1_2_Planejamento_Bim.html</a>/   
+<nav class="botoes-container">       
 
-    <a href="https://artesvisuais.github.io/3_Planejamento_Bim.html">3_Planejamento_Bim.html</a>/   
+    <a href="https://artesvisuais.github.io/1_2_Planejamento_Bim.html"class="botao-link" style="background-color: #87CEEB; color: #222222;">1_2_Planejamento_Bim.html</a><br><br>   
 
-<a href="https://artesvisuais.github.io/4_Planejamento_Bim.html">4_Planejamento_Bim.html</a>/
+    <a href="https://artesvisuais.github.io/3_Planejamento_Bim.html"class="botao-link" style="background-color: #90EE90; color: #222222;">3_Planejamento_Bim.html</a><br><br>  
 
-<a href="https://artesvisuais.github.io/5_Planejamento_Bim.html">5_Planejamento_Bim.html</a>/
+<a href="https://artesvisuais.github.io/4_Planejamento_Bim.html"class="botao-link" style="background-color: #DAA520; color: #FFFFFF;">4_Planejamento_Bim.html</a><br><br>
 
-<a href="https://artesvisuais.github.io/EJA_Planejamento_Bim.html">EJA_Planejamento_Bim.html</a>/   
-<br><br>
-<a href="https://artesvisuais.github.io/4_5_Planejamento_Bim.html">4_5_Planejamento_Bim.html</a>/   
+<a href="https://artesvisuais.github.io/5_Planejamento_Bim.html"class="botao-link" style="background-color: #FFD700; color: #222222;">5_Planejamento_Bim.html</a><br><br>
 
+<a href="https://artesvisuais.github.io/EJA_Planejamento_Bim.html" class="botao-link" style="background-color: #DEB887; color: #222222;">EJA_Planejamento_Bim.html</a><br><br>   
+
+<a href="https://artesvisuais.github.io/4_5_Planejamento_Bim.html" class="botao-link" style="background-color: #FFFF00; color: #222222;">4_5_Planejamento_Bim.html</a><br><br>   
+
+    <a href="https://artesvisuais.github.io/Rubrica_Bim.html"class="botao-link" style="background-color: #F5F5DC; color: #007bff;">Rubrica_Bim.html</a>
 
   </nav>
 </header>
-<ul>
-<li><a href="#Semana1">Semana 1</a></li>
-<li><a href="#Semana2">Semana 2</a></li>
-<li><a href="#Semana3">Semana 3</a></li>
-<li><a href="#Semana4">Semana 4</a></li>
-<li><a href="#Semana5">Semana 5</a></li>
-<li><a href="#Semana6">Semana 6</a></li>
-<li><a href="#Semana7">Semana 7</a></li>
-<li><a href="#Semana8">Semana 8</a></li>
-<li><a href="#Semana9">Semana 9</a></li>
-<li><a href="#Semana10">Semana 10</a></li>
-<li><a href="#Semana11">Semana 11</a></li>
-<li><a href="#Semana12">Semana 12</a></li>
-</ul>
-<!--  XXXXXXXXXXX  Inicio do Conteudo 1   XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  4 e 5 anos - Planejamento Bimestral<br/>
-<b><h3 id="Semana1">Semana1(a) -  10/02  à       14/02</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1" id="n1a">Proposta</div> <button class="btnCopi" onclick="CopyTexto('n1a')" type="button">Copiar</button> </div>
+    <hr style="border: 10px solid green;  border-radius: 5px;"/>
+<div class="aula1">
 
-Habilidade <div class="box-frases"> <div class="texto1" id="h1a">Habilidade 1a</div> <button class="btnCopi" onclick="CopyTexto('h1a')" type="button">Copiar</button> </div> Conteudo <div class="box-frases"> <div class="texto1" id="c1a">Conteudo 1a</div> <button class="btnCopi" onclick="CopyTexto('c1a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+<li><a href="#" class="link-Oval">Semanas:</a></li>
+
+
+   <a href="#Semana1" class="link-redondo">1</a></li>
+<a href="#Semana2" class="link-redondo">2</a></li>
+<a href="#Semana3" class="link-redondo">3</a></li>
+<a href="#Semana4" class="link-redondo">4</a></li>
+<a href="#Semana5" class="link-redondo">5</a></li>
+<a href="#Semana6" class="link-redondo">6</a></li>
+<a href="#Semana7" class="link-redondo">7</a></li>
+<a href="#Semana8" class="link-redondo">8</a></li>
+<a href="#Semana9" class="link-redondo">9</a></li>
+<a href="#Semana10" class="link-redondo">10</a></li>
+<a href="#Semana11" class="link-redondo">11</a></li>
+<a href="#Semana12" class="link-redondo">12</a></li>
+    <br>
+</div>
+
+<!--  XXXXXXXXXXX  Inicio do Conteudo 1   XXXXXXX   -->
+<hr/><div class="aula1"> <br>  4 e 5 anos - Planejamento Bimestral <br>
+<b><h3 id="Semana1">Semana 1(a) -   21/07 a 25/07</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n1a">Transformando espaço com Móbiles</pre></div> <button class="btnCopi" onclick="CopyTexto('n1a')" type="button">Copiar</button> </div>
+
+Habilidade <div class="box-frases"> <div class="texto1"><pre id="h1a">EF04AR01. Conhecer e apreciar a INSTALAÇÃO como modalidades das artes visuais tradicionais e contemporâneas presentes na cultura nacional, cultivando a percepção, o imaginário, a capacidade de simbolizar e o repertório imagético.</pre></div> <button class="btnCopi" onclick="CopyTexto('h1a')" type="button">Copiar</button> </div> Conteudo <div class="box-frases"> <div class="texto1"><pre id="c1a">Aula 1: Apreciação, Contextualização e Leitura de Imagens
+Objetivo: Introduzir os estudantes aos artistas Lygia Clark e Franz Weissman, além de contextualizar a importância da instalação artística e do trabalho de Alexander Calder.
+Habilidade: Compreender e refletir sobre a importância do trabalho de Lygia Clark e Franz Weissman na arte contemporânea, realizar leitura de imagens e discutir as obras apresentadas, reconhecer a transformação de formas bidimensionais em tridimensionais.
+A aula começa com uma roda de conversa sobre arte contemporânea e as diferentes formas de expressão artística. O professor apresentará rapidamente os artistas Lygia Clark, Franz Weissman e Alexander Calder, destacando suas contribuições e como suas obras influenciam a arte moderna. O conceito de instalação artística será introduzido, explicando que é uma obra que ocupa um espaço e busca interagir com ele e com o público.
+Seguindo, serão exibidas imagens das obras de Lygia Clark e Franz Weissman. A leitura das imagens será realizada com os estudantes, discutindo o uso da forma e da textura nas obras, o que elas transmitem, e como elas utilizam a interatividade e a tridimensionalidade. O professor fará perguntas para estimular a reflexão, como: "O que as formas sugerem?", "Como a arte pode ser tocada ou manipulada?", "O que significa transformar algo plano em uma forma tridimensional?"
+Na parte prática, o professor distribuirá pedaços de papel color set para cada estudante e explicará como realizar a atividade. Os estudantes deverão dobrar a folha de papel color set ao meio e colar uma parte na outra, deixando secar. Em seguida, eles criarão uma linha ou forma com base na sua criatividade, recortando e colando para montar sua escultura. A proposta é que criem formas orgânicas ou geométricas inspiradas nas obras de Lygia Clark e Franz Weissman. O uso do corte e da dobra para transformar a folha bidimensional em tridimensional será incentivado. O professor pode oferecer materiais alternativos, como canudinhos, fita crepe, papéis coloridos e materiais recicláveis, para enriquecer a criação.
+No final da aula, o professor pode realizar uma reflexão com os estudantes, permitindo que compartilhem suas obras e o que aprenderam durante o processo. A discussão abordará como as obras tridimensionais podem dialogar com o espaço e com o público, características típicas das instalações artísticas.
+Material necessário: papel color set, tesoura, cola, papéis coloridos, canudinhos, fita crepe, materiais recicláveis (como papelão, sacola plástica, palitos de sorvete).
+Aula 2: Montagem da Instalação Artística e Exposição das Produções
+Objetivo: Desenvolver uma instalação artística em sala de aula, utilizando as obras feitas pelos estudantes como base para uma montagem coletiva.
+Habilidade: Aplicar a técnica de montagem de uma instalação artística coletiva, utilizando as formas e construções realizadas pelos estudantes, refletir sobre como as obras individuais podem se integrar em uma obra coletiva que ocupa o espaço de forma interativa.
+Na segunda aula, o professor iniciará relembrando o conceito de instalação artística e o vídeo que será assistido. O vídeo ajuda a ilustrar como a arte pode interagir com o espaço e o público, demonstrando a transformação do ambiente. Após a exibição, o professor discutirá com os estudantes como o vídeo exemplifica o uso do espaço em uma instalação artística.
+A parte prática da aula envolverá a montagem coletiva da instalação artística. O professor orientará os estudantes a utilizarem as esculturas feitas com o papel color set e outros materiais alternativos. Eles poderão utilizar canudinhos, fita crepe, palitos de sorvete, entre outros materiais para integrar suas obras em uma instalação. A proposta é que, juntos, criem um "móbile" ou outra forma de instalação artística que ocupe o espaço da sala de aula, interagindo com os outros objetos e com os estudantes.
+Após a montagem, os estudantes terão a oportunidade de observar e interagir com a instalação criada. O professor guiará uma reflexão sobre como as obras individuais se conectam dentro de um contexto coletivo e como elas podem transformar o espaço e a percepção das pessoas que as observam.
+A aula será finalizada com uma exposição das produções, onde os estudantes poderão compartilhar suas experiências e impressões sobre o trabalho coletivo. O professor reforçará a importância da arte como meio de expressão e transformação do ambiente, conectando as produções individuais com a obra coletiva criada.
+Material necessário: obra dos estudantes da aula anterior, cola, fita crepe, tesoura, materiais recicláveis, palitos de sorvete, canudinhos, papelão, sacolas plásticas.
+</pre></pre></pre></div> <button class="btnCopi" onclick="CopyTexto('c1a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana1(b) - 10/02  à       14/02</b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" id="h1b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>4 e 5 anos - Planejamento Bimestral<br/>
+<b>Semana1(b) - __/__  à   __/__</b> <div class="box-frases"><div class="texto2"><pre id="n1b">Nome da atividade (b) Semana 1</pre></div><button class="btnCopi" onclick="CopyTexto('n1b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h1b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('h1b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" id="c1b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h1b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c1b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('c1b')" type="button">Copiar</button> </div> <hr/></div>
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('c1b')" type="button">Copiar</button> </div> <hr/></div>
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 2   XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  4 e 5 anos - Planejamento Bimestral<br/>
-<b> <h3 id="Semana2">Semana2(a) -  17/02  à       21/02</h3></b> 
-Nome da atividade<div class="box-frases"> <div class="texto1" id="n2a">Proposta</div> <button class="btnCopi" onclick="CopyTexto('n2a')" type="button">Copiar</button> </div>
+<hr/><div class="aula1"> <br/>  4 e 5 anos - Planejamento Bimestral <br/>
+<b> <h3 id="Semana2">Semana 2(a) -   28/07 a 01/08</h3></b> 
+Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n2a">Aprendendo sobre Instalação com Yayoi Kusama</pre></div> <button class="btnCopi" onclick="CopyTexto('n2a')" type="button">Copiar</button> </div>
 
-Habilidade <div class="box-frases"> <div class="texto1" id="h2a">Habilidade 2a</div> <button class="btnCopi" onclick="CopyTexto('h2a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1" id="c2a">Conteudo 2a</div> <button class="btnCopi" onclick="CopyTexto('c2a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+Habilidade <div class="box-frases"> <div class="texto1"><pre id="h2a">EF04AR04. Experimentar a instalação fazendo uso sustentável de diversos materiais, instrumentos e suportes convencionais e não convencionais em suas produções.</pre></div> <button class="btnCopi" onclick="CopyTexto('h2a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c2a">Aula 1 – Descobrindo o que é Instalação na Arte
+Nesta aula, o professor inicia com uma roda de conversa guiada por perguntas como: Vocês já ouviram falar em instalação artística? O que acham que pode ser? Que materiais poderíamos usar para fazer uma instalação? O objetivo é estimular a curiosidade e a troca de ideias entre os estudantes.
+Após a conversa, serão apresentadas imagens e vídeos de obras de instalação, como Cartas de Agradecimento, da artista japonesa Chiharu Shiota, e os móbiles de Alexander Calder. Durante a apreciação, o professor propõe perguntas como: O que você sente ao ver essa obra? Que materiais foram usados? Como ela ocupa o espaço?
+
+Em seguida, é apresentada a artista Yayoi Kusama, conhecida por suas instalações com pontos e repetições. O professor poderá mostrar trechos do vídeo Infinity Mirrors e comentar sobre o estilo visual marcante da artista, ressaltando o uso de círculos e padrões.
+Para encerrar a aula, o professor combina com os estudantes que tragam, na próxima semana, materiais recicláveis como caixas, rolinhos de papel higiênico ou garrafas, que serão utilizados na criação de uma instalação inspirada nos artistas estudados.
+
+Aula 2 – Criando uma Instalação Coletiva.
+Nesta aula, os estudantes iniciam organizando os materiais recicláveis que trouxeram. O professor distribui papéis coloridos e orienta a criação de círculos de diversos tamanhos, que serão colados nos objetos reciclados. A proposta é criar uma instalação inspirada no estilo de Yayoi Kusama, com repetição de formas e uso criativo do espaço.
+Enquanto os estudantes produzem suas peças, o professor circula, incentiva a experimentação e relembra as referências vistas na aula anterior.
+Depois de concluídas as produções, a turma escolhe, com orientação do professor, um local da escola para montar a instalação coletiva. Os próprios estudantes ajudam a organizar os trabalhos, pensando em como posicioná-los de forma que a ocupação do espaço tenha impacto visual.
+Ao final, é feita uma breve conversa sobre a experiência de transformar objetos simples em arte, e como a instalação convida o público a se envolver com a obra de maneira diferente das artes tradicionais.</pre></div> <button class="btnCopi" onclick="CopyTexto('c2a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana2(b) - 17/02  à       21/02</b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" id="h2b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>4 e 5 anos - Planejamento Bimestral<br/>
+<b>Semana2(b) - __/__  à  __/__</b> <div class="box-frases"><div class="texto2"><pre id="n2b">Nome da atividade (b) Semana 2</pre></div><button class="btnCopi" onclick="CopyTexto('n2b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h2b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('h2b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" id="c2b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h2b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c2b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('c2b')" type="button">Copiar</button> </div> <hr/></div>
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('c2b')" type="button">Copiar</button> </div> <hr/></div>
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 3  XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  4 e 5 anos - Planejamento Bimestral<br/>
-<b><h3 id="Semana3">Semana3(a) -  24/02  à       28/02</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1" id="n3a">Proposta</div> <button class="btnCopi" onclick="CopyTexto('n3a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1" id="h3a">Habilidade 3a</div> <button class="btnCopi" onclick="CopyTexto('h3a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1" id="c3a">Conteudo 3a</div> <button class="btnCopi" onclick="CopyTexto('c3a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+<hr/><div class="aula1"> <br/>  4 e 5 anos - Planejamento Bimestral <br/>
+<b><h3 id="Semana3">Semana 3(a) -   04/08 a 08/08</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n3a">Apreciação e contextualização sobre o artista Os Gêmeos e suas obras Boombox;</pre></div> <button class="btnCopi" onclick="CopyTexto('n3a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h3a">EF15AR02. Conhecer e explorar os elementos constitutivos das artes visuais (ponto, linha, forma, espaço, movimento, gestualidade, cor, textura, volume e composição).</pre></div> <button class="btnCopi" onclick="CopyTexto('h3a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c3a">Aula 1: Apreciação da obra "Boombox" dos artistas Os Gêmeos, com leitura de imagem e discussão sobre materiais, formas, cor e disposição no espaço.
+https://drive.google.com/file/d/1bccvXnOnb1hQtu7nN_AHTnIN5ipNftGy/view?usp=drive_link
+Aula 2: Releitura com caixas recicladas, decoradas como "faces" artísticas. Ao final, organização de uma instalação coletiva se houver a possibilidade e espaço.</pre></div> <button class="btnCopi" onclick="CopyTexto('c3a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana3(b) - 24/02  à       28/02</b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" id="h3b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>4 e 5 anos - Planejamento Bimestral<br/>
+<b>Semana3(b) - __/__  à __/__ </b> <div class="box-frases"><div class="texto2"><pre id="n3b">Nome da atividade (b) Semana 3</pre></div><button class="btnCopi" onclick="CopyTexto('n3b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h3b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('h3b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" id="c3b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h3b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c3b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('c3b')" type="button">Copiar</button> </div> <hr/></div>
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('c3b')" type="button">Copiar</button> </div> <hr/></div>
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 4   XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  4 e 5 anos - Planejamento Bimestral<br/>
-<b><h3 id="Semana4">Semana4(a) -  03/03  à       07/03</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1" id="n4a">Proposta</div> <button class="btnCopi" onclick="CopyTexto('n4a')" type="button">Copiar</button> </div>Habilidade <div class="box-frases"> <div class="texto1" id="h4a">habilidade 4a</div> <button class="btnCopi" onclick="CopyTexto('h4a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1" id="c4a">Conteúdo 4a</div> <button class="btnCopi" onclick="CopyTexto('c4a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+<hr/><div class="aula1"> <br/>  4 e 5 anos - Planejamento Bimestral <br/>
+<b><h3 id="Semana4">Semana 4(a) -  11/08 a 15/08</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n4a">Teatro de fantoche, sombras e varetas com improviso e com objetos escolares.
+</pre></div> <button class="btnCopi" onclick="CopyTexto('n4a')" type="button">Copiar</button> </div>Habilidade <div class="box-frases"> <div class="texto1"><pre id="h4a">EF05AR20 - Experimentar o trabalho colaborativo, coletivo e autoral em improvisações teatrais e processos narrativos criativos em teatro infantil, explorando desde a teatralidade dos gestos e das ações do cotidiano até elementos de diferentes matrizes estéticas e culturais.
+EF05AR22 - Experimentar, com respeito e sem preconceito, possibilidades criativas de movimento e voz na criação de um personagem teatral, discutindo estereótipos.</pre></div> <button class="btnCopi" onclick="CopyTexto('h4a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c4a">Aula 1 – Roda de Conversa e Apreciação do Teatro
+Nesta aula, o professor inicia com uma roda de conversa com o objetivo de conhecer os conhecimentos prévios dos estudantes sobre teatro. A conversa é guiada por perguntas como: O que é teatro? Já assistiram a alguma peça? Como era? Onde aconteceu? Quem eram os personagens? O que é uma história? Todas as histórias são iguais? Os estudantes também podem contar experiências, falar sobre histórias que conhecem e comentar se já viram ou ouviram falar em teatro de sombras.
+Após a conversa, o professor apresenta diferentes tipos de teatro, contextualizando brevemente cada um: teatro de sombras, de fantoches, de improviso e de marionetes. Durante essa explicação, são exibidos vídeos curtos e imagens ilustrativas, com pausas para discussão. O professor estimula que os estudantes comentem o que perceberam, como os personagens aparecem, como as histórias são contadas e quais recursos são usados (sombras, objetos, sons, vozes, gestos, luzes etc.).
+Ao final da aula, os estudantes farão um registro do que aprenderam por meio de um pequeno texto ou desenho, destacando o tipo de teatro que mais chamou sua atenção e o que acharam mais interessante nas apresentações assistidas.
+
+Aula 2 – Experimentação com Jogos Teatrais e Improvisação
+Nesta aula, o professor retoma brevemente os tipos de teatro apresentados anteriormente e propõe atividades práticas com foco no teatro de improvisação. Os estudantes são organizados em pequenos grupos e participam de jogos teatrais, que estimulam a criatividade, expressão corporal e trabalho em equipe.
+Algumas propostas de jogos envolvem o uso de sons ou ruídos para criar cenas improvisadas. Cada grupo poderá inventar uma situação simples e representá-la usando gestos, expressões e sons variados, de maneira espontânea. As apresentações poderão ser feitas na própria sala ou em outro espaço da escola, conforme a realidade da turma.
+Após as apresentações, a turma conversa sobre como foi participar da atividade, o que foi fácil, o que foi difícil e o que mais gostaram. O professor estimula os comentários construtivos entre os colegas.
+Na parte final da aula, o professor propõe que cada grupo comece a criar sua própria história teatral, escolhendo o tipo de teatro que mais gostaram (sugestão: começar com improvisação). Os grupos ensaiarão ao longo das próximas aulas e poderão utilizar diferentes materiais para montar os objetos e cenários da encenação.</pre></div> <button class="btnCopi" onclick="CopyTexto('c4a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana4(b) - 03/03  à       07/03</b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" id="h4b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>4 e 5 anos - Planejamento Bimestral<br/>
+<b>Semana4(b) - __/__  à  __/__</b> <div class="box-frases"><div class="texto2"><pre id="n4b">Nome da atividade (b) Semana 4</pre></div><button class="btnCopi" onclick="CopyTexto('n4b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h4b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('h4b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" id="c4b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h4b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c4b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('c4b')" type="button">Copiar</button> </div> <hr/></div>
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('c4b')" type="button">Copiar</button> </div> <hr/></div>
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 5  XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  4 e 5 anos - Planejamento Bimestral<br/>
-<b><h3 id="Semana5">Semana5(a) -   10/03  à       14/03</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1" id="n5a">Proposta</div> <button class="btnCopi" onclick="CopyTexto('n5a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1" id="h5a">Habilidade 5a</div> <button class="btnCopi" onclick="CopyTexto('h5a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1" id="c5a">Conteudo 5a</div> <button class="btnCopi" onclick="CopyTexto('c5a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+<hr/><div class="aula1"> <br/>  4 e 5 anos - Planejamento Bimestral <br/>
+<b><h3 id="Semana5">Semana 5(a) -  18/08 a 22/08</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n5a">Trabalhando com o teatro de sombras.</pre></div> <button class="btnCopi" onclick="CopyTexto('n5a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h5a">EF04AR18. Conhecer e apreciar o TEATRO DE SOMBRAS presente em diferentes contextos aprendendo a ver e a ouvir histórias dramatizadas e cultivando a percepção, o imaginário, a capacidade de simbolizar e o repertório ficcional.
+EF05AR18. Conhecer e apreciar o teatro infantil presente em diferentes contextos, aprendendo a ver e a ouvir histórias dramatizadas e cultivando a percepção, o imaginário, a capacidade de simbolizar e o repertório ficcional.</pre></div> <button class="btnCopi" onclick="CopyTexto('h5a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c5a">Aula 1 – Conhecendo os Tipos de Teatro e Explorando o Teatro de Sombras
+A aula começa com uma conversa coletiva sobre os diferentes tipos de teatro, como fantoches, sombras, varetas, pantomima, mamulengos, objetos e animação. O professor apresenta imagens ou exemplos rápidos, explicando de forma simples como cada um funciona e em que contextos pode ser utilizado. Os estudantes são incentivados a comentar se já viram algum desses tipos e o que acharam mais curioso ou divertido.
+Em seguida, o foco é direcionado para o teatro de sombras. O professor exibe vídeos curtos sobre essa técnica (como os indicados nos links), fazendo pausas estratégicas para conversar com os estudantes sobre o que estão vendo. Perguntas como: Como as sombras foram criadas? Que materiais foram usados? A música combinava com a cena? ajudam a manter a turma envolvida.
+Ao final, o professor propõe a ideia de que, na próxima aula, os estudantes irão criar e apresentar suas próprias cenas de teatro de sombras, usando uma música brasileira como inspiração. Os estudantes são divididos em grupos e o sorteio das músicas pode ser feito ao final da aula ou no início da próxima.
+
+Aula 2 – Criação e Apresentação de Teatro de Sombras com Músicas Infantis.
+O professor inicia a aula relembrando o que é teatro de sombras e apresentando (ou retomando) as músicas sorteadas. Cada grupo, com sua música, começa a criar os elementos da encenação: personagens, objetos, cenários e detalhes visuais. Usando papel, palitos, recortes e criatividade, os estudantes montam seus elementos de sombra com a ajuda do professor.
+Enquanto os grupos trabalham, o professor circula, orienta e incentiva a colaboração. Depois que todos terminarem suas criações, os grupos se revezam para apresentar suas cenas usando a música como trilha. Pode-se usar um tecido branco com luz por trás ou uma lanterna para criar o efeito de sombra.
+Ao final, os estudantes comentam o que mais gostaram, como foi trabalhar em grupo e como a música ajudou a contar a história. O professor pode registrar os trabalhos em foto ou vídeo e reforçar a importância do trabalho coletivo e da expressão artística.
+</pre></div> <button class="btnCopi" onclick="CopyTexto('c5a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana5(b) -  10/03  à       14/03 </b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" id="h5b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>4 e 5 anos - Planejamento Bimestral<br/>
+<b>Semana5(b) -  __/__  à  __/__ </b> <div class="box-frases"><div class="texto2"><pre id="n5b">Nome da atividade (b) Semana 5</pre></div><button class="btnCopi" onclick="CopyTexto('n5b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h5b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('h5b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" id="c5b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h5b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c5b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('c5b')" type="button">Copiar</button> </div> <hr/></div>
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('c5b')" type="button">Copiar</button> </div> <hr/></div>
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 6   XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  4 e 5 anos - Planejamento Bimestral<br/>
-<b><h3 id="Semana6">Semana6(a) -  17/03  à       21/03</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1" id="n6a">Proposta</div> <button class="btnCopi" onclick="CopyTexto('n6a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1" id="h6a">Habilidade 6a </div> <button class="btnCopi" onclick="CopyTexto('h6a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1" id="c6a">
-Contéudo 6a                                                                                       <!--      Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('c5a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+<hr/><div class="aula1"> <br/>  4 e 5 anos - Planejamento Bimestral <br/>
+<b><h3 id="Semana6">Semana6(a) -  25/08 a 29/08</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n6a">Jogo Teatral: Se Eu Fosse...</pre></div> <button class="btnCopi" onclick="CopyTexto('n6a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h6a">EF04AR19. Reconhecer teatralidades na vida cotidiana, identificando elementos teatrais (variadas entonações de voz, diferentes fisicalidades, diversidades de personagens e narrativas, etc.).</pre></div> <button class="btnCopi" onclick="CopyTexto('h6a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c6a">Aula 1: Apresentação de vídeo sobre improvisação e expressão corporal. Discussão sobre a entonação de voz, movimentos e expressividade.
+A aula começa com a exibição do vídeo “Voz, corpo e imaginação”, produzido pelo Instituto Sociocultural Hospital do Amor, que apresenta jogos teatrais voltados para o público infantil. O vídeo trabalha elementos importantes da linguagem cênica, como a entonação da voz, o uso do corpo e a imaginação, tudo isso através de brincadeiras e imitações de animais e objetos. Os vídeos podem ser acessados nos seguintes links:
+    https://www.youtube.com/watch?v=KrGG9z8KQHA
+    https://drive.google.com/file/d/1jfN7vidcu9YWe6rPyjcsNhiDaVB7BkHZ/view?usp=drive_link
+Caso não haja TV disponível na sala, o professor pode apresentar o conteúdo usando notebook, celular ou tablet.
+Após assistirem juntos, o professor conversa com os estudantes sobre o que foi visto, destacando a importância da entonação da voz na construção de personagens, a força da linguagem não verbal (gestos, expressões) na comunicação e como a imaginação pode criar cenas e histórias mesmo sem objetos reais.
+
+Aula 2 – Jogo Teatral: Se Eu Fosse...
+A turma é dividida em pequenos grupos. O professor propõe o seguinte jogo: cada estudante escolhe um animal ou objeto e inicia com a frase:
+"Se eu fosse (animal ou objeto escolhido), eu seria assim..."
+Em seguida, faz uma pequena encenação, utilizando voz, corpo e gestos para representar sua escolha de forma criativa.
+Cada integrante do grupo se apresenta individualmente, e depois todos participam de uma segunda rodada, onde devem criar juntos uma pequena cena, fazendo com que seus personagens interajam entre si. A ideia é improvisar e brincar com as combinações de personagens — por exemplo, um leão interagindo com uma xícara ou um robô com uma borboleta.
+Durante toda a atividade, o professor acompanha os grupos, incentivando, propondo desafios e ajudando os estudantes a explorar ainda mais a expressão corporal, as variações de voz e a criação de pequenos enredos. Ao final, cada grupo pode apresentar sua cena para a turma.</pre></div> <button class="btnCopi" onclick="CopyTexto('c5a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana6(b) - 17/03  à       21/03</b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" id="h6b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>4 e 5 anos - Planejamento Bimestral<br/>
+<b>Semana6(b) - __/__  à  __/__ </b> <div class="box-frases"><div class="texto2"><pre id="n6b">Nome da atividade (b) Semana 6</pre></div><button class="btnCopi" onclick="CopyTexto('n6b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h6b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('h6b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" id="c6b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h6b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c6b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('c6b')" type="button">Copiar</button> </div> <hr/></div>
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('c6b')" type="button">Copiar</button> </div> <hr/></div>
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 7  XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  4 e 5 anos - Planejamento Bimestral<br/>
-<b><h3 id="Semana7">Semana7(a) -  24/03  à       28/03</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1" id="n7a">Proposta</div> <button class="btnCopi" onclick="CopyTexto('n7a')" type="button">Copiar</button> </div>Habilidade <div class="box-frases"> <div class="texto1" id="h7a"> Habilidade 7a</div> <button class="btnCopi" onclick="CopyTexto('h7a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1" id="c7a">Conteudo 7a</div> <button class="btnCopi" onclick="CopyTexto('c7a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+<hr/><div class="aula1"> <br/>  4 e 5 anos - Planejamento Bimestral <br/>
+<b><h3 id="Semana7">Semana7(a) -  01/09 a 05/09</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n7a">Teatro, Sons e Histórias</pre></div> <button class="btnCopi" onclick="CopyTexto('n7a')" type="button">Copiar</button> </div>Habilidade <div class="box-frases"> <div class="texto1"><pre id="h7a">EF15AR26. Explorar diferentes tecnologias e recursos digitais (multimeios, animações, jogos eletrônicos, gravações em áudio e vídeo, fotografia) nos processos de criação artística.</pre></div> <button class="btnCopi" onclick="CopyTexto('h7a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c7a">Aula 1 – Roda de Conversa, Apreciação e Planejamento da Cena Teatral.
+A aula começa com uma roda de conversa sobre os diferentes tipos de teatro. O professor apresenta vídeos curtos e variados que mostrem exemplos como teatro de sombras, fantoches, improviso, teatro de objetos, entre outros. Durante a exibição, o professor faz pausas para conversar com os estudantes, perguntando o que perceberam, quais tipos de teatro já conheciam e o que mais chamou a atenção.
+Após a apreciação, o professor divide a turma em pequenos grupos e propõe que cada grupo crie uma cena teatral. Cada grupo receberá um pedaço de TNT, que poderá ser usado como cenário, figurino, cortina ou elemento criativo da encenação. Os estudantes também poderão escolher uma música ou sons que combinem com a história que vão contar.
+Ao final da aula, os grupos começam a planejar sua cena: definem os personagens, o início, o meio e o fim da história, e como irão usar o tecido e os sons para enriquecer a apresentação.
+
+Aula 2 – Criação, Apresentação e Avaliação das Cenas Teatrais.
+Os grupos retomam o planejamento feito na aula anterior e finalizam os preparativos para a apresentação. Cada grupo terá um tempo para apresentar sua cena teatral para a turma, utilizando o pedaço de TNT de forma criativa e incluindo música ou sons que combinem com a narrativa.
+Após as apresentações, o professor propõe um momento de conversa, onde os próprios estudantes avaliam sua participação e a dos demais grupos. A ideia é refletir sobre o que foi fácil, o que foi mais difícil e o que pode ser feito de forma diferente nas próximas atividades. O foco da avaliação é ampliar a criatividade e a colaboração entre os colegas.</pre></div> <button class="btnCopi" onclick="CopyTexto('c7a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana7(b) - 24/03  à       28/03</b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" id="h7b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>4 e 5 anos - Planejamento Bimestral<br/>
+<b>Semana7(b) - __/__  à  __/__</b> <div class="box-frases"><div class="texto2"><pre id="n7b">Nome da atividade (b) Semana 7</pre></div><button class="btnCopi" onclick="CopyTexto('n7b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h7b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('h7b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" id="c7b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h7b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c7b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('c7b')" type="button">Copiar</button> </div> <hr/></div>
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('c7b')" type="button">Copiar</button> </div> <hr/></div>
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 8  XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  4 e 5 anos - Planejamento Bimestral<br/>
-<b><h3 id="Semana8">Semana8(a) -  31/03  à       04/04</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1" id="n8a">Proposta</div> <button class="btnCopi" onclick="CopyTexto('n8a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1" id="h8a">Habilidade 8a</div> <button class="btnCopi" onclick="CopyTexto('h8a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1" id="c8a">Conteudo 8a</div> <button class="btnCopi" onclick="CopyTexto('c8a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+<hr/><div class="aula1"> <br/>  4 e 5 anos - Planejamento Bimestral <br/>
+<b><h3 id="Semana8">Semana8(a) - 08/09 a 12/09</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n8a"> Encenando Obras</pre></div> <button class="btnCopi" onclick="CopyTexto('n8a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h8a">EF15AR23. Conhecer e experimentar, em projetos temáticos, as relações processuais entre diversas linguagens artísticas.</pre></div> <button class="btnCopi" onclick="CopyTexto('h8a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c8a">Aula 1 – Leitura de Imagens e Criação de Cena.
+A aula começa com os estudantes organizados em pequenos grupos. O professor distribui imagens de obras de artistas brasileiros como Cândido Portinari, Tarsila do Amaral e Heitor dos Prazeres. A escolha das obras pode variar de acordo com o acervo disponível na escola ou com os objetivos do professor.
+Cada grupo observa atentamente a obra recebida. O professor conduz uma leitura de imagens com perguntas como: O que vocês veem nessa imagem? Quem são os personagens? Onde essa cena se passa? O que essas pessoas estão fazendo? Em que época isso pode ter acontecido? Como são as roupas, os objetos, os gestos?
+Após essa análise, o professor orienta os grupos a criarem uma cena teatral inspirada na obra. Cada estudante assume o papel de um personagem, e o grupo pode inventar nomes, falas, ações e até um pequeno roteiro. A ideia é imaginar o que estava acontecendo no momento retratado na pintura — ou o que aconteceu antes ou depois daquela cena.
+
+Aula 2 – Ensaio, Apresentação e Registro das Peças Inspiradas em Obras de Arte.
+Na segunda aula, os grupos retomam suas ideias e ensaiam as cenas criadas com base nas obras. O professor acompanha o processo, orientando, incentivando e ajudando quando necessário.
+Cada grupo apresenta sua pequena peça teatral para a turma. As apresentações podem ser registradas com fotos ou vídeos, e o professor pode organizar uma pequena mostra com esses registros na escola, como forma de valorizar o trabalho dos estudantes e compartilhar o aprendizado com a comunidade escolar.
+Essa atividade permite integrar arte visual e teatro, desenvolvendo a criatividade, expressão oral, interpretação e trabalho em grupo.</pre></div> <button class="btnCopi" onclick="CopyTexto('c8a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana8(b) - 31/03  à       04/04 </b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" id="h8b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>4 e 5 anos - Planejamento Bimestral<br/>
+<b>Semana8(b) - __/__  à  __/__ </b> <div class="box-frases"><div class="texto2"><pre id="n8b">Nome da atividade (b) Semana 8</pre></div><button class="btnCopi" onclick="CopyTexto('n8b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h8b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('h8b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" id="c8b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h8b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c8b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('c8b')" type="button">Copiar</button> </div> <hr/></div>
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('c8b')" type="button">Copiar</button> </div> <hr/></div>
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 9   XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  4 e 5 anos - Planejamento Bimestral<br/>
-<b><h3 id="Semana9">Semana9(a) -  07/04  à       11/04</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1" id="n9a">Proposta</div> <button class="btnCopi" onclick="CopyTexto('n9a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1" id="h9a">Habilidade 9a</div> <button class="btnCopi" onclick="CopyTexto('h9a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1" id="c9a">Conteudo 9a</div> <button class="btnCopi" onclick="CopyTexto('c9a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+<hr/><div class="aula1"> <br/>  4 e 5 anos - Planejamento Bimestral <br/>
+<b><h3 id="Semana9">Semana9(a) -  15/09 a 19/09</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n9a">Artistas Inventores</pre></div> <button class="btnCopi" onclick="CopyTexto('n9a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h9a">EF15AR24. Conhecer e experimentar brinquedos, brincadeiras, jogos, danças, canções e histórias de diferentes matrizes estéticas e culturais.</pre></div> <button class="btnCopi" onclick="CopyTexto('h9a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c9a">Aula 1 – Artistas e Inventores: Apreciação e Inspiração.
+A aula começa com uma conversa sobre como artistas também podem ser inventores. O professor explica que pessoas criativas transformam ideias em arte, ciência ou tecnologia, e que tudo o que vemos, ouvimos e sentimos pode ser inspiração para criar algo novo.
+Em seguida, os estudantes assistem a vídeos curtos sobre três figuras importantes:
+
+    Leonardo da Vinci – Artista e inventor renascentista, conhecido por obras como a Mona Lisa e pela criação de máquinas voadoras.
+    YouTube: https://www.youtube.com/watch?v=Idl-dtMt_aA
+    Google Drive: https://drive.google.com/file/d/1dvDH8LqRWhEy-z1vnSQluLNnhDenBX_7/view?usp=drive_link
+    Santos Dumont – Inventor brasileiro que criou balões e aviões, sendo reconhecido mundialmente por ter voado com o 14 Bis.
+    YouTube: https://www.youtube.com/watch?v=dMRHfuqKDd0
+    Google Drive: https://drive.google.com/file/d/1fd1HpmfUnL-F0NaVd75OBCysocd-oTOb/view?usp=drive_link
+    Guto Lacaz – Artista contemporâneo que mistura arte com ciência, conhecido por sua “Asa Mecânica” e performances inspiradas no voo.
+    YouTube: https://www.youtube.com/watch?v=Kj2ri_JlJgE
+    Google Drive – Guto fala sobre o 14 Bis:
+    https://drive.google.com/file/d/1OjfKUx0KhbvBamSyVZLN0Rf7Hk4FU8Xg/view?usp=drive_link
+
+Após cada vídeo, o professor conduz uma roda de conversa para que os estudantes comentem o que mais gostaram, quais invenções chamaram atenção e como os artistas usaram a imaginação para criar algo novo.
+
+Aula 2 – Fazer Artístico: Construção de Máquinas Voadoras.
+Com base nas inspirações da aula anterior, os estudantes são convidados a projetar e construir suas próprias máquinas voadoras em grupo. A proposta é imaginar como seria um invento que pudesse voar, como um ornitóptero (máquina com asas que batem), um balão, uma asa mecânica ou algo completamente novo.
+Cada grupo poderá usar materiais simples e recicláveis como:
+    Papelão, Sucata, Embalagens, Rolinhos, tampinhas, palitos, barbantes, Tinta, papel colorido, cola e tesoura.
+O professor estimula a criatividade, reforçando que não há certo ou errado: vale inventar, desenhar, combinar e explorar ideias.
+Ao final da aula, os grupos apresentam suas criações para a turma, explicando o funcionamento imaginado da máquina. As invenções podem ser fotografadas ou filmadas e expostas na escola como parte de uma mostra criativa sobre arte e invenção.</pre></div> <button class="btnCopi" onclick="CopyTexto('c9a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana9(b) - 07/04  à       11/04 </b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" id="h9b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>4 e 5 anos - Planejamento Bimestral<br/>
+<b>Semana9(b) - __/__  à __/__ </b> <div class="box-frases"><div class="texto2"><pre id="n9b">Nome da atividade (b) Semana 9</pre></div><button class="btnCopi" onclick="CopyTexto('n9b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h9b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('h9b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" id="c9b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h9b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c9b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('c9b')" type="button">Copiar</button> </div> <hr/></div>
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('c9b')" type="button">Copiar</button> </div> <hr/></div>
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 10   XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  4 e 5 anos - Planejamento Bimestral<br/>
-<b><h3 id="Semana10">Semana10(a) -  14/04  à       18/04</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1" id="n10a">Proposta</div> <button class="btnCopi" onclick="CopyTexto('n10a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1" id="h10a">Habilidade 10a</div> <button class="btnCopi" onclick="CopyTexto('h10a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1" id="c10a">Conteudo 10a</div> <button class="btnCopi" onclick="CopyTexto('c10a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+<hr/><div class="aula1"> <br/>  4 e 5 anos - Planejamento Bimestral <br/>
+<b><h3 id="Semana10">Semana10(a) -  22/09 a 26/09</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n10a">Criação Cênica Multissensorial.</pre></div> <button class="btnCopi" onclick="CopyTexto('n10a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h10a">EF15AR23 - Conhecer e experimentar, em projetos temáticos, as relações processuais entre diversas linguagens artísticas.</pre></div> <button class="btnCopi" onclick="CopyTexto('h10a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c10a">Aula 1 – Apreciação e Exploração das Artes Integradas
+A aula começa com uma roda de conversa sobre diferentes formas de expressão artística: música, dança, teatro, artes visuais e como elas podem se misturar em uma mesma apresentação. O professor pergunta: Vocês já viram alguma apresentação que misture teatro com música? Ou dança com vídeo e luzes? Como essas artes se combinam? O que vocês sentem ao assistir algo assim?
+Em seguida, o professor apresenta vídeos curtos com performances que integram som, movimento e imagem — como trechos de espetáculos de dança contemporânea, teatro com projeções ou cenas que misturam objetos e sons. Durante a exibição, o professor propõe pequenas pausas para que os estudantes comentem o que perceberam em cada linguagem usada.
+O objetivo é mostrar como é possível comunicar ideias e sentimentos por meio da união de várias linguagens artísticas.
+
+Aula 2 – Criação de Cena com Artes Integradas
+A turma é dividida em pequenos grupos. Cada grupo é desafiado a criar uma cena curta que una pelo menos três elementos:
+
+   • Visual (como cenário, objetos simbólicos ou figurinos),
+   • Sonoro (uso da voz, instrumentos, sons com objetos),
+    •Movimento (dança, gestos, encenação teatral).
+
+Os grupos usam materiais disponíveis na escola e muita criatividade. O professor atua como mediador, ajudando os estudantes a pensar nas possibilidades de integração entre os elementos escolhidos.
+Ao final da aula, cada grupo apresenta sua cena para a turma ou registra o trabalho em vídeo ou representação gráfica (como desenhos ou esquemas da cena). Caso desejado, esses registros podem compor uma mostra interna ou mural artístico da turma.
+</pre></div> <button class="btnCopi" onclick="CopyTexto('c10a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana10(b) - 14/04  à       18/04 </b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" id="h10b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>4 e 5 anos - Planejamento Bimestral<br/>
+<b>Semana10(b) - __/__  à  __/__ </b> <div class="box-frases"><div class="texto2"><pre id="n10b">Nome da atividade (b) Semana 10</pre></div><button class="btnCopi" onclick="CopyTexto('n10b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h10b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('h10b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" id="c10b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h10b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c10b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('c10b')" type="button">Copiar</button> </div> <hr/></div>
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('c10b')" type="button">Copiar</button> </div> <hr/></div>
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 11  XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  4 e 5 anos - Planejamento Bimestral<br/>
-<b><h3 id="Semana11">Semana11(a) -  21/04  à       25/04</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1" id="n11a">Proposta</div> <button class="btnCopi" onclick="CopyTexto('n11a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1" id="h11a">Habilidade 11a</div> <button class="btnCopi" onclick="CopyTexto('h11a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1" id="c11a">Conteudo 11a</div> <button class="btnCopi" onclick="CopyTexto('c11a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+<hr/><div class="aula1"> <br/>  4 e 5 anos - Planejamento Bimestral <br/>
+<b><h3 id="Semana11">Semana11(a) -  __/__  à  __/__</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n11a">Proposta</pre></div> <button class="btnCopi" onclick="CopyTexto('n11a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h11a">Habilidade 11a</pre></div> <button class="btnCopi" onclick="CopyTexto('h11a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c11a">Conteudo 11a</pre></div> <button class="btnCopi" onclick="CopyTexto('c11a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana11(b) - 21/04  à       25/04</b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" id="h11b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>4 e 5 anos - Planejamento Bimestral<br/>
+<b>Semana11(b) - __/__  à  __/__</b> <div class="box-frases"><div class="texto2"><pre id="n11b">Nome da atividade (b) Semana 11</pre></div><button class="btnCopi" onclick="CopyTexto('n11b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h11b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('h11b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" id="c11b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h11b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c11b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('c11b')" type="button">Copiar</button> </div> <hr/></div>
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('c11b')" type="button">Copiar</button> </div> <hr/></div>
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 12   XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  4 e 5 anos - Planejamento Bimestral<br/>
-<b><h3 id="Semana12">Semana12(a) - __/__ à __/__</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1" id="n12a">Proposta</div> <button class="btnCopi" onclick="CopyTexto('n12a')" type="button">Copiar</button> </div>Habilidade <div class="box-frases"> <div class="texto1" id="h12a">Habilidade 12a</div> <button class="btnCopi" onclick="CopyTexto('h12a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1" id="c12a">Conteudo 12a</div> <button class="btnCopi" onclick="CopyTexto('c12a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+<hr/><div class="aula1"> <br/>  4 e 5 anos - Planejamento Bimestral <br/>
+<b><h3 id="Semana12">Semana12(a) - __/__ à __/__</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n12a">Proposta</pre></div> <button class="btnCopi" onclick="CopyTexto('n12a')" type="button">Copiar</button> </div>Habilidade <div class="box-frases"> <div class="texto1"><pre id="h12a">Habilidade 12a</pre></div> <button class="btnCopi" onclick="CopyTexto('h12a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c12a">Conteudo 12a</pre></div> <button class="btnCopi" onclick="CopyTexto('c12a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana12(b) - __/__ à __/__ </b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" id="h12b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>4 e 5 anos - Planejamento Bimestral<br/>
+<b>Semana12(b) - __/__  à  __/__ </b> <div class="box-frases"><div class="texto2"><pre id="n12b">Nome da atividade (b) Semana 12</pre></div><button class="btnCopi" onclick="CopyTexto('n12b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h12b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('h12b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" id="c12b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h12b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c12b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </div> <button class="btnCopi" onclick="CopyTexto('c12b')" type="button">Copiar</button> </div> <hr/></div>
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('c12b')" type="button">Copiar</button> </div> <hr/></div>
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <script type="text/javascript">
