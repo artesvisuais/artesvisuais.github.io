@@ -1,12 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>3_Planejamento</title>
- 
-  <style type="text/css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="ie=edge" http-equiv="X-UA-Compatible"/>
+<title> 3_Planejamento</title>
+<style type="text/css">
 .aula1 {
 background-color: #98FB98; 
 text-align: center;
@@ -31,18 +31,23 @@ text-align: center;
     width: 92%; 
     padding: 3px 0px; 
     font-style:italic; 
-    text-align: left;
+      text-align: left; 
 }
 .box-frases .texto2   {
     float: left; 
     width: 92%; 
     padding: 3px 0px; 
     font-style:italic; 
-    text-align: left;
+text-align: left;
 }
 .box-frases .btnCopi { 
-    background:#e3e3e3; 
-    color:#202020; 
+    /* Cores e aparência */
+            background-color: #2196F3;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            
+            /* Efeito hover */
+            transition: background-color 0.3s ease;
     float:right; 
     border:none; 
     padding:5px; 
@@ -56,60 +61,208 @@ text-align: center;
 p {
 line-height: 100%;text-align: left;margin-bottom: 0cm;background: transparent;
 } 
+
+
+#botaoTopo {
+        background-color: #DEB887;
+        color: #222222;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+   
+    #botaoTopo:hover {
+        background-color: #007BFF;
+    }
+    .botoes-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7em; /* Espaço entre os botões */
+    justify-content: flex-start; /* Alinhe como preferir: flex-start, center, flex-end */
+  }
+
+  .botao-link {
+    display: inline-block;
+    padding: 10px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: background 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    min-width: 100px;
+    text-align: center;
+    margin: 0; /* Remove margem individual */
+    white-space: nowrap;
+  }
+  .botao-link:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  @media (max-width: 600px) {
+    .botao-link {
+      font-size: 0.95em;
+      padding: 8px 14px;
+      min-width: 80px;
+    }
+    .botoes-container {
+      gap: 0.4em;
+    }
+  }
+   .link-Oval {
+    display: inline-block;
+    padding: 0.7em 1.2em;         /* Espaçamento interno ajustável */
+    border-radius: 50em;           /* Deixa o botão oval/quase circular */
+    background-color: #4F4F4F;
+    color: #fff;
+    font-size: 1em;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: background 0.2s, box-shadow 0.2s;
+    margin: 0.3em;
+    text-align: center;
+    white-space: nowrap;
+    min-width: 3.5em;              /* Garante um tamanho mínimo */
+  }
+  .link-Oval:hover {
+    background-color: #A9A9A9;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  @media (max-width: 600px) {
+    .link-Oval {
+      font-size: 0.9em;
+      padding: 0.6em 1em;
+      min-width: 2.5em;
+    }
+  }
+    .link-redondo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5em;
+    height: 3.5em;
+    min-width: 3.5em;
+    min-height: 3.5em;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 1em;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: background 0.2s, box-shadow 0.2s;
+    margin: 0.3em;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .link-redondo:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  @media (max-width: 600px) {
+    .link-redondo {
+      width: 2.5em;
+      height: 2.5em;
+      font-size: 0.9em;
+    }
+  }
   </style>
 </head>
 <body>
 <header>
 <h1 id="Sitesatalhos">Sites atalhos</h1>
-<nav>
-       
 
-    <a href="https://artesvisuais.github.io/1_2_Planejamento_Bim.html">1_2_Planejamento_Bim.html</a>/   
+<nav class="botoes-container">       
 
-    <a href="https://artesvisuais.github.io/3_Planejamento_Bim.html">3_Planejamento_Bim.html</a>/   
+    <a href="https://artesvisuais.github.io/1_2_Planejamento_Bim.html"class="botao-link" style="background-color: #87CEEB; color: #222222;">1_2_Planejamento_Bim.html</a><br><br>   
 
-<a href="https://artesvisuais.github.io/4_Planejamento_Bim.html">4_Planejamento_Bim.html</a>/
+    <a href="https://artesvisuais.github.io/3_Planejamento_Bim.html"class="botao-link" style="background-color: #90EE90; color: #222222;">3_Planejamento_Bim.html</a><br><br>  
 
-<a href="https://artesvisuais.github.io/5_Planejamento_Bim.html">5_Planejamento_Bim.html</a>/
+<a href="https://artesvisuais.github.io/4_Planejamento_Bim.html"class="botao-link" style="background-color: #DAA520; color: #FFFFFF;">4_Planejamento_Bim.html</a><br><br>
 
-<a href="https://artesvisuais.github.io/EJA_Planejamento_Bim.html">EJA_Planejamento_Bim.html</a>/   
-<br><br>
-<a href="https://artesvisuais.github.io/4_5_Planejamento_Bim.html">4_5_Planejamento_Bim.html</a>/   
+<a href="https://artesvisuais.github.io/5_Planejamento_Bim.html"class="botao-link" style="background-color: #FFD700; color: #222222;">5_Planejamento_Bim.html</a><br><br>
 
+<a href="https://artesvisuais.github.io/EJA_Planejamento_Bim.html" class="botao-link" style="background-color: #DEB887; color: #222222;">EJA_Planejamento_Bim.html</a><br><br>   
+
+<a href="https://artesvisuais.github.io/4_5_Planejamento_Bim.html" class="botao-link" style="background-color: #FFFF00; color: #222222;">4_5_Planejamento_Bim.html</a><br><br>   
+
+    <a href="https://artesvisuais.github.io/Rubrica_Bim.html"class="botao-link" style="background-color: #F5F5DC; color: #007bff;">Rubrica_Bim.html</a>
 
   </nav>
 </header>
-<ul>
-<li><a href="#Semana1">Semana 1</a></li>
-<li><a href="#Semana2">Semana 2</a></li>
-<li><a href="#Semana3">Semana 3</a></li>
-<li><a href="#Semana4">Semana 4</a></li>
-<li><a href="#Semana5">Semana 5</a></li>
-<li><a href="#Semana6">Semana 6</a></li>
-<li><a href="#Semana7">Semana 7</a></li>
-<li><a href="#Semana8">Semana 8</a></li>
-<li><a href="#Semana9">Semana 9</a></li>
-<li><a href="#Semana10">Semana 10</a></li>
-<li><a href="#Semana11">Semana 11</a></li>
-<li><a href="#Semana12">Semana 12</a></li>
-</ul>
-<!--  XXXXXXXXXXX  Inicio do Conteudo 1   XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  3 anos - Planejamento Bimestral<br/>
-<b><h3 id="Semana1">Semana 1, 05/05/2025 até 09/05/2025</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1" ><pre id="n1a">● Preparação da Mostra de desenho contextualização.</pre></div> <button class="btnCopi" onclick="CopyTexto('n1a')" type="button">Copiar</button> </div>
+    <hr style="border: 10px solid green;  border-radius: 5px;"/>
+<div class="aula1">
 
-Habilidade <div class="box-frases"> <div class="texto1" ><pre id="h1a">EF15AR01. Conhecer e apreciar o DESENHO como modalidade das artes visuais, cultivando a percepção, o imaginário, a capacidade de simbolizar e ampliar seu repertório imagético.</pre></div> <button class="btnCopi" onclick="CopyTexto('h1a')" type="button">Copiar</button> </div> Conteudo <div class="box-frases"> <div class="texto1" ><pre id="c1a">Apresentar obras de artistas que usam o desenho como linguagem visual, em especial com estilos e traços variados (linhas simples, contornos, rabiscos, desenhos figurativos e abstratos). Propor a apreciação coletiva de imagens para observar formas, linhas e expressões.
-Explicar o que é uma mostra de arte e a ideia de organizarmos uma com os trabalhos da turma. Estimular os estudantes a refletirem sobre temas que gostariam de retratar e como podem representar suas ideias com desenhos.
-Orientar os estudantes a planejar seus desenhos, escolher materiais e iniciar esboços no caderno ou folha rascunho. Valorizar o processo criativo individual, respeitando o tempo e o estilo de cada criança.
-Materiais sugeridos: papel sulfite, lápis grafite, lápis de cor, giz de cera, canetinha, imagens para apreciação e mural para organizar ideias e inspirações.</pre></div> <button class="btnCopi" onclick="CopyTexto('c1a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+<li><a href="#" class="link-Oval">Semanas:</a></li>
+
+
+   <a href="#Semana1" class="link-redondo">1</a></li>
+<a href="#Semana2" class="link-redondo">2</a></li>
+<a href="#Semana3" class="link-redondo">3</a></li>
+<a href="#Semana4" class="link-redondo">4</a></li>
+<a href="#Semana5" class="link-redondo">5</a></li>
+<a href="#Semana6" class="link-redondo">6</a></li>
+<a href="#Semana7" class="link-redondo">7</a></li>
+<a href="#Semana8" class="link-redondo">8</a></li>
+<a href="#Semana9" class="link-redondo">9</a></li>
+<a href="#Semana10" class="link-redondo">10</a></li>
+<a href="#Semana11" class="link-redondo">11</a></li>
+<a href="#Semana12" class="link-redondo">12</a></li>
+    <br>
+</div>
+<!--  XXXXXXXXXXX  Inicio do Conteudo 1   XXXXXXX   -->
+<hr/><div class="aula1"> <br>  3 anos - Planejamento Bimestral <br>
+<b><h3 id="Semana1">Semana 1(a) -  21/07 à 25/07</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n1a">Retrato com caixa de ovos;</pre></div> <button class="btnCopi" onclick="CopyTexto('n1a')" type="button">Copiar</button> </div>
+
+Habilidade <div class="box-frases"> <div class="texto1"><pre id="h1a">EF03AR01. Conhecer, identificar e apreciar a MODELAGEM/ CONSTRUÇÃO como modalidades das artes visuais tradicionais e contemporâneas presentes na cultura paulista, cultivando a percepção, o imaginário, a capacidade de simbolizar e o repertório imagético, a capacidade de simbolizar e ampliar seu repertório imagético</pre></div> <button class="btnCopi" onclick="CopyTexto('h1a')" type="button">Copiar</button> </div> Conteudo <div class="box-frases"> <div class="texto1"><pre id="c1a">Aula 1 – Apreciação, Planejamento e Início da Criação.
+
+🖼️ Apreciação e conversa inicial:
+● O professor apresenta imagens e pinturas com animais antropomórficos, mostrando animais vestidos como humanos.
+● Também podem ser exibidos trechos curtos de Zootopia ou O Fantástico Senhor Raposo.
+● Durante a roda de conversa, os estudantes comentam o que observam: roupas, expressões, cenários, época e estilo.
+🎨 Início do fazer artístico:
+● O professor distribui os "gomos" das caixas de ovos já recortados.
+● ✂ Cada estudante aparará as bordas com tesoura para deixá-las regulares.
+● 🖌 Pintam o rosto do animal com tinta guache. É possível aplicar uma base branca para intensificar as cores.
+● As orelhas e detalhes (como bigodes) são criados com papel sulfite, papel cartão ou outro material leve.
+
+🖍️ Criação do suporte do retrato:
+● Enquanto os rostos secam, os estudantes preparam o fundo:
+► Cortam papel cartão no formato desejado (retângulo, oval etc.).
+► Delimitam o espaço do quadro e a área da moldura.
+► Iniciam o desenho do corpo humano do animal, já com roupas, respeitando o tamanho do rosto tridimensional.
+
+Aula 2 – Finalização, Moldura e Montagem do Retrato
+
+🖌️ Coloração e acabamento:
+● Os estudantes finalizam o desenho do corpo, colorem com lápis de cor, giz pastel ou canetinha e criam o fundo do retrato.
+● O professor relembra a proposta de uma inspiração renascentista para o estilo da composição.
+
+🧪 Criação da moldura em relevo:
+● O professor apresenta o vídeo com a receita de papel machê:
+🔗 https://www.youtube.com/watch?v=-q-Jpe4gLhI
+● A massa pode ser feita antecipadamente com os retalhos das caixas de ovos.
+● Cada estudante modela sua moldura tridimensional usando a massa sobre o papel cartão.
+
+📌 Montagem final:
+● Quando tudo estiver seco, o rosto do animal é colado sobre o corpo desenhado.
+● O resultado é um retrato tridimensional com composição visual rica e detalhada.
+
+🏛️ Exposição:
+● As obras podem ser fotografadas ou exibidas em um mural ou galeria da escola, valorizando a criatividade e o trabalho coletivo da turma.</pre></pre></pre></div> <button class="btnCopi" onclick="CopyTexto('c1a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana1(b) - 10/02  à       14/02</b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" ><pre id="h1b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>3 anos - Planejamento Bimestral<br/>
+<b>Semana1(b) - __/__  à   __/__</b> <div class="box-frases"><div class="texto2"><pre id="n1b">Nome da atividade (b) Semana 1</pre></div><button class="btnCopi" onclick="CopyTexto('n1b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h1b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h1b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" ><pre id="c1b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h1b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c1b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
@@ -117,35 +270,61 @@ Materiais sugeridos: papel sulfite, lápis grafite, lápis de cor, giz de cera, 
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 2   XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  3 anos - Planejamento Bimestral<br/>
-<b> <h3 id="Semana2">
-Semana 2, 12/05/2025 até 16/05/2025</h3></b> 
-Nome da atividade<div class="box-frases"> <div class="texto1" ><pre id="n2a">● Atividade da Mostra de desenho desenvolvimento.</pre></div> <button class="btnCopi" onclick="CopyTexto('n2a')" type="button">Copiar</button> </div>
+<hr/><div class="aula1"> <br/>  3 anos - Planejamento Bimestral <br/>
+<b> <h3 id="Semana2">Semana 2(a) -  28/07 à 01/08</h3></b> 
+Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n2a">Desafio do Cone </pre></div> <button class="btnCopi" onclick="CopyTexto('n2a')" type="button">Copiar</button> </div>
 
-Habilidade <div class="box-frases"> <div class="texto1" ><pre id="h2a">EF15AR01. Conhecer e apreciar o DESENHO como modalidade das artes visuais, cultivando a percepção, o imaginário, a capacidade de simbolizar e ampliar seu repertório imagético.
-EF15AR02 Conhecer e explorar os elementos constitutivos das artes visuais (ponto, linha, forma, cor, espaço, movimento, gestualidade etc.).
-EF15AR04 Experimentar o desenho, fazendo uso sustentável de diversos materiais, instrumentos e suportes convencionais e não convencionais em suas produções.
-EF15AR06. Dialogar sobre a sua criação e as dos colegas, para alcançar sentidos plurais.</pre></div> <button class="btnCopi" onclick="CopyTexto('h2a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1" ><pre id="c2a">Aula 1 – Produção artística
-Retomar o tema definido na atividade anterior, relembrando com os estudantes as ideias surgidas na roda de conversa e os esboços já iniciados.
- Apresentar e explorar os elementos visuais do desenho: ponto, linha, forma, cor, textura e espaço. Utilizar imagens como referência para que as crianças identifiquem e comentem esses elementos nas obras.
-Organizar os materiais disponíveis e orientar os estudantes a realizarem sua produção principal para a mostra, incentivando o uso criativo e responsável dos recursos.
- Reforçar que o desenho é uma forma de expressão pessoal, portanto, não deve haver correção técnica, mas incentivo ao aperfeiçoamento da ideia.
-Materiais sugeridos: sulfite A4 ou A3, lápis, borracha, lápis de cor, giz de cera, canetinha, papéis variados e apoio de pranchetas ou mesas.
+Habilidade <div class="box-frases"> <div class="texto1"><pre id="h2a">EF15AR02. Conhecer e explorar os elementos constitutivos das artes visuais (ponto, linha, forma, espaço, movimento, gestualidade, cor, textura, volume e composição).</pre></div> <button class="btnCopi" onclick="CopyTexto('h2a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c2a">Aula 1 – Conceito de Escultura e Montagem do Cone
 
-Aula 2 – Reflexão e socialização
-Finalizar as produções com tempo para ajustes e cuidados com a apresentação visual. Organizar uma exposição parcial na sala, colocando os trabalhos em mesas ou no chão para que todos possam circular.
-Propor uma roda de apreciação, onde cada estudante poderá apresentar sua obra, explicando o que desenhou, por que escolheu aquele tema e como realizou o trabalho.
- Conduzir a conversa para que os colegas façam comentários respeitosos sobre as obras, destacando o uso das cores, formas e ideias representadas.
-Finalizar colhendo sugestões sobre como apresentar esses desenhos na mostra final: se usar molduras, onde expor, se colocar legendas, entre outras ideias coletivas.</pre></div> <button class="btnCopi" onclick="CopyTexto('c2a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+🧠 Nuvem de ideias e conversa inicial:
+● O professor inicia uma roda de conversa com os estudantes sobre o que é uma escultura.
+● Levanta perguntas como:
+► Você já viu uma escultura? Onde?
+► Qual a diferença entre uma escultura e um desenho?
+► O que é uma forma com volume?
+● A partir das respostas, o professor constrói com a turma uma breve nuvem de ideias no quadro, organizando palavras relacionadas: volume, forma, espaço, tridimensional, entre outras.
+
+📄 Contextualização conceitual:
+● O professor explica, com exemplos visuais ou objetos reais, a diferença entre arte bidimensional (2D) e tridimensional (3D).
+● Apresenta o cone como uma forma tridimensional, mostrando sua planificação (forma aberta) e explicando o que muda quando é montado (ganha volume).
+● Mostra imagens ou esculturas simples feitas a partir de cones ou figuras geométricas.
+
+✂️ Montagem do cone:
+● Cada estudante recebe uma planificação de cone impressa em papel colorido.
+● ► Dobram e colam as abas conforme a orientação do professor.
+● Observam como o volume surge a partir da forma plana (2D → 3D).
+● Ao final da aula, cada estudante terá montado seu cone-base, pronto para a transformação artística da próxima aula.
+Aula 2 – Desafio Criativo: Transformando o Cone em Animal
+
+🎨 Introdução ao fazer artístico:
+● O professor propõe o desafio:
+🐾 “E se esse cone fosse transformado em um animal com volume? Como ele seria?”
+● Os estudantes pensam em animais com formas que podem se adaptar ao cone — como corujas, tubarões, ratos, tamanduás, gatos etc.
+● O professor apresenta exemplos ilustrativos ou referências visuais para estimular a criatividade.
+
+🖌️ Criação e modelagem com colagem:
+● Usando papel colorido, tesoura e cola, os estudantes:
+✂️ Criam orelhas, patas, asas, olhos, focinho, cauda e outros elementos em papel.
+📌 Colam as partes no cone, cuidando da composição visual e do equilíbrio dos volumes.
+● Exploram texturas e contrastes com dobras, sobreposições ou recortes.
+
+🎯 Apresentação e socialização:
+● Cada estudante apresenta seu animal-cone para a turma, explicando qual animal criou e quais partes adaptou para dar vida à forma tridimensional.
+● O professor pode estimular os estudantes a dar nomes aos animais e contar pequenas histórias sobre eles.
+
+🏛️ Exposição final:
+● Os trabalhos podem ser organizados em uma exposição na escola, formando uma “galeria de esculturas-cone” feita pela turma.</pre></div> <button class="btnCopi" onclick="CopyTexto('c2a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana2(b) - 17/02  à       21/02</b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" ><pre id="h2b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>3 anos - Planejamento Bimestral<br/>
+<b>Semana2(b) - __/__  à  __/__</b> <div class="box-frases"><div class="texto2"><pre id="n2b">Nome da atividade (b) Semana 2</pre></div><button class="btnCopi" onclick="CopyTexto('n2b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h2b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h2b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" ><pre id="c2b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h2b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c2b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
@@ -153,33 +332,49 @@ Finalizar colhendo sugestões sobre como apresentar esses desenhos na mostra fin
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 3  XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  3 anos - Planejamento Bimestral<br/>
-<b><h3 id="Semana3">Semana 3, 19/05/2025 até 23/05/2025</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1" ><pre id="n3a">● Atividade da Mostra de desenho, exposição e votação inicial.</pre></div> <button class="btnCopi" onclick="CopyTexto('n3a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1" ><pre id="h3a">EF15AR05. Experimentar a criação em artes visuais de modo individual, coletivo e colaborativo, explorando diferentes espaços da escola e da comunidade.
-EF15AR06. Dialogar sobre a sua criação e as dos colegas, para alcançar sentidos plurais.</pre></div> <button class="btnCopi" onclick="CopyTexto('h3a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1" ><pre id="c3a">Aula 1 – Organização e montagem da exposição
-Organizar um momento coletivo para planejar a exposição dos desenhos. Em roda, discutir com os estudantes:
-●Onde podemos expor os trabalhos? (murais da escola, corredores, sala de aula etc.)
+<hr/><div class="aula1"> <br/>  3 anos - Planejamento Bimestral <br/>
+<b><h3 id="Semana3">Semana 3(a) -  04/08 à 08/08</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n3a">Pantomima</pre></div> <button class="btnCopi" onclick="CopyTexto('n3a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h3a">EF03AR18. Conhecer e apreciar a pantomima presente em diferentes contextos, aprendendo a ver e a ouvir histórias dramatizadas e cultivando a percepção, o imaginário, a capacidade de simbolizar e o repertório ficcional</pre></div> <button class="btnCopi" onclick="CopyTexto('h3a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c3a">Aula 1 – Apreciação e Compreensão da Pantomima
 
-●Como organizaremos os desenhos? (por tema, turma, técnica, cor, etc.)
+🎭 Pensando Arte – Introdução à pantomima:
+● O professor apresenta à turma vídeos curtos do artista Carlos Martínez, conhecido por sua expressividade corporal sem o uso da fala.
+► Vídeo sugerido: https://youtu.be/e-1yvu9nBv0?si=UlMV-gou36V-e8WL
+● Os estudantes observam como os gestos, expressões faciais e movimentos são usados para contar histórias e provocar emoções.
 
-●Precisamos escrever algo junto? (nome do autor, título da obra, legenda?)
+🗣️ Aprendendo Arte – Roda de conversa:
+● Após a exibição dos vídeos, o professor propõe uma roda de conversa com perguntas como:
+► O que você entendeu da cena mesmo sem falas?
+► Como o artista conseguiu mostrar sentimentos apenas com o corpo?
+► Você já usou a mímica para se comunicar com alguém?
+● A turma discute como a linguagem corporal pode expressar ideias, ações e emoções de forma clara, mesmo sem palavras.
+Aula 2 – Fazendo Arte: Jogos de Mímica
 
-Separar os trabalhos finalizados, providenciar etiquetas com os nomes dos estudantes e organizar a montagem do espaço expositivo com apoio das crianças. Estimular a cooperação e o cuidado com o trabalho dos colegas.
-Materiais sugeridos: fita adesiva, cartolina para legendas, etiquetas, cola, alfinetes ou prendedores.
+🎯 Jogo de Mímica – Explorando a linguagem corporal:
+● O professor propõe aos estudantes um jogo de mímica em grupo, utilizando a linguagem corporal para representar:
+● Ações simples do cotidiano (comer, nadar, pentear o cabelo).
+● Profissões (bombeiro, cozinheiro, artista).
+● Animais ou personagens.
+● Os colegas devem adivinhar o que está sendo representado, incentivando a observação e a interpretação dos gestos.
 
-Aula 2 – Apreciação e votação inicial
-Convidar os estudantes para visitar a exposição organizada, incentivando que observem com atenção os diferentes estilos e temas representados.
- Realizar uma votação simbólica e respeitosa: cada estudante poderá escolher alguns trabalhos que mais chamaram sua atenção (pode usar adesivos, estrelas de papel, marcadores).
-Durante a votação, reforçar que todos os trabalhos têm valor e que a escolha serve apenas como forma de destacar percepções e preferências.
- Encerrar com uma roda de conversa sobre a experiência da exposição e da votação. Estimular a troca de impressões, a escuta ativa e o reconhecimento mútuo.</pre></div> <button class="btnCopi" onclick="CopyTexto('c3a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+🧠 Variações e desafios criativos:
+● O professor pode propor novas rodadas com desafios, como:
+► Fazer uma mímica em dupla.
+► Mímica com tema sorteado (emoções, situações engraçadas).
+► Mímica silenciosa de uma pequena cena (como em pantomima).
+
+📌 Reflexão final:
+● Ao final da aula, os estudantes comentam sobre as dificuldades e facilidades de se comunicar apenas com o corpo.
+● O professor retoma a ideia de que o corpo é uma poderosa ferramenta de expressão artística.</pre></div> <button class="btnCopi" onclick="CopyTexto('c3a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana3(b) - 24/02  à       28/02</b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" ><pre id="h3b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>3 anos - Planejamento Bimestral<br/>
+<b>Semana3(b) - __/__  à __/__ </b> <div class="box-frases"><div class="texto2"><pre id="n3b">Nome da atividade (b) Semana 3</pre></div><button class="btnCopi" onclick="CopyTexto('n3b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h3b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h3b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" ><pre id="c3b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h3b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c3b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
@@ -187,29 +382,54 @@ Durante a votação, reforçar que todos os trabalhos têm valor e que a escolha
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 4   XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  3 anos - Planejamento Bimestral<br/>
-<b><h3 id="Semana4">Semana 4, 26/05/2025 até 30/05/2025</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1" ><pre id="n4a">● Atividade da Mostra de desenho, votação dos representantes da escola.</pre></div> <button class="btnCopi" onclick="CopyTexto('n4a')" type="button">Copiar</button> </div>Habilidade <div class="box-frases"> <div class="texto1" ><pre id="h4a">EF15AR05. Experimentar a criação em artes visuais de modo individual, coletivo e colaborativo, explorando diferentes espaços da escola e da comunidade.
-EF15AR06. Dialogar sobre a sua criação e as dos colegas, para alcançar sentidos plurais.</pre></div> <button class="btnCopi" onclick="CopyTexto('h4a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1" ><pre id="c4a">Aula 1 – Seleção dos representantes
-Retomar com os estudantes o processo de apreciação da mostra. Explicar que agora será feita uma votação oficial para escolher os desenhos que representarão a escola em uma possível exposição externa ou evento.
-Organizar a turma para revisitar os trabalhos expostos e, em seguida, realizar a votação de forma estruturada. Pode-se utilizar cédulas simples com os nomes dos participantes ou número das obras.
- Garantir que o processo seja feito com respeito e valorização de todos os trabalhos, reforçando a importância da diversidade de estilos e ideias.
-Registrar os nomes dos estudantes mais votados e abrir espaço para que eles compartilhem como se sentem sendo indicados, estimulando o diálogo e a escuta entre os colegas.
+<hr/><div class="aula1"> <br/>  3 anos - Planejamento Bimestral <br/>
+<b><h3 id="Semana4">Semana 4(a) -  11/08 à 15/08</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n4a">Aprender como o ator pode narrar uma história por meio de gestos e de expressões, usando o corpo para comunicar uma ideia;</pre></div> <button class="btnCopi" onclick="CopyTexto('n4a')" type="button">Copiar</button> </div>Habilidade <div class="box-frases"> <div class="texto1"><pre id="h4a">EF03AR19. Reconhecer teatralidades na vida cotidiana, identificando elementos teatrais (variadas entonações de voz, diferentes fisicalidades, diversidades de personagens e narrativas, etc.).</pre></div> <button class="btnCopi" onclick="CopyTexto('h4a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c4a">Aula 1 – Expressão Corporal e Jogo com Palavra-chave
 
-Aula 2 – Preenchimento da autorização e orientações finais
-Apresentar aos estudantes o modelo de autorização para participação na mostra externa e representação da escola. Explicar a importância de obter a assinatura dos responsáveis para validação da participação.
-Distribuir as autorizações entre os escolhidos e orientar as crianças sobre como entregá-las aos responsáveis. Informar o prazo para devolução.
- Aproveitar para conversar sobre a responsabilidade de representar a escola, incentivando atitudes de respeito, cuidado com os materiais e valorização da arte.
-Finalizar com uma conversa aberta sobre o processo vivido até aqui, destacando o papel de cada um na construção coletiva da mostra e como esse tipo de atividade fortalece o sentido de comunidade escolar.
-Materiais sugeridos: autorizações impressas, envelopes para envio.</pre></div> <button class="btnCopi" onclick="CopyTexto('c4a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+🎭 Introdução ao fazer artístico:
+● O professor inicia com uma conversa breve sobre como usamos o corpo para contar histórias, mesmo sem palavras.
+● Apresenta a proposta do dia: um jogo de improvisação corporal com base em uma história narrada.
+
+🗣️ Atividade – História com palavra-chave:
+● Os estudantes se sentam em círculo, como em uma “dança da cadeira”.
+● O professor começa a narrar uma história simples, utilizando gestos, expressões faciais e entonação dramática.
+► Exemplo de palavra-chave: “🚂 trem” (mas pode ser avião, cachorro, bicicleta, pizza, tempestade...).
+● Sempre que o professor gesticular ou mencionar a palavra-chave, todos trocam de lugar rapidamente.
+● O estudante que ficar sem cadeira vai ao centro, assume o papel de narrador e continua a história com novos gestos.
+
+🧠 Objetivos da atividade:
+● Estimular a atenção, expressão corporal, improviso e escuta ativa.
+● Trabalhar ritmo, movimento e imaginação coletiva de forma divertida.
+Aula 2 – Variações do Jogo e Reflexão Coletiva
+
+🎲 Exploração de variações do jogo:
+● O professor propõe novas rodadas com diferentes palavras-chave e cenários, por exemplo:
+► "Aventura na floresta", palavra-chave: "onça"
+► "Dia de tempestade", palavra-chave: "relâmpago"
+● Pode-se variar o ritmo da narrativa ou permitir que os estudantes, em duplas ou trios, gesticulem juntos enquanto contam a história.
+
+🔄 Interações e desafios criativos:
+● Introduzir desafios:
+● Continuar a história só com gestos (sem fala).
+● Imitar sons com o corpo.
+● Incluir um objeto imaginário (ex: “uma bola mágica”).
+
+💬 Roda de conversa final:
+● No encerramento, o grupo se reúne para refletir sobre:
+► Como foi se expressar com o corpo?
+► Foi difícil improvisar?
+► O que mais gostaram na atividade?
+● O professor pode registrar as falas no quadro, valorizando as descobertas do grupo sobre arte e expressão corporal.</pre></div> <button class="btnCopi" onclick="CopyTexto('c4a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana4(b) - 03/03  à       07/03</b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" ><pre id="h4b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>3 anos - Planejamento Bimestral<br/>
+<b>Semana4(b) - __/__  à  __/__</b> <div class="box-frases"><div class="texto2"><pre id="n4b">Nome da atividade (b) Semana 4</pre></div><button class="btnCopi" onclick="CopyTexto('n4b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h4b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h4b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" ><pre id="c4b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h4b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c4b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
@@ -217,67 +437,64 @@ Materiais sugeridos: autorizações impressas, envelopes para envio.</pre></div>
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 5  XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  3 anos - Planejamento Bimestral<br/>
-<b><h3 id="Semana5">Semana 5, 02/06/2025 até 06/06/2025</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1" ><pre id="n5a">●Dança em linhas;
-●Recorte, colagem, dobradura e pintura;</pre></div> <button class="btnCopi" onclick="CopyTexto('n5a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1" ><pre id="h5a">EF03AR01. Identificar e apreciar desenho, pintura, modelagem/construção, colagem e gravura/monotipia como modalidades das artes visuais tradicionais e contemporâneas presentes na cultura paulista, cultivando a percepção, o imaginário, a capacidade de simbolizar e o repertório imagético. EF15AR02. Conhecer e explorar os elementos constitutivos das artes visuais (ponto, linha, forma, espaço, movimento, gestualidade, cor, textura, volume e composição). EF03AR04. Experimentar desenho, pintura, modelagem/ construção, colagem, gravura/monotipia por meio de técnicas convencionais e não convencionais, fazendo uso sustentável de materiais e instrumentos. EF15AR05. Experimentar a criação em artes visuais de modo individual, coletivo e colaborativo, explorando diferentes espaços da escola e da comunidade.
-EF15AR06. Dialogar sobre a sua criação e as dos colegas, para alcançar sentidos plurais. </pre></div> <button class="btnCopi" onclick="CopyTexto('h5a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1" ><pre id="c5a">Objetivos
-●Estimular a expressão artística e a criatividade através de composições visuais inspiradas em movimentos de dança.
-●Explorar técnicas mistas envolvendo pintura, colagem e dobradura.
-●Utilizar materiais recicláveis com intencionalidade e criatividade.
-●Valorizar a apreciação e socialização das produções artísticas.
+<hr/><div class="aula1"> <br/>  3 anos - Planejamento Bimestral <br/>
+<b><h3 id="Semana5">Semana 5(a) -  18/08 à 22/08</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n5a">Quadro Vivo: Uma Obra que Ganha Vida,</pre></div> <button class="btnCopi" onclick="CopyTexto('n5a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h5a">EF15AR23. Conhecer e experimentar, em projetos temáticos, as relações processuais entre diversas linguagens artísticas.
+EF15AR24. Conhecer e experimentar brinquedos, brincadeiras, jogos, danças, canções e histórias de diferentes matrizes estéticas e culturais.
+EF15AR26. Explorar diferentes tecnologias e recursos digitais (multimeios, animações, jogos eletrônicos, gravações em áudio e vídeo, fotografia) nos processos de criação artística.</pre></div> <button class="btnCopi" onclick="CopyTexto('h5a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c5a">Aula 1 – Apreciação, Releitura Visual e Criação Cênica
 
+🖼️ Apreciação e escolha da obra:
+● O professor apresenta aos estudantes imagens impressas ou projetadas de obras visuais famosas, como:
+► O Grito de Edvard Munch
+► Abaporu de Tarsila do Amaral
+► Os Retirantes de Cândido Portinari
+● A turma conversa sobre o que observa, sente e imagina com cada imagem: cores, expressões, ações, cenário e clima emocional.
+● Divididos em grupos, os estudantes escolhem uma das obras para usar como referência criativa.
 
-Aula 1 – Inspiração e produção do fundo
-1.Apreciação de artistas visuais:
- Apresentar brevemente artistas como Mila Petry, Sandro Presoto, Márcio Camargo, Ângela Leite e Aldemir Martins, destacando o uso de linhas, formas, texturas e materiais diversos.
+🎨 Releitura visual da obra:
+● Cada grupo faz uma releitura artística da obra escolhida, podendo criar:
+● Painéis coletivos com tinta ou colagem
+● Elementos visuais soltos para montagem do cenário
+● Detalhes como objetos, partes do fundo, acessórios e figurinos
 
-2.Discussão coletiva:
- Conversar com os estudantes sobre como podemos representar o movimento do corpo, da dança e da natureza por meio da arte visual.
+🎭 Transformando a imagem em cena teatral:
+● O grupo discute juntos:
+► Quem são os personagens?
+► O que pode estar acontecendo antes ou depois da cena da obra?
+► Qual é o sentimento principal da cena?
+● Com base nisso, criam uma cena teatral inspirada na obra, começando por uma imagem congelada (tableau vivant) e, em seguida, incorporando falas, movimentos e possíveis interações entre os personagens.
 
-3.Produção artística – etapa 1:
+Aula 2 – Apresentações, Registro e Exposição
 
-○Cada estudante recebe um suporte circular (papelão, prato de papel, cartolina etc.).
+📸 Apresentação dos grupos e registro fotográfico:
+● Cada grupo apresenta sua cena teatral baseada na obra escolhida.
+● As apresentações começam com a imagem congelada, seguida da encenação com movimento e fala.
+● O professor registra com fotografia o momento do quadro vivo (opcionalmente, pode usar trilha sonora para acompanhar a cena).
 
-○Pintam o fundo utilizando tinta azul, branca e verde, aplicadas com bucha ou pincel, criando efeitos de movimento e profundidade.
+🖼️ Exposição e compartilhamento:
+● Com ajuda da turma, monta-se uma exposição na escola com:
+● Impressões das obras originais
+● Fotografias das releituras vivas
+● Produções visuais feitas por cada grupo
+● A exposição pode ser visitada por outras turmas ou pela comunidade escolar.
 
-○Enquanto a pintura seca, iniciam a dobradura de peixe ou pássaro com círculos, quadrados ou forminhas de papel, com orientação do professor.
+💬 Roda de conversa final:
+● Os estudantes compartilham como foi a experiência de transformar arte visual em expressão corporal e teatral.
+● Refletem sobre o que mais gostaram, as dificuldades enfrentadas e as descobertas feitas com a atividade.
 
-
-Aula 2 – Composição, montagem e socialização
-1.Finalização das dobraduras:
-
-○Dobradura do peixe (com círculos coloridos, quadrados ou forminhas).
-
-○Dobradura do pássaro (com círculo e tiras de papel colorido ou fita crepe).
-
-2.Montagem da obra mista:
-
-○Colagem das dobraduras no suporte pintado.
-
-○Adição de detalhes com canetinhas, papel picado, cola colorida ou linhas com barbante.
-
-3.Apreciação e exposição:
-
-○Expor os trabalhos na sala ou mural da escola.
-
-○Realizar uma roda de conversa para que os estudantes compartilhem seu processo criativo e comentem os elementos usados nas composições dos colegas.
-
-
-Materiais sugeridos
-●Suporte circular (papelão, cartolina etc.)
-●Tintas (azul, branca, verde) e bucha de lavar louça
-●Papéis coloridos, forminhas, fita crepe
-
-Tesoura, cola, canetinhas, papel picado, barbante (opcional)</pre></div> <button class="btnCopi" onclick="CopyTexto('c5a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+🎶 Possibilidades adicionais:
+● Incluir trilha sonora que combine com o clima da obra encenada.
+● Organizar uma “exposição performática” aberta à escola, com encenações ao vivo das obras escolhidas.</pre></div> <button class="btnCopi" onclick="CopyTexto('c5a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana5(b) -  10/03  à       14/03 </b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" ><pre id="h5b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>3 anos - Planejamento Bimestral<br/>
+<b>Semana5(b) -  __/__  à  __/__ </b> <div class="box-frases"><div class="texto2"><pre id="n5b">Nome da atividade (b) Semana 5</pre></div><button class="btnCopi" onclick="CopyTexto('n5b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h5b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h5b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" ><pre id="c5b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h5b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c5b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
@@ -285,85 +502,52 @@ Tesoura, cola, canetinhas, papel picado, barbante (opcional)</pre></div> <button
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 6   XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  3 anos - Planejamento Bimestral<br/>
-<b><h3 id="Semana6">Semana 6, 09/06/2025 até 13/06/2025</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1" ><pre id="n6a">●“É PRÁ MOVIMENTAR? VAMOS LÁ!”;</pre></div> <button class="btnCopi" onclick="CopyTexto('n6a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1" ><pre id="h6a">EF15AR08. Conhecer, apreciar e experimentar diferentes formas da dança, presentes em diferentes contextos da cultura local (lar, escola, comunidade, cidade, outras), nas tradicionais e contemporâneas da cultura popular paulista e brasileira. </pre></div> <button class="btnCopi" onclick="CopyTexto('h6a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1" ><pre id="c6a">Objetivos
-●Estimular a vivência corporal por meio da dança, promovendo a percepção rítmica, coordenação e expressão individual.
+<hr/><div class="aula1"> <br/>  3 anos - Planejamento Bimestral <br/>
+<b><h3 id="Semana6">Semana6(a) -  25/08 à 29/08</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n6a">● Criação de bonecos "articulados" de papel, utilizando modelagem (amassando e dobrando)
+● Personalização de bonecos utilizando recorte e colagem (técnica baseada nos "paper duck")
+● Criação de histórias e interpretação de cenas utilizando os bonecos (teatro de bonecos)
+</pre></div> <button class="btnCopi" onclick="CopyTexto('n6a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h6a">EF15AR23. Conhecer e experimentar, em projetos temáticos, as relações processuais entre diversas linguagens artísticas.</pre></div> <button class="btnCopi" onclick="CopyTexto('h6a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c6a">Aula 1 – Introdução à Modelagem e Criação do Boneco Articulado
 
-●Apresentar manifestações culturais da dança presentes no cotidiano, na cultura local e brasileira.
+🖌️ Apreciação e contextualização:
+● O professor inicia a aula discutindo com os estudantes o conceito de modelagem, estimulando-os a refletir sobre:
+► Quais materiais podem ser modelados?
+► Que ferramentas usamos para modelar?
+● O professor também pode mostrar exemplos de materiais como argila, massa de modelar, papel, entre outros, e como cada um deles permite a criação de formas e figuras.
 
-●Valorizar a diversidade e o pertencimento cultural através do movimento.
+🎨 Fazer Artístico – Criação do boneco de papel articulado:
+● Após essa introdução, será apresentada à turma a técnica de modelagem de um boneco articulado de papel.
+● O boneco é feito a partir de uma única folha de papel:
+► Cortes ou rasgos são feitos na folha, e depois a modelagem ocorre através de dobra e amassamento do papel para dar volume e formar os membros articulados.
+● O professor pode demonstrar a técnica, incentivando os estudantes a fazerem seus próprios bonecos, criando braços e pernas móveis para que possam ser posicionados em diferentes posições.
+● Referência de vídeo: Modelo de boneco articulado de papel
 
-●Proporcionar momentos de criação coletiva e apreciação entre os colegas.
+Aula 2 – Customização e Criação de Personagens
 
+🎨 Fazer Artístico – Customização dos bonecos:
+● Após a criação do boneco, o professor introduz o conceito de customização de bonecos.
+● Os estudantes aprenderão a criar roupas, acessórios e rostos trocáveis para seus bonecos, utilizando papel e técnicas de recorte e colagem.
+● O conceito do “paper duck” (patinho de papel com acessórios trocáveis) será apresentado, com exemplos de como customizar bonecos.
+► Referência do paper duck para exemplo: Paper Duck no Pinterest
 
-Aula 1 – Reconhecendo e experimentando danças da cultura popular
-1. Roda de conversa inicial
-●Você já participou de alguma dança em família, festa ou evento escolar?
+🎭 Exercício de imaginação – Criando personagens:
+● O professor sugere que cada estudante crie uma história para seu boneco, dando-lhe nome, origem, vocação e um contexto único.
+● Os estudantes podem também, em grupos, criar uma pequena peça teatral, utilizando seus bonecos como personagens e incorporando acessórios e feições trocáveis.
+● Durante o ensaio, os alunos devem dublar seus personagens, explorando diferentes expressões e ações, e criar diálogos e situações cotidianas ou momentâneas.
 
-●Que músicas ou danças tradicionais você conhece (ciranda, frevo, forró, samba de roda, etc.)?
-
-●Como a dança aparece no nosso dia a dia?
-
-2. Apreciação cultural e contextualização
-●Apresentar trechos de vídeos ou músicas de danças tradicionais brasileiras, com foco em manifestações do Vale do Paraíba, interior de São Paulo ou cultura popular nordestina.
-
-●Exemplos: Ciranda, Cateretê, Samba de Roda, Dança do Pezinho, Frevo.
-
-●Conversar sobre as origens, ritmos, vestimentas e significados dessas danças.
-
-3. Vivência corporal
-●Ensinar movimentos básicos de algumas danças.
-
-●Atividades lúdicas como:
-
-○Dança da cadeira com variação de ritmos
-
-○Caminhar no ritmo da música
-
-○Jogo de imitar passos e movimentos populares (pular, girar, marcar o chão)
-
-
-Aula 2 – Criação e expressão com a dança
-1. Revisão dos ritmos e movimentos
-●Retomar brevemente as danças vistas na aula anterior.
-
-●Estimular os estudantes a escolherem um ritmo que mais gostaram.
-
-2. Criação em pequenos grupos
-●Os estudantes, organizados em trios ou quartetos, inventam uma pequena sequência de dança usando os movimentos trabalhados.
-
-●Podem usar objetos simples como lenços, fitas ou arcos para compor a dança.
-
-3. Apresentação e apreciação
-●Cada grupo apresenta sua sequência para a turma.
-
-●A turma observa e comenta aspectos como ritmo, expressão e criatividade.
-
-●O professor valoriza a escuta e o respeito às diferentes formas de se movimentar.
-
-4. Encerramento e relaxamento
-●Finalizar com uma dança coletiva livre ao som de uma música suave e alegre.
-
-●Conduzir um momento breve de relaxamento, com respiração e alongamento.
-
-
-Materiais sugeridos
-●Aparelho de som ou caixa bluetooth
-
-●Lista de músicas tradicionais brasileiras
-
-●Lenços, fitas, arcos (opcional)
-
-Espaço amplo para movimentação</pre></div> <button class="btnCopi" onclick="CopyTexto('c5a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+💬 Apresentação e apreciação:
+● Cada grupo terá a oportunidade de apresentar sua esquete teatral para a turma, utilizando os bonecos criados e a dublagem feita pelos próprios estudantes.
+● Após as apresentações, o professor pode promover uma roda de conversa, onde os estudantes compartilham como foi criar e dar vida aos seus bonecos, e o que aprenderam sobre modelagem e expressão artística.</pre></div> <button class="btnCopi" onclick="CopyTexto('c5a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana6(b) - 17/03  à       21/03</b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" ><pre id="h6b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>3 anos - Planejamento Bimestral<br/>
+<b>Semana6(b) - __/__  à  __/__ </b> <div class="box-frases"><div class="texto2"><pre id="n6b">Nome da atividade (b) Semana 6</pre></div><button class="btnCopi" onclick="CopyTexto('n6b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h6b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h6b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" ><pre id="c6b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h6b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c6b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
@@ -371,75 +555,39 @@ Espaço amplo para movimentação</pre></div> <button class="btnCopi" onclick="C
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 7  XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  3 anos - Planejamento Bimestral<br/>
-<b><h3 id="Semana7">
-Semana 7, 16/06/2025 até 20/06/2025</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1" ><pre id="n7a">●“CIRANDA: APRECIAÇÃO E CRIAÇÃO”;</pre></div> <button class="btnCopi" onclick="CopyTexto('n7a')" type="button">Copiar</button> </div>Habilidade <div class="box-frases"> <div class="texto1" ><pre id="h7a">EF15AR08. Conhecer, apreciar e experimentar diferentes formas da dança, presentes em diferentes contextos da cultura local (lar, escola, comunidade, cidade, outras), nas tradicionais e contemporâneas da cultura popular paulista e brasileira. EF15AR09. Estabelecer relações entre as partes do corpo e destas com o todo corporal na construção do movimento dançado. EF15AR10. Experimentar diferentes formas de orientação no espaço (deslocamentos, planos, direções, caminhos etc.) e ritmos de movimento (lento, moderado e rápido) na construção do movimento dançado. EF03AR11. Conhecer e experimentar os elementos constitutivos e os aspectos estruturais do movimento, de modo individual e coletivo, em movimentos dançados, a partir de um gênero ou estilo específico de danças adequadas à faixa etária. EF03AR12. Dialogar, com respeito e sem preconceito, sobre as experiências pessoais e coletivas em dança vivenciadas na escola, como fonte para a construção de vocabulários e repertórios próprios.</pre></div> <button class="btnCopi" onclick="CopyTexto('h7a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1" ><pre id="c7a">Objetivos
-●Apreciar obras visuais que representem a ciranda como manifestação cultural e artística.
+<hr/><div class="aula1"> <br/>  3 anos - Planejamento Bimestral <br/>
+<b><h3 id="Semana7">Semana7(a) -  01/09 à 05/09</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n7a">Teatro do Silêncio: A Arte da Pantomima</pre></div> <button class="btnCopi" onclick="CopyTexto('n7a')" type="button">Copiar</button> </div>Habilidade <div class="box-frases"> <div class="texto1"><pre id="h7a">EF03AR18 – Conhecer e apreciar a pantomima presente em diferentes contextos, aprendendo a ver e a ouvir histórias dramatizadas e cultivando a percepção, o imaginário, a capacidade de simbolizar e o repertório ficcional.
+EF03AR20 – Conhecer e explorar processos narrativos individuais e coletivos, em teatro, explorando a improvisação, a criatividade e a teatralidade dos gestos.
+EF03AR21 – Experimentar o trabalho colaborativo e coletivo em improvisações teatrais e processos narrativos criativos em pantomima, explorando a teatralidade do figurino e das fisicalidades.</pre></div> <button class="btnCopi" onclick="CopyTexto('h7a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c7a">Aula 1 – Apreciação e Experimentação de Gestos
 
-●Vivenciar a dança da ciranda com foco em movimentos corporais, formação de roda, ritmo e deslocamentos no espaço.
+🎭 Apreciação e contextualização:
+● O professor inicia com uma roda de conversa perguntando: É possível contar uma história sem falar?
+● Apresenta vídeos curtos de pantomima, como cenas do artista Carlos Martínez, ou trechos de filmes de Charlie Chaplin e Mr. Bean.
+● Discute com a turma o uso da expressão facial, gestos, movimentos corporais e a ausência de fala como formas de contar histórias.
 
-●Desenvolver a escuta, o respeito mútuo e a criação coletiva.
+🕺 Fazer artístico – Exploração corporal:
+● Os estudantes experimentam imitar gestos e ações simples: empurrar uma parede invisível, puxar uma corda, andar contra o vento, etc.
+● Ao final, propõe-se pequenos desafios de imitação em duplas, como o “espelho humano”, onde um imita o outro.
+Aula 2 – Criação de Cenas em Pantomima
 
-●Estimular a expressão corporal a partir da interpretação de imagens artísticas e da criação de novos movimentos.
+🎨 Fazer artístico – Criação colaborativa:
+● Em grupos, os estudantes escolhem uma situação cotidiana simples (ir à feira, procurar um objeto perdido, escorregar no sabão) e criam uma cena em pantomima baseada nela.
+● O professor orienta para que explorem expressões corporais e faciais marcantes, criatividade e organização de início, meio e fim na ação.
 
-
-Aula 1 – Apreciação e interpretação corporal
-1.Roda de conversa inicial
-
-○O que é uma ciranda? Onde podemos vê-la ou participar dela?
-
-○Que outras danças em roda vocês conhecem?
-
-2.Apreciação de imagens
-
-○Exibição de obras visuais que representem a ciranda (ex.: Carybé, Tarsila do Amaral, Ana Maria Dias).
-
-○Breve contextualização da vida e obra dos artistas apresentados.
-
-○Análise guiada: observar posições corporais, roupas, expressões e formação da roda.
-
-3.Interpretação corporal
-
-○Dividir a turma em grupos. Cada grupo escolhe uma imagem apreciada e recria a formação da ciranda representada, transformando-se nos elementos visuais da obra (posturas, direção dos braços, gestos).
-
-
-Aula 2 – Criação de movimentos e apreciação coletiva
-1.Criação coreográfica em grupo
-
-○A partir da imagem que representaram, os grupos criam uma sequência de movimentos dançados inspirados na ciranda, podendo modificar os passos, a direção e o ritmo.
-
-○Explorar deslocamentos (em círculo, para frente e para trás), níveis (alto/baixo) e variações rítmicas (lento, moderado, rápido).
-
-2.Ensaios e apresentações
-
-○Os grupos apresentam suas criações para a turma.
-
-○O professor media uma roda de apreciação, incentivando comentários respeitosos sobre o que foi observado: “O que te chamou atenção nesse grupo?”, “Como eles usaram o espaço?”
-
-3.Encerramento e reflexão
-
-○Conversa final sobre o valor da ciranda como dança coletiva, cultural e integradora.
-
-○Estimular os estudantes a perceberem o quanto sua contribuição pessoal ajudou na construção coletiva.
-
-
-Materiais sugeridos
-●Imagens impressas ou projetadas de obras sobre a ciranda
-
-●Aparelho de som e músicas de ciranda (ex.: “Ciranda Cirandinha”, versões do Grupo Tiquequê ou Palavra Cantada)
-
-●Lenços ou fitas para enriquecer a movimentação (opcional)
-
-Espaço amplo para movimentação</pre></div> <button class="btnCopi" onclick="CopyTexto('c7a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+🎬 Apresentação e roda de conversa:
+● Cada grupo apresenta sua cena.
+● Ao final, a turma participa de uma conversa sobre o que cada um sentiu ao comunicar sem palavras, percebendo as diferentes formas de representar ideias e emoções.</pre></div> <button class="btnCopi" onclick="CopyTexto('c7a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana7(b) - 24/03  à       28/03</b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" ><pre id="h7b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>3 anos - Planejamento Bimestral<br/>
+<b>Semana7(b) - __/__  à  __/__</b> <div class="box-frases"><div class="texto2"><pre id="n7b">Nome da atividade (b) Semana 7</pre></div><button class="btnCopi" onclick="CopyTexto('n7b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h7b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h7b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" ><pre id="c7b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h7b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c7b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
@@ -447,92 +595,41 @@ Espaço amplo para movimentação</pre></div> <button class="btnCopi" onclick="C
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 8  XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  3 anos - Planejamento Bimestral<br/>
-<b><h3 id="Semana8">Semana 8, 23/06/2025 até 27/06/2025</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1" ><pre id="n8a">●Movimentos e Cores da Cultura Indígena - Artista Jaider Esbell e suas obras;</pre></div> <button class="btnCopi" onclick="CopyTexto('n8a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1" ><pre id="h8a">EF15AR26. Explorar diferentes linguagens artísticas disponíveis na internet (como vídeos, animações, jogos interativos e gravações) e, a partir disso, criar uma produção visual pessoal, desenvolvendo a criatividade, percepção estética e expressão artística. EF15AR23. Conhecer e experimentar, em projetos temáticos, as relações processuais entre diversas linguagens artísticas. </pre></div> <button class="btnCopi" onclick="CopyTexto('h8a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1" ><pre id="c8a">Objetivos
-●Apresentar a arte indígena contemporânea e os rituais tradicionais dos povos originários.
+<hr/><div class="aula1"> <br/>  3 anos - Planejamento Bimestral <br/>
+<b><h3 id="Semana8">Semana8(a) - 08/09 à 12/09</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n8a"> Teatro dos Animais: Voz, Corpo e Personagens</pre></div> <button class="btnCopi" onclick="CopyTexto('n8a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h8a">EF03AR19 – Reconhecer teatralidades na vida cotidiana, identificando elementos teatrais (variadas entonações de voz, diferentes fisicalidades, diversidades de personagens e narrativas, etc.).
+EF03AR21 – Experimentar o trabalho colaborativo e coletivo em improvisações teatrais e processos narrativos criativos em pantomima, explorando a teatralidade do figurino e das fisicalidades.
+EF03AR22 – Experimentar, com respeito e sem preconceito, possibilidades criativas de movimento e voz para personagens que representem pessoas e animais, reconhecendo semelhanças e diferenças entre suas experimentações e as feitas pelos colegas.
+</pre></div> <button class="btnCopi" onclick="CopyTexto('h8a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c8a">Aula 1 – Observação e Criação de Personagens Animais
 
-●Valorizar a diversidade cultural e artística dos povos indígenas.
+🐾 Apreciação e contextualização:
+● O professor exibe imagens ou vídeos curtos de animais e pergunta: Como esse animal se move? Que sons ele faz?
+● Convida os estudantes a imitar o andar, o som e os comportamentos de alguns animais.
+● Introduz a ideia de personagem animal: imaginar o animal com personalidade, nome, emoções.
 
-●Estimular a criação artística livre, o respeito à natureza e à cultura ancestral.
+🎭 Fazer artístico – Criação individual:
+● Cada estudante escolhe um animal e inventa uma identidade para ele:
+► Nome, idade, o que gosta, como se comporta
+● Realizam exercícios de improvisação, imitando o animal e interagindo com colegas em um “encontro entre bichos”.
+Aula 2 – Encenação e Diálogo entre Animais
 
-●Integrar expressão visual, corporal e digital em uma experiência criativa e significativa.
+🎬 Fazer artístico – Cena em dupla ou trio:
+● Os estudantes, em duplas ou trios, montam pequenas cenas onde os animais se encontram e vivem alguma situação (festa na floresta, ajuda a um animal doente, competição de dança, etc.).
+● Eles usam voz, corpo, movimentação no espaço e podem improvisar falas simples ou usar apenas sons.
 
-
-Aula 1 – Apreciação e criação visual: O ser encantado
-1. Roda de conversa inicial
-●Falar sobre a importância da floresta, da natureza e do respeito à cultura indígena.
-
-●Exibir vídeos de danças tradicionais (ex.: Toré, Kuarup) e comentar seus significados, ritmos e instrumentos (maracás, tambores, vozes). ( O video  é opcional quando houver esse recurso em sala, pode ser usado o notebook do professor se tiver internet disponível na escola)
-
-2. Apresentação do artista Jaider Esbell
-●Contar brevemente quem foi Jaider Esbell (povo Makuxi – Roraima).
-
-●Exibir imagens de suas obras (via sites como MAM-SP, Pinacoteca).
-
-○Exemplos: Makunaimî Riba, Cobra Norato, Floresta Encantada.
-
-●Comentar sobre suas cores vivas, formas soltas e seres místicos.
-
-3. Criação artística: Meu Ser Encantado da Natureza
-●Propor que cada criança imagine um ser protetor da natureza, metade animal, metade planta, mágico, engraçado ou misterioso.
-
-●Criar o desenho ou pintura com lápis de cor, giz de cera, tinta ou canetinhas.
-
-●Escrever uma frase ou pequeno texto:
- _“Meu ser encantado se chama ___. Ele cuida de ___. Aparece quando __.”
-
-🎵 Músicas indígenas suaves ao fundo.
- 🌱 Elementos naturais (sementes, folhas, cascas) podem ser usados como inspiração.
- 🖼️ Montar um “Mural dos Seres Encantados” com os trabalhos e frases.
-
-Aula 2 – Adereços, movimento e expressão corporal
-1. Confecção de adereços indígenas (opcional)
-●Conversa sobre o significado cultural do cocar.
-
-●Confecção de cocares e/ou colares com materiais diversos:
-
-○Papel colorido, penas artificiais, barbante, miçangas, fitas.
-
-●Cada estudante escolhe suas cores e formas livremente.
-
-2. Oficina de movimentos indígenas
-●Vivência com danças circulares inspiradas na cultura indígena.
-
-●Movimentos suaves, marcados e coordenados, com o uso dos adereços confeccionados.
-
-●Criação de uma pequena coreografia coletiva, com respeito ao ritmo e limites das crianças.
-
-3. Apresentação e expressão pós-dança
-●Os estudantes se apresentam em roda com os adereços, gravando a apresentação para registro.
-
-●Após a dança, fazem uma pintura ou desenho expressando o que sentiram durante a vivência.
-
-
-Materiais necessários
-●Papéis coloridos, cartolina
-
-●Tinta guache, pincéis
-
-●Tesoura, cola, fitas, barbante
-
-●Penas artificiais, miçangas (opcional)
-
-●Lápis de cor, giz de cera, canetinha
-
-●Elementos naturais para inspiração
-
-●Caixa de som para músicas indígenas
-
-Aparelho para gravação de vídeo (opcional)</pre></div> <button class="btnCopi" onclick="CopyTexto('c8a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+💬 Apresentação e roda de conversa:
+● As duplas apresentam as cenas.
+● A turma comenta sobre as diferenças entre os personagens e as escolhas expressivas de cada um.</pre></div> <button class="btnCopi" onclick="CopyTexto('c8a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana8(b) - 31/03  à       04/04 </b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" ><pre id="h8b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>3 anos - Planejamento Bimestral<br/>
+<b>Semana8(b) - __/__  à  __/__ </b> <div class="box-frases"><div class="texto2"><pre id="n8b">Nome da atividade (b) Semana 8</pre></div><button class="btnCopi" onclick="CopyTexto('n8b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h8b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h8b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" ><pre id="c8b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h8b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c8b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
@@ -540,75 +637,39 @@ Aparelho para gravação de vídeo (opcional)</pre></div> <button class="btnCopi
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 9   XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  3 anos - Planejamento Bimestral<br/>
-<b><h3 id="Semana9">Semana 9,30/06/2025 até 04/07/2025</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1" ><pre id="n9a">● O GRAFISMO E A IDENTIDADE DA CULTURA INDÍGENA; MODA E ARTE;</pre></div> <button class="btnCopi" onclick="CopyTexto('n9a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1" ><pre id="h9a">EF03AR25A. Compreender o significado de patrimônio Cultural e dos conceitos: material e imaterial.
+<hr/><div class="aula1"> <br/>  3 anos - Planejamento Bimestral <br/>
+<b><h3 id="Semana9">Semana9(a) -  15/09 à 19/09</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n9a">Teatro com Objetos do Dia a Dia.</pre></div> <button class="btnCopi" onclick="CopyTexto('n9a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h9a">EF03AR19 – Reconhecer teatralidades na vida cotidiana, identificando elementos teatrais (variadas entonações de voz, diferentes fisicalidades, diversidades de personagens e narrativas, etc.).
+EF03AR20 – Conhecer e explorar processos narrativos individuais e coletivos, em teatro, explorando a improvisação, a criatividade e a teatralidade dos gestos.
+EF03AR21 – Experimentar o trabalho colaborativo e coletivo em improvisações teatrais e processos narrativos criativos em pantomima, explorando a teatralidade do figurino e das fisicalidades.
+</pre></div> <button class="btnCopi" onclick="CopyTexto('h9a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c9a">Aula 1 – Descobrindo Teatralidades nos Objetos
 
-EF03AR25B. Conhecer e apreciar (re)produções de obras de diferentes linguagens artísticas, onde seja possível observar elementos das matrizes estéticas e culturais brasileira, indígena, africana e europeia de diferentes épocas. 
+🧺 Apreciação e contextualização:
+● O professor traz uma sacola com objetos comuns (escova, colher, pano, copo, fita, etc.).
+● Estimula os estudantes a olhar para os objetos de outra forma: O que mais isso poderia ser?
+● Apresenta vídeos ou exemplos de teatro com objetos, onde materiais simples viram personagens.
 
-EF15AR03. Identificar e reconhecer as influências estéticas e culturais de diferentes povos migrantes e imigrantes, nas manifestações artísticas visuais da cultura paulista, em diferentes épocas. </pre></div> <button class="btnCopi" onclick="CopyTexto('h9a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1" ><pre id="c9a">Objetivos
-●Valorizar a arte indígena como expressão cultural viva e contemporânea.
+🎨 Fazer artístico – Criação de personagens com objetos:
+● Os estudantes escolhem objetos e criam personagens ou criaturas imaginárias, explorando movimentos, vozes e histórias possíveis.
+Aula 2 – Criação de uma Cena Coletiva com Objetos
 
-●Compreender o grafismo indígena como linguagem visual e simbólica.
+🎭 Fazer artístico – Cena colaborativa com objetos:
+● Em grupos, os estudantes criam uma cena curta com os objetos transformados em personagens.
+● Cada grupo decide o tema da cena e ensaia formas de contar a história com seus objetos-personagens.
 
-●Estimular a criação artística a partir de elementos tradicionais aplicados à moda e design.
-
-●Desenvolver habilidades de observação, apreciação, desenho e composição.
-
-
-Aula 1 – Grafismo indígena e criação de bracelete
-1. Roda de conversa e contextualização
-●Retomar o que os estudantes sabem sobre pinturas e símbolos indígenas.
-
-●Explicar o uso do grafismo como forma de comunicação e identidade (grupo étnico, função social, intenção espiritual, fase da vida, etc.).
-2. Apreciação de vídeo e imagens
-●Vídeo: https://www.youtube.com/watch?v=RK00FQF2lMs
-
-●Apresentar imagens com exemplos de grafismos e seus significados.
-
-●Conversar sobre como esses padrões se repetem em corpos, utensílios e artefatos.
-
-3. Criação artística: bracelete com grafismos
-●Reproduzir três símbolos gráficos em tiras de papel sulfite, posicionadas na horizontal.
-
-●Colorir com canetinha ou lápis de cor.
-
-●Recortar as tiras e colá-las ao redor de um rolo de papel higiênico.
-
-●Cortar o rolo para transformá-lo em um bracelete indígena estilizado.
-
-Materiais: rolo de papel higiênico, tesoura, cola, papel sulfite, canetinhas ou lápis de cor.
-
-Aula 2 – Moda indígena e criação de estampa
-1. Apreciação: moda indígena contemporânea
-●Mostrar a página do artista indígena Rodrigo Tremembé:
- https://www.facebook.com/rodrigotremembe
-
-●Vídeo: https://g1.globo.com/ce/ceara/video/rodrigo-tremembe-reforca-a-identidade-indigena-por-meio-da-moda-9446106.ghtml
-
-●Conversar com os estudantes sobre como o grafismo pode ser aplicado a roupas e acessórios na moda indígena atual.
-
-2. Criação artística: estampa de camisa de time indígena
-●Propor que cada estudante crie a estampa de uma camisa de futebol inspirada em grafismos indígenas.
-
-●Sugerir nomes para os times com base em povos indígenas: Tupi, Xingu, Guarani, Xavante, etc.
-
-●Os estudantes desenham a camisa com formas geométricas, padrões gráficos e cores vivas.
-
-3. Socialização
-●Os estudantes apresentam suas camisas para a turma, explicando o nome do time, o significado dos grafismos e as cores escolhidas.
-
-●Se possível, montar um “Varal das Camisas Indígenas” na sala ou corredor da escola.
-
-Materiais: papel sulfite, lápis de cor, canetinhas, régua (opcional), modelos de camisa impressos (se desejar facilitar o traço base, preferencialmente os estudantes desenharem).</pre></div> <button class="btnCopi" onclick="CopyTexto('c9a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+📷 Apresentação e reflexão:
+● Apresentações para a turma, com incentivo ao uso criativo do espaço, som e narrativa.
+● Após, roda de conversa sobre como o objeto “virou” personagem e que histórias surgiram.</pre></div> <button class="btnCopi" onclick="CopyTexto('c9a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana9(b) - 07/04  à       11/04 </b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" ><pre id="h9b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>3 anos - Planejamento Bimestral<br/>
+<b>Semana9(b) - __/__  à __/__ </b> <div class="box-frases"><div class="texto2"><pre id="n9b">Nome da atividade (b) Semana 9</pre></div><button class="btnCopi" onclick="CopyTexto('n9b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h9b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h9b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" ><pre id="c9b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h9b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c9b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
@@ -616,17 +677,41 @@ Materiais: papel sulfite, lápis de cor, canetinhas, régua (opcional), modelos 
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 10   XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  3 anos - Planejamento Bimestral<br/>
-<b><h3 id="Semana10">Semana10(a) -  14/04  à       18/04</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1" ><pre id="n10a">Proposta</pre></div> <button class="btnCopi" onclick="CopyTexto('n10a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1" ><pre id="h10a">Habilidade 10a</pre></div> <button class="btnCopi" onclick="CopyTexto('h10a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1" ><pre id="c10a">Conteudo 10a</pre></div> <button class="btnCopi" onclick="CopyTexto('c10a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+<hr/><div class="aula1"> <br/>  3 anos - Planejamento Bimestral <br/>
+<b><h3 id="Semana10">Semana10(a) -  22/09 à 26/09</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n10a">Contação de História com Som e Movimento</pre></div> <button class="btnCopi" onclick="CopyTexto('n10a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h10a">EF15AR23 – Conhecer e experimentar, em projetos temáticos, as relações processuais entre diversas linguagens artísticas.
+EF15AR26 – Explorar diferentes tecnologias e recursos digitais (multimeios, animações, jogos eletrônicos, gravações em áudio e vídeo, fotografia) nos processos de criação artística.
+EF03AR22 – Experimentar, com respeito e sem preconceito, possibilidades criativas de movimento e voz para personagens que representem pessoas e animais, reconhecendo semelhanças e diferenças entre suas experimentações e as feitas pelos colegas.</pre></div> <button class="btnCopi" onclick="CopyTexto('h10a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c10a">Aula 1 – Explorando Som, Movimento e Imagem
+
+🎶 Apreciação e experimentação:
+● O professor apresenta uma história curta contada com uso de som, movimento e imagem (pode ser vídeo de contação ou animação).
+● Em roda, os estudantes comentam: O que fez essa história ficar interessante?
+● O grupo experimenta produzir sons com o corpo, objetos e voz (chuva, vento, passos, risos, etc.).
+
+🎨 Fazer artístico – Sons e gestos para uma história:
+● Em pequenos grupos, os estudantes criam uma trilha sonora corporal para acompanhar uma narrativa simples contada pelo professor, usando gestos e efeitos sonoros.
+Aula 2 – Criação de Cena com Artes Integradas
+
+🎭 Fazer artístico – Criação de uma cena com som, imagem e movimento:
+● Os estudantes, em grupos, escolhem uma história curta (popular ou inventada) e a encenam com:
+► Movimentos/danças
+► Sons com a voz ou objetos
+► Desenhos simples ou adereços visuais
+● O professor orienta para que cada grupo explore diferentes linguagens integradas.
+
+📸 Apresentação e registro:
+● As apresentações são feitas para a turma ou gravadas com celular.
+● Em seguida, conversa sobre o que cada grupo escolheu para representar a história e como uniu diferentes formas de expressão.</pre></div> <button class="btnCopi" onclick="CopyTexto('c10a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana10(b) - 14/04  à       18/04 </b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" ><pre id="h10b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>3 anos - Planejamento Bimestral<br/>
+<b>Semana10(b) - __/__  à  __/__ </b> <div class="box-frases"><div class="texto2"><pre id="n10b">Nome da atividade (b) Semana 10</pre></div><button class="btnCopi" onclick="CopyTexto('n10b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h10b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h10b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" ><pre id="c10b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h10b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c10b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
@@ -634,17 +719,19 @@ Materiais: papel sulfite, lápis de cor, canetinhas, régua (opcional), modelos 
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 11  XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  3 anos - Planejamento Bimestral<br/>
-<b><h3 id="Semana11">Semana11(a) -  21/04  à       25/04</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1" ><pre id="n11a">Proposta</pre></div> <button class="btnCopi" onclick="CopyTexto('n11a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1" ><pre id="h11a">Habilidade 11a</pre></div> <button class="btnCopi" onclick="CopyTexto('h11a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1" ><pre id="c11a">Conteudo 11a</pre></div> <button class="btnCopi" onclick="CopyTexto('c11a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+<hr/><div class="aula1"> <br/>  3 anos - Planejamento Bimestral <br/>
+<b><h3 id="Semana11">Semana11(a) -  __/__ à __/__</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n11a">Proposta</pre></div> <button class="btnCopi" onclick="CopyTexto('n11a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h11a">Habilidade 11a</pre></div> <button class="btnCopi" onclick="CopyTexto('h11a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c11a">Conteudo 11a</pre></div> <button class="btnCopi" onclick="CopyTexto('c11a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana11(b) - 21/04  à       25/04</b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" ><pre id="h11b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>3 anos - Planejamento Bimestral<br/>
+<b>Semana11(b) - __/__  à  __/__</b> <div class="box-frases"><div class="texto2"><pre id="n11b">Nome da atividade (b) Semana 11</pre></div><button class="btnCopi" onclick="CopyTexto('n11b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h11b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h11b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" ><pre id="c11b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h11b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c11b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
@@ -652,17 +739,19 @@ Materiais: papel sulfite, lápis de cor, canetinhas, régua (opcional), modelos 
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 12   XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  3 anos - Planejamento Bimestral<br/>
-<b><h3 id="Semana12">Semana12(a) - __/__ à __/__</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1" ><pre id="n12a">Proposta</pre></div> <button class="btnCopi" onclick="CopyTexto('n12a')" type="button">Copiar</button> </div>Habilidade <div class="box-frases"> <div class="texto1" ><pre id="h12a">Habilidade 12a</pre></div> <button class="btnCopi" onclick="CopyTexto('h12a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1" ><pre id="c12a">Conteudo 12a</pre></div> <button class="btnCopi" onclick="CopyTexto('c12a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+<hr/><div class="aula1"> <br/>  3 anos - Planejamento Bimestral <br/>
+<b><h3 id="Semana12">Semana12(a) - __/__ à __/__</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n12a">Proposta</pre></div> <button class="btnCopi" onclick="CopyTexto('n12a')" type="button">Copiar</button> </div>Habilidade <div class="box-frases"> <div class="texto1"><pre id="h12a">Habilidade 12a</pre></div> <button class="btnCopi" onclick="CopyTexto('h12a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c12a">Conteudo 12a</pre></div> <button class="btnCopi" onclick="CopyTexto('c12a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana12(b) - __/__ à __/__ </b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2" ><pre id="h12b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>3 anos - Planejamento Bimestral<br/>
+<b>Semana12(b) - __/__  à  __/__ </b> <div class="box-frases"><div class="texto2"><pre id="n12b">Nome da atividade (b) Semana 12</pre></div><button class="btnCopi" onclick="CopyTexto('n12b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h12b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
 
-                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h12b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2" ><pre id="c12b"> 
+                                                                                              <!--  Botao copiar --> </pre></div> <button class="btnCopi" onclick="CopyTexto('h12b')" type="button">Copiar</button> </div> <div class="box-frases"> <div class="texto2"><pre id="c12b"> 
 
             Escreva o Conteudo (b) Repetir aula anterior
 
@@ -687,4 +776,3 @@ Materiais: papel sulfite, lápis de cor, canetinhas, régua (opcional), modelos 
 </script>
 </body>
 </html>
-
