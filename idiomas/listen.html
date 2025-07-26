@@ -1,1 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quiz com Voltar e Refazer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-x: hidden;
+            background-color: black;
+            color: white;
+        }
 
+        section.quiz {
+            margin-bottom: 2em;
+    display: none;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 1em;
+    background-color: #111; /* para destacar o quiz */
+    border-radius: 8px;
+        }
+
+        h2 {
+            text-align: center;
+            color: white;
+        }
+
+        .images-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .image-box {
+            width: 100%;
+            aspect-ratio: 1/1;
+            overflow: hidden;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .image-box:hover {
+            border-color: #007bff;
+            box-shadow: 0 0 10px rgba(0,123,255,0.5);
+        }
+
+        .image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        button {
+            display: inline-block;
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 10px 5px 0 0;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .message {
+            margin-top: 10px;
+            font-weight: bold;
+            min-height: 24px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Quiz 1 -->
+    <section class="quiz" id="quiz1">
+        
+        <audio id="audio1" src="audio/boy.mp3" preload="auto"></audio>
+        <button id="btn-replay-1">Ouvir novamente</button>
+        <div class="images-grid">
+            <div class="image-box" data-correct="false">
+                <img src="imagens/cachorro.jpg" alt="Cachorro" />
+            </div>
+            <div class="image-box" data-correct="true">
+                <img src="imagens/boy.jpg" alt="Gato" />
+            </div>
+            <div class="image-box" data-correct="false">
+                <img src="imagens/girl.jpg" alt="Peixe" />
+            </div>
+            <div class="image-box" data-correct="false">
+                <img src="imagens/gato.jpg" alt="Papagaio" />
+            </div>
+        </div>
+        <button class="btn-voltar" style="display:none;">Voltar</button>
+        <button class="btn-refazer" style="display:none;">Proximo</button>
+        <div class="message" id="msg1"></div>
+    </section>
+
+    <!-- Quiz 2 -->
+    <section class="quiz" id="quiz2">
+        
+        <audio id="audio2" src="audio/girl.mp3" preload="auto"></audio>
+        <button id="btn-replay-2">Ouvir novamente</button>
+        <div class="images-grid">
+            <div class="image-box" data-correct="false">
+                <img src="imagens/banana.jpg" alt="Banana" />
+            </div>
+            <div class="image-box" data-correct="true">
+                <img src="imagens/girl.jpg" alt="Maçã" />
+            </div>
+            <div class="image-box" data-correct="false">
+                <img src="imagens/laranja.jpg" alt="Laranja" />
+            </div>
+            <div class="image-box" data-correct="false">
+                <img src="imagens/uva.jpg" alt="Uva" />
+            </div>
+        </div>
+        <button class="btn-voltar">Voltar</button>
+        <button class="btn-refazer" style="display:none;">Proximo</button>
+        <div class="message" id="msg2"></div>
+    </section>
+
+    <!-- Quiz 3 -->
+    <section class="quiz" id="quiz3">
+        
+        <audio id="audio3" src="audio/pergunta-aviao.mp3" preload="auto"></audio>
+        <button id="btn-replay-3">Ouvir novamente</button>
+        <div class="images-grid">
+            <div class="image-box" data-correct="false">
+                <img src="imagens/carros.jpg" alt="Carros" />
+            </div>
+            <div class="image-box" data-correct="false">
+                <img src="imagens/navio.jpg" alt="Navio" />
+            </div>
+            <div class="image-box" data-correct="true">
+                <img src="imagens/aviao.jpg" alt="Avião" />
+            </div>
+            <div class="image-box" data-correct="false">
+                <img src="imagens/bicicleta.jpg" alt="Bicicleta" />
+            </div>
+        </div>
+        <button class="btn-voltar">Voltar</button>
+        <button class="btn-refazer" style="display:none;">Proximo</button>
+        <div class="message" id="msg3"></div>
+    </section>
+
+    <!-- Mensagem final -->
+    <section id="fim" style="display:none; color: white; text-align:center; margin-top:40px;">
+        <h2>Parabéns! Você completou todos os quizzes.</h2>
+        <button id="btn-refazer-tudo">Refazer a lição</button>
+    </section>
+
+    <script>
+        const quizzes = [
+            {
+                sectionId: 'quiz1',
+                audioId: 'audio1',
+                replayBtnId: 'btn-replay-1',
+                messageId: 'msg1',
+                nextAnchor: 'quiz2'
+            },
+            {
+                sectionId: 'quiz2',
+                audioId: 'audio2',
+                replayBtnId: 'btn-replay-2',
+                messageId: 'msg2',
+                nextAnchor: 'quiz3'
+            },
+            {
+                sectionId: 'quiz3',
+                audioId: 'audio3',
+                replayBtnId: 'btn-replay-3',
+                messageId: 'msg3',
+                nextAnchor: 'fim'
+            }
+        ];
+
+        let currentQuizIndex = 0;
+
+        function bloquearScroll() {
+            document.body.style.overflow = 'hidden';
+        }
+
+        function desbloquearScroll() {
+            document.body.style.overflow = '';
+        }
+
+        function navigateToNextQuiz(nextSectionId) {
+            // Esconde o quiz atual
+            document.getElementById(quizzes[currentQuizIndex].sectionId).style.display = 'none';
+
+            // Encontra o índice do próximo quiz
+            const nextIndex = quizzes.findIndex(q => q.sectionId === nextSectionId);
+
+            if (nextIndex !== -1) {
+                currentQuizIndex = nextIndex;
+                initQuiz(currentQuizIndex);
+                
+                // Rola até o próximo quiz
+                document.getElementById(nextSectionId).scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }
+        }
+
+        function initQuiz(index) {
+            const quiz = quizzes[index];
+            const section = document.getElementById(quiz.sectionId);
+            const audio = document.getElementById(quiz.audioId);
+            const replayBtn = document.getElementById(quiz.replayBtnId);
+            const message = document.getElementById(quiz.messageId);
+            const imageBoxes = section.querySelectorAll('.image-box');
+            const btnVoltar = section.querySelector('.btn-voltar');
+            const btnRefazer = section.querySelector('.btn-refazer');
+
+            // Garante que o quiz esteja visível
+            section.style.display = 'block';
+
+            message.textContent = '';
+            bloquearScroll();
+
+            // Configura botão Voltar
+            if (btnVoltar) {
+                btnVoltar.style.display = (index === 0) ? 'none' : 'inline-block';
+                btnVoltar.onclick = () => {
+                    if (index > 0) {
+                        navigateToNextQuiz(quizzes[index - 1].sectionId);
+                    }
+                };
+            }
+
+            // Configura botão Refazer
+            if (btnRefazer) {
+                btnRefazer.style.display = 'none';
+                btnRefazer.onclick = () => {
+                    message.textContent = '';
+                    btnRefazer.style.display = 'none';
+                    imageBoxes.forEach(box => {
+                        box.style.pointerEvents = 'auto';
+                        box.style.borderColor = '#ccc';
+                        box.style.boxShadow = 'none';
+                    });
+                    bloquearScroll();
+                    audio.currentTime = 0;
+                    audio.play().catch(() => {});
+                };
+            }
+
+            // Toca áudio no início
+            audio.currentTime = 0;
+            audio.play().catch(() => {});
+
+            // Botão ouvir novamente
+            replayBtn.onclick = () => {
+                audio.currentTime = 0;
+                audio.play().catch(() => {});
+            };
+
+            // Reset estilos e permitir clique
+            imageBoxes.forEach(box => {
+                box.style.pointerEvents = 'auto';
+                box.style.borderColor = '#ccc';
+                box.style.boxShadow = 'none';
+
+                box.onclick = () => {
+                    if (box.getAttribute('data-correct') === 'true') {
+                        message.textContent = 'Resposta correta!';
+                        box.style.borderColor = '#28a745';
+                        box.style.boxShadow = '0 0 10px #28a745';
+                        
+                        desbloquearScroll();
+
+                        if (btnRefazer) btnRefazer.style.display = 'inline-block';
+
+                        imageBoxes.forEach(b => {
+                            b.style.pointerEvents = 'none';
+                        });
+
+                        setTimeout(() => {
+                            const nextSectionId = quiz.nextAnchor;
+                            navigateToNextQuiz(nextSectionId);
+                        }, 1000);
+                    } else {
+                        message.textContent = 'Resposta incorreta. Tente novamente.';
+                        box.style.borderColor = '#dc3545';
+                        box.style.boxShadow = '0 0 10px #dc3545';
+                        
+                        setTimeout(() => {
+                            message.textContent = '';
+                            box.style.borderColor = '#ccc';
+                            box.style.boxShadow = 'none';
+                        }, 1500);
+                    }
+                };
+            });
+        }
+
+        // Botão para refazer toda a lição no final
+        const btnRefazerTudo = document.getElementById('btn-refazer-tudo');
+        btnRefazerTudo.onclick = () => {
+            currentQuizIndex = 0;
+            document.getElementById('fim').style.display = 'none';
+            document.getElementById(quizzes[0].sectionId).scrollIntoView({
+                behavior: 'smooth'
+            });
+            initQuiz(0);
+        };
+
+        // Inicialização do primeiro quiz
+        window.addEventListener('load', () => {
+            quizzes.forEach((quiz, index) => {
+                const section = document.getElementById(quiz.sectionId);
+                section.style.display = 'none';
+            });
+            
+            initQuiz(currentQuizIndex);
+        });
+    </script>
+</body>
+</html>
