@@ -95,16 +95,38 @@
     </style>
 </head>
 <body>
-<audio id="autoPlayAudio" autoplay loop="false" muted>
-    <source src="audio/boy.mp3" type="audio/mp3">
-    
-</audio>
+ <audio id="autoPlayAudio" loop="false" muted>
+        <source src="audio/boy.mp3" type="audio/mp3">
+     
+    </audio>
+
+    <button onclick="reproduzirAudio()">Testar Áudio</button>
+
+    <script>
+        const audio = document.getElementById('autoPlayAudio');
+
+        async function reproduzirAudio() {
+            try {
+                await audio.setVolume(0.5);
+                audio.muted = false;
+                await audio.play();
+                console.log('Áudio reproduzido com sucesso!');
+            } catch (erro) {
+                console.error('Erro ao reproduzir áudio:', erro);
+                alert('Não foi possível reproduzir o áudio automaticamente.\nPor favor, clique no botão para reproduzir.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            reproduzirAudio();
+        });
+    </script>
     
     <!-- Quiz 1 -->
     <section class="quiz" id="quiz1">
         
         <audio id="audio1" src="audio/boy.mp3" preload="auto"></audio>
-        <button id="btn-replay-1">Ouvir novamente</button>.....
+        <button id="btn-replay-1">Ouvir novamente</button>////
         <div class="images-grid">
             <div class="image-box" data-correct="false">
                 <img src="imagens/cachorro.jpg" alt="Cachorro" />
