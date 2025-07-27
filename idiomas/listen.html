@@ -16,17 +16,6 @@
             color: white;
         }
 
-
-        const ProductDisplay = () => (
-  <section>
-    <div className="product-display">
-      <img
-        src="https://i.imgur.com/..."
-        alt="Product preview"
-      />
-    </div>
-  </section>
-);
         section.quiz {
             margin-bottom: 2em;
     display: none;
@@ -95,38 +84,36 @@
     </style>
 </head>
 <body>
- <audio id="autoPlayAudio" loop="false" muted>
-        <source src="audio/boy.mp3" type="audio/mp3">
-     
-    </audio>
-
-    <button onclick="reproduzirAudio()">Testar Áudio</button>
-
-    <script>
-        const audio = document.getElementById('autoPlayAudio');
-
-        async function reproduzirAudio() {
-            try {
-                await audio.setVolume(0.5);
-                audio.muted = false;
-                await audio.play();
-                console.log('Áudio reproduzido com sucesso!');
-            } catch (erro) {
-                console.error('Erro ao reproduzir áudio:', erro);
-                alert('Não foi possível reproduzir o áudio automaticamente.\nPor favor, clique no botão para reproduzir.');
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            reproduzirAudio();
-        });
-    </script>
-    
-    <!-- Quiz 1 -->
+<!-- Quiz 1 -->
     <section class="quiz" id="quiz1">
         
-        <audio id="audio1" src="audio/boy.mp3" preload="auto"></audio>
-        <button id="btn-replay-1">Ouvir novamente</button>////
+        <audio id="audio1" src="" preload="auto"></audio>
+        <button id="btn-replay-1"></button>Clique na imagem que representa "Começar". 
+        <div class="images-grid">
+            <div class="image-box" data-correct="false">
+                <img src="imagens/fim.jpg" />
+            </div>
+            <div class="image-box" data-correct="true">
+                <img src="imagens/start.jpg" alt="start" />
+            </div>
+            <div class="image-box" data-correct="false">
+                <img src="imagens/maybe.jpg" />
+            </div>
+            <div class="image-box" data-correct="false">
+                <img src="imagens/doubt.jpg" />
+            </div>
+        </div>
+        <button class="btn-voltar" style="display:none;">Voltar</button>
+        <button class="btn-refazer" style="display:none;">Iniciar</button>
+        <div class="message" id="msg1"></div>
+    </section>
+
+
+    <!-- Quiz 2 -->
+    <section class="quiz" id="quiz2">
+        
+        <audio id="audio2" src="audio/boy.mp3" preload="auto"></audio>
+        <button id="btn-replay-2">Ouvir novamente</button>
         <div class="images-grid">
             <div class="image-box" data-correct="false">
                 <img src="imagens/cachorro.jpg" alt="Cachorro" />
@@ -143,14 +130,14 @@
         </div>
         <button class="btn-voltar" style="display:none;">Voltar</button>
         <button class="btn-refazer" style="display:none;">Proximo</button>
-        <div class="message" id="msg1"></div>
+        <div class="message" id="msg2"></div>
     </section>
 
-    <!-- Quiz 2 -->
-    <section class="quiz" id="quiz2">
+    <!-- Quiz3 -->
+    <section class="quiz" id="quiz3">
         
-        <audio id="audio2" src="audio/girl.mp3" preload="auto"></audio>
-        <button id="btn-replay-2">Ouvir novamente</button>
+        <audio id="audio3" src="audio/girl.mp3" preload="auto"></audio>
+        <button id="btn-replay-3">Ouvir novamente</button>
         <div class="images-grid">
             <div class="image-box" data-correct="false">
                 <img src="imagens/banana.jpg" alt="Banana" />
@@ -167,14 +154,14 @@
         </div>
         <button class="btn-voltar">Voltar</button>
         <button class="btn-refazer" style="display:none;">Proximo</button>
-        <div class="message" id="msg2"></div>
+        <div class="message" id="msg3"></div>
     </section>
 
-    <!-- Quiz 3 -->
-    <section class="quiz" id="quiz3">
+    <!-- Quiz 4 -->
+    <section class="quiz" id="quiz4">
         
-        <audio id="audio3" src="audio/pergunta-aviao.mp3" preload="auto"></audio>
-        <button id="btn-replay-3">Ouvir novamente</button>
+        <audio id="audio4" src="audio/pergunta-aviao.mp3" preload="auto"></audio>
+        <button id="btn-replay-4">Ouvir novamente</button>
         <div class="images-grid">
             <div class="image-box" data-correct="false">
                 <img src="imagens/carros.jpg" alt="Carros" />
@@ -191,11 +178,11 @@
         </div>
         <button class="btn-voltar">Voltar</button>
         <button class="btn-refazer" style="display:none;">Proximo</button>
-        <div class="message" id="msg3"></div>
+        <div class="message" id="msg4"></div>
     </section>
 
     <!-- Mensagem final -->
-    <section id="fim" style="display:none; color: white; text-align:center; margin-top:40px;">
+    <section class="quiz" id="fim" style="display:none; color: white; text-align:center; margin-top:40px;">
         <h2>Parabéns! Você completou todos os quizzes.</h2>
         <button id="btn-refazer-tudo">Refazer a lição</button>
     </section>
@@ -221,6 +208,13 @@
                 audioId: 'audio3',
                 replayBtnId: 'btn-replay-3',
                 messageId: 'msg3',
+                nextAnchor: 'quiz4'
+            },
+            {
+                sectionId: 'quiz4',
+                audioId: 'audio4',
+                replayBtnId: 'btn-replay-4',
+                messageId: 'msg4',
                 nextAnchor: 'fim'
             }
         ];
@@ -235,24 +229,31 @@
             document.body.style.overflow = '';
         }
 
-        function navigateToNextQuiz(nextSectionId) {
-            // Esconde o quiz atual
-            document.getElementById(quizzes[currentQuizIndex].sectionId).style.display = 'none';
+       function navigateToNextQuiz(nextSectionId) {
+    // Esconde o quiz atual
+    document.getElementById(quizzes[currentQuizIndex].sectionId).style.display = 'none';
 
-            // Encontra o índice do próximo quiz
-            const nextIndex = quizzes.findIndex(q => q.sectionId === nextSectionId);
+    if (nextSectionId === 'fim') {
+        desbloquearScroll();  // desbloqueia scroll no fim, se quiser
+        document.getElementById('fim').style.display = 'block';
+        document.getElementById('fim').scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        });
+        return;
+    }
 
-            if (nextIndex !== -1) {
-                currentQuizIndex = nextIndex;
-                initQuiz(currentQuizIndex);
-                
-                // Rola até o próximo quiz
-                document.getElementById(nextSectionId).scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
-                });
-            }
-        }
+    const nextIndex = quizzes.findIndex(q => q.sectionId === nextSectionId);
+
+    if (nextIndex !== -1) {
+        currentQuizIndex = nextIndex;
+        initQuiz(currentQuizIndex);
+        document.getElementById(nextSectionId).scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        });
+    }
+}        
 
         function initQuiz(index) {
             const quiz = quizzes[index];
@@ -344,6 +345,7 @@
                     }
                 };
             });
+
         }
 
         // Botão para refazer toda a lição no final
