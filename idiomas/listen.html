@@ -36,6 +36,12 @@
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 15px;
             margin-top: 20px;
+            /* Força pelo menos 2 colunas em telas pequenas */
+@media (max-width: 600px) {
+  .images-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
         }
 
         .image-box {
