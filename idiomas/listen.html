@@ -36,12 +36,20 @@
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 15px;
             margin-top: 20px;
-            /* Força pelo menos 2 colunas em telas pequenas */
+            /* Para smartphones (telas pequenas), força 2 colunas */
 @media (max-width: 600px) {
-  .images-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-  }
+    .images-grid {
+        grid-template-columns: repeat(2, 40%);
+        justify-content: center; /* centraliza o grid */
+        gap: 10px;
+    }
+
+    .image-box {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        max-width: none; /* permite aumentar até 40% da grid */
+    }
+}
         }
 
         .image-box {
