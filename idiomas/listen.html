@@ -269,6 +269,42 @@
     }
 }        
 
+// Função para ajustar a grade das imagens (2x2 com 40% largura cada) em telas pequenas (mobile)
+function ajustarGradeImagens() {
+    const grids = document.querySelectorAll('.images-grid');
+    grids.forEach(grid => {
+        if (window.innerWidth <= 600) { // Condição para smartphones
+            grid.style.display = 'grid';
+            grid.style.gridTemplateColumns = '40% 40%'; // 2 colunas com 40% cada
+            grid.style.gap = '10px';
+            grid.style.justifyContent = 'center';
+            grid.style.width = '100%';
+        } else {
+            // Reseta para comportamento padrão para telas maiores (desktop, tablet)
+            grid.style.display = '';
+            grid.style.gridTemplateColumns = '';
+            grid.style.gap = '';
+            grid.style.justifyContent = '';
+            grid.style.width = '';
+        }
+    });
+
+    const imageBoxes = document.querySelectorAll('.image-box');
+    imageBoxes.forEach(box => {
+        if (window.innerWidth <= 600) {
+            box.style.width = '100%';          // Usa toda a largura da célula
+            box.style.aspectRatio = '1 / 1';  // Mantém quadrado
+            box.style.maxWidth = 'none';
+        } else {
+            box.style.width = '';
+            box.style.aspectRatio = '';
+            box.style.maxWidth = '';
+        }
+    });
+}
+
+// Chama ajustarGradeImagens quando a janela redimensionar
+window.addEventListener('resize', ajustarGradeImagens);
         function initQuiz(index) {
             const quiz = quizzes[index];
             const section = document.getElementById(quiz.sectionId);
@@ -279,11 +315,16 @@
             const btnVoltar = section.querySelector('.btn-voltar');
             const btnRefazer = section.querySelector('.btn-refazer');
 
+
+
             // Garante que o quiz esteja visível
             section.style.display = 'block';
 
             message.textContent = '';
             bloquearScroll();
+
+ // Ajusta a grade das imagens para caber no dispositivo atual
+    ajustarGradeImagens();
 
             // Configura botão Voltar
             if (btnVoltar) {
@@ -355,7 +396,7 @@
                             message.textContent = '';
                             box.style.borderColor = '#ccc';
                             box.style.boxShadow = 'none';
-                        }, 1500);
+                        }, 1000);
                     }
                 };
             });
@@ -383,5 +424,6 @@
             initQuiz(currentQuizIndex);
         });
     </script>
+
 </body>
 </html>
