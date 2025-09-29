@@ -1,11 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>EJAPlanejamento</title>
- 
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="ie=edge" http-equiv="X-UA-Compatible"/>
+<title> EJA_Planejamento</title>
 <style type="text/css">
 .aula1 {
 background-color: #DEB887; 
@@ -31,18 +31,23 @@ text-align: center;
     width: 92%; 
     padding: 3px 0px; 
     font-style:italic; 
-    text-align: left;
+      text-align: left; 
 }
 .box-frases .texto2   {
     float: left; 
     width: 92%; 
     padding: 3px 0px; 
     font-style:italic; 
-    text-align: left;
+text-align: left;
 }
 .box-frases .btnCopi { 
-    background:#e3e3e3; 
-    color:#202020; 
+    /* Cores e aparência */
+            background-color: #2196F3;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            
+            /* Efeito hover */
+            transition: background-color 0.3s ease;
     float:right; 
     border:none; 
     padding:5px; 
@@ -56,123 +61,173 @@ text-align: center;
 p {
 line-height: 100%;text-align: left;margin-bottom: 0cm;background: transparent;
 } 
-  </style>
 
- </head>
+
+#botaoTopo {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+   
+    #botaoTopo:hover {
+        background-color: #45a049;
+    }
+    .botoes-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7em; /* Espaço entre os botões */
+    justify-content: flex-start; /* Alinhe como preferir: flex-start, center, flex-end */
+  }
+
+  .botao-link {
+    display: inline-block;
+    padding: 10px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: background 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    min-width: 100px;
+    text-align: center;
+    margin: 0; /* Remove margem individual */
+    white-space: nowrap;
+  }
+  .botao-link:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  @media (max-width: 600px) {
+    .botao-link {
+      font-size: 0.95em;
+      padding: 8px 14px;
+      min-width: 80px;
+    }
+    .botoes-container {
+      gap: 0.4em;
+    }
+  }
+   .link-Oval {
+    display: inline-block;
+    padding: 0.7em 1.2em;         /* Espaçamento interno ajustável */
+    border-radius: 50em;           /* Deixa o botão oval/quase circular */
+    background-color: #4F4F4F;
+    color: #fff;
+    font-size: 1em;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: background 0.2s, box-shadow 0.2s;
+    margin: 0.3em;
+    text-align: center;
+    white-space: nowrap;
+    min-width: 3.5em;              /* Garante um tamanho mínimo */
+  }
+  .link-Oval:hover {
+    background-color: #A9A9A9;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  @media (max-width: 600px) {
+    .link-Oval {
+      font-size: 0.9em;
+      padding: 0.6em 1em;
+      min-width: 2.5em;
+    }
+  }
+    .link-redondo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5em;
+    height: 3.5em;
+    min-width: 3.5em;
+    min-height: 3.5em;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 1em;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: background 0.2s, box-shadow 0.2s;
+    margin: 0.3em;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .link-redondo:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  @media (max-width: 600px) {
+    .link-redondo {
+      width: 2.5em;
+      height: 2.5em;
+      font-size: 0.9em;
+    }
+  }
+  </style>
+</head>
 <body>
 <header>
 <h1 id="Sitesatalhos">Sites atalhos</h1>
-<nav>
-       
 
-    <a href="https://artesvisuais.github.io/1_2_Planejamento_Bim.html">1_2_Planejamento_Bim.html</a>/   
+<nav class="botoes-container">       
 
-    <a href="https://artesvisuais.github.io/3_Planejamento_Bim.html">3_Planejamento_Bim.html</a>/   
+    <a href="https://artesvisuais.github.io/1_2_Planejamento_Bim.html"class="botao-link" style="background-color: #87CEEB; color: #222222;">1_2_Planejamento_Bim.html</a><br><br>   
 
-<a href="https://artesvisuais.github.io/4_Planejamento_Bim.html">4_Planejamento_Bim.html</a>/
+    <a href="https://artesvisuais.github.io/3_Planejamento_Bim.html"class="botao-link" style="background-color: #90EE90; color: #222222;">3_Planejamento_Bim.html</a><br><br>  
 
-<a href="https://artesvisuais.github.io/4_Planejamento_Bim.html">5_Planejamento_Bim.html</a>/
+<a href="https://artesvisuais.github.io/4_Planejamento_Bim.html"class="botao-link" style="background-color: #DAA520; color: #FFFFFF;">4_Planejamento_Bim.html</a><br><br>
 
-<a href="https://artesvisuais.github.io/EJA_Planejamento_Bim.html">EJA_Planejamento_Bim.html</a>/   
-<br><br>
-<a href="https://artesvisuais.github.io/4_5_Planejamento_Bim.html">4_5_Planejamento_Bim.html</a>/   
+<a href="https://artesvisuais.github.io/5_Planejamento_Bim.html"class="botao-link" style="background-color: #FFD700; color: #222222;">5_Planejamento_Bim.html</a><br><br>
 
+<a href="https://artesvisuais.github.io/EJA_Planejamento_Bim.html" class="botao-link" style="background-color: #DEB887; color: #222222;">EJA_Planejamento_Bim.html</a><br><br>   
+
+<a href="https://artesvisuais.github.io/4_5_Planejamento_Bim.html" class="botao-link" style="background-color: #FFFF00; color: #222222;">4_5_Planejamento_Bim.html</a><br><br>   
+
+    <a href="https://artesvisuais.github.io/Rubrica_Bim.html"class="botao-link" style="background-color: #F5F5DC; color: #007bff;">Rubrica_Bim.html</a>
 
   </nav>
 </header>
-<ul>
-<li><a href="#Semana1">Semana 1</a></li>
-<li><a href="#Semana2">Semana 2</a></li>
-<li><a href="#Semana3">Semana 3</a></li>
-<li><a href="#Semana4">Semana 4</a></li>
-<li><a href="#Semana5">Semana 5</a></li>
-<li><a href="#Semana6">Semana 6</a></li>
-<li><a href="#Semana7">Semana 7</a></li>
-<li><a href="#Semana8">Semana 8</a></li>
-<li><a href="#Semana9">Semana 9</a></li>
-<li><a href="#Semana10">Semana 10</a></li>
-<li><a href="#Semana11">Semana 11</a></li>
-<li><a href="#Semana12">Semana 12</a></li>
-</ul>
+    <hr style="border: 10px solid green;  border-radius: 5px;"/>
+<div class="aula1">
+
+<li><a href="#" class="link-Oval">Semanas:</a></li>
+
+
+   <a href="#Semana1" class="link-redondo">1</a></li>
+<a href="#Semana2" class="link-redondo">2</a></li>
+<a href="#Semana3" class="link-redondo">3</a></li>
+<a href="#Semana4" class="link-redondo">4</a></li>
+<a href="#Semana5" class="link-redondo">5</a></li>
+<a href="#Semana6" class="link-redondo">6</a></li>
+<a href="#Semana7" class="link-redondo">7</a></li>
+<a href="#Semana8" class="link-redondo">8</a></li>
+<a href="#Semana9" class="link-redondo">9</a></li>
+<a href="#Semana10" class="link-redondo">10</a></li>
+<a href="#Semana11" class="link-redondo">11</a></li>
+<a href="#Semana12" class="link-redondo">12</a></li>
+    <br>
+</div>
+
 <!--  XXXXXXXXXXX  Inicio do Conteudo 1   XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  EJA - Planejamento Bimestral<br/>
-<b><h3 id="Semana1">Semana1, 2 e 3 -- de 05/05/2025 até 23/05/2025</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n1a">Apreciação e Reflexão sobre a Arte Urbana (Atividades para 2 ou mais aulas)</pre></div> <button class="btnCopi" onclick="CopyTexto('n1a')" type="button">Copiar</button> </div>
+<hr/><div class="aula1"> <br>EJA - Planejamento Bimestral <br>
+<b><h3 id="Semana1">Semana  1 e 2:  de 01/10  à  10/10. </h3></b> Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n1a">“A pintura como expressão cultural”</pre></div> <button class="btnCopi" onclick="CopyTexto('n1a')" type="button">Copiar</button> </div>
 
-Habilidade <div class="box-frases"> <div class="texto1"><pre id="h1a">EF04AR01. Conhecer e apreciar a ARTE URBANA como modalidade das artes visuais, cultivando a percepção, o imaginário, a capacidade de simbolizar e ampliar seu repertório imagético.
-
-EF04AR04. Experimentar a ARTE URBANA por meio de técnicas convencionais e não convencionais, fazendo uso sustentável de diversos materiais, instrumentos e suportes em suas produções.</pre></div> <button class="btnCopi" onclick="CopyTexto('h1a')" type="button">Copiar</button> </div> Conteudo <div class="box-frases"> <div class="texto1"><pre id="c1a">Aula 1: Entendendo a Arte Urbana:
-
-Objetivos:
-
-Conhecer e apreciar a arte urbana como modalidade das artes visuais.
-Cultivar a percepção, o imaginário, a capacidade de simbolizar e ampliar o repertório imagético.
-
-Atividades:
-
-Introdução à Arte Urbana:
-Use a lousa para desenhar exemplos simples de arte urbana (grafites, estêncil, esculturas), se tiver dificuldade use material impresso ou projeção.
-
-Explique que a arte urbana é uma forma de expressão artística que ocorre em espaços públicos, como muros, paredes e praças.
-
-Debate para reflexão e troca de experiências em Sala:
-
-Pergunte aos estudantes se já viram algum tipo de arte urbana em suas cidades ou bairros.
-
-Discuta o que eles acham sobre essas obras e como elas podem influenciar o ambiente urbano.
-
-Reflexão sobre Mensagens:
-
-Desenhe na lousa um exemplo de arte urbana que transmite uma mensagem social (por exemplo, sobre meio ambiente ou igualdade), se tiver dificuldade use material impresso ou projeção.
-
-Peça aos estudantes que reflitam sobre a mensagem que a obra pode estar transmitindo. Peça aos estudantes para produzirem uma mensagem com base nos seus conhecimentos e vivencias.
-
-Importância da Arte Urbana:
-
-Discuta como a arte urbana pode transformar espaços públicos e promover a reflexão sobre questões sociais. ( O professor pode aproveitar esse momento para explicar aos estudantes a diferença entre Grafite e pichação, conceitos que ainda hoje confundem alguns).
-
-
-Aula 2: Experimentação com Técnicas de Arte Urbana;
-
-Objetivos:
-
-Experimentar a arte urbana por meio de técnicas convencionais e não convencionais.
-Fazer uso sustentável de materiais e instrumentos em suas produções.
-
-Materiais Necessários:
-Lousa.
-Materiais reciclados (papelão, garrafas PET, etc.);
-Tintas naturais (ou giz colorido).
-
-Atividades:
-
-Técnicas Convencionais:
-
-Mostre aos estudantes como criar um estêncil simples usando papelão e giz.
-
-Peça que eles desenhem um estêncil na lousa e o reproduzam em papelão.
-
-Técnicas Não Convencionais:
-
-Use materiais reciclados para criar esculturas ou objetos que possam ser usados em uma obra de arte urbana.
-Peça aos estudantes que criem suas próprias esculturas ou objetos usando materiais reciclados.
-
-Produção Artística:
-
-Organize uma área na sala onde os estudantes possam criar suas próprias obras de arte urbana usando as técnicas aprendidas.
-
-Incentive o uso de tintas naturais ou giz colorido para pintar suas criações.
-
-(Observação: a produção artística pode ser iniciada em sala e o estudante levar para casa para terminar no seu ritmo e tempo disponível, trazendo na próxima aula).
-
-Avaliação e Reflexão:
-
-Ao final da atividade, peça aos estudantes que apresentem suas obras e expliquem o que elas representam.
-Discuta como essas obras podem ser aplicadas em espaços públicos e o impacto que podem ter na comunidade.
-Essa atividade visa não apenas ensinar sobre arte urbana, mas também promover a criatividade e a reflexão crítica sobre o papel da arte no espaço público.</pre></div> <button class="btnCopi" onclick="CopyTexto('c1a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+Habilidade <div class="box-frases"> <div class="texto1"><pre id="h1a"> EF01AR01 – Conhecer, identificar e apreciar a pintura como modalidade das artes visuais tradicionais e contemporâneas nacional e internacional, cultivando a percepção, o imaginário, a capacidade de simbolizar e ampliar seu repertório imagético.</pre></div> <button class="btnCopi" onclick="CopyTexto('h1a')" type="button">Copiar</button> </div> Conteudo <div class="box-frases"> <div class="texto1"><pre id="c1a">Iniciar com uma roda de conversa sobre o que os estudantes já conhecem sobre pintura (pinturas de parede, obras vistas em livros, imagens de artistas locais, murais da cidade, etc.);
+Exibição de obras de diferentes artistas nacionais e internacionais (Tarsila do Amaral, Candido Portinari, Van Gogh, Frida Kahlo, entre outros), com comentários sobre cores, estilos e significados;
+Cada estudante registra no caderno o que mais chamou sua atenção em cada obra apresentada;
+Produção de uma linha do tempo coletiva no quadro (ou sulfitão). O professor deverá levar imagens de obras de arte de diferentes períodos, para que os estudantes façam, com a ajuda do professor, uma linha do tempo pensando no contexto histórico dessas produções (ex: uma obra do período clássico, outra do período barroco e daí por diante....)  situando as obras apresentadas, para visualizar diversidade de épocas e contextos;
+Reflexão final: cada estudante escreve uma frase sobre “o que a pintura pode expressar”.</pre></pre></pre></div> <button class="btnCopi" onclick="CopyTexto('c1a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana1(b) - 10/02  à       14/02</b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2"><pre id="h1b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>EJA - Planejamento Bimestral<br/>
+<b>Semana1(b) - __/__  à   __/__</b> <div class="box-frases"><div class="texto2"><pre id="n1b">Nome da atividade (b) Semana 1</pre></div><button class="btnCopi" onclick="CopyTexto('n1b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h1b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
@@ -185,85 +240,21 @@ Essa atividade visa não apenas ensinar sobre arte urbana, mas também promover 
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 2   XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  EJA - Planejamento Bimestral<br/>
-<b> <h3 id="Semana2">Semana2(a) -  até 23/05/2025</h3></b> 
-Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n2a">Apreciação e Reflexão sobre a Arte Urbana (Atividades para 2 ou mais aulas);</pre></div> <button class="btnCopi" onclick="CopyTexto('n2a')" type="button">Copiar</button> </div>
+<hr/><div class="aula1"> <br/>EJA - Planejamento Bimestral <br/>
+<b> <h3 id="Semana2">Semana  1 e 2:  de 01/10  à  10/10. </h3></b> 
+Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n2a">“A pintura como expressão cultural”</pre></div> <button class="btnCopi" onclick="CopyTexto('n2a')" type="button">Copiar</button> </div>
 
-Habilidade <div class="box-frases"> <div class="texto1"><pre id="h2a">EF04AR01. Conhecer e apreciar a ARTE URBANA como modalidade das artes visuais, cultivando a percepção, o imaginário, a capacidade de simbolizar e ampliar seu repertório imagético.
-
-EF04AR04. Experimentar a ARTE URBANA por meio de técnicas convencionais e não convencionais, fazendo uso sustentável de diversos materiais, instrumentos e suportes em suas produções.</pre></div> <button class="btnCopi" onclick="CopyTexto('h2a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c2a">Aula 1: Entendendo a Arte Urbana:
-
-Objetivos:
-
-Conhecer e apreciar a arte urbana como modalidade das artes visuais.
-Cultivar a percepção, o imaginário, a capacidade de simbolizar e ampliar o repertório imagético.
-
-Atividades:
-
-Introdução à Arte Urbana:
-Use a lousa para desenhar exemplos simples de arte urbana (grafites, estêncil, esculturas), se tiver dificuldade use material impresso ou projeção.
-
-Explique que a arte urbana é uma forma de expressão artística que ocorre em espaços públicos, como muros, paredes e praças.
-
-Debate para reflexão e troca de experiências em Sala:
-
-Pergunte aos estudantes se já viram algum tipo de arte urbana em suas cidades ou bairros.
-
-Discuta o que eles acham sobre essas obras e como elas podem influenciar o ambiente urbano.
-
-Reflexão sobre Mensagens:
-
-Desenhe na lousa um exemplo de arte urbana que transmite uma mensagem social (por exemplo, sobre meio ambiente ou igualdade), se tiver dificuldade use material impresso ou projeção.
-
-Peça aos estudantes que reflitam sobre a mensagem que a obra pode estar transmitindo. Peça aos estudantes para produzirem uma mensagem com base nos seus conhecimentos e vivencias.
-
-Importância da Arte Urbana:
-
-Discuta como a arte urbana pode transformar espaços públicos e promover a reflexão sobre questões sociais. ( O professor pode aproveitar esse momento para explicar aos estudantes a diferença entre Grafite e pichação, conceitos que ainda hoje confundem alguns).
-
-
-Aula 2: Experimentação com Técnicas de Arte Urbana;
-
-Objetivos:
-
-Experimentar a arte urbana por meio de técnicas convencionais e não convencionais.
-Fazer uso sustentável de materiais e instrumentos em suas produções.
-
-Materiais Necessários:
-Lousa.
-Materiais reciclados (papelão, garrafas PET, etc.);
-Tintas naturais (ou giz colorido).
-
-Atividades:
-
-Técnicas Convencionais:
-
-Mostre aos estudantes como criar um estêncil simples usando papelão e giz.
-
-Peça que eles desenhem um estêncil na lousa e o reproduzam em papelão.
-
-Técnicas Não Convencionais:
-
-Use materiais reciclados para criar esculturas ou objetos que possam ser usados em uma obra de arte urbana.
-Peça aos estudantes que criem suas próprias esculturas ou objetos usando materiais reciclados.
-
-Produção Artística:
-
-Organize uma área na sala onde os estudantes possam criar suas próprias obras de arte urbana usando as técnicas aprendidas.
-
-Incentive o uso de tintas naturais ou giz colorido para pintar suas criações.
-
-(Observação: a produção artística pode ser iniciada em sala e o estudante levar para casa para terminar no seu ritmo e tempo disponível, trazendo na próxima aula).
-
-Avaliação e Reflexão:
-
-Ao final da atividade, peça aos estudantes que apresentem suas obras e expliquem o que elas representam.
-Discuta como essas obras podem ser aplicadas em espaços públicos e o impacto que podem ter na comunidade.
-Essa atividade visa não apenas ensinar sobre arte urbana, mas também promover a criatividade e a reflexão crítica sobre o papel da arte no espaço público.</pre></div> <button class="btnCopi" onclick="CopyTexto('c2a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+Habilidade <div class="box-frases"> <div class="texto1"><pre id="h2a"> EF01AR01 – Conhecer, identificar e apreciar a pintura como modalidade das artes visuais tradicionais e contemporâneas nacional e internacional, cultivando a percepção, o imaginário, a capacidade de simbolizar e ampliar seu repertório imagético.</pre></div> <button class="btnCopi" onclick="CopyTexto('h2a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c2a">Iniciar com uma roda de conversa sobre o que os estudantes já conhecem sobre pintura (pinturas de parede, obras vistas em livros, imagens de artistas locais, murais da cidade, etc.);
+Exibição de obras de diferentes artistas nacionais e internacionais (Tarsila do Amaral, Candido Portinari, Van Gogh, Frida Kahlo, entre outros), com comentários sobre cores, estilos e significados;
+Cada estudante registra no caderno o que mais chamou sua atenção em cada obra apresentada;
+Produção de uma linha do tempo coletiva no quadro (ou sulfitão). O professor deverá levar imagens de obras de arte de diferentes períodos, para que os estudantes façam, com a ajuda do professor, uma linha do tempo pensando no contexto histórico dessas produções (ex: uma obra do período clássico, outra do período barroco e daí por diante....)  situando as obras apresentadas, para visualizar diversidade de épocas e contextos;
+Reflexão final: cada estudante escreve uma frase sobre “o que a pintura pode expressar”.</pre></div> <button class="btnCopi" onclick="CopyTexto('c2a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana2(b) - 17/02  à       21/02</b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2"><pre id="h2b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>EJA - Planejamento Bimestral<br/>
+<b>Semana2(b) - __/__  à  __/__</b> <div class="box-frases"><div class="texto2"><pre id="n2b">Nome da atividade (b) Semana 2</pre></div><button class="btnCopi" onclick="CopyTexto('n2b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h2b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
@@ -276,82 +267,20 @@ Essa atividade visa não apenas ensinar sobre arte urbana, mas também promover 
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 3  XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  EJA - Planejamento Bimestral<br/>
-<b><h3 id="Semana3">Semana3(a) -   até 23/05/2025</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n3a">Apreciação e Reflexão sobre a Arte Urbana (Atividades para 2 ou mais aulas);</pre></div> <button class="btnCopi" onclick="CopyTexto('n3a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h3a">EF04AR01. Conhecer e apreciar a ARTE URBANA como modalidade das artes visuais, cultivando a percepção, o imaginário, a capacidade de simbolizar e ampliar seu repertório imagético.
-
-EF04AR04. Experimentar a ARTE URBANA por meio de técnicas convencionais e não convencionais, fazendo uso sustentável de diversos materiais, instrumentos e suportes em suas produções.</pre></div> <button class="btnCopi" onclick="CopyTexto('h3a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c3a">Aula 1: Entendendo a Arte Urbana:
-
-Objetivos:
-
-Conhecer e apreciar a arte urbana como modalidade das artes visuais.
-Cultivar a percepção, o imaginário, a capacidade de simbolizar e ampliar o repertório imagético.
-
-Atividades:
-
-Introdução à Arte Urbana:
-Use a lousa para desenhar exemplos simples de arte urbana (grafites, estêncil, esculturas), se tiver dificuldade use material impresso ou projeção.
-
-Explique que a arte urbana é uma forma de expressão artística que ocorre em espaços públicos, como muros, paredes e praças.
-
-Debate para reflexão e troca de experiências em Sala:
-
-Pergunte aos estudantes se já viram algum tipo de arte urbana em suas cidades ou bairros.
-
-Discuta o que eles acham sobre essas obras e como elas podem influenciar o ambiente urbano.
-
-Reflexão sobre Mensagens:
-
-Desenhe na lousa um exemplo de arte urbana que transmite uma mensagem social (por exemplo, sobre meio ambiente ou igualdade), se tiver dificuldade use material impresso ou projeção.
-
-Peça aos estudantes que reflitam sobre a mensagem que a obra pode estar transmitindo. Peça aos estudantes para produzirem uma mensagem com base nos seus conhecimentos e vivencias.
-
-Importância da Arte Urbana:
-
-Discuta como a arte urbana pode transformar espaços públicos e promover a reflexão sobre questões sociais. ( O professor pode aproveitar esse momento para explicar aos estudantes a diferença entre Grafite e pichação, conceitos que ainda hoje confundem alguns).
-
-
-Aula 2: Experimentação com Técnicas de Arte Urbana;
-
-Objetivos:
-
-Experimentar a arte urbana por meio de técnicas convencionais e não convencionais.
-Fazer uso sustentável de materiais e instrumentos em suas produções.
-
-Materiais Necessários:
-Lousa.
-Materiais reciclados (papelão, garrafas PET, etc.);
-Tintas naturais (ou giz colorido).
-
-Atividades:
-
-Técnicas Convencionais:
-
-Mostre aos estudantes como criar um estêncil simples usando papelão e giz.
-
-Peça que eles desenhem um estêncil na lousa e o reproduzam em papelão.
-
-Técnicas Não Convencionais:
-
-Use materiais reciclados para criar esculturas ou objetos que possam ser usados em uma obra de arte urbana.
-Peça aos estudantes que criem suas próprias esculturas ou objetos usando materiais reciclados.
-
-Produção Artística:
-
-Organize uma área na sala onde os estudantes possam criar suas próprias obras de arte urbana usando as técnicas aprendidas.
-
-Incentive o uso de tintas naturais ou giz colorido para pintar suas criações.
-
-(Observação: a produção artística pode ser iniciada em sala e o estudante levar para casa para terminar no seu ritmo e tempo disponível, trazendo na próxima aula).
-
-Avaliação e Reflexão:
-
-Ao final da atividade, peça aos estudantes que apresentem suas obras e expliquem o que elas representam.
-Discuta como essas obras podem ser aplicadas em espaços públicos e o impacto que podem ter na comunidade.
-Essa atividade visa não apenas ensinar sobre arte urbana, mas também promover a criatividade e a reflexão crítica sobre o papel da arte no espaço público.</pre></div> <button class="btnCopi" onclick="CopyTexto('c3a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+<hr/><div class="aula1"> <br/>EJA - Planejamento Bimestral <br/>
+<b><h3 id="Semana3">Semana  3 e 4:  de 13/10  à  24/10. </h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n3a">“Explorando os elementos da pintura”
+</pre></div> <button class="btnCopi" onclick="CopyTexto('n3a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h3a">EF15AR02 – Conhecer e explorar os elementos constitutivos das artes visuais (forma, cor, espaço, movimento, gestualidade, massa de cor/preenchimento, tonalidade, textura etc.).</pre></div> <button class="btnCopi" onclick="CopyTexto('h3a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c3a">Conversa inicial: o que dá “vida” a uma pintura? Destacar elementos como cor, forma, textura, espaço e movimento;
+Demonstração prática: professor apresenta diferentes técnicas de pintura (pinceladas largas e finas, uso de esponja, textura com objetos como folhas e tecidos);
+Proposta: cada estudante cria uma pequena pintura experimental em papel cartão, explorando pelo menos três elementos da linguagem (por exemplo: cor e tonalidade, textura, movimento);
+Exposição em varal na sala para apreciação coletiva;
+Debate final: cada estudante apresenta quais elementos escolheu trabalhar e por quê.
+</pre></div> <button class="btnCopi" onclick="CopyTexto('c3a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana3(b) - 24/02  à       28/02</b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2"><pre id="h3b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>EJA - Planejamento Bimestral<br/>
+<b>Semana3(b) - __/__  à __/__ </b> <div class="box-frases"><div class="texto2"><pre id="n3b">Nome da atividade (b) Semana 3</pre></div><button class="btnCopi" onclick="CopyTexto('n3b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h3b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
@@ -364,20 +293,19 @@ Essa atividade visa não apenas ensinar sobre arte urbana, mas também promover 
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 4   XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  EJA - Planejamento Bimestral<br/>
-<b><h3 id="Semana4">Semana4(a) - 26/05/2025 até 13/06/2025</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n4a">Apreciação, contextualização e fazer artístico, referência das HQs (posições dos quadrinhos, a quadrinagem, o enquadramento utilizado em cada página, e também a balonagem, como cada balão expressa um sentimento do personagem);</pre></div> <button class="btnCopi" onclick="CopyTexto('n4a')" type="button">Copiar</button> </div>Habilidade <div class="box-frases"> <div class="texto1"><pre id="h4a">EF05AR01. Conhecer e apreciar a HISTÓRIAS EM QUADRINHOS e DESENHOS ANIMADOS como modalidade das artes visuais, cultivando a percepção, o imaginário, a capacidade de simbolizar e ampliar seu repertório imagético. </pre></div> <button class="btnCopi" onclick="CopyTexto('h4a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c4a">Nutrição estética: Em sala deixar um tempo reservado para os estudantes folhearem uma HQ previamente coletada na sala de leitura, ou leva-los na sala de leitura.
-
-Contextualização: Durante e depois da apreciação das HQs, direcionar a atenção dos estudantes para observar como são as posições dos quadrinhos, a quadrinagem, o enquadramento utilizado em cada página, e também a balonagem, como cada balão expressa um sentimento do personagem.
-
-Fazer artístico: Em folha separada ou no caderno, propor aos estudantes que façam uma tirinha com enquadramento simples, início, meio e fim, podendo expandir se quiser, propor que utilizem personagem simples, como flores, animais ou objetos comuns, que coloquem carinhas e soltem a imaginação, auxiliar na escolha dos balões para as falas dos personagens. Colar as HQs dos estudantes em local apropriado para outros poderem apreciar.
-
-Fazer Artístico: outra possibilidade os estudantes poderão criar/copiar uma onomatopeia dos exemplos mostrados pensando em utiliza-la no formato de sticker (podendo simplificar o design) no caderno de arte e depois, criar uma versão de recorte e colagem utilizando color set ou cartolina colorida. O(a) professor(a) pode aproveitar os trabalhos para criar um mural com os stickers de cada sala.
-
-Explicar que podem ser utilizadas variadas possibilidades de balões.</pre></div> <button class="btnCopi" onclick="CopyTexto('c4a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+<hr/><div class="aula1"> <br/>EJA - Planejamento Bimestral <br/>
+<b><h3 id="Semana4">Semana  3 e 4:  de 13/10  à  24/10. </h3></b> Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n4a">“Explorando os elementos da pintura”</pre></div> <button class="btnCopi" onclick="CopyTexto('n4a')" type="button">Copiar</button> </div>Habilidade <div class="box-frases"> <div class="texto1"><pre id="h4a">EF15AR02 – Conhecer e explorar os elementos constitutivos das artes visuais (forma, cor, espaço, movimento, gestualidade, massa de cor/preenchimento, tonalidade, textura etc.).</pre></div> <button class="btnCopi" onclick="CopyTexto('h4a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c4a">Conversa inicial: o que dá “vida” a uma pintura? Destacar elementos como cor, forma, textura, espaço e movimento;
+Demonstração prática: professor apresenta diferentes técnicas de pintura (pinceladas largas e finas, uso de esponja, textura com objetos como folhas e tecidos);
+Proposta: cada estudante cria uma pequena pintura experimental em papel cartão, explorando pelo menos três elementos da linguagem (por exemplo: cor e tonalidade, textura, movimento);
+Exposição em varal na sala para apreciação coletiva;
+Debate final: cada estudante apresenta quais elementos escolheu trabalhar e por quê.
+</pre></div> <button class="btnCopi" onclick="CopyTexto('c4a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana4(b) - 03/03  à       07/03</b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2"><pre id="h4b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>EJA - Planejamento Bimestral<br/>
+<b>Semana4(b) - __/__  à  __/__</b> <div class="box-frases"><div class="texto2"><pre id="n4b">Nome da atividade (b) Semana 4</pre></div><button class="btnCopi" onclick="CopyTexto('n4b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h4b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
@@ -390,20 +318,21 @@ Explicar que podem ser utilizadas variadas possibilidades de balões.</pre></div
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 5  XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  EJA - Planejamento Bimestral<br/>
-<b><h3 id="Semana5">Semana5(a) -  26/05/2025 até 13/06/2025</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n5a">Apreciação, contextualização e fazer artístico, referência das HQs (posições dos quadrinhos, a quadrinagem, o enquadramento utilizado em cada página, e também a balonagem, como cada balão expressa um sentimento do personagem);</pre></div> <button class="btnCopi" onclick="CopyTexto('n5a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h5a">EF05AR01. Conhecer e apreciar a HISTÓRIAS EM QUADRINHOS e DESENHOS ANIMADOS como modalidade das artes visuais, cultivando a percepção, o imaginário, a capacidade de simbolizar e ampliar seu repertório imagético. </pre></div> <button class="btnCopi" onclick="CopyTexto('h5a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c5a">Nutrição estética: Em sala deixar um tempo reservado para os estudantes folhearem uma HQ previamente coletada na sala de leitura, ou leva-los na sala de leitura.
+<hr/><div class="aula1"> <br/>EJA - Planejamento Bimestral <br/>
+<b><h3 id="Semana5">Semana  5 e 6:  de 27/10  à  07/11.</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n5a">Pintura com tintas naturais</pre></div> <button class="btnCopi" onclick="CopyTexto('n5a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h5a">EF15AR04 Experimentar a pintura, fazendo uso sustentável de diversos materiais, instrumentos e suportes convencionais e não convencionais em suas produções.
+ EF15AR27 Confeccionar e experimentar tintas e instrumentos naturais</pre></div> <button class="btnCopi" onclick="CopyTexto('h5a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c5a">Pintura com tintas naturais:
 
-Contextualização: Durante e depois da apreciação das HQs, direcionar a atenção dos estudantes para observar como são as posições dos quadrinhos, a quadrinagem, o enquadramento utilizado em cada página, e também a balonagem, como cada balão expressa um sentimento do personagem.
-
-Fazer artístico: Em folha separada ou no caderno, propor aos estudantes que façam uma tirinha com enquadramento simples, início, meio e fim, podendo expandir se quiser, propor que utilizem personagem simples, como flores, animais ou objetos comuns, que coloquem carinhas e soltem a imaginação, auxiliar na escolha dos balões para as falas dos personagens. Colar as HQs dos estudantes em local apropriado para outros poderem apreciar.
-
-Fazer Artístico: outra possibilidade os estudantes poderão criar/copiar uma onomatopeia dos exemplos mostrados pensando em utiliza-la no formato de sticker (podendo simplificar o design) no caderno de arte e depois, criar uma versão de recorte e colagem utilizando color set ou cartolina colorida. O(a) professor(a) pode aproveitar os trabalhos para criar um mural com os stickers de cada sala.
-
-Explicar que podem ser utilizadas variadas possibilidades de balões.</pre></div> <button class="btnCopi" onclick="CopyTexto('c5a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+Apresentação do artista Jhon Bermond e seu trabalho;
+Preparação de tintas com elementos naturais: água, goma laca, curcuma, espirulina, beterraba, terra, etc;
+Pintura com as tintas com temática selecionada em grupo;
+Apreciação das obras.
+</pre></div> <button class="btnCopi" onclick="CopyTexto('c5a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana5(b) -  10/03  à       14/03 </b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2"><pre id="h5b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>EJA - Planejamento Bimestral<br/>
+<b>Semana5(b) -  __/__  à  __/__ </b> <div class="box-frases"><div class="texto2"><pre id="n5b">Nome da atividade (b) Semana 5</pre></div><button class="btnCopi" onclick="CopyTexto('n5b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h5b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
@@ -416,20 +345,20 @@ Explicar que podem ser utilizadas variadas possibilidades de balões.</pre></div
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 6   XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  EJA - Planejamento Bimestral<br/>
-<b><h3 id="Semana6">Semana6(a) -  26/05/2025 até 13/06/2025</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n6a">Apreciação, contextualização e fazer artístico, referência das HQs (posições dos quadrinhos, a quadrinagem, o enquadramento utilizado em cada página, e também a balonagem, como cada balão expressa um sentimento do personagem);</pre></div> <button class="btnCopi" onclick="CopyTexto('n6a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h6a">EF05AR01. Conhecer e apreciar a HISTÓRIAS EM QUADRINHOS e DESENHOS ANIMADOS como modalidade das artes visuais, cultivando a percepção, o imaginário, a capacidade de simbolizar e ampliar seu repertório imagético. </pre></div> <button class="btnCopi" onclick="CopyTexto('h6a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c6a">Nutrição estética: Em sala deixar um tempo reservado para os estudantes folhearem uma HQ previamente coletada na sala de leitura, ou leva-los na sala de leitura.
+<hr/><div class="aula1"> <br/>EJA - Planejamento Bimestral <br/>
+<b><h3 id="Semana6">Semana  5 e 6:  de 27/10  à  07/11.</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n6a">Pintura com tintas naturais</pre></div> <button class="btnCopi" onclick="CopyTexto('n6a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h6a">EF15AR04 Experimentar a pintura, fazendo uso sustentável de diversos materiais, instrumentos e suportes convencionais e não convencionais em suas produções.
+ EF15AR27 Confeccionar e experimentar tintas e instrumentos naturais</pre></div> <button class="btnCopi" onclick="CopyTexto('h6a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c6a">Pintura com tintas naturais:
 
-Contextualização: Durante e depois da apreciação das HQs, direcionar a atenção dos estudantes para observar como são as posições dos quadrinhos, a quadrinagem, o enquadramento utilizado em cada página, e também a balonagem, como cada balão expressa um sentimento do personagem.
-
-Fazer artístico: Em folha separada ou no caderno, propor aos estudantes que façam uma tirinha com enquadramento simples, início, meio e fim, podendo expandir se quiser, propor que utilizem personagem simples, como flores, animais ou objetos comuns, que coloquem carinhas e soltem a imaginação, auxiliar na escolha dos balões para as falas dos personagens. Colar as HQs dos estudantes em local apropriado para outros poderem apreciar.
-
-Fazer Artístico: outra possibilidade os estudantes poderão criar/copiar uma onomatopeia dos exemplos mostrados pensando em utiliza-la no formato de sticker (podendo simplificar o design) no caderno de arte e depois, criar uma versão de recorte e colagem utilizando color set ou cartolina colorida. O(a) professor(a) pode aproveitar os trabalhos para criar um mural com os stickers de cada sala.
-
-Explicar que podem ser utilizadas variadas possibilidades de balões.</pre></div> <button class="btnCopi" onclick="CopyTexto('c5a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+Apresentação do artista Jhon Bermond e seu trabalho;
+Preparação de tintas com elementos naturais: água, goma laca, curcuma, espirulina, beterraba, terra, etc;
+Pintura com as tintas com temática selecionada em grupo;
+Apreciação das obras.</pre></div> <button class="btnCopi" onclick="CopyTexto('c5a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana6(b) - 17/03  à       21/03</b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2"><pre id="h6b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>EJA - Planejamento Bimestral<br/>
+<b>Semana6(b) - __/__  à  __/__ </b> <div class="box-frases"><div class="texto2"><pre id="n6b">Nome da atividade (b) Semana 6</pre></div><button class="btnCopi" onclick="CopyTexto('n6b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h6b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
@@ -442,77 +371,21 @@ Explicar que podem ser utilizadas variadas possibilidades de balões.</pre></div
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 7  XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  EJA - Planejamento Bimestral<br/>
-<b><h3 id="Semana7">Semana7(a) -  16/06/2025 até 04/07/2025</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n7a">Explorando a Dança em Diferentes Contextos (Atividades para 2 ou mais aulas);</pre></div> <button class="btnCopi" onclick="CopyTexto('n7a')" type="button">Copiar</button> </div>Habilidade <div class="box-frases"> <div class="texto1"><pre id="h7a">EF15AR08. Conhecer, apreciar e experimentar diferentes formas da dança, presentes em diferentes contextos da cultura local (lar, escola, comunidade, cidade, outras), nas tradicionais e contemporâneas da cultura popular paulista e brasileira.
+<hr/><div class="aula1"> <br/>EJA - Planejamento Bimestral <br/>
+<b><h3 id="Semana7">Semana  7 e 8:  de 10/11  à  21/11.</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n7a">Criando mandalas com referência à artista Beth Lins</pre></div> <button class="btnCopi" onclick="CopyTexto('n7a')" type="button">Copiar</button> </div>Habilidade <div class="box-frases"> <div class="texto1"><pre id="h7a">EF01AR04 Experimentar a pintura, fazendo uso sustentável de diversos materiais, instrumentos e suportes convencionais e não convencionais em suas produções.
+EF01AR27 Confeccionar e experimentar tintas e instrumentos naturais.</pre></div> <button class="btnCopi" onclick="CopyTexto('h7a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c7a">Roda de conversa e apreciação dos trabalhos da artista brasileira Beth Lins, em especial sua série de mandalas. Comentar sua biografia, seus estilos de trabalhos, os materiais que a artista utiliza e etc.
+Apresentar Referências sobre Beth Lins.
+Etapa 2: Com o auxílio de instrumentos circulares, orientar os alunos a criarem suas próprias mandalas, utilizando como referência os trabalhos da artista Beth Lins. Após o desenho, os alunos irão colorir suas mandalas com materiais diversos,  tais como: tinta guache, miçangas, botões, sementes, recortes de papel colorido.
 
-EF15AR09. Estabelecer relações entre as partes do corpo e destas com o todo corporal na construção do movimento dançado. 
+Vídeo de como fazer uma mandala: https://www.youtube.com/watch?v=3-bK6rAhpos
 
-EF15AR10. Experimentar diferentes formas de orientação no espaço (deslocamentos, planos, direções, caminhos etc.) e ritmos de movimento (lento, moderado e rápido) na construção do movimento dançado. Onde os estudantes são do EJA, não completamente alfabetizados e o espaço não permite a prática da dança, deve ser atividade somente de reflexão e atividade no caderno.</pre></div> <button class="btnCopi" onclick="CopyTexto('h7a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c7a">Aula 1: Conhecendo e Apreciando a Dança;
-
-Objetivos:
-
-Conhecer e apreciar diferentes formas da dança presentes em contextos culturais locais.
-Estabelecer relações entre as partes do corpo e o todo corporal na construção do movimento dançado.
-
-Materiais Necessários:
-Caderno;
-Lápis;
-
-Atividades:
-
-Introdução à Dança:
-
-Peça aos estudantes que desenhem ou escrevam sobre suas experiências com a dança em diferentes contextos (lar, escola, comunidade).
-
-Discuta como a dança pode ser encontrada em diversas situações do cotidiano.
-
-Reflexão sobre Danças Tradicionais e Contemporâneas:
-
-Use a lousa para desenhar ou escrever sobre danças tradicionais e contemporâneas da cultura popular paulista e brasileira (por exemplo, samba, forró, axé).
-
-Peça aos estudantes que reflitam sobre como essas danças refletem a cultura local.
-
-Relações Corporais:
-
-Peça aos estudantes que desenhem o corpo humano e identifiquem as partes que são usadas em diferentes movimentos de dança.
-
-Discuta como essas partes se relacionam para criar movimentos dançados.
-
-
-Aula 2: Experimentando Movimentos e Orientação no Espaço;
-
-Objetivos:
-
-Os estudantes entenderem os conceitos do movimento através de símbolos e prática do grafismo para fixação.
-
-Experimentar diferentes formas de orientação no espaço (deslocamentos, planos, direções, caminhos etc.).
-
-Experimentar ritmos de movimento (lento, moderado e rápido) na construção do movimento dançado.
-
-Materiais Necessários:
-Caderno;
-Lápis;
-
-Atividades:
-
-Movimentos no Espaço:
-Peça aos estudantes que desenhem diferentes direções e planos no espaço (frente, trás, esquerda, direita, cima, baixo).
-Discuta como esses movimentos são usados em danças.
-
-Ritmos de Movimento:
-
-Peça aos estudantes que escrevam ou desenhem sobre como diferentes ritmos de movimento (lento, moderado, rápido) são usados em danças.
-Discuta como esses ritmos podem criar diferentes efeitos em uma coreografia.
-
-Criação de Coreografia Simbólica:
-
-Peça aos estudantes que criem uma coreografia simbólica no papel, usando símbolos para representar diferentes movimentos e ritmos. Incentive-os a descreverem suas coreografias para a turma.
-
-Essa atividade visa promover a reflexão sobre a dança em diferentes contextos, mesmo sem a possibilidade de prática física, utilizando o caderno como ferramenta para expressão e reflexão.</pre></div> <button class="btnCopi" onclick="CopyTexto('c7a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+Etapa 3: Após a atividade, o professor poderá expor a mandala em um mural coletivo.</pre></div> <button class="btnCopi" onclick="CopyTexto('c7a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana7(b) - 24/03  à       28/03</b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2"><pre id="h7b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>EJA - Planejamento Bimestral<br/>
+<b>Semana7(b) - __/__  à  __/__</b> <div class="box-frases"><div class="texto2"><pre id="n7b">Nome da atividade (b) Semana 7</pre></div><button class="btnCopi" onclick="CopyTexto('n7b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h7b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
@@ -525,77 +398,21 @@ Essa atividade visa promover a reflexão sobre a dança em diferentes contextos,
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 8  XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  EJA - Planejamento Bimestral<br/>
-<b><h3 id="Semana8">Semana8(a) -    16/06/2025 até 04/07/2025</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n8a">Explorando a Dança em Diferentes Contextos (Atividades para 2 ou mais aulas);</pre></div> <button class="btnCopi" onclick="CopyTexto('n8a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h8a">EF15AR08. Conhecer, apreciar e experimentar diferentes formas da dança, presentes em diferentes contextos da cultura local (lar, escola, comunidade, cidade, outras), nas tradicionais e contemporâneas da cultura popular paulista e brasileira.
+<hr/><div class="aula1"> <br/>EJA - Planejamento Bimestral <br/>
+<b><h3 id="Semana8">Semana  7 e 8:  de 10/11  à  21/11.</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n8a">Criando mandalas com referência à artista Beth Lins</pre></div> <button class="btnCopi" onclick="CopyTexto('n8a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h8a">EF01AR04 Experimentar a pintura, fazendo uso sustentável de diversos materiais, instrumentos e suportes convencionais e não convencionais em suas produções.
+EF01AR27 Confeccionar e experimentar tintas e instrumentos naturais.</pre></div> <button class="btnCopi" onclick="CopyTexto('h8a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c8a">Roda de conversa e apreciação dos trabalhos da artista brasileira Beth Lins, em especial sua série de mandalas. Comentar sua biografia, seus estilos de trabalhos, os materiais que a artista utiliza e etc.
+Apresentar Referências sobre Beth Lins.
+Etapa 2: Com o auxílio de instrumentos circulares, orientar os alunos a criarem suas próprias mandalas, utilizando como referência os trabalhos da artista Beth Lins. Após o desenho, os alunos irão colorir suas mandalas com materiais diversos,  tais como: tinta guache, miçangas, botões, sementes, recortes de papel colorido.
 
-EF15AR09. Estabelecer relações entre as partes do corpo e destas com o todo corporal na construção do movimento dançado. 
+Vídeo de como fazer uma mandala: https://www.youtube.com/watch?v=3-bK6rAhpos
 
-EF15AR10. Experimentar diferentes formas de orientação no espaço (deslocamentos, planos, direções, caminhos etc.) e ritmos de movimento (lento, moderado e rápido) na construção do movimento dançado. Onde os estudantes são do EJA, não completamente alfabetizados e o espaço não permite a prática da dança, deve ser atividade somente de reflexão e atividade no caderno.</pre></div> <button class="btnCopi" onclick="CopyTexto('h8a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c8a">Aula 1: Conhecendo e Apreciando a Dança;
-
-Objetivos:
-
-Conhecer e apreciar diferentes formas da dança presentes em contextos culturais locais.
-Estabelecer relações entre as partes do corpo e o todo corporal na construção do movimento dançado.
-
-Materiais Necessários:
-Caderno;
-Lápis;
-
-Atividades:
-
-Introdução à Dança:
-
-Peça aos estudantes que desenhem ou escrevam sobre suas experiências com a dança em diferentes contextos (lar, escola, comunidade).
-
-Discuta como a dança pode ser encontrada em diversas situações do cotidiano.
-
-Reflexão sobre Danças Tradicionais e Contemporâneas:
-
-Use a lousa para desenhar ou escrever sobre danças tradicionais e contemporâneas da cultura popular paulista e brasileira (por exemplo, samba, forró, axé).
-
-Peça aos estudantes que reflitam sobre como essas danças refletem a cultura local.
-
-Relações Corporais:
-
-Peça aos estudantes que desenhem o corpo humano e identifiquem as partes que são usadas em diferentes movimentos de dança.
-
-Discuta como essas partes se relacionam para criar movimentos dançados.
-
-
-Aula 2: Experimentando Movimentos e Orientação no Espaço;
-
-Objetivos:
-
-Os estudantes entenderem os conceitos do movimento através de símbolos e prática do grafismo para fixação.
-
-Experimentar diferentes formas de orientação no espaço (deslocamentos, planos, direções, caminhos etc.).
-
-Experimentar ritmos de movimento (lento, moderado e rápido) na construção do movimento dançado.
-
-Materiais Necessários:
-Caderno;
-Lápis;
-
-Atividades:
-
-Movimentos no Espaço:
-Peça aos estudantes que desenhem diferentes direções e planos no espaço (frente, trás, esquerda, direita, cima, baixo).
-Discuta como esses movimentos são usados em danças.
-
-Ritmos de Movimento:
-
-Peça aos estudantes que escrevam ou desenhem sobre como diferentes ritmos de movimento (lento, moderado, rápido) são usados em danças.
-Discuta como esses ritmos podem criar diferentes efeitos em uma coreografia.
-
-Criação de Coreografia Simbólica:
-
-Peça aos estudantes que criem uma coreografia simbólica no papel, usando símbolos para representar diferentes movimentos e ritmos. Incentive-os a descreverem suas coreografias para a turma.
-
-Essa atividade visa promover a reflexão sobre a dança em diferentes contextos, mesmo sem a possibilidade de prática física, utilizando o caderno como ferramenta para expressão e reflexão.</pre></div> <button class="btnCopi" onclick="CopyTexto('c8a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+Etapa 3: Após a atividade, o professor poderá expor a mandala em um mural coletivo.</pre></div> <button class="btnCopi" onclick="CopyTexto('c8a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana8(b) - 31/03  à       04/04 </b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2"><pre id="h8b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>EJA - Planejamento Bimestral<br/>
+<b>Semana8(b) - __/__  à  __/__ </b> <div class="box-frases"><div class="texto2"><pre id="n8b">Nome da atividade (b) Semana 8</pre></div><button class="btnCopi" onclick="CopyTexto('n8b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h8b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
@@ -608,77 +425,45 @@ Essa atividade visa promover a reflexão sobre a dança em diferentes contextos,
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 9   XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  EJA - Planejamento Bimestral<br/>
-<b><h3 id="Semana9">Semana9(a) -    16/06/2025 até 04/07/2025</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n9a">Explorando a Dança em Diferentes Contextos (Atividades para 2 ou mais aulas);</pre></div> <button class="btnCopi" onclick="CopyTexto('n9a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h9a">EF15AR08. Conhecer, apreciar e experimentar diferentes formas da dança, presentes em diferentes contextos da cultura local (lar, escola, comunidade, cidade, outras), nas tradicionais e contemporâneas da cultura popular paulista e brasileira.
+<hr/><div class="aula1"> <br/>EJA - Planejamento Bimestral <br/>
+<b><h3 id="Semana9">Semana  9:  de   24/11  à  28/11.</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n9a">Pintura abstrata.</pre></div> <button class="btnCopi" onclick="CopyTexto('n9a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h9a">EF15AR06 Dialogar sobre a sua criação e a dos colegas, para alcançar sentidos plurais.</pre></div> <button class="btnCopi" onclick="CopyTexto('h9a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c9a">Comece a aula apresentando o artista Paul Klee, destacando seu estilo único e a maneira como ele usava a abstração e o simbolismo para expressar sentimentos e ideias.
+Contextualização breve sobre a obra:
+A Cidade dos Sonhos faz parte de um período onde Klee explorava formas geométricas e cores vibrantes para representar paisagens e lugares imaginários. A obra remete a uma cidade imaginária, que poderia ser tanto um espaço físico quanto uma representação simbólica de um mundo interior ou de sonhos.
+A pintura é composta por formas geométricas, linhas e cores que se intercalam para sugerir uma ideia de cidade, mas de uma forma quase surreal e fantasiosa. Não se trata de uma cidade real, mas de uma construção abstrata do que pode ser uma "cidade dos sonhos". Perguntas iniciais para o aquecimento: Destaque o contexto da pintura;
+O que uma "cidade dos sonhos" poderia representar para vocês? Uma cidade real ou um lugar imaginário?
+Já pensaram em como seria a cidade dos seus próprios sonhos? Quais elementos ela teria? Quais formas e cores você usaria para representá-la?
+Em seguida projete ou distribua uma imagem impressa de A Cidade dos Sonhos para cada estudante. Peça que os estudantes observem com atenção todos os detalhes da pintura e anotem suas impressões iniciais.
+Peça para observar as formas geométricas (como quadrados, retângulos, triângulos) e as cores utilizadas por Klee;
+Como essas formas e cores criam a sensação de uma cidade? Quais emoções elas transmitem?
+O que essas formas poderiam representar? (edifícios, ruas, praças, ou algo mais simbólico?)
+O que pode significar essa construção de "sonhos"? Essa cidade é real ou imaginária? Qual a sensação que ela transmite?
+Perguntas para refletir em grupo:
+Como você descreve a cidade na obra? Ela parece ser calma ou caótica?
+Quais sentimentos a pintura desperta em você? Seria um lugar onde você gostaria de viver? Por quê?
+Reflexões sobre o significado da obra:
+A "cidade dos sonhos" de Klee pode ser vista como um espaço onde a realidade se mistura com a fantasia. A construção da cidade não é feita de maneira realista, mas sim por uma série de formas e cores que podem representar diferentes aspectos da vida urbana ou da vida interior.
+A cidade pode simbolizar a busca por um lugar ideal, um refúgio, um sonho de comunidade ou um desejo de escapar das limitações da vida cotidiana.
+As cores, as linhas e as formas podem ser interpretadas de várias maneiras. Alguns alunos podem ver nela um lugar de harmonia, enquanto outros podem enxergar um local de fragmentação e confusão.
 
-EF15AR09. Estabelecer relações entre as partes do corpo e destas com o todo corporal na construção do movimento dançado. 
+-Atividade prática
+Agora, proponha que cada estudante crie a sua própria Cidade dos Sonhos. Essa atividade criativa estimulará a imaginação e a expressão individual dos estudantes.
 
-EF15AR10. Experimentar diferentes formas de orientação no espaço (deslocamentos, planos, direções, caminhos etc.) e ritmos de movimento (lento, moderado e rápido) na construção do movimento dançado. Onde os estudantes são do EJA, não completamente alfabetizados e o espaço não permite a prática da dança, deve ser atividade somente de reflexão e atividade no caderno.</pre></div> <button class="btnCopi" onclick="CopyTexto('h9a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c9a">Aula 1: Conhecendo e Apreciando a Dança;
-
-Objetivos:
-
-Conhecer e apreciar diferentes formas da dança presentes em contextos culturais locais.
-Estabelecer relações entre as partes do corpo e o todo corporal na construção do movimento dançado.
-
-Materiais Necessários:
-Caderno;
-Lápis;
-
-Atividades:
-
-Introdução à Dança:
-
-Peça aos estudantes que desenhem ou escrevam sobre suas experiências com a dança em diferentes contextos (lar, escola, comunidade).
-
-Discuta como a dança pode ser encontrada em diversas situações do cotidiano.
-
-Reflexão sobre Danças Tradicionais e Contemporâneas:
-
-Use a lousa para desenhar ou escrever sobre danças tradicionais e contemporâneas da cultura popular paulista e brasileira (por exemplo, samba, forró, axé).
-
-Peça aos estudantes que reflitam sobre como essas danças refletem a cultura local.
-
-Relações Corporais:
-
-Peça aos estudantes que desenhem o corpo humano e identifiquem as partes que são usadas em diferentes movimentos de dança.
-
-Discuta como essas partes se relacionam para criar movimentos dançados.
-
-
-Aula 2: Experimentando Movimentos e Orientação no Espaço;
-
-Objetivos:
-
-Os estudantes entenderem os conceitos do movimento através de símbolos e prática do grafismo para fixação.
-
-Experimentar diferentes formas de orientação no espaço (deslocamentos, planos, direções, caminhos etc.).
-
-Experimentar ritmos de movimento (lento, moderado e rápido) na construção do movimento dançado.
-
-Materiais Necessários:
-Caderno;
-Lápis;
-
-Atividades:
-
-Movimentos no Espaço:
-Peça aos estudantes que desenhem diferentes direções e planos no espaço (frente, trás, esquerda, direita, cima, baixo).
-Discuta como esses movimentos são usados em danças.
-
-Ritmos de Movimento:
-
-Peça aos estudantes que escrevam ou desenhem sobre como diferentes ritmos de movimento (lento, moderado, rápido) são usados em danças.
-Discuta como esses ritmos podem criar diferentes efeitos em uma coreografia.
-
-Criação de Coreografia Simbólica:
-
-Peça aos estudantes que criem uma coreografia simbólica no papel, usando símbolos para representar diferentes movimentos e ritmos. Incentive-os a descreverem suas coreografias para a turma.
-
-Essa atividade visa promover a reflexão sobre a dança em diferentes contextos, mesmo sem a possibilidade de prática física, utilizando o caderno como ferramenta para expressão e reflexão.</pre></div> <button class="btnCopi" onclick="CopyTexto('c9a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+Instruções para a atividade prática:
+Usando papel em branco e materiais como tintas ou pigmentos naturais os estudantes devem criar uma representação visual de sua "cidade dos sonhos". Eles podem se inspirar nas formas geométricas e cores da obra de Klee, mas devem dar seu toque pessoal à criação.
+Eles podem representar a cidade de forma abstrata, como Paul Klee, ou optar por um estilo mais figurativo, onde as formas podem ser mais reconhecíveis (casas, praças, árvores, ruas, etc.).
+Durante a produção, peça para que eles considerem o seguinte:
+Como seria o espaço urbano ideal para eles?
+Que cores, formas e texturas representam suas emoções ou sonhos?
+A cidade é pacífica, alegre, movimentada, silenciosa, ou tem algum outro caráter?
+Ao terminar, cada aluno pode fazer uma breve descrição sobre sua cidade, explicando os elementos escolhidos e o que cada um deles representa. Pode ser algo como: "Nesta parte da cidade, coloquei muitas linhas retas para representar a organização. Já as áreas com formas curvas simbolizam a liberdade e os sonhos."
+Depois de terminar as criações, organize um momento de compartilhamento onde os alunos possam mostrar suas cidades e explicar suas escolhas.
+</pre></div> <button class="btnCopi" onclick="CopyTexto('c9a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana9(b) - 07/04  à       11/04 </b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2"><pre id="h9b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>EJA - Planejamento Bimestral<br/>
+<b>Semana9(b) - __/__  à __/__ </b> <div class="box-frases"><div class="texto2"><pre id="n9b">Nome da atividade (b) Semana 9</pre></div><button class="btnCopi" onclick="CopyTexto('n9b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h9b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
@@ -691,12 +476,30 @@ Essa atividade visa promover a reflexão sobre a dança em diferentes contextos,
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 10   XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  EJA - Planejamento Bimestral<br/>
-<b><h3 id="Semana10">Semana10(a) -  14/04  à       18/04</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n10a">Proposta</pre></div> <button class="btnCopi" onclick="CopyTexto('n10a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h10a">habilida 10a</pre></div> <button class="btnCopi" onclick="CopyTexto('h10a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c10a">Conteudo 10a</pre></div> <button class="btnCopi" onclick="CopyTexto('c10a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+<hr/><div class="aula1"> <br/>EJA - Planejamento Bimestral <br/>
+<b><h3 id="Semana10">Semana 10:  de 01/12  à  05/12.</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n10a">Pensando a Cidade a partir da Arte</pre></div> <button class="btnCopi" onclick="CopyTexto('n10a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h10a">EF01AR04 Experimentar a pintura, fazendo uso sustentável de diversos materiais, instrumentos e suportes convencionais e não convencionais em suas produções.</pre></div> <button class="btnCopi" onclick="CopyTexto('h10a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c10a">Nessa atividade, o professor irá abordar a ideia de cidade sob outras perspectivas, como as cidades ideais, o conceito de utopia ou distopia, ou mesmo discutir o contraste entre a cidade real e a cidade dos sonhos.
+O professor pode levar para estudo, outras pinturas de outros autores que tratem de temas urbanos ou paisagens surreais, criando uma sequência de sentidos sobre formas de lidar com o espaço e o imaginário.
+Apresentar imagens de referências se possivel.
+Após a contextualização, cada estudante faz uma pintura utilizando a técnica de monoprinnt. O professor pode levar imagens diversas (fauna, flora, arquitetura da cidade, mobilidade) que podemos chamar atenção para a melhoria na transformação da cidade e do meio ambiente.
+
+Materiais utilizados:
+Plástico acrílico transparente ou saco transparente (recortar um retângulo)
+Papelão para fazer uma moldura que delimita o print
+Folhas sulfite
+Tinta guache preta ou nanquim 
+Tintas guaches cores diversas
+Imagens diversas (fauna, flora, arquitetura da cidade, mobilidade)
+Link do vídeo ensinando com sugestão de técnica a ser usada:
+https://youtu.be/77kPysR7sd0?si=MPOQlXTOOdEhb-BC 
+O tema da cidade ideal reflete a busca por um espaço urbano que proporcione um ambiente de vida harmonioso, saudável e belo, seja através de pinturas que a representam, seja por reflexões teóricas e literárias. (poesias, frases...). As produções podem ser expostas em um mural coletivo na escola.
+A reflexão sobre a cidade dos sonhos pode ser levada para uma discussão mais prática, como um projeto comunitário de melhorias para o ambiente urbano local, incentivando os estudantes a pensar sobre como transformar a cidade real e o papel de cada estudante na transformação do espaço urbano e compromisso com ações concretas.
+</pre></div> <button class="btnCopi" onclick="CopyTexto('c10a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana10(b) - 14/04  à       18/04 </b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2"><pre id="h10b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>EJA - Planejamento Bimestral<br/>
+<b>Semana10(b) - __/__  à  __/__ </b> <div class="box-frases"><div class="texto2"><pre id="n10b">Nome da atividade (b) Semana 10</pre></div><button class="btnCopi" onclick="CopyTexto('n10b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h10b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
@@ -709,12 +512,19 @@ Essa atividade visa promover a reflexão sobre a dança em diferentes contextos,
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 11  XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  EJA - Planejamento Bimestral<br/>
-<b><h3 id="Semana11">Semana11(a) -  21/04  à       25/04</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n11a">Proposta</pre></div> <button class="btnCopi" onclick="CopyTexto('n11a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h11a">Habilidade 11a</pre></div> <button class="btnCopi" onclick="CopyTexto('h11a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c11a">Conteudo 11a</pre></div> <button class="btnCopi" onclick="CopyTexto('c11a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+<hr/><div class="aula1"> <br/>EJA - Planejamento Bimestral <br/>
+<b><h3 id="Semana11">Semana 11:  de 08/12  à  12/12.</h3></b>Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n11a">“Da pintura ao quadrinho”</pre></div> <button class="btnCopi" onclick="CopyTexto('n11a')" type="button">Copiar</button> </div> Habilidade <div class="box-frases"> <div class="texto1"><pre id="h11a">EF15AR23 – Conhecer e experimentar, em projetos temáticos, as relações processuais entre diversas linguagens artísticas.</pre></div> <button class="btnCopi" onclick="CopyTexto('h11a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c11a">Início: conversa sobre a diferença entre arte estática (pintura) e arte sequencial (história em quadrinhos, animações);
+Exibição de exemplos de HQs e desenhos animados baseados em obras ou estilos de pintura (como releituras de obras famosas em quadrinhos);
+Proposta prática: em grupos, os estudantes escolhem uma das pinturas estudadas na Atividade 1 e criam uma história em quadrinhos de 3 a 4 quadros, reinterpretando a cena ou inventando uma narrativa inspirada nela;
+Produção: desenho em folha A4, podendo utilizar lápis de cor, canetinhas ou tinta;
+Socialização: exposição dos quadrinhos produzidos, seguida de conversa sobre como a pintura inspirou outras linguagens artísticas.
+</pre></div> <button class="btnCopi" onclick="CopyTexto('c11a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana11(b) - 21/04  à       25/04</b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2"><pre id="h11b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>EJA - Planejamento Bimestral<br/>
+<b>Semana11(b) - __/__  à  __/__</b> <div class="box-frases"><div class="texto2"><pre id="n11b">Nome da atividade (b) Semana 11</pre></div><button class="btnCopi" onclick="CopyTexto('n11b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h11b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
@@ -727,12 +537,19 @@ Essa atividade visa promover a reflexão sobre a dança em diferentes contextos,
 <!-- cores do (hr)  --> <hr style="border: 10px solid green;  border-radius: 5px;"/>
 <!--  XXXXXXXXXX Fim do conteudo xxxxxxxxxxxxxxxxxxx -->
 <!--  XXXXXXXXXXX  Inicio do Conteudo 12   XXXXXXX   -->
- <hr/><div class="aula1"> <br/>  EJA - Planejamento Bimestral<br/>
-<b><h3 id="Semana12">Semana12(a) - __/__ à __/__</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n12a">Proposta</pre></div> <button class="btnCopi" onclick="CopyTexto('n12a')" type="button">Copiar</button> </div>Habilidade <div class="box-frases"> <div class="texto1"><pre id="h12a">Habilidade 12a</pre></div> <button class="btnCopi" onclick="CopyTexto('h12a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c12a">Conteudo 12a</pre></div> <button class="btnCopi" onclick="CopyTexto('c12a')" type="button">Copiar</button>
-</div> <!-- Fim da primeira parte --> <hr/> </div>
+<hr/><div class="aula1"> <br/>EJA - Planejamento Bimestral <br/>
+<b><h3 id="Semana12">Semana 12:  de 15/12  à  17/12.</h3></b> Nome da atividade<div class="box-frases"> <div class="texto1"><pre id="n12a">Apreciação do patrimônio cultural de Jacareí</pre></div> <button class="btnCopi" onclick="CopyTexto('n12a')" type="button">Copiar</button> </div>Habilidade <div class="box-frases"> <div class="texto1"><pre id="h12a">EF15AR05 Experimentar a criação em artes visuais de modo individual, coletivo e colaborativo, explorando diferentes espaços da escola e da comunidade. 
+EF15AR06 Dialogar sobre a sua criação e a dos colegas, para alcançar sentidos plurais.</pre></div> <button class="btnCopi" onclick="CopyTexto('h12a')" type="button">Copiar</button> </div>Conteudo <div class="box-frases"> <div class="texto1"><pre id="c12a">Apresentação e apreciação dos pontos de patrimônio cultural de Jacareí: Pátio dos Trilhos, Museu de Antropologia do Vale do Paraíba, Igreja Matriz, Corneteiro de Jesus, Teatro Arianos Suassuna, Parque Dos Eucaliptos, Mural dos Abolicionistas, etc;
+Discussão sobre o tema;
+Pintura de um dos pontos escolhido pelo aluno;
+Apreciação das obras.
+</pre></div> <button class="btnCopi" onclick="CopyTexto('c12a')" type="button">Copiar</button>
+</div> <!-- Fim da primeira parte --> <hr/> </br></br></div>
+    <hr><button id="botaoTopo" onclick="window.location.href='#Sitesatalhos'">
+    <b>Topo</b>     </button>
 <!-- __________________________________________ --> <div class="aula2">
-<!-- Segunda parte do Conteudo --> <hr/><br/> 1 e 2 anos - Planejamento Bimestral<br/>
-<b>Semana12(b) - __/__ à __/__ </b><a href="#Sitesatalhos"><b>  &nbsp&nbsp&nbsp&nbspTopo</b></a> <div class="box-frases"> <div class="texto2"><pre id="h12b">
+<!-- Segunda parte do Conteudo --> <hr/><br/>EJA - Planejamento Bimestral<br/>
+<b>Semana12(b) - __/__  à  __/__ </b> <div class="box-frases"><div class="texto2"><pre id="n12b">Nome da atividade (b) Semana 12</pre></div><button class="btnCopi" onclick="CopyTexto('n12b')" type="button">Copiar</button></div><div class="box-frases"> <div class="texto2"><pre id="h12b">
  
              
    Escreva a Habilidade (b) Repetir aula anterior
