@@ -1,51 +1,114 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chamada Digital</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chamada Digital 02</title>
 <style>
-  body { font-family: Arial, sans-serif; background: #f7f7f7; margin: 0; padding: 15px; }
-  h2 { text-align: center; margin-bottom: 10px; }
-  select, button { width: 100%; padding: 10px; margin-top: 10px; font-size: 16px; border-radius: 8px; }
-  .aluno { background: #fff; border-radius: 10px; margin: 8px 0; padding: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-  .botoes { margin-top: 8px; display: flex; justify-content: space-between; }
-  .botoes button { flex: 1; margin: 0 2px; padding: 10px; border: none; border-radius: 6px; color: #fff; font-weight: bold; }
-  .btnF { background: #d9534f; }
-  .btn1 { background: #f0ad4e; }
-  .btn2 { background: #5bc0de; }
-  .btn3 { background: #5cb85c; }
+  body {
+    font-family: Arial, sans-serif;
+    background: #f7f7f7;
+    margin: 0;
+    padding: 15px;
+  }
+  h2 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  select,
+  button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+  }
+  .aluno {
+    background: #fff;
+    border-radius: 10px;
+    margin: 8px 0;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  .botoes {
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .botoes button {
+    flex: 1;
+    margin: 0 2px;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .btnF {
+    background: #d9534f;
+  }
+  .btn1 {
+    background: #f0ad4e;
+  }
+  .btn2 {
+    background: #5bc0de;
+  }
+  .btn3 {
+    background: #5cb85c;
+  }
+
+.botoes button:active:not(:disabled) {
+  transform: scale(0.9);
+  transition: transform 0.1s ease;
+}
+  /* Destaque para o botão selecionado */
+  .botoes button.selecionado {
+    box-shadow: 0 0 8px 3px #333 inset;
+    opacity: 1;
+    filter: brightness(110%);
+  }
+
+.transferido {
+  opacity: 0.4;
+  color: #555; /* opcional, para deixar um cinza escuro */
+}
 </style>
 </head>
 <body>
-<h2>Chamada Digital 5</h2>
+  <h2>Chamada Digital 6</h2>
 
-<label for="turma">Selecione a turma:</label>
-<select id="turma">
-  <option value="">-- Escolha --</option>
-  <option value="1A">1A</option>
-  <option value="1B">1B</option>
-  <option value="2A">2A</option>
-  <option value="2B">2B</option>
-  <option value="2C">2C</option>
-  <option value="3A">3A</option>
-  <option value="3B">3B</option>
-  <option value="4A">4A</option>
-  <option value="4B">4B</option>
-  <option value="5A">5A</option>
-  <option value="5B">5B</option>
-</select>
+  <label for="turma">Selecione a turma:</label>
+  <select id="turma">
+    <option value="">-- Escolha --</option>
+    <option value="1A">1A</option>
+    <option value="1B">1B</option>
+    <option value="2A">2A</option>
+    <option value="2B">2B</option>
+    <option value="2C">2C</option>
+    <option value="3A">3A</option>
+    <option value="3B">3B</option>
+    <option value="4A">4A</option>
+    <option value="4B">4B</option>
+    <option value="5A">5A</option>
+    <option value="5B">5B</option>
+  </select>
 
-<div id="lista"></div>
+  <div id="lista"></div>
 
 <script>
-const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwFgEJ7IWx4SIaV0WDPB2nLZfkQhq38SeOdZoH63xTDTejBsFkvBWGsX-V4g_9I1Xg/exec"; // 🔗 sua URL do Apps Script
+const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwFgEJ7IWx4SIaV0WDPB2nLZfkQhq38SeOdZoH63xTDTejBsFkvBWGsX-V4g_9I1Xg/exec";
 
 function jsonp(url) {
   return new Promise((resolve, reject) => {
-    const callbackName = '_cb_' + Math.random().toString(36).substr(2,9);
-    window[callbackName] = function(data) {
-      try { resolve(data); } finally { cleanup(); }
+    const callbackName = '_cb_' + Math.random().toString(36).substr(2, 9);
+    window[callbackName] = function (data) {
+      try {
+        resolve(data);
+      } finally {
+        cleanup();
+      }
     };
     function cleanup() {
       delete window[callbackName];
@@ -55,10 +118,16 @@ function jsonp(url) {
     const s = document.createElement('script');
     s.src = url + (url.indexOf('?') === -1 ? '?' : '&') + 'callback=' + callbackName;
     s.id = callbackName;
-    s.onerror = function() { cleanup(); reject(new Error('Erro carregando JSONP')); };
+    s.onerror = function () {
+      cleanup();
+      reject(new Error('Erro carregando JSONP'));
+    };
     document.body.appendChild(s);
   });
 }
+
+// Guarda o estado dos registros (id do aluno -> valor registrado)
+let registros = {};
 
 async function carregarTurma() {
   const turma = document.getElementById("turma").value;
@@ -67,21 +136,35 @@ async function carregarTurma() {
   lista.innerHTML = "<p>Carregando estudantes...</p>";
 
   try {
-    const alunos = await jsonp(URL_SCRIPT + '?turma=' + encodeURIComponent(turma));
-    if (alunos.erro) { lista.innerHTML = `<p>${alunos.erro}</p>`; return; }
+    const alunos = await jsonp(URL_SCRIPT + "?turma=" + encodeURIComponent(turma));
+    if (alunos.erro) {
+      lista.innerHTML = `<p>${alunos.erro}</p>`;
+      return;
+    }
     lista.innerHTML = "";
-    alunos.forEach(a => {
+    registros = {}; // reset para nova turma
+
+    alunos.forEach((a) => {
       const div = document.createElement("div");
       div.className = "aluno";
+if (a.nome.startsWith('*')) {
+  div.classList.add('transferido');
+}
+      div.id = `aluno-${a.id}`;
       div.innerHTML = `
         <strong>${a.nome}</strong><br>
         <div class="botoes">
-          <button class="btnF" onclick="registrar('${turma}', ${a.id}, 'F')">F</button>
-          <button class="btn1" onclick="registrar('${turma}', ${a.id}, '1')">1</button>
-          <button class="btn2" onclick="registrar('${turma}', ${a.id}, '2')">2</button>
-          <button class="btn3" onclick="registrar('${turma}', ${a.id}, '3')">3</button>
+          <button class="btnF" data-valor="F" onclick="registrar('${turma}', ${a.id}, 'F')">F</button>
+          <button class="btn1" data-valor="1" onclick="registrar('${turma}', ${a.id}, '1')">1</button>
+          <button class="btn2" data-valor="2" onclick="registrar('${turma}', ${a.id}, '2')">2</button>
+          <button class="btn3" data-valor="3" onclick="registrar('${turma}', ${a.id}, '3')">3</button>
         </div>
       `;
+if (a.nome.startsWith('*')) {
+  div.classList.add('transferido');
+  const botoes = div.querySelectorAll("button");
+  botoes.forEach(btn => btn.disabled = true);
+}
       lista.appendChild(div);
     });
   } catch (err) {
@@ -90,14 +173,40 @@ async function carregarTurma() {
   }
 }
 
+function atualizarVisual(id) {
+  const alunoDiv = document.getElementById(`aluno-${id}`);
+  if (!alunoDiv) return;
+
+  const botoes = alunoDiv.querySelectorAll(".botoes button");
+  botoes.forEach((btn) => {
+    if (registros[id] === btn.getAttribute("data-valor")) {
+      btn.classList.add("selecionado");
+    } else {
+      btn.classList.remove("selecionado");
+    }
+  });
+}
+
 async function registrar(turma, id, valor) {
   try {
-    // Usando GET via JSONP para contornar CORS
-    const resp = await jsonp(URL_SCRIPT + '?turma=' + encodeURIComponent(turma) + '&id=' + encodeURIComponent(id) + '&valor=' + encodeURIComponent(valor));
-    if (resp.erro) alert('Erro: ' + resp.erro);
-    else alert(resp.mensagem || 'Registro ok');
+    const resp = await jsonp(
+      URL_SCRIPT +
+        "?turma=" +
+        encodeURIComponent(turma) +
+        "&id=" +
+        encodeURIComponent(id) +
+        "&valor=" +
+        encodeURIComponent(valor)
+    );
+    if (resp.erro) {
+      alert("Erro: " + resp.erro);
+    } else {
+      alert(resp.mensagem || "Registro ok");
+      registros[id] = valor;  // armazena o registro localmente
+      atualizarVisual(id);   // atualiza visual do botão
+    }
   } catch (e) {
-    alert('Erro ao registrar: ' + e);
+    alert("Erro ao registrar: " + e);
     console.error(e);
   }
 }
