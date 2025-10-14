@@ -5,11 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chamada Digital</title>
 <style>
-  body { font-family: Arial, sans-serif; padding: 15px; background: #f4f4f4; }
-  h2 { text-align: center; }
-  select, button { width: 100%; padding: 10px; margin-top: 10px; font-size: 16px; }
-  .aluno { background: white; border-radius: 8px; margin: 8px 0; padding: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-  .botoes button { margin-right: 5px; }
+  body { font-family: Arial, sans-serif; background: #f7f7f7; margin: 0; padding: 15px; }
+  h2 { text-align: center; margin-bottom: 10px; }
+  select, button { width: 100%; padding: 10px; margin-top: 10px; font-size: 16px; border-radius: 8px; }
+  .aluno { background: #fff; border-radius: 10px; margin: 8px 0; padding: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+  .botoes { margin-top: 8px; display: flex; justify-content: space-between; }
+  .botoes button { flex: 1; margin: 0 2px; padding: 10px; border: none; border-radius: 6px; color: #fff; font-weight: bold; }
+  .btnF { background: #d9534f; }
+  .btn1 { background: #f0ad4e; }
+  .btn2 { background: #5bc0de; }
+  .btn3 { background: #5cb85c; }
 </style>
 </head>
 <body>
@@ -17,6 +22,7 @@
 
 <label for="turma">Selecione a turma:</label>
 <select id="turma">
+  <option value="">-- Escolha --</option>
   <option value="1A">1A</option>
   <option value="1B">1B</option>
   <option value="2A">2A</option>
@@ -33,52 +39,46 @@
 <div id="lista"></div>
 
 <script>
-// ⚙️ CONFIGURAÇÃO: cole aqui a URL do Web App
-const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzKnnbg4pOSJUzkvVbW9OOejYTcCwFC-ilih5QpbqQ7adcoIWBaa-gdaFBItI6ElBY/exec";
+const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwGnH6W5NqMB4kKoi0Ce2kaguWvrIecQhzmsprSd0Sc6BR26R_l_7rY9dsB6tS6mmk/exec"; // 🔗 Cole aqui a URL do Apps Script publicado
 
-// Nomes podem vir manualmente ou de uma API, mas por ora faremos exemplo simples
-// Depois podemos integrar para ler automaticamente via Google Script
-const alunosPorTurma = {
-  "4B": [
-    { id: 101, nome: "Ana Paula" },
-    { id: 102, nome: "Bruno Henrique" },
-    { id: 103, nome: "Carla Souza" }
-  ]
-};
-
-const lista = document.getElementById("lista");
-document.getElementById("turma").addEventListener("change", carregarTurma);
-
-function carregarTurma() {
+document.getElementById("turma").addEventListener("change", async () => {
   const turma = document.getElementById("turma").value;
-  const alunos = alunosPorTurma[turma] || [];
-  lista.innerHTML = "";
+  if (!turma) return;
 
-  if (alunos.length === 0) {
-    lista.innerHTML = "<p>Nenhum estudante cadastrado para esta turma.</p>";
-    return;
+  const lista = document.getElementById("lista");
+  lista.innerHTML = "<p>Carregando estudantes...</p>";
+
+  try {
+    const resposta = await fetch(`${URL_SCRIPT}?turma=${turma}`);
+    const alunos = await resposta.json();
+
+    if (alunos.erro) {
+      lista.innerHTML = `<p>${alunos.erro}</p>`;
+      return;
+    }
+
+    lista.innerHTML = "";
+    alunos.forEach(a => {
+      const div = document.createElement("div");
+      div.className = "aluno";
+      div.innerHTML = `
+        <strong>${a.nome}</strong><br>
+        <div class="botoes">
+          <button class="btnF" onclick="registrar('${turma}', ${a.id}, 'F')">F</button>
+          <button class="btn1" onclick="registrar('${turma}', ${a.id}, '1')">1</button>
+          <button class="btn2" onclick="registrar('${turma}', ${a.id}, '2')">2</button>
+          <button class="btn3" onclick="registrar('${turma}', ${a.id}, '3')">3</button>
+        </div>
+      `;
+      lista.appendChild(div);
+    });
+  } catch (e) {
+    lista.innerHTML = `<p>Erro ao carregar estudantes: ${e}</p>`;
   }
-
-  alunos.forEach(a => {
-    const div = document.createElement("div");
-    div.className = "aluno";
-    div.innerHTML = `
-      <strong>${a.nome}</strong><br>
-      <div class="botoes">
-        <button onclick="registrar('${turma}', ${a.id}, 'F')">F</button>
-        <button onclick="registrar('${turma}', ${a.id}, '1')">1</button>
-        <button onclick="registrar('${turma}', ${a.id}, '2')">2</button>
-        <button onclick="registrar('${turma}', ${a.id}, '3')">3</button>
-      </div>
-    `;
-    lista.appendChild(div);
-  });
-}
+});
 
 async function registrar(turma, id, valor) {
-  const resposta = await fetch(`${URL_SCRIPT}?turma=${turma}&id=${id}&valor=${valor}`, {
-    method: "POST"
-  });
+  const resposta = await fetch(`${URL_SCRIPT}?turma=${turma}&id=${id}&valor=${valor}`, { method: "POST" });
   const texto = await resposta.text();
   alert(texto);
 }
