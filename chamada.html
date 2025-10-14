@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chamada Digital</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 15px; background: #f4f4f4; }
+  h2 { text-align: center; }
+  select, button { width: 100%; padding: 10px; margin-top: 10px; font-size: 16px; }
+  .aluno { background: white; border-radius: 8px; margin: 8px 0; padding: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+  .botoes button { margin-right: 5px; }
+</style>
+</head>
+<body>
+<h2>Chamada Digital</h2>
+
+<label for="turma">Selecione a turma:</label>
+<select id="turma">
+  <option value="1A">1A</option>
+  <option value="1B">1B</option>
+  <option value="2A">2A</option>
+  <option value="2B">2B</option>
+  <option value="2C">2C</option>
+  <option value="3A">3A</option>
+  <option value="3B">3B</option>
+  <option value="4A">4A</option>
+  <option value="4B">4B</option>
+  <option value="5A">5A</option>
+  <option value="5B">5B</option>
+</select>
+
+<div id="lista"></div>
+
+<script>
+// ⚙️ CONFIGURAÇÃO: cole aqui a URL do Web App
+const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzKnnbg4pOSJUzkvVbW9OOejYTcCwFC-ilih5QpbqQ7adcoIWBaa-gdaFBItI6ElBY/exec";
+
+// Nomes podem vir manualmente ou de uma API, mas por ora faremos exemplo simples
+// Depois podemos integrar para ler automaticamente via Google Script
+const alunosPorTurma = {
+  "4B": [
+    { id: 101, nome: "Ana Paula" },
+    { id: 102, nome: "Bruno Henrique" },
+    { id: 103, nome: "Carla Souza" }
+  ]
+};
+
+const lista = document.getElementById("lista");
+document.getElementById("turma").addEventListener("change", carregarTurma);
+
+function carregarTurma() {
+  const turma = document.getElementById("turma").value;
+  const alunos = alunosPorTurma[turma] || [];
+  lista.innerHTML = "";
+
+  if (alunos.length === 0) {
+    lista.innerHTML = "<p>Nenhum estudante cadastrado para esta turma.</p>";
+    return;
+  }
+
+  alunos.forEach(a => {
+    const div = document.createElement("div");
+    div.className = "aluno";
+    div.innerHTML = `
+      <strong>${a.nome}</strong><br>
+      <div class="botoes">
+        <button onclick="registrar('${turma}', ${a.id}, 'F')">F</button>
+        <button onclick="registrar('${turma}', ${a.id}, '1')">1</button>
+        <button onclick="registrar('${turma}', ${a.id}, '2')">2</button>
+        <button onclick="registrar('${turma}', ${a.id}, '3')">3</button>
+      </div>
+    `;
+    lista.appendChild(div);
+  });
+}
+
+async function registrar(turma, id, valor) {
+  const resposta = await fetch(`${URL_SCRIPT}?turma=${turma}&id=${id}&valor=${valor}`, {
+    method: "POST"
+  });
+  const texto = await resposta.text();
+  alert(texto);
+}
+</script>
+</body>
+</html>
