@@ -18,7 +18,7 @@
 </style>
 </head>
 <body>
-<h2>Chamada Digital 2</h2>
+<h2>Chamada Digital 3</h2>
 
 <label for="turma">Selecione a turma:</label>
 <select id="turma">
@@ -39,24 +39,36 @@
 <div id="lista"></div>
 
 <script>
-const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwL2gI2F8vA60QdkfmZgijq3YeuKpO62dsWimC1rWgmMvCefoStADyHZUB5WMvlFUQ/exec"; // 🔗 Cole aqui a URL do Apps Script publicado
+const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbyCuPUYAxaK1VzrtQPidwaHDBstBRm1FoCnbUfm4bDO9PMrowiFz_zeu3Eu0RIMFEU/exec"; // 🔗 sua URL do Apps Script
 
-document.getElementById("turma").addEventListener("change", async () => {
+function jsonp(url) {
+  return new Promise((resolve, reject) => {
+    const callbackName = '_cb_' + Math.random().toString(36).substr(2,9);
+    window[callbackName] = function(data) {
+      try { resolve(data); } finally { cleanup(); }
+    };
+    function cleanup() {
+      delete window[callbackName];
+      const s = document.getElementById(callbackName);
+      if (s) s.remove();
+    }
+    const s = document.createElement('script');
+    s.src = url + (url.indexOf('?') === -1 ? '?' : '&') + 'callback=' + callbackName;
+    s.id = callbackName;
+    s.onerror = function() { cleanup(); reject(new Error('Erro carregando JSONP')); };
+    document.body.appendChild(s);
+  });
+}
+
+async function carregarTurma() {
   const turma = document.getElementById("turma").value;
   if (!turma) return;
-
   const lista = document.getElementById("lista");
   lista.innerHTML = "<p>Carregando estudantes...</p>";
 
   try {
-    const resposta = await fetch(`${URL_SCRIPT}?turma=${turma}`);
-    const alunos = await resposta.json();
-
-    if (alunos.erro) {
-      lista.innerHTML = `<p>${alunos.erro}</p>`;
-      return;
-    }
-
+    const alunos = await jsonp(URL_SCRIPT + '?turma=' + encodeURIComponent(turma));
+    if (alunos.erro) { lista.innerHTML = `<p>${alunos.erro}</p>`; return; }
     lista.innerHTML = "";
     alunos.forEach(a => {
       const div = document.createElement("div");
@@ -72,16 +84,25 @@ document.getElementById("turma").addEventListener("change", async () => {
       `;
       lista.appendChild(div);
     });
-  } catch (e) {
-    lista.innerHTML = `<p>Erro ao carregar estudantes: ${e}</p>`;
+  } catch (err) {
+    lista.innerHTML = `<p>Erro ao carregar estudantes: ${err}</p>`;
+    console.error(err);
   }
-});
+}
 
 async function registrar(turma, id, valor) {
-  const resposta = await fetch(`${URL_SCRIPT}?turma=${turma}&id=${id}&valor=${valor}`, { method: "POST" });
-  const texto = await resposta.text();
-  alert(texto);
+  try {
+    // Usando GET via JSONP para contornar CORS
+    const resp = await jsonp(URL_SCRIPT + '?turma=' + encodeURIComponent(turma) + '&id=' + encodeURIComponent(id) + '&valor=' + encodeURIComponent(valor));
+    if (resp.erro) alert('Erro: ' + resp.erro);
+    else alert(resp.mensagem || 'Registro ok');
+  } catch (e) {
+    alert('Erro ao registrar: ' + e);
+    console.error(e);
+  }
 }
+
+document.getElementById("turma").addEventListener("change", carregarTurma);
 </script>
 </body>
 </html>
