@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Chamada Digital 02</title>
+<title>Chamada Digital 06</title>
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -201,7 +201,7 @@ async function registrar(turma, id, valor) {
     if (resp.erro) {
       alert("Erro: " + resp.erro);
     } else {
-      alert(resp.mensagem || "Registro ok");
+      //alert(resp.mensagem || "Registro ok");
       registros[id] = valor;  // armazena o registro localmente
       atualizarVisual(id);   // atualiza visual do botão
     }
@@ -212,6 +212,11 @@ async function registrar(turma, id, valor) {
 }
 
 document.getElementById("turma").addEventListener("change", carregarTurma);
+
+window.addEventListener('load', function() {
+  document.getElementById("turma").value = "";
+  document.getElementById("lista").innerHTML = "";
+});
 </script>
 </body>
 </html>
