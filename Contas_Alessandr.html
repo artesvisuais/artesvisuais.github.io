@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Controle de Crédito Mensal por Perfil</title>
+<style>
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;background:#f7f8fb;margin:18px;color:#111;}
+  h1{font-size:20px;margin-bottom:12px;}
+  .card{background:#fff;border-radius:10px;padding:14px;box-shadow:0 1px 4px rgba(16,24,40,0.06);margin-bottom:14px;}
+  label{display:block;font-size:13px;margin-bottom:6px;}
+  input, select{width:100%;padding:8px;border-radius:6px;border:1px solid #e6e9ef;font-size:14px;}
+  .row{display:flex;gap:10px;margin-bottom:8px;}
+  .row>div{flex:1;}
+  button{padding:8px 12px;border-radius:8px;border:0;background:#0b5fff;color:#fff;font-weight:600;cursor:pointer;}
+  button.ghost{background:#fff;border:1px solid #d7dbe8;color:#111;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th,td{padding:8px;border-bottom:1px solid #eef1f7;text-align:left;}
+  th{background:#fafbfd;font-weight:600;}
+  .muted{color:#6b7280;font-size:13px;}
+</style>
+</head>
+<body>
+<h1>Controle de Crédito Mensal por Perfil</h1>
+
+<!-- Perfis de pessoas -->
+<div class="card" style="margin-bottom:8px;display:flex;gap:8px;align-items:center">
+  <div style="flex:1">
+    <label>Pessoa / Perfil</label>
+    <select id="personSelect"></select>
+  </div>
+  <div style="width:120px;display:flex;gap:8px;">
+    <button id="btnAddPerson" class="ghost">+ Pessoa</button>
+    <button id="btnRemovePerson" class="ghost">Remover</button>
+  </div>
+</div>
+
+<div class="card">
+  <div class="row">
+    <div>
+      <label>Crédito mensal (R$)</label>
+      <input type="number" id="creditMonthly" step="0.01"/>
+    </div>
+    <div>
+      <label>Dia do débito</label>
+      <select id="debitDay">
+        <option value="1">1</option>
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15" selected>15</option>
+        <option value="20">20</option>
+        <option value="25">25</option>
+      </select>
+    </div>
+    <div style="display:flex;align-items:end;">
+      <button id="btnClear" class="ghost">Limpar dados</button>
+    </div>
+  </div>
+
+  <h3>Adicionar nova conta / parcelamento</h3>
+  <div class="row">
+    <div><input id="desc" type="text" placeholder="Descrição"/></div>
+    <div><input id="total" type="number" step="0.01" placeholder="Valor total (R$)"/></div>
+    <div><input id="installments" type="number" min="1" value="1" placeholder="Parcelas"/></div>
+  </div>
+  <div class="row">
+    <div><label>Data inicial (opcional)</label><input id="startDate" type="month"/></div>
+    <div style="display:flex;align-items:end;"><button id="btnAdd" >Adicionar conta</button></div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Resumo Mensal</h3>
+  <table>
+    <thead><tr><th>Mês/Ano</th><th>Crédito</th><th>Débitos</th><th>Receber</th><th>Pendente</th></tr></thead>
+    <tbody id="summaryTable"></tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h3>Parcelas Geradas</h3>
+  <label>Filtrar por data (opcional)</label>
+  <input type="date" id="filterDate"/>
+  <table>
+    <thead><tr><th>Data</th><th>Descrição</th><th>Parcela</th><th>Valor</th><th>Ação</th></tr></thead>
+    <tbody id="parcelsTable"></tbody>
+  </table>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const STORAGE_KEY = 'controle_credito_v5';
+let persons=[], selectedPersonId=null, loans=[], parcels=[];
+
+function formatBR(v){return Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
+
+// --- SALVAR DADOS ---
+function save(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    persons,
+    selectedPersonId,
+    loans
+  }));
+}
+
+// --- CARREGAR DADOS ---
+function load(){
+  const data = localStorage.getItem(STORAGE_KEY);
+  if(data){
+    try{
+      const obj = JSON.parse(data);
+      persons = obj.persons || [];
+      loans = obj.loans || [];
+      selectedPersonId = obj.selectedPersonId ?? (persons[0]?.id ?? null);
+    } catch(e){console.error('Erro parse storage', e);}
+  }
+  renderPersonOptions();
+  loadPersonData();
+  rebuildAll();
+}
+
+// --- RENDER PESSOAS ---
+function renderPersonOptions(){
+  const sel=$('personSelect'); sel.innerHTML='';
+  persons.forEach(p=>{
+    const opt = document.createElement('option');
+    opt.value=p.id;
+    opt.textContent=p.name;
+    if(p.id===selectedPersonId) opt.selected=true;
+    sel.appendChild(opt);
+  });
+}
+
+// --- CARREGAR DADOS DO PERFIL SELECIONADO ---
+function loadPersonData(){
+  const p = persons.find(x=>x.id===selectedPersonId);
+  if(p){
+    $('creditMonthly').value=p.creditMonthly ?? 600;
+    $('debitDay').value=p.debitDay ?? 15;
+  }
+}
+
+// --- ADICIONAR PESSOA ---
+function addPerson(){
+  const name = prompt('Nome da pessoa / perfil:');
+  if(!name) return;
+  const id = 'p_'+Date.now();
+  persons.push({id,name,creditMonthly:600,debitDay:15});
+  selectedPersonId=id;
+  renderPersonOptions();
+  loadPersonData();
+  save();
+  rebuildAll();
+}
+
+// --- REMOVER PESSOA ---
+function removePerson(){
+  if(!selectedPersonId){ alert('Nenhuma pessoa selecionada'); return;}
+  const p=persons.find(x=>x.id===selectedPersonId);
+  if(!p) return;
+  if(!confirm('Remover '+p.name+'? Isso NÃO apagará débitos associados.')) return;
+  const eraseLoans = confirm('Apagar também os débitos desta pessoa?');
+  if(eraseLoans){loans=loans.filter(l=>l.ownerId!==selectedPersonId);}
+  persons=persons.filter(x=>x.id!==selectedPersonId);
+  selectedPersonId=persons[0]?.id ?? null;
+  renderPersonOptions();
+  loadPersonData();
+  rebuildAll();
+  save();
+}
+
+// --- SALVAR ALTERAÇÕES DE CRÉDITO/DIA ---
+$('creditMonthly').addEventListener('change', ()=>{
+  const p = persons.find(x=>x.id===selectedPersonId);
+  if(p) p.creditMonthly=Number($('creditMonthly').value);
+  rebuildAll(); save();
+});
+$('debitDay').addEventListener('change', ()=>{
+  const p = persons.find(x=>x.id===selectedPersonId);
+  if(p) p.debitDay=Number($('debitDay').value);
+  rebuildAll(); save();
+});
+
+// --- ADICIONAR CONTA ---
+function addLoan(){
+  if(!selectedPersonId){alert('Crie ou selecione uma pessoa antes de adicionar uma conta.'); return;}
+  const desc=$('desc').value.trim();
+  const total=Number($('total').value);
+  const installments=Number($('installments').value)||1;
+  const startMonth=$('startDate').value;
+  if(!desc||!total||total<=0||installments<=0){alert('Preencha corretamente.'); return;}
+  let startISO;
+  if(startMonth){
+    const parts=startMonth.split('-'); const y=Number(parts[0]), m=Number(parts[1])-1;
+    const d=Number($('debitDay').value)||15;
+    startISO=new Date(y,m,d).toISOString().slice(0,10);
+  } else { const now=new Date(); const d=Number($('debitDay').value)||15; startISO=new Date(now.getFullYear(),now.getMonth(),d).toISOString().slice(0,10);}
+  loans.push({id:Date.now(),ownerId:selectedPersonId,description:desc,total,installments,startISO});
+  $('desc').value=''; $('total').value=''; $('installments').value=1; $('startDate').value='';
+  rebuildAll();
+}
+
+// --- LIMPAR DADOS ---
+function clearAll(){if(confirm('Limpar todos os dados?')){loans=[];persons=[];selectedPersonId=null;localStorage.removeItem(STORAGE_KEY);rebuildAll();}}
+
+// --- GERAR PARCELAS ---
+function generateParcels(){
+  parcels=[];
+  loans.filter(l=>l.ownerId===selectedPersonId).forEach(l=>{
+    const day = Number($('debitDay').value)||15;
+    const start = l.startISO?new Date(l.startISO):new Date();
+    for(let i=0;i<l.installments;i++){
+      const d=new Date(start.getFullYear(),start.getMonth()+i,day);
+      parcels.push({loanId:l.id,dateISO:d.toISOString().slice(0,10),description:l.description,installmentIndex:i+1,installmentValue:Number((l.total/l.installments).toFixed(2))});
+    }
+  });
+  parcels.sort((a,b)=>a.dateISO.localeCompare(b.dateISO));
+}
+
+// --- RENDER PARCELAS ---
+function renderParcels(){
+  const tbody=$('parcelsTable'); tbody.innerHTML='';
+  const filter=$('filterDate').value;
+  parcels.forEach(p=>{
+    const dt=new Date(p.dateISO);
+    if(filter){
+      const fm=new Date(filter); if(dt.getMonth()!==fm.getMonth()||dt.getFullYear()!==fm.getFullYear()) return;
+    }
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${dt.toLocaleDateString('pt-BR')}</td><td>${p.description}</td><td>${p.installmentIndex}</td><td>R$ ${formatBR(p.installmentValue)}</td><td><button class="ghost btnRemoveLoan" data-id="${p.loanId}">Remover</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// --- REMOVER CONTA ---
+$('parcelsTable').addEventListener('click',e=>{
+  if(e.target.classList.contains('btnRemoveLoan')){
+    const id=e.target.dataset.id;
+    if(confirm('Remover esta conta/parcelamento?')){
+      loans=loans.filter(l=>l.id!==Number(id));
+      rebuildAll();
+    }
+  }
+});
+
+// --- RENDER RESUMO ---
+function renderSummary(){
+  const p=persons.find(x=>x.id===selectedPersonId);
+  const credit=p?.creditMonthly||0;
+  const map={};
+  parcels.forEach(p=>{
+    const d=new Date(p.dateISO);
+    const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    map[key]=(map[key]||0)+p.installmentValue;
+  });
+  const keys=Object.keys(map).sort();
+  const tbody=$('summaryTable'); tbody.innerHTML='';
+  keys.forEach(k=>{
+    const parts=k.split('-'); const y=parts[0], m=parts[1];
+    const dtLabel=new Date(y,m-1,1).toLocaleDateString('pt-BR',{month:'short',year:'numeric'});
+    const debits=Number(map[k]||0);
+    const receive=debits<credit?credit-debits:0;
+    const pending=debits>credit?debits-credit:0;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${dtLabel}</td><td>R$ ${formatBR(credit)}</td><td>R$ ${formatBR(debits)}</td><td>R$ ${formatBR(receive)}</td><td>R$ ${formatBR(pending)}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// --- REBUILD ---
+function rebuildAll(){generateParcels(); renderParcels(); renderSummary(); save();}
+
+// --- EVENTOS ---
+$('btnAdd').addEventListener('click',addLoan);
+$('btnClear').addEventListener('click',clearAll);
+$('filterDate').addEventListener('change',renderParcels);
+$('btnAddPerson').addEventListener('click',addPerson);
+$('btnRemovePerson').addEventListener('click',removePerson);
+$('personSelect').addEventListener('change',e=>{
+  selectedPersonId=e.target.value;
+  loadPersonData();
+  rebuildAll();
+});
+
+load();
+</script>
+</body>
+</html>
