@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Chamada Digital 06</title>
+<title>Chamada Digital</title>
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -15,8 +15,7 @@
     text-align: center;
     margin-bottom: 10px;
   }
-  select,
-  button {
+  select, button, input[type="date"] {
     width: 100%;
     padding: 10px;
     margin-top: 10px;
@@ -46,177 +45,216 @@
     cursor: pointer;
     transition: background-color 0.3s;
   }
-  .btnF {
-    background: #d9534f;
-  }
-  .btn1 {
-    background: #f0ad4e;
-  }
-  .btn2 {
-    background: #5bc0de;
-  }
-  .btn3 {
-    background: #5cb85c;
+  .btnA { background: #B0E0E6; }
+  .btnF { background: #d9534f; }
+  .btn1 { background: #f0ad4e; }
+  .btn2 { background: #5bc0de; }
+  .btn3 { background: #5cb85c; }
+
+  .botoes button:active:not(:disabled) {
+    transform: scale(0.9);
+    transition: transform 0.1s ease;
   }
 
-.botoes button:active:not(:disabled) {
-  transform: scale(0.9);
-  transition: transform 0.1s ease;
-}
-  /* Destaque para o botão selecionado */
   .botoes button.selecionado {
     box-shadow: 0 0 8px 3px #333 inset;
     opacity: 1;
     filter: brightness(110%);
+    transform: scale(1.2);
+   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+   z-index: 1;
+   position: relative;
   }
 
-.transferido {
-  opacity: 0.4;
-  color: #555; /* opcional, para deixar um cinza escuro */
-}
+  .transferido {
+    opacity: 0.4;
+    color: #555;
+  }
+
+  #top-controls {
+    display: flex;
+    gap: 8px;
+  }
+
+  #top-controls > * {
+    flex: 1;
+  }
 </style>
 </head>
 <body>
-  <h2>Chamada Digital 6</h2>
-
-  <label for="turma">Selecione a turma:</label>
-  <select id="turma">
-    <option value="">-- Escolha --</option>
-    <option value="1A">1A</option>
-    <option value="1B">1B</option>
-    <option value="2A">2A</option>
-    <option value="2B">2B</option>
-    <option value="2C">2C</option>
-    <option value="3A">3A</option>
-    <option value="3B">3B</option>
-    <option value="4A">4A</option>
-    <option value="4B">4B</option>
-    <option value="5A">5A</option>
-    <option value="5B">5B</option>
-  </select>
-
+  <h2>Chamada Digital</h2>
+  <div id="top-controls">
+    <select id="turma">
+      <option value="">-- Escolha a turma --</option>
+      <option value="1A">1A</option>
+      <option value="1B">1B</option>
+      <option value="2A">2A</option>
+      <option value="2B">2B</option>
+      <option value="2C">2C</option>
+      <option value="3A">3A</option>
+      <option value="3B">3B</option>
+      <option value="4A">4A</option>
+      <option value="4B">4B</option>
+      <option value="5A">5A</option>
+      <option value="5B">5B</option>
+    </select>
+    <input type="date" id="dataConsulta" />
+    <button id="refreshBtn">Atualizar</button>
+  </div>
   <div id="lista"></div>
+  <script>
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzcG18B2ryfV99os-MSdguWYfXDYYw6sF9Zhk3mH-xxfW3yglZj3jRTElZ8pEehwRZh/exec"; // substitua pelo seu
+    let registros = {};
+    let dataAtual = new Date();
 
-<script>
-const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwFgEJ7IWx4SIaV0WDPB2nLZfkQhq38SeOdZoH63xTDTejBsFkvBWGsX-V4g_9I1Xg/exec";
+    function formatarData(d) {
+      const dia = String(d.getDate()).padStart(2, '0');
+      const mes = String(d.getMonth() + 1).padStart(2, '0');
+      const ano = d.getFullYear();
+      return `${ano}-${mes}-${dia}`;
+    }
 
-function jsonp(url) {
-  return new Promise((resolve, reject) => {
-    const callbackName = '_cb_' + Math.random().toString(36).substr(2, 9);
-    window[callbackName] = function (data) {
+    function jsonp(url) {
+      return new Promise((resolve, reject) => {
+        const callbackName = '_cb_' + Math.random().toString(36).substr(2, 9);
+        window[callbackName] = function (data) {
+          try {
+            resolve(data);
+          } finally {
+            cleanup();
+          }
+        };
+        function cleanup() {
+          delete window[callbackName];
+          const s = document.getElementById(callbackName);
+          if (s) s.remove();
+        }
+        const s = document.createElement('script');
+        s.src = url + (url.indexOf('?') === -1 ? '?' : '&') + 'callback=' + callbackName;
+        s.id = callbackName;
+        s.onerror = function () {
+          cleanup();
+          reject(new Error('Erro carregando JSONP'));
+        };
+        document.body.appendChild(s);
+      });
+    }
+
+    async function carregarTurma() {
+      const turma = document.getElementById("turma").value;
+      if (!turma) return;
+
+      // Usar a dataAtual já corrigida (local, sem deslocamento)
+      const dia = dataAtual.getDate();
+      const mes = dataAtual.getMonth() + 1;
+
+      const lista = document.getElementById("lista");
+      lista.innerHTML = "<p>Carregando estudantes...</p>";
+
       try {
-        resolve(data);
-      } finally {
-        cleanup();
+        const resp = await jsonp(`${URL_SCRIPT}?turma=${turma}&dia=${dia}&mes=${mes}`);
+        if (resp.erro) {
+          lista.innerHTML = `<p>${resp.erro}</p>`;
+          return;
+        }
+        if (!resp.registros || resp.registros.length === 0) {
+          lista.innerHTML = `<p>Nenhum registro encontrado para esta data.</p>`;
+          return;
+        }
+        // Exibe data
+        document.querySelector("h2").innerText = `Chamada Digital (${resp.data})`;
+        lista.innerHTML = "";
+        registros = {}; // limpa para nova data
+
+        resp.registros.forEach((a) => {
+          const div = document.createElement("div");
+          div.className = "aluno";
+          div.id = `aluno-${a.id}`;
+          if (a.nome.startsWith('*')) div.classList.add('transferido');
+          div.innerHTML = `
+            <strong>${a.nome}</strong><br>
+            <div class="botoes">
+              <button class="btnA" data-valor="A" onclick="registrar('${turma}', ${a.id}, 'A')">Não Letivo</button>
+              <button class="btnF" data-valor="F" onclick="registrar('${turma}', ${a.id}, 'F')">F</button>
+              <button class="btn1" data-valor="1" onclick="registrar('${turma}', ${a.id}, '1')">1</button>
+              <button class="btn2" data-valor="2" onclick="registrar('${turma}', ${a.id}, '2')">2</button>
+              <button class="btn3" data-valor="3" onclick="registrar('${turma}', ${a.id}, '3')">3</button>
+            </div>
+          `;
+          lista.appendChild(div);
+          registros[a.id] = (a.valor !== undefined && a.valor !== null) ? String(a.valor) : "";
+          atualizarVisual(a.id);
+          if (a.nome.startsWith('*')) {
+            const botoes = div.querySelectorAll("button");
+            botoes.forEach(btn => btn.disabled = true);
+          }
+        });
+      } catch (err) {
+        lista.innerHTML = `<p>Erro ao carregar estudantes: ${err}</p>`;
+        console.error(err);
       }
-    };
-    function cleanup() {
-      delete window[callbackName];
-      const s = document.getElementById(callbackName);
-      if (s) s.remove();
     }
-    const s = document.createElement('script');
-    s.src = url + (url.indexOf('?') === -1 ? '?' : '&') + 'callback=' + callbackName;
-    s.id = callbackName;
-    s.onerror = function () {
-      cleanup();
-      reject(new Error('Erro carregando JSONP'));
-    };
-    document.body.appendChild(s);
-  });
-}
 
-// Guarda o estado dos registros (id do aluno -> valor registrado)
-let registros = {};
-
-async function carregarTurma() {
-  const turma = document.getElementById("turma").value;
-  if (!turma) return;
-  const lista = document.getElementById("lista");
-  lista.innerHTML = "<p>Carregando estudantes...</p>";
-
-  try {
-    const alunos = await jsonp(URL_SCRIPT + "?turma=" + encodeURIComponent(turma));
-    if (alunos.erro) {
-      lista.innerHTML = `<p>${alunos.erro}</p>`;
-      return;
+    function atualizarVisual(id) {
+      const alunoDiv = document.getElementById(`aluno-${id}`);
+      if (!alunoDiv) return;
+      const botoes = alunoDiv.querySelectorAll(".botoes button");
+      botoes.forEach((btn) => {
+        if (registros[id] === btn.getAttribute("data-valor")) {
+          btn.classList.add("selecionado");
+        } else {
+          btn.classList.remove("selecionado");
+        }
+      });
     }
-    lista.innerHTML = "";
-    registros = {}; // reset para nova turma
 
-    alunos.forEach((a) => {
-      const div = document.createElement("div");
-      div.className = "aluno";
-if (a.nome.startsWith('*')) {
-  div.classList.add('transferido');
-}
-      div.id = `aluno-${a.id}`;
-      div.innerHTML = `
-        <strong>${a.nome}</strong><br>
-        <div class="botoes">
-          <button class="btnF" data-valor="F" onclick="registrar('${turma}', ${a.id}, 'F')">F</button>
-          <button class="btn1" data-valor="1" onclick="registrar('${turma}', ${a.id}, '1')">1</button>
-          <button class="btn2" data-valor="2" onclick="registrar('${turma}', ${a.id}, '2')">2</button>
-          <button class="btn3" data-valor="3" onclick="registrar('${turma}', ${a.id}, '3')">3</button>
-        </div>
-      `;
-if (a.nome.startsWith('*')) {
-  div.classList.add('transferido');
-  const botoes = div.querySelectorAll("button");
-  botoes.forEach(btn => btn.disabled = true);
-}
-      lista.appendChild(div);
+    async function registrar(turma, id, valor) {
+      try {
+        const resp = await jsonp(`${URL_SCRIPT}?turma=${turma}&id=${id}&valor=${valor}`);
+        if (resp.erro) {
+          alert("Erro: " + resp.erro);
+        } else {
+          registros[id] = valor;
+          atualizarVisual(id);
+        }
+      } catch (e) {
+        alert("Erro ao registrar: " + e);
+      }
+    }
+
+    function setDataAtualFromInput() {
+      const dateInput = document.getElementById("dataConsulta");
+      if (dateInput.value) {
+        const parts = dateInput.value.split('-');
+        const year = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10) - 1;
+        const day = parseInt(parts[2], 10);
+        dataAtual = new Date(year, month, day);
+      } else {
+        dataAtual = new Date();
+      }
+    }
+
+    // Eventos
+    document.getElementById("turma").addEventListener("change", () => {
+      setDataAtualFromInput();
+      carregarTurma();
     });
-  } catch (err) {
-    lista.innerHTML = `<p>Erro ao carregar estudantes: ${err}</p>`;
-    console.error(err);
-  }
-}
 
-function atualizarVisual(id) {
-  const alunoDiv = document.getElementById(`aluno-${id}`);
-  if (!alunoDiv) return;
+    document.getElementById("dataConsulta").addEventListener("change", () => {
+      setDataAtualFromInput();
+      carregarTurma();
+    });
 
-  const botoes = alunoDiv.querySelectorAll(".botoes button");
-  botoes.forEach((btn) => {
-    if (registros[id] === btn.getAttribute("data-valor")) {
-      btn.classList.add("selecionado");
-    } else {
-      btn.classList.remove("selecionado");
-    }
-  });
-}
+    document.getElementById("refreshBtn").addEventListener("click", () => {
+      carregarTurma();
+    });
 
-async function registrar(turma, id, valor) {
-  try {
-    const resp = await jsonp(
-      URL_SCRIPT +
-        "?turma=" +
-        encodeURIComponent(turma) +
-        "&id=" +
-        encodeURIComponent(id) +
-        "&valor=" +
-        encodeURIComponent(valor)
-    );
-    if (resp.erro) {
-      alert("Erro: " + resp.erro);
-    } else {
-      //alert(resp.mensagem || "Registro ok");
-      registros[id] = valor;  // armazena o registro localmente
-      atualizarVisual(id);   // atualiza visual do botão
-    }
-  } catch (e) {
-    alert("Erro ao registrar: " + e);
-    console.error(e);
-  }
-}
-
-document.getElementById("turma").addEventListener("change", carregarTurma);
-
-window.addEventListener('load', function() {
-  document.getElementById("turma").value = "";
-  document.getElementById("lista").innerHTML = "";
-});
-</script>
+    // Inicializa input de data com hoje
+    window.addEventListener('load', () => {
+      const dateInput = document.getElementById("dataConsulta");
+      dateInput.value = formatarData(new Date());
+    });
+  </script>
 </body>
 </html>
