@@ -1,49 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Acessando Planilha</title>
+  <title>Enviar String para Planilha</title>
 </head>
 <body>
-  <h1>Dados da Planilha</h1>
-  <div id="dados-planilha">Carregando dados...</div>
-
-  <hr>
-
-  <h1>Enviar novos dados</h1>
-  <form id="form-dados">
-    <label for="nome">Nome:</label>
-    <input type="text" id="nome" name="Nome" required><br><br>
-    <label for="email">E-mail:</label>
-    <input type="email" id="email" name="Email" required><br><br>
+  <h1>Enviar string</h1>
+  <form id="form-string">
+    <label for="campo-string">Digite algo:</label>
+    <input type="text" id="campo-string" name="minhaString" required>
     <button type="submit">Enviar</button>
   </form>
 
   <script>
     const webAppUrl = 'https://script.google.com/macros/s/AKfycbyE2WHynEdsQstiC6swPsfRdiSaEYMJrcwiKrrrKhXwj6XyS2UdvkKi-tiJb-K82wdZ/exec'; // Cole a URL copiada aqui
 
-    // Função para carregar dados da planilha
-    async function carregarDados() {
-      try {
-        const response = await fetch(webAppUrl);
-        const dados = await response.json();
-        
-        const divDados = document.getElementById('dados-planilha');
-        divDados.innerHTML = JSON.stringify(dados, null, 2);
-      } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-      }
-    }
-
-    // Função para enviar dados à planilha
-    document.getElementById('form-dados').addEventListener('submit', async (event) => {
+    document.getElementById('form-string').addEventListener('submit', async (event) => {
       event.preventDefault();
-      
-      const form = event.target;
-      const formData = new FormData(form);
-      const dados = Object.fromEntries(formData.entries());
+
+      const campo = document.getElementById('campo-string');
+      const dados = {
+        minhaString: campo.value
+      };
 
       try {
-        await fetch(webAppUrl, {
+        const response = await fetch(webAppUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -51,16 +31,19 @@
           body: JSON.stringify(dados)
         });
 
-        alert('Dados enviados com sucesso!');
-        form.reset();
-        carregarDados(); // Recarrega os dados para mostrar a nova entrada
+        const resultado = await response.json();
+
+        if (resultado.status === 'sucesso') {
+          alert('Dados enviados com sucesso!');
+          campo.value = ''; // Limpa o campo
+        } else {
+          alert('Erro ao enviar dados: ' + resultado.mensagem);
+        }
       } catch (error) {
-        console.error('Erro ao enviar dados:', error);
-        alert('Erro ao enviar dados.');
+        console.error('Erro na requisição:', error);
+        alert('Erro na requisição. Verifique o console para mais detalhes.');
       }
     });
-
-    carregarDados();
   </script>
 </body>
 </html>
