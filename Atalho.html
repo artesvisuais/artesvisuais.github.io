@@ -115,8 +115,7 @@ function renderCards(){
     openBtn.className=''; copyBtn.className='btnCopy';
     actions.appendChild(openBtn); actions.appendChild(copyBtn);
     // optional delete
-    const delBtn = document.createElement('button'); delBtn.textContent='Remover'; delBtn.className='btnDel'; delBtn.onclick = ()=> { if(confirm('Remover atalho "'+l.title+'"?')){ links.splice(links.indexOf(l),1); renderCards(); } };
-    actions.appendChild(delBtn);
+    
     // assemble
     card.appendChild(row);
     card.appendChild(domain);
@@ -142,15 +141,6 @@ function copyAll(){
 }
 
 // adicionar via UI (não persiste no arquivo — é temporário)
-function showAdd(){ document.getElementById('addForm').style.display='block'; document.getElementById('newTitle').focus(); }
-function hideAdd(){ document.getElementById('addForm').style.display='none'; }
-function addLink(){
-  const t = document.getElementById('newTitle').value.trim();
-  const h = document.getElementById('newHref').value.trim();
-  if(!t||!h){ alert('Preencha título e URL.'); return; }
-  links.unshift({title:t, href:h});
-  document.getElementById('newTitle').value=''; document.getElementById('newHref').value=''; hideAdd(); renderCards();
-}
 
 // quick init
 renderCards();
@@ -159,6 +149,6 @@ renderCards();
 document.getElementById('q').addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); const first = document.querySelector('.card button'); if(first) first.focus(); } });
 </script>
 </body>
-
 </html>
+
 
