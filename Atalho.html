@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Atalhos - Apps Script</title>
+<style>
+  :root{
+    --bg:#f7f8fb; --card:#fff; --accent:#2b79ff; --muted:#666;
+    --danger:#d9534f; --glass: rgba(43,121,255,0.06);
+  }
+  body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial; margin:16px; background:var(--bg); color:#222;}
+  header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+  h1{font-size:18px;margin:0}
+  p.lead{margin:0;color:var(--muted);font-size:13px}
+  #controls{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
+  input, button, select{font-size:14px;padding:8px;border-radius:8px;border:1px solid #e0e6f0}
+  input[type="search"]{min-width:220px;flex:1}
+  button{background:var(--accent);color:#fff;border:0;cursor:pointer}
+  button.secondary{background:#fff;color:var(--accent);border:1px solid var(--accent)}
+  button.ghost{background:transparent;color:var(--muted);border:1px dashed #ddd}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px;margin-top:16px}
+  .card{background:var(--card);padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(20,30,80,0.04);display:flex;flex-direction:column;gap:8px}
+  .card .row{display:flex;align-items:center;gap:8px}
+  .favicon{width:34px;height:34px;border-radius:6px;display:inline-block;flex:0 0 34px;background:#eee;display:flex;align-items:center;justify-content:center;color:#999;font-weight:600}
+  .title{font-weight:600;font-size:14px;flex:1}
+  .url{font-size:12px;color:var(--muted);word-break:break-all}
+  .actions{display:flex;gap:6px}
+  .btnOpen{background:#0b7a5f}
+  .btnCopy{background:#4a4a4a}
+  .btnDel{background:var(--danger)}
+  small.hint{color:var(--muted);display:block;margin-top:6px}
+  form.inline{display:flex;gap:8px;align-items:center}
+  @media (max-width:520px){
+    .grid{grid-template-columns:1fr}
+    input[type="search"]{width:100%}
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Atalhos — Apps Script</h1>
+      <p class="lead">Acesso rápido aos seus scripts e páginas (coloque aqui os links que usar com frequência).</p>
+    </div>
+  </header>
+
+  <div id="controls">
+    <input type="search" id="q" placeholder="Pesquisar atalhos (título, domínio)..." oninput="renderCards()" />
+    <button class="secondary" onclick="showAdd()">+ Novo atalho</button>
+    <button class="ghost" onclick="copyAll()">Copiar lista</button>
+  </div>
+
+  <div id="addForm" style="margin-top:12px;display:none">
+    <form class="inline" onsubmit="event.preventDefault(); addLink();">
+      <input id="newTitle" placeholder="Título (ex: Formulário de Votação)" required />
+      <input id="newHref" placeholder="URL completa (https://...)" required style="min-width:260px"/>
+      <button type="submit">Adicionar</button>
+      <button type="button" class="ghost" onclick="hideAdd()">Cancelar</button>
+    </form>
+    <small class="hint">Dica: Coloque o link do seu Apps Script publicado (URL do deploy) ou a página no github.io.</small>
+  </div>
+
+  <div class="grid" id="list"></div>
+
+<script>
+/*
+  Edite a lista abaixo adicionando seus links.
+  Cada item: {title: 'Nome', href:'https://script.google.com/..', note: 'opcional'}
+*/
+const links = [
+
+  { title: 'Chamada diaria', href: 'https://artesvisuais.github.io/chamada.html', note: 'Página de chamada' },
+
+  { title: 'Formulário Anotações - V23', href: 'https://script.google.com/macros/s/AKfycbzQq2JbvtvkZyshepSq29AnTmB8ImfSTm38xfnNXdkj_cvVSNN9L9wz5yKXRtKMmL7T/exec', note: 'Formulário de anotações ' },
+
+  { title: 'Admin AppsScript', href: 'https://script.google.com/d/1Xyz.../edit', note: 'Editor (seu projeto)' }
+];
+
+// util: extrai domínio curto
+function shortDomain(u){
+  try{
+    const url = new URL(u);
+    return url.hostname.replace(/^www\./,'');
+  }catch(e){
+    return u.length>30? u.slice(0,30)+'...': u;
+  }
+}
+
+// render
+function renderCards(){
+  const container = document.getElementById('list');
+  const q = document.getElementById('q').value.trim().toLowerCase();
+  container.innerHTML = '';
+  const filtered = links.filter(l=>{
+    if(!q) return true;
+    return (l.title||'').toLowerCase().includes(q) || (l.href||'').toLowerCase().includes(q) || (l.note||'').toLowerCase().includes(q);
+  });
+  if(filtered.length===0){
+    container.innerHTML = '<div style="grid-column:1/-1; color:#666">Nenhum atalho encontrado. Use "Adicionar" para incluir um.</div>';
+    return;
+  }
+  filtered.forEach((l, idx)=>{
+    const card = document.createElement('div'); card.className='card';
+    // header row
+    const row = document.createElement('div'); row.className='row';
+    const fav = document.createElement('div'); fav.className='favicon'; fav.textContent = shortDomain(l.href).slice(0,2).toUpperCase();
+    const title = document.createElement('div'); title.className='title'; title.textContent = l.title || shortDomain(l.href);
+    const domain = document.createElement('div'); domain.className='url'; domain.textContent = shortDomain(l.href);
+    row.appendChild(fav); row.appendChild(title);
+    // actions
+    const actions = document.createElement('div'); actions.className='actions';
+    const openBtn = document.createElement('button'); openBtn.textContent='Abrir'; openBtn.onclick = ()=> window.open(l.href,'_blank');
+    const copyBtn = document.createElement('button'); copyBtn.textContent='Copiar'; copyBtn.onclick = ()=> copyToClipboard(l.href, copyBtn);
+    openBtn.className=''; copyBtn.className='btnCopy';
+    actions.appendChild(openBtn); actions.appendChild(copyBtn);
+    // optional delete
+    const delBtn = document.createElement('button'); delBtn.textContent='Remover'; delBtn.className='btnDel'; delBtn.onclick = ()=> { if(confirm('Remover atalho "'+l.title+'"?')){ links.splice(links.indexOf(l),1); renderCards(); } };
+    actions.appendChild(delBtn);
+    // assemble
+    card.appendChild(row);
+    card.appendChild(domain);
+    if(l.note){ const note = document.createElement('div'); note.className='url'; note.style.marginTop='6px'; note.textContent = l.note; card.appendChild(note); }
+    card.appendChild(actions);
+    container.appendChild(card);
+  });
+}
+
+// copiar texto e feedback
+function copyToClipboard(text, btn){
+  navigator.clipboard.writeText(text).then(()=>{
+    const original = btn.textContent;
+    btn.textContent = 'Copiado ✓';
+    setTimeout(()=>btn.textContent=original,1200);
+  }).catch(()=>alert('Não foi possível copiar (permissão).'));
+}
+
+// copiar lista de URLs (texto)
+function copyAll(){
+  const txt = links.map(l=> `${l.title} — ${l.href}`).join('\\n');
+  navigator.clipboard.writeText(txt).then(()=>alert('Lista copiada para a área de transferência.'));
+}
+
+// adicionar via UI (não persiste no arquivo — é temporário)
+function showAdd(){ document.getElementById('addForm').style.display='block'; document.getElementById('newTitle').focus(); }
+function hideAdd(){ document.getElementById('addForm').style.display='none'; }
+function addLink(){
+  const t = document.getElementById('newTitle').value.trim();
+  const h = document.getElementById('newHref').value.trim();
+  if(!t||!h){ alert('Preencha título e URL.'); return; }
+  links.unshift({title:t, href:h});
+  document.getElementById('newTitle').value=''; document.getElementById('newHref').value=''; hideAdd(); renderCards();
+}
+
+// quick init
+renderCards();
+
+// allow pressing Enter in search to focus first result
+document.getElementById('q').addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); const first = document.querySelector('.card button'); if(first) first.focus(); } });
+</script>
+</body>
+</html>
