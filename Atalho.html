@@ -1,157 +1,424 @@
-<!doctype html>
-<html lang="pt-BR">
+<!DOCTYPE html>
+<html>
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Atalhos</title>
-<style>
-  :root{
-    --bg:#f7f8fb; --card:#fff; --accent:#2b79ff; --muted:#666;
-    --danger:#d9534f; --glass: rgba(43,121,255,0.06);
-  }
-  body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial; margin:16px; background:var(--bg); color:#222;}
-  header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-  h1{font-size:18px;margin:0}
-  p.lead{margin:0;color:var(--muted);font-size:13px}
-  #controls{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
-  input, button, select{font-size:14px;padding:8px;border-radius:8px;border:1px solid #e0e6f0}
-  input[type="search"]{min-width:220px;flex:1}
-  button{background:var(--accent);color:#fff;border:0;cursor:pointer}
-  button.secondary{background:#fff;color:var(--accent);border:1px solid var(--accent)}
-  button.ghost{background:transparent;color:var(--muted);border:1px dashed #ddd}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px;margin-top:16px}
-  .card{background:var(--card);padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(20,30,80,0.04);display:flex;flex-direction:column;gap:8px}
-  .card .row{display:flex;align-items:center;gap:8px}
-  .favicon{width:34px;height:34px;border-radius:6px;display:inline-block;flex:0 0 34px;background:#eee;display:flex;align-items:center;justify-content:center;color:#999;font-weight:600}
-  .title{font-weight:600;font-size:14px;flex:1}
-  .url{font-size:12px;color:var(--muted);word-break:break-all}
-  .actions{display:flex;gap:6px}
-  .btnOpen{background:#0b7a5f}
-  .btnCopy{background:#4a4a4a}
-  .btnDel{background:var(--danger)}
-  small.hint{color:var(--muted);display:block;margin-top:6px}
-  form.inline{display:flex;gap:8px;align-items:center}
-  @media (max-width:520px){
-    .grid{grid-template-columns:1fr}
-    input[type="search"]{width:100%}
-  }
-</style>
+  <meta charset="utf-8">
+  <title>Anotações_v35</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #fff;
+    }
+
+    /* ---------- BOTÕES ---------- */
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      cursor: pointer;
+      border-radius: 4px;
+      margin-right: 4px;
+      transition: 0.2s;
+    }
+    button:hover { background-color: #45a049; }
+
+    .btnExcluir {
+      background-color: #d9534f;
+    }
+    .btnExcluir:hover {
+      background-color: #c9302c;
+    }
+
+    /* ---------- FORM NOVA ANOTAÇÃO ---------- */
+    #formularioNovo {
+      display: none;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 6px;
+      background-color: #f9f9f9;
+    }
+
+    input[type="text"], textarea, select {
+      font-size: 15px;
+      padding: 6px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    /* ---------- LISTA DE ANOTAÇÕES (SEM TABELA) ---------- */
+    #listaAnotacoes {
+      margin-top: 20px;
+    }
+
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 15px;
+      background: #fff;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    .card-top {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .card-top span {
+      display: inline-block;
+      margin-right: 10px;
+      font-weight: bold;
+    }
+
+    .card-text {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      margin-bottom: 10px;
+    }
+
+    .card-editarea {
+      width: 100%;
+      display: none;
+      margin-bottom: 10px;
+    }
+
+    .card-actions {
+      margin-top: 10px;
+    }
+
+    /* ---------- PESQUISA ---------- */
+    #pesquisaContainer {
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    #contadorResultados {
+      color: #555;
+      font-size: 13px;
+    }
+
+    /* ---------- RESPONSIVIDADE ---------- */
+    @media (max-width: 768px) {
+      body { font-size: 18px; margin: 10px; }
+
+      button {
+        padding: 10px;
+        font-size: 18px;
+        margin: 6px 2px;
+      }
+
+      .card { padding: 14px; }
+      .card-top { font-size: 16px; }
+      .card-text { font-size: 18px; }
+      textarea { font-size: 18px; }
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <div>
-      <h1>Atalhos — Apps Script - e paginas soltas.</h1>
-      <p class="lead">Acesso rápido aos seus scripts e páginas.</p>
-    </div>
-  </header>
 
-  <div id="controls">
-    <input type="search" id="q" placeholder="Pesquisar atalhos (título, domínio)..." oninput="renderCards()" />
-   
-    <button class="ghost" onclick="copyAll()">Copiar lista</button>
-  </div>
+<button onclick="toggleFormulario()">Nova anotação</button>
 
-  <div id="addForm" style="margin-top:12px;display:none">
-    <form class="inline" onsubmit="event.preventDefault(); addLink();">
-      <input id="newTitle" placeholder="Título (ex: Formulário de Votação)" required />
-      <input id="newHref" placeholder="URL completa (https://...)" required style="min-width:260px"/>
-      <button type="submit">Adicionar</button>
-      <button type="button" class="ghost" onclick="hideAdd()">Cancelar</button>
-    </form>
-    <small class="hint">Dica: Coloque o link do seu Apps Script publicado (URL do deploy) ou a página no github.io.</small>
-  </div>
+<div id="formularioNovo">
+  <h3>Inserir nova anotação</h3>
 
-  <div class="grid" id="list"></div>
+  <label>Categoria/Tópico:</label>
+  <input type="text" id="novaCategoria" placeholder="Nova categoria...">
+
+  <select id="selectCategoriaExistente" onchange="sincronizarCategoria()">
+    <option value="">(ou selecione uma existente)</option>
+  </select>
+
+  <br><br>
+
+  <label>Anotação:</label>
+  <textarea id="novaAnotacao" rows="3"></textarea>
+
+  <br><br>
+
+  <button onclick="enviarNova()">Salvar</button>
+  <button onclick="toggleFormulario()">Fechar</button>
+</div>
+
+<h3>Visualizar anotações por categoria</h3>
+
+<select id="filtroCategoria" onchange="carregarAnotacoes()">
+  <option value="">Selecione uma categoria</option>
+</select>
+
+<div id="pesquisaContainer">
+  <input type="text" id="campoPesquisa" placeholder="Pesquisar..." oninput="filtrarTabela()">
+  <button onclick="limparPesquisa()">Limpar</button>
+  <span id="contadorResultados" style="display:none"></span>
+</div>
+
+<!-- AQUI ENTRAM OS CARDS (SEM TABELA) -->
+<div id="listaAnotacoes"></div>
+
+
 
 <script>
-/*
-  Edite a lista abaixo adicionando seus links.
-  Cada item: {title: 'Nome', href:'https://script.google.com/..', note: 'opcional'}
-*/
-const links = [
+/* ------------------------------- SEU JS ORIGINAL (mantido)
+   Apenas alterei a parte de preencherTabela()
+   para criar DIVS em vez de Tabela.
+-------------------------------- */
 
-  { title: 'Chamada diaria', href: 'https://artesvisuais.github.io/chamada.html', note: 'Página de chamada' },
+let categorias = [];
+let anotacoes = [];
+let anotacoesFiltradas = [];
 
-  { title: 'Formulário Anotações - V23', href: 'https://script.google.com/macros/s/AKfycbxUJqhTpT6ee7-vAIx1EoDwlXIgQXWHAdcHZsINlpy-Wk0mLtL8eTun50i6z9uLWm2-/exec', note: 'Formulário de anotações ' },
-
-  { title: 'Planejamentos_Bimestrais', href: 'https://artesvisuais.github.io/1_2_Planejamento_Bim.html', note: '' }
-];
-
-// util: extrai domínio curto
-function shortDomain(u){
-  try{
-    const url = new URL(u);
-    return url.hostname.replace(/^www\./,'');
-  }catch(e){
-    return u.length>30? u.slice(0,30)+'...': u;
+/* ---------------- FORMULÁRIO ---------------- */
+function toggleFormulario() {
+  const div = document.getElementById('formularioNovo');
+  div.style.display = div.style.display === 'none' ? 'block' : 'none';
+  if (div.style.display === 'block') {
+    preencherSelectCategoriasExistentes();
   }
 }
 
-// render
-function renderCards(){
-  const container = document.getElementById('list');
-  const q = document.getElementById('q').value.trim().toLowerCase();
-  container.innerHTML = '';
-  const filtered = links.filter(l=>{
-    if(!q) return true;
-    return (l.title||'').toLowerCase().includes(q) || (l.href||'').toLowerCase().includes(q) || (l.note||'').toLowerCase().includes(q);
+function sincronizarCategoria() {
+  const select = document.getElementById('selectCategoriaExistente');
+  const input = document.getElementById('novaCategoria');
+  if (select.value) input.value = select.value;
+}
+
+function transformarLinksEmHTML(texto) {
+  if (!texto) return '';
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  return texto.replace(urlRegex, url => {
+    try {
+      const u = new URL(url);
+      return `<a href="${url}" target="_blank">${u.hostname.replace('www.', '')}</a>`;
+    } catch {
+      return url;
+    }
   });
-  if(filtered.length===0){
-    container.innerHTML = '<div style="grid-column:1/-1; color:#666">Nenhum atalho encontrado. Use "Adicionar" para incluir um.</div>';
+}
+
+/* ---------------- CATEGORIAS ---------------- */
+function carregarCategorias() {
+  google.script.run.withSuccessHandler(function(cats) {
+    categorias = cats || [];
+    const filtro = document.getElementById('filtroCategoria');
+    const catAtual = filtro.value;
+
+    filtro.innerHTML = '<option value="">Selecione uma categoria</option>';
+    categorias.forEach(cat => {
+      const option = document.createElement('option');
+      option.value = cat;
+      option.textContent = cat;
+      if (cat === catAtual) option.selected = true;
+      filtro.appendChild(option);
+    });
+  }).obterCategorias();
+}
+
+function preencherSelectCategoriasExistentes() {
+  const select = document.getElementById('selectCategoriaExistente');
+  select.innerHTML = '<option value="">(ou selecione uma existente)</option>';
+  categorias.forEach(cat => {
+    const opt = document.createElement('option');
+    opt.value = cat;
+    opt.textContent = cat;
+    select.appendChild(opt);
+  });
+}
+
+/* ---------------- LISTAR ANOTAÇÕES ---------------- */
+function carregarAnotacoes() {
+  const filtro = document.getElementById('filtroCategoria').value;
+  const lista = document.getElementById('listaAnotacoes');
+  lista.innerHTML = '';
+  document.getElementById('campoPesquisa').value = '';
+  esconderContador();
+
+  if (!filtro) return;
+
+  google.script.run.withSuccessHandler(function(data) {
+    anotacoes = data || [];
+    anotacoesFiltradas = [...anotacoes];
+    preencherCards(anotacoesFiltradas);
+  }).obterAnotacoes(filtro);
+}
+
+/* ---------- AQUI É A NOVA LISTA (SEM TABELA) ---------- */
+function preencherCards(dados) {
+  const lista = document.getElementById('listaAnotacoes');
+  lista.innerHTML = '';
+
+  if (dados.length === 0) {
+    lista.innerHTML = '<em>Nenhuma anotação encontrada.</em>';
     return;
   }
-  filtered.forEach((l, idx)=>{
-    const card = document.createElement('div'); card.className='card';
-    // header row
-    const row = document.createElement('div'); row.className='row';
-    const fav = document.createElement('div'); fav.className='favicon'; fav.textContent = shortDomain(l.href).slice(0,2).toUpperCase();
-    const title = document.createElement('div'); title.className='title'; title.textContent = l.title || shortDomain(l.href);
-    const domain = document.createElement('div'); domain.className='url'; domain.textContent = shortDomain(l.href);
-    row.appendChild(fav); row.appendChild(title);
-    // actions
-    const actions = document.createElement('div'); actions.className='actions';
-    const openBtn = document.createElement('button'); openBtn.textContent='Abrir'; openBtn.onclick = ()=> window.open(l.href,'_blank');
-    const copyBtn = document.createElement('button'); copyBtn.textContent='Copiar'; copyBtn.onclick = ()=> copyToClipboard(l.href, copyBtn);
-    openBtn.className=''; copyBtn.className='btnCopy';
-    actions.appendChild(openBtn); actions.appendChild(copyBtn);
-    // optional delete
-    
-    // assemble
-    card.appendChild(row);
-    card.appendChild(domain);
-    if(l.note){ const note = document.createElement('div'); note.className='url'; note.style.marginTop='6px'; note.textContent = l.note; card.appendChild(note); }
+
+  dados.forEach(row => {
+    const [data, hora, categoria, anotacao, linha] = row;
+
+    const card = document.createElement('div');
+    card.className = "card";
+
+    /* Topo */
+    const topo = document.createElement('div');
+    topo.className = "card-top";
+    topo.innerHTML = `
+      <span>${categoria}</span>
+      <span>${data}</span>
+      <span>${hora}</span>
+    `;
+
+    /* Conteúdo */
+    const texto = document.createElement('div');
+    texto.className = "card-text";
+    texto.innerHTML = transformarLinksEmHTML(anotacao);
+
+    /* Textarea edição */
+    const editArea = document.createElement('textarea');
+    editArea.className = "card-editarea";
+    editArea.rows = 3;
+    editArea.value = anotacao;
+
+    /* Botões */
+    const actions = document.createElement('div');
+    actions.className = "card-actions";
+
+    const btnEditar = document.createElement('button');
+    btnEditar.textContent = "Editar";
+
+    const btnSalvar = document.createElement('button');
+    btnSalvar.textContent = "Salvar";
+    btnSalvar.style.display = "none";
+
+    const btnCancelar = document.createElement('button');
+    btnCancelar.textContent = "Cancelar";
+    btnCancelar.className = "btnExcluir";
+    btnCancelar.style.display = "none";
+
+    const btnExcluir = document.createElement('button');
+    btnExcluir.textContent = "Excluir";
+    btnExcluir.className = "btnExcluir";
+
+
+    /* --- EVENTOS --- */
+    btnEditar.onclick = () => {
+      texto.style.display = "none";
+      editArea.style.display = "block";
+      btnEditar.style.display = "none";
+      btnSalvar.style.display = "inline-block";
+      btnCancelar.style.display = "inline-block";
+    };
+
+    btnCancelar.onclick = () => {
+      editArea.value = anotacao;
+      texto.style.display = "block";
+      editArea.style.display = "none";
+      btnEditar.style.display = "inline-block";
+      btnSalvar.style.display = "none";
+      btnCancelar.style.display = "none";
+    };
+
+    btnSalvar.onclick = () => {
+      const novaAnot = editArea.value.trim();
+      if (!novaAnot) { alert("Anotação vazia!"); return; }
+
+      google.script.run.withSuccessHandler(() => {
+        alert("Atualizado!");
+        carregarCategorias();
+        setTimeout(carregarAnotacoes, 200);
+      }).atualizarAnotacao(linha, categoria, novaAnot);
+    };
+
+    btnExcluir.onclick = () => {
+      if (confirm("Excluir esta anotação?")) {
+        google.script.run.withSuccessHandler(() => {
+          alert("Excluída!");
+          carregarCategorias();
+          setTimeout(carregarAnotacoes, 200);
+        }).excluirAnotacao(linha);
+      }
+    };
+
+    actions.appendChild(btnEditar);
+    actions.appendChild(btnSalvar);
+    actions.appendChild(btnCancelar);
+    actions.appendChild(btnExcluir);
+
+    /* Montagem final */
+    card.appendChild(topo);
+    card.appendChild(texto);
+    card.appendChild(editArea);
     card.appendChild(actions);
-    container.appendChild(card);
+
+    lista.appendChild(card);
   });
 }
 
-// copiar texto e feedback
-function copyToClipboard(text, btn){
-  navigator.clipboard.writeText(text).then(()=>{
-    const original = btn.textContent;
-    btn.textContent = 'Copiado ✓';
-    setTimeout(()=>btn.textContent=original,1200);
-  }).catch(()=>alert('Não foi possível copiar (permissão).'));
+/* ---------------- PESQUISA ---------------- */
+function filtrarTabela() {
+  const termo = document.getElementById('campoPesquisa').value.trim().toLowerCase();
+  const contador = document.getElementById('contadorResultados');
+
+  if (!termo) {
+    anotacoesFiltradas = [...anotacoes];
+    preencherCards(anotacoesFiltradas);
+    esconderContador();
+    return;
+  }
+
+  const filtradas = anotacoes.filter(row => {
+    const texto = (row[3] || '') + ' ' + (row[2] || '');
+    return texto.toLowerCase().includes(termo);
+  });
+
+  anotacoesFiltradas = filtradas;
+  preencherCards(filtradas);
+
+  contador.style.display = "inline";
+  contador.textContent = filtradas.length + " resultados";
 }
 
-// copiar lista de URLs (texto)
-function copyAll(){
-  const txt = links.map(l=> `${l.title} — ${l.href}`).join('\\n');
-  navigator.clipboard.writeText(txt).then(()=>alert('Lista copiada para a área de transferência.'));
+function limparPesquisa() {
+  document.getElementById('campoPesquisa').value = '';
+  filtrarTabela();
 }
 
-// adicionar via UI (não persiste no arquivo — é temporário)
+function esconderContador() {
+  document.getElementById('contadorResultados').style.display = 'none';
+}
 
-// quick init
-renderCards();
 
-// allow pressing Enter in search to focus first result
-document.getElementById('q').addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); const first = document.querySelector('.card button'); if(first) first.focus(); } });
+/* ---------------- ENVIAR NOVA ---------------- */
+function enviarNova() {
+  const categoria = document.getElementById('novaCategoria').value.trim();
+  const anotacao = document.getElementById('novaAnotacao').value.trim();
+
+  if (!anotacao) {
+    alert('Insira uma anotação.');
+    return;
+  }
+
+  google.script.run.withSuccessHandler(() => {
+    alert("Salvo!");
+    document.getElementById('novaCategoria').value = '';
+    document.getElementById('selectCategoriaExistente').value = '';
+    document.getElementById('novaAnotacao').value = '';
+    toggleFormulario();
+    carregarCategorias();
+    setTimeout(carregarAnotacoes, 300);
+  }).salvarAnotacao(categoria, anotacao);
+}
+
+window.onload = carregarCategorias;
 </script>
+
 </body>
 </html>
-
-
-
-
-
