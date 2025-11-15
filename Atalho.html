@@ -31,12 +31,13 @@
   .btnDel{background:var(--danger)}
   small.hint{color:var(--muted);display:block;margin-top:6px}
   form.inline{display:flex;gap:8px;align-items:center}
-  @media (max-width:520px){
-    .grid{grid-template-columns:1fr}
-    input[type="search"]{width:100%}
-     p.lead, .url {
-    color: #000 !important;}
+  @media (max-width: 520px) {
+  body, p.lead, .url {
+    color: #000 !important;
+    font-size: 14px;
+    line-height: 1.4;
   }
+}
 </style>
 </head>
 <body>
@@ -152,6 +153,7 @@ document.getElementById('q').addEventListener('keydown', (e)=>{ if(e.key==='Ente
 </script>
 </body>
 </html>
+
 
 
 
