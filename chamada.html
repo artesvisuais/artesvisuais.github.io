@@ -270,6 +270,44 @@
       const dateInput = document.getElementById("dataConsulta");
       dateInput.value = formatarData(new Date());
     });
+
+    // Mudar a cor do option no Select
+    // Busca o elemento <select> pelo ID "turma" e guarda na variável
+const selectTurma = document.getElementById('turma');
+
+// Adiciona um "ouvinte" que executa a função toda vez que a opção mudar (evento change)
+selectTurma.addEventListener('change', function() {
+    
+    // Obtém o elemento <option> que está selecionado no momento
+    const opcao = this.options[this.selectedIndex];
+    
+    // Captura o valor da cor que você escreveu no atributo style="background-color: ..." da tag option
+    const cor = opcao.style.backgroundColor;
+    
+    // Aplica essa cor capturada ao fundo do campo principal (o select)
+    this.style.backgroundColor = cor;
+    
+    /**
+     * Lógica de Contraste:
+     * Para cores escuras (como azul), mudamos o texto para branco.
+     * Para cores claras (amarelo, verde, rosa), mantemos o texto preto.
+     */
+    if (cor === 'blue') {
+        this.style.color = 'white'; // Letra branca no fundo azul
+    } else {
+        this.style.color = 'black'; // Letra preta nos demais fundos
+    }
+
+    /**
+     * Reset de Estilo:
+     * Se o usuário selecionar a primeira opção ("-- Escolha a turma --"),
+     * o valor (value) será vazio e o código remove as cores aplicadas.
+     */
+    if (this.value === "") {
+        this.style.backgroundColor = ""; // Volta ao fundo padrão
+        this.style.color = "";           // Volta à cor de texto padrão
+    }
+});
   </script>
 </body>
 </html>
