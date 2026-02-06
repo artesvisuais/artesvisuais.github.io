@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chamada Digital_V9</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f7f7f7;
+    margin: 0;
+    padding: 15px;
+  }
+  h2 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  select, button, input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+  }
+  .aluno {
+    background: #fff;
+    border-radius: 10px;
+    margin: 8px 0;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  .botoes {
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .botoes button {
+    flex: 1;
+    margin: 0 2px;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .btnA { background: #B0E0E6; }
+  .btnF { background: #d9534f; }
+  .btn1 { background: #f0ad4e; }
+  .btn2 { background: #5bc0de; }
+  .btn3 { background: #5cb85c; }
+
+  .botoes button:active:not(:disabled) {
+    transform: scale(0.9);
+    transition: transform 0.1s ease;
+  }
+
+  .botoes button.selecionado {
+    box-shadow: 0 0 8px 3px #333 inset;
+    opacity: 1;
+    filter: brightness(110%);
+    transform: scale(1.2);
+   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+   z-index: 1;
+   position: relative;
+  }
+
+  .transferido {
+    opacity: 0.4;
+    color: #555;
+  }
+
+  #top-controls {
+    display: flex;
+    gap: 8px;
+  }
+
+  #top-controls > * {
+    flex: 1;
+  }
+  @media (max-width: 480px) {
+  #dataConsulta {
+    width: 120px;      /* largura menor */
+    font-size: 14px;   /* fonte menor */
+    padding: 6px 8px;  /* menos espaçamento interno */
+  }
+    #turma {
+    min-width: 65px; /* Garante espaço para 3 letras + seta */
+    padding: 5px;    /* Dá um respiro interno para o texto */
+    width: auto;     /* Faz o box crescer conforme o conteúdo */
+}
+}
+
+@media (max-width: 480px) {
+  h2 {
+    margin-top: 50px; /* Abre espaço para o ícone de 3 traços */
+  }
+}
+
+/* Estilo do botão de 3 traços */
+.menu-mobile {
+  cursor: pointer;
+  display: inline-block;
+  padding: 10px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.bar {
+  width: 25px;
+  height: 3px;
+  background-color: #333;
+  margin: 4px 0;
+  border-radius: 2px;
+}
+
+/* Painel lateral (escondido por padrão) */
+.side-menu {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  background-color: #fff;
+  overflow-x: hidden;
+  transition: 0.4s; /* Suavidade ao abrir */
+  padding-top: 60px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+}
+
+.side-menu a {
+  padding: 15px 25px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #333;
+  display: block;
+  border-bottom: 1px solid #eee;
+}
+
+.side-menu a:hover {
+  background-color: #f1f1f1;
+}
+.btn-voltar {
+  display: inline-block;
+  transform: rotate(180deg); /* Gira a seta para a esquerda */
+  font-size: 30px !important;
+  color: #d9534f !important; /* Cor vermelha para indicar saída */
+  padding: 10px 25px !important;
+  border-bottom: none !important;
+}
+
+.btn-voltar:hover {
+  background: transparent !important;
+  transform: rotate(180deg) scale(1.2);
+}
+</style>
+</head>
+<body>
+<!-- Ícone do Menu -->
+<div class="menu-mobile" onclick="toggleMenu()">
+  <div class="bar"></div>
+  <div class="bar"></div>
+  <div class="bar"></div>
+</div>
+
+<!-- Painel Lateral do Menu -->
+<div id="side-menu" class="side-menu">
+  <a href="#" class="btn-voltar" onclick="toggleMenu()">&#10140;</a> 
+  <!-- a href="#" onclick="toggleMenu()">Fechar &times;</aj -->
+  <a href="outra_pagina1.html">Página 1</a>
+  <a href="outra_pagina2.html">Página 2</a>
+  <a href="outra_pagina3.html">Página 3</a>
+</div>
+
+  <h2>Chamada Digital</h2>
+  <div id="top-controls">
+    <select id="turma">
+      <option value="">-- Escolha a turma --</option>
+      <option style="background-color: blue ;" value="1E">1E</option>
+      <option style="background-color: blue ;" value="2G">2G</option>
+      <option style="background-color: blue ;" value="3E">3E</option>
+      <option style="background-color: blue ;" value="5E">5E</option>
+      <option style="background-color: blue ;" value="5F">5F</option>
+      <option style="background-color: blue ;" value="4A">4A</option>
+      <option style="background-color: blue ;" value="BB">4B</option>
+      <option style="background-color: blue ;" value="5A">5A</option>
+      <option style="background-color: blue ;" value="5B">5B</option>
+      <option style="background-color: blue ;" value="5C">5C</option>
+      <option style="background-color: #FF00FF ;" value="5DD">5DD</option>
+      <option style="background-color: #FFFF00 ;" value="1TC">1TC</option>
+      <option style="background-color: #FFFF00 ;" value="2TC">2TC</option>
+      <option style="background-color: #FFFF00 ;" value="3TC">3TC</option>
+      <option style="background-color: #FFFF00 ;" value="4TC">4TC</option> 
+      <option style="background-color: #00FF00 ;" value="1TJ">1TJ</option>
+      <option style="background-color: #00FF00 ;" value="2TJ">2TJ</option>
+      <option style="background-color: #00FF00 ;" value="3TJ">3TJ</option>
+      <option style="background-color: #00FF00 ;" value="4TJ">4TJ</option> 
+    </select>
+    <input type="date" id="dataConsulta" />
+    <button id="refreshBtn">Atualizar</button>
+  </div>
+  <div id="lista"></div>
+  <script>
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbyZTRtxAcPdj-qx0IC9bJ_yWELubfsPJEpUPFrqL5tYe2YPzZ3k98ReEB4kIe--ZA/exec"; // substitua pelo seu
+    let registros = {};
+    let dataAtual = new Date();
+
+    function formatarData(d) {
+      const dia = String(d.getDate()).padStart(2, '0');
+      const mes = String(d.getMonth() + 1).padStart(2, '0');
+      const ano = d.getFullYear();
+      return `${ano}-${mes}-${dia}`;
+    }
+
+    function jsonp(url) {
+      return new Promise((resolve, reject) => {
+        const callbackName = '_cb_' + Math.random().toString(36).substr(2, 9);
+        window[callbackName] = function (data) {
+          try {
+            resolve(data);
+          } finally {
+            cleanup();
+          }
+        };
+        function cleanup() {
+          delete window[callbackName];
+          const s = document.getElementById(callbackName);
+          if (s) s.remove();
+        }
+        const s = document.createElement('script');
+        s.src = url + (url.indexOf('?') === -1 ? '?' : '&') + 'callback=' + callbackName;
+        s.id = callbackName;
+        s.onerror = function () {
+          cleanup();
+          reject(new Error('Erro carregando JSONP'));
+        };
+        document.body.appendChild(s);
+      });
+    }
+
+    async function carregarTurma() {
+      const turma = document.getElementById("turma").value;
+      if (!turma) return;
+
+      // Usar a dataAtual já corrigida (local, sem deslocamento)
+      const dia = dataAtual.getDate();
+      const mes = dataAtual.getMonth() + 1;
+
+      const lista = document.getElementById("lista");
+      lista.innerHTML = "<p>Carregando estudantes...</p>";
+
+      try {
+        const resp = await jsonp(`${URL_SCRIPT}?turma=${turma}&dia=${dia}&mes=${mes}`);
+        if (resp.erro) {
+          lista.innerHTML = `<p>${resp.erro}</p>`;
+          return;
+        }
+        if (!resp.registros || resp.registros.length === 0) {
+          lista.innerHTML = `<p>Nenhum registro encontrado para esta data.</p>`;
+          return;
+        }
+        // Exibe data
+        document.querySelector("h2").innerText = `Chamada Digital (${resp.data}), (${turma})`;
+        lista.innerHTML = "";
+        registros = {}; // limpa para nova data
+
+        resp.registros.forEach((a) => {
+          const div = document.createElement("div");
+          div.className = "aluno";
+          div.id = `aluno-${a.id}`;
+          if (a.nome.startsWith('*')) div.classList.add('transferido');
+          div.innerHTML = `
+            <strong>${a.nome}</strong><br>
+            <div class="botoes">
+              <button class="btnA" data-valor="A" onclick="registrar('${turma}', ${a.id}, 'A')">Não Letivo</button>
+              <button class="btnF" data-valor="F" onclick="registrar('${turma}', ${a.id}, 'F')">F</button>
+              <button class="btn1" data-valor="1" onclick="registrar('${turma}', ${a.id}, '1')">1</button>
+              <button class="btn2" data-valor="2" onclick="registrar('${turma}', ${a.id}, '2')">2</button>
+              <button class="btn3" data-valor="3" onclick="registrar('${turma}', ${a.id}, '3')">3</button>
+            </div>
+          `;
+          lista.appendChild(div);
+          registros[a.id] = (a.valor !== undefined && a.valor !== null) ? String(a.valor) : "";
+          atualizarVisual(a.id);
+          if (a.nome.startsWith('*')) {
+            const botoes = div.querySelectorAll("button");
+            botoes.forEach(btn => btn.disabled = true);
+          }
+        });
+      } catch (err) {
+        lista.innerHTML = `<p>Erro ao carregar estudantes: ${err}</p>`;
+        console.error(err);
+      }
+    }
+
+    function atualizarVisual(id) {
+      const alunoDiv = document.getElementById(`aluno-${id}`);
+      if (!alunoDiv) return;
+      const botoes = alunoDiv.querySelectorAll(".botoes button");
+      botoes.forEach((btn) => {
+        if (registros[id] === btn.getAttribute("data-valor")) {
+          btn.classList.add("selecionado");
+        } else {
+          btn.classList.remove("selecionado");
+        }
+      });
+    }
+
+    async function registrar(turma, id, valor) {
+      try {
+        const resp = await jsonp(`${URL_SCRIPT}?turma=${turma}&id=${id}&valor=${valor}`);
+        if (resp.erro) {
+          alert("Erro: " + resp.erro);
+        } else {
+          registros[id] = valor;
+          atualizarVisual(id);
+        }
+      } catch (e) {
+        alert("Erro ao registrar: " + e);
+      }
+    }
+
+    function setDataAtualFromInput() {
+      const dateInput = document.getElementById("dataConsulta");
+      if (dateInput.value) {
+        const parts = dateInput.value.split('-');
+        const year = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10) - 1;
+        const day = parseInt(parts[2], 10);
+        dataAtual = new Date(year, month, day);
+      } else {
+        dataAtual = new Date();
+      }
+    }
+
+    // Eventos
+    document.getElementById("turma").addEventListener("change", () => {
+      setDataAtualFromInput();
+      carregarTurma();
+    });
+
+    document.getElementById("dataConsulta").addEventListener("change", () => {
+      setDataAtualFromInput();
+      carregarTurma();
+    });
+
+    document.getElementById("refreshBtn").addEventListener("click", () => {
+      carregarTurma();
+    });
+
+    // Inicializa input de data com hoje
+    window.addEventListener('load', () => {
+      const dateInput = document.getElementById("dataConsulta");
+      dateInput.value = formatarData(new Date());
+    });
+
+    // Mudar a cor do option no Select
+    // Busca o elemento <select> pelo ID "turma" e guarda na variável
+const selectTurma = document.getElementById('turma');
+
+// Adiciona um "ouvinte" que executa a função toda vez que a opção mudar (evento change)
+selectTurma.addEventListener('change', function() {
+    
+    // Obtém o elemento <option> que está selecionado no momento
+    const opcao = this.options[this.selectedIndex];
+    
+    // Captura o valor da cor que você escreveu no atributo style="background-color: ..." da tag option
+    const cor = opcao.style.backgroundColor;
+    
+    // Aplica essa cor capturada ao fundo do campo principal (o select)
+    this.style.backgroundColor = cor;
+    
+    /**
+     * Lógica de Contraste:
+     * Para cores escuras (como azul), mudamos o texto para branco.
+     * Para cores claras (amarelo, verde, rosa), mantemos o texto preto.
+     */
+    if (cor === 'blue') {
+        this.style.color = 'white'; // Letra branca no fundo azul
+    } else {
+        this.style.color = 'black'; // Letra preta nos demais fundos
+    }
+
+    /**
+     * Reset de Estilo:
+     * Se o usuário selecionar a primeira opção ("-- Escolha a turma --"),
+     * o valor (value) será vazio e o código remove as cores aplicadas.
+     */
+    if (this.value === "") {
+        this.style.backgroundColor = ""; // Volta ao fundo padrão
+        this.style.color = "";           // Volta à cor de texto padrão
+    }
+});
+
+function toggleMenu() {
+  const menu = document.getElementById("side-menu");
+  // Se estiver fechado, abre (250px), se estiver aberto, fecha (0)
+  if (menu.style.width === "250px") {
+    menu.style.width = "0";
+  } else {
+    menu.style.width = "250px";
+  }
+}
+  </script>
+</body>
+</html>
