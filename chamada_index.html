@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Início - Chamada Index</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f0f2f5; /* Um cinza levemente mais moderno */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Cabeçalho de Boas-vindas */
+  .header-home {
+    background: #fff;
+    width: 100%;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+  }
+
+  .avatar-circle {
+    width: 60px; height: 60px;
+    background: #5bc0de; /* Cor azul do seu btn2 */
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 15px; font-weight: bold; font-size: 22px;
+  }
+
+  h2 { margin: 0; color: #333; font-size: 24px; }
+  #data-hoje { color: #888; font-size: 14px; margin-top: 8px; text-transform: capitalize; }
+
+  /* Grid de Cards */
+  .container-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Duas colunas */
+    gap: 15px;
+    width: 90%;
+    max-width: 500px;
+    padding-bottom: 30px;
+  }
+
+  .card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #eee;
+  }
+
+  .card:active { transform: scale(0.95); background: #fafafa; }
+
+  /* Destaque para o Card de Chamada (ocupa 2 colunas) */
+  .card-principal {
+    grid-column: span 2;
+    flex-direction: row;
+    justify-content: center;
+    gap: 15px;
+    background: #5cb85c; /* Cor verde do seu btn3 */
+    color: white;
+    border: none;
+  }
+  .card-principal .icon { background: rgba(255,255,255,0.2); }
+
+  .icon {
+    font-size: 24px;
+    width: 50px; height: 50px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 10px;
+    background: #f8f9fa;
+  }
+  .card-principal .icon { margin-bottom: 0; }
+
+  .card span { font-weight: bold; font-size: 14px; text-align: center; }
+
+  /* Menu Lateral (Mantido conforme seu padrão) */
+  .menu-mobile { cursor: pointer; position: absolute; top: 15px; left: 15px; z-index: 10; }
+  .bar { width: 22px; height: 3px; background-color: #333; margin: 4px 0; border-radius: 2px; }
+  .side-menu {
+    height: 100%; width: 0; position: fixed; z-index: 100;
+    top: 0; left: 0; background-color: #fff; overflow-x: hidden;
+    transition: 0.4s; padding-top: 60px; box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+  }
+  .side-menu a { padding: 15px 25px; text-decoration: none; font-size: 18px; color: #333; display: block; border-bottom: 1px solid #eee; }
+  .btn-voltar { transform: rotate(180deg); font-size: 30px !important; color: #d9534f !important; border-bottom: none !important; }
+</style>
+</head>
+<body>
+
+<!-- Ícone do Menu -->
+<div class="menu-mobile" onclick="toggleMenu()">
+  <div class="bar"></div>
+  <div class="bar"></div>
+  <div class="bar"></div>
+</div>
+
+<!-- Painel Lateral -->
+<div id="side-menu" class="side-menu">
+  <a href="#" class="btn-voltar" onclick="toggleMenu()">➜</a> 
+  <a href="chamada2.html">Chamada</a>
+  <a href="https://artesvisuais.github.io/1_2_Planejamento_Bim.html">Planejamentos</a>
+  <a href="https://jacarei.i-diario.com/">I-diario</a>
+  <a href="https://artesvisuais.github.io/Atalho.html">Configurações</a>
+</div>
+
+<div class="header-home">
+  <div class="avatar-circle">P</div>
+  <h2>Olá, Professor</h2>
+  <p id="data-hoje"></p>
+</div>
+
+<div class="container-cards">
+  <!-- Card de Destaque -->
+  <a href="chamada2.html" class="card card-principal">
+    <div class="icon">📝</div>
+    <span>LANÇAR CHAMADA</span>
+  </a>
+
+  <!-- Cards Secundários -->
+  <a href="https://artesvisuais.github.io/1_2_Planejamento_Bim.html" class="card">
+    <div class="icon">📚</div>
+    <span>Planejamentos</span>
+  </a>
+
+  <a href="https://jacarei.i-diario.com/" class="card">
+    <div class="icon">📅</div>
+    <span>I-diário</span>
+  </a>
+
+  <a href="https://artesvisuais.github.io/Atalho.html" class="card">
+    <div class="icon">ℹ️</div>
+    <span>Informações</span>
+  </a>
+
+  <a href="config.html" class="card">
+    <div class="icon">⚙️</div>
+    <span>Ajustes</span>
+  </a>
+</div>
+
+<script>
+  // Script da Data
+  const opcoes = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  document.getElementById('data-hoje').innerText = new Date().toLocaleDateString('pt-BR', opcoes);
+
+  // Script do Menu
+  function toggleMenu() {
+    const menu = document.getElementById("side-menu");
+    menu.style.width = (menu.style.width === "250px") ? "0" : "250px";
+  }
+</script>
+
+</body>
+</html>
