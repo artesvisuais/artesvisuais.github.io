@@ -1,0 +1,188 @@
+    <!DOCTYPE html>
+    <html lang="pt-br">
+      <head>
+        <title>Repositorio cursos</title>
+        <meta charset="utf-8">
+        <style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f0f2f5; /* Um cinza levemente mais moderno */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Cabeçalho de Boas-vindas */
+  .header-home {
+    background: #fff;
+    width: 100%;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+  }
+
+  .avatar-circle {
+    width: 60px; height: 60px;
+    background: #5bc0de; /* Cor azul do seu btn2 */
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 15px; font-weight: bold; font-size: 22px;
+  }
+
+  h2 { margin: 0; color: #333; font-size: 24px; }
+  #data-hoje { color: #888; font-size: 14px; margin-top: 8px; text-transform: capitalize; }
+
+  /* Grid de Cards */
+  .container-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Duas colunas */
+    gap: 15px;
+    width: 90%;
+    max-width: 500px;
+    padding-bottom: 30px;
+  }
+
+  .card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #eee;
+  }
+
+  .card:active { transform: scale(0.95); background: #fafafa; }
+
+  /* Destaque para o Card de Chamada (ocupa 2 colunas) */
+  .card-principal {
+    grid-column: span 2;
+    flex-direction: row;
+    justify-content: center;
+    gap: 15px;
+    background: #5cb85c; /* Cor verde do seu btn3 */
+    color: white;
+    border: none;
+  }
+  .card-principal .icon { background: rgba(255,255,255,0.2); }
+
+  .icon {
+    font-size: 24px;
+    width: 50px; height: 50px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 10px;
+    background: #f8f9fa;
+  }
+  .card-principal .icon { margin-bottom: 0; }
+
+  .card span { font-weight: bold; font-size: 14px; text-align: center; }
+
+  /* Menu Lateral (Mantido conforme seu padrão) */
+  .menu-mobile { cursor: pointer; position: absolute; top: 15px; left: 15px; z-index: 10; }
+  .bar { width: 22px; height: 3px; background-color: #333; margin: 4px 0; border-radius: 2px; }
+  .side-menu {
+    height: 100%; width: 0; position: fixed; z-index: 100;
+    top: 0; left: 0; background-color: #fff; overflow-x: hidden;
+    transition: 0.4s; padding-top: 60px; box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+  }
+  .side-menu a { padding: 15px 25px; text-decoration: none; font-size: 18px; color: #333; display: block; border-bottom: 1px solid #eee; }
+  .btn-voltar { transform: rotate(180deg); font-size: 30px !important; color: #d9534f !important; border-bottom: none !important; }
+</style>
+
+      </head>
+      <body>
+<!-- Ícone do Menu -->
+<div class="menu-mobile" onclick="toggleMenu()">
+  <div class="bar"></div>
+  <div class="bar"></div>
+  <div class="bar"></div>
+</div>
+
+<!-- Painel Lateral Iink 1-->
+<div id="side-menu" class="side-menu">
+         <a href="#" class="btn-voltar" onclick="toggleMenu()">➜</a> 
+         <a href="https://artesvisuais.github.io/cursos/arte/BNCC_AREA_DAS_LINGUAGENS_ARTE.pdf" target="_blank" >● BNCC AREA DAS LINGUAGENS ARTE</a>
+         <a href="https://artesvisuais.github.io/cursos/arte/PEDAGOGIA_DO_MOVIMENTO.pdf" target="_blank" >● PEDAGOGIA DO MOVIMENTO</a>
+         <a href="https://artesvisuais.github.io/cursos/arte/A_MUSICA_E_A_CULTURA_POPULAR.pdf" target="_blank" >● A MUSICA E A CULTURA POPULAR</a>
+         <a href="https://artesvisuais.github.io/cursos/arte/ARTE_MÍDIA_E_FUNDAMENTOS_DA_EDUCACAO.pdf" target="_blank" >● ARTE MÍDIA E FUNDAMENTOS DA EDUCAÇÂO</a>
+         <a href="https://artesvisuais.github.io/cursos/arte/ARTE_TERAPIA_E_OFICINAS_DE_ARTE.pdf" target="_blank" >● ARTE TERAPIA E OFICINAS DE ARTE</a>
+         <a href="https://artesvisuais.github.io/cursos/arte/DESENVOLVIMENTO_COGNITIVO_MUSICAL.pdf" target="_blank" >● DESENVOLVIMENTO COGNITIVO MUSICAL</a>
+         <a href="https://artesvisuais.github.io/cursos/arte/FORMACAO_DO_POVO_BRASILEIRO.pdf" target="_blank" >● FORMAÇÂO DO POVO BRASILEIRO</a>
+</div>
+
+
+<div class="header-home">
+  <div class="avatar-circle">🧑‍🎓</div>
+  <h2>Olá, seja bem vindo</h2>
+  <p id="data-hoje"></p>
+  <p> Aqui estão os links dos cursos para um rápido acesso:</p>
+</div>
+        
+<div class="container-cards">
+  <!-- Card de Destaque -->
+  <a href="https://artesvisuais.github.io/cursos/arte/BNCC_AREA_DAS_LINGUAGENS_ARTE.pdf" class="card card-principal" target="_blank">
+    <div class="icon">📚</div>
+    <span>BNCC AREA DAS LINGUAGENS ARTE</span>
+  </a>
+
+  <!-- Cards Secundários 1-->
+  <a href="https://artesvisuais.github.io/cursos/arte/PEDAGOGIA_DO_MOVIMENTO.pdf" class="card" target="_blank">
+    <div class="icon">📚</div>
+    <span>PEDAGOGIA DO MOVIMENTO</span>
+  </a>
+
+ <!-- Cards Secundários 2-->
+  <a href="https://artesvisuais.github.io/cursos/arte/A_MUSICA_E_A_CULTURA_POPULAR.pdf" class="card" target="_blank">
+    <div class="icon">📚</div>
+    <span>A MUSICA E A CULTURA POPULAR</span>
+  </a>
+               
+ <!-- Cards Secundários 3-->
+  <a href="https://artesvisuais.github.io/cursos/arte/ARTE_MÍDIA_E_FUNDAMENTOS_DA_EDUCACAO.pdf" class="card" target="_blank">
+    <div class="icon">📚</div>
+    <span>ARTE MÍDIA E FUNDAMENTOS DA EDUCAÇÂO</span>
+  </a>
+
+ <!-- Cards Secundários 4-->
+  <a href="https://artesvisuais.github.io/cursos/arte/ARTE_TERAPIA_E_OFICINAS_DE_ARTE.pdf" class="card" target="_blank">
+    <div class="icon">📚</div>
+    <span>ARTE TERAPIA E OFICINAS DE ARTE</span>
+  </a>
+
+ <!-- Cards Secundários 5-->
+  <a href="https://artesvisuais.github.io/cursos/arte/DESENVOLVIMENTO_COGNITIVO_MUSICAL.pdf" class="card" target="_blank">
+    <div class="icon">📚</div>
+    <span>DESENVOLVIMENTO COGNITIVO MUSICAL</span>
+  </a>
+
+ <!-- Cards Secundários 6-->
+  <a href="https://artesvisuais.github.io/cursos/arte/FORMACAO_DO_POVO_BRASILEIRO.pdf" class="card" target="_blank">
+    <div class="icon">📚</div>
+    <span>FORMAÇÂO DO POVO BRASILEIRO</span>
+  </a>
+
+<script>
+  // Script da Data
+  const opcoes = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  document.getElementById('data-hoje').innerText = new Date().toLocaleDateString('pt-BR', opcoes);
+
+  // Script do Menu
+  function toggleMenu() {
+    const menu = document.getElementById("side-menu");
+    menu.style.width = (menu.style.width === "250px") ? "0" : "250px";
+  }
+</script>
+
+      </body>
+    </html>
