@@ -98,6 +98,29 @@
   }
   .side-menu a { padding: 15px 25px; text-decoration: none; font-size: 18px; color: #333; display: block; border-bottom: 1px solid #eee; }
   .btn-voltar { transform: rotate(180deg); font-size: 30px !important; color: #d9534f !important; border-bottom: none !important; }
+/* Regra específica para Celulares */
+@media (max-width: 480px) {
+  .container-cards {
+    /* Força as duas colunas a dividirem 50% da tela rigorosamente */
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .card {
+    /* Garante que o padding não aumente o tamanho do card */
+    box-sizing: border-box !important;
+    padding: 15px 5px !important;
+  }
+
+  .card span {
+    /* Ajusta o texto para caber no espaço pequeno sem alargar a coluna */
+    font-size: 12px !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    display: block !important;
+    width: 100% !important;
+  }
+}
+        
 </style>
 
       </head>
@@ -187,5 +210,6 @@
       </body>
 
     </html>
+
 
 
