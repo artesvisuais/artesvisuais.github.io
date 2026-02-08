@@ -95,6 +95,9 @@
     height: 100%; width: 0; position: fixed; z-index: 100;
     top: 0; left: 0; background-color: #fff; overflow-x: hidden;
     transition: 0.4s; padding-top: 60px; box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+    /* --- ADICIONE ESTAS DUAS LINHAS Para a barra de rolagem --- */
+  overflow-y: auto;       /* Permite rolar para baixo se o menu for longo */
+  overflow-x: hidden;     /* Garante que não role para os lados */      
   }
   .side-menu a { padding: 15px 25px; text-decoration: none; font-size: 18px; color: #333; display: block; border-bottom: 1px solid #eee; }
   .btn-voltar { transform: rotate(180deg); font-size: 30px !important; color: #d9534f !important; border-bottom: none !important; }
@@ -210,6 +213,7 @@
       </body>
 
     </html>
+
 
 
 
