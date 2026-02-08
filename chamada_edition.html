@@ -81,7 +81,15 @@
     box-shadow: 2px 0 5px rgba(0,0,0,0.2);
     /* --- ADICIONE ESTAS DUAS LINHAS --- */
   overflow-y: auto;       /* Permite rolar para baixo se o menu for longo */
-  
+  display: flex;
+  flex-direction: column;
+}
+
+/* Isso substitui o "link vazio" de forma automática */
+.side-menu::after {
+  content: "";
+  min-height: 80px; /* Cria o espaço vazio no final da lista */
+  width: 100%;
   }
   .side-menu a {
     padding: 15px 25px;
