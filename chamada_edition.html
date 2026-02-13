@@ -387,7 +387,10 @@ function atualizarInfoTurma() {
   const professor = PROFESSORES[turma];
 
   if (professor) {
-    info.innerHTML = `👩‍🏫 Regente: ${professor}`;
+    info.innerHTML = `
+  <div style="font-size:14px;opacity:0.8;">Turma ${turma}</div>
+  <div style="font-size:16px;">👩‍🏫 ${professor}</div>
+`;
   } else {
     info.innerHTML = "👩‍🏫 Regente não cadastrado";
   }
@@ -400,3 +403,4 @@ document.getElementById("data").addEventListener("change", atualizarListaAlunos)
 
 </body>
 </html>
+
