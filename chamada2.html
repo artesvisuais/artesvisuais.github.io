@@ -156,6 +156,12 @@
   background: transparent !important;
   transform: rotate(180deg) scale(1.2);
 }
+  .info-turma {
+  margin-top: 8px;
+  font-weight: bold;
+  font-size: 16px;
+  color: #444;
+}
 </style>
 </head>
 <body>
@@ -177,7 +183,7 @@
 
   <h2>Chamada Digital</h2>
   <div id="top-controls">
-    <select id="turma">
+    <select id="turma" onchange="atualizarInfoTurma(); atualizarListaAlunos();">
       <option value="">-- Escolha a turma --</option>
       <option style="background-color: blue ;" value="1E">1E</option>
       <option style="background-color: blue ;" value="2G">2G</option>
@@ -202,6 +208,7 @@
     <input type="date" id="dataConsulta" />
     <button id="refreshBtn">Atualizar</button>
   </div>
+  <div id="infoTurma" class="info-turma"></div>
   <div id="lista"></div>
   <script>
     const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbyZTRtxAcPdj-qx0IC9bJ_yWELubfsPJEpUPFrqL5tYe2YPzZ3k98ReEB4kIe--ZA/exec"; // substitua pelo seu
@@ -404,10 +411,40 @@ function toggleMenu() {
     menu.style.width = "250px";
   }
 }
+    // Mapa fixo de turmas -> professores
+const PROFESSORES = {
+  "1E": "Profª Maria Oliveira",
+  "2G": "Prof. Carlos Silva",
+  "3A": "Profª Juliana Souza",
+  "4B": "Prof. André Lima"
+  // Adicione as demais turmas aqui
+};
+
+function atualizarInfoTurma() {
+  const turma = document.getElementById("turma").value;
+  const info = document.getElementById("infoTurma");
+
+  if (!turma) {
+    info.innerHTML = "";
+    return;
+  }
+
+  const professor = PROFESSORES[turma];
+
+  if (professor) {
+    info.innerHTML = `
+  <div style="font-size:14px;opacity:0.8;">Turma ${turma}</div>
+  <div style="font-size:16px;">👩‍🏫 ${professor}</div>
+`;
+  } else {
+    info.innerHTML = "👩‍🏫 Regente não cadastrado";
+  }
+}
   </script>
 </body>
 
 </html>
+
 
 
 
