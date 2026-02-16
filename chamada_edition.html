@@ -405,24 +405,49 @@ function atualizarInfoTurma() {
     info.innerHTML = "👩‍🏫 Regente não cadastrado";
   }
 }
-  function marcarTodosNaoLetivo() {
-  // Seleciona todos os botões que possuem a classe btnA (Botão A)
-  const botoesA = document.querySelectorAll('.btnA');
-  
-  if (botoesA.length === 0) {
-    alert("Carregue uma turma primeiro!");
+  //Funcão para marcar dia não letivo
+  async function marcarTodosNaoLetivo() {
+  const turma = document.getElementById("turma").value;
+  const dataVal = document.getElementById("data").value;
+  const alunosCards = document.querySelectorAll(".aluno:not(.transferido)");
+
+  if (!turma || !dataVal) {
+    alert("Selecione a turma e a data primeiro!");
     return;
   }
 
-  // Confirmação para evitar cliques acidentais
-  if (confirm("Deseja marcar TODOS os alunos como 'A' (Não Letivo)?")) {
-    botoesA.forEach(botao => {
-      // Só clica se o botão não estiver desativado (para respeitar transferidos)
-      if (!botao.disabled) {
-        botao.click();
+  if (alunosCards.length === 0) {
+    alert("Nenhum aluno carregado na lista.");
+    return;
+  }
+
+  if (confirm(`Deseja marcar TODOS os ${alunosCards.length} alunos como 'A' (Não Letivo) agora?`)) {
+    const st = document.getElementById("status");
+    st.innerText = "Processando todos...";
+    st.style.color = "blue";
+    
+    toggleMenu(); // Fecha o menu lateral
+
+    // Percorre cada card de aluno na tela
+    for (const card of alunosCards) {
+      // Pega o ID do aluno que está no ID da DIV (ex: aluno-15 -> 15)
+      const idAluno = card.id.replace('aluno-', '');
+      
+      // Mostra uma mensagem visual no card para o usuário ver o progresso
+      const confirmBox = document.getElementById(`confirm-${idAluno}`);
+      confirmBox.innerHTML = "<small style='color:blue'>Gravando 'A'...</small>";
+
+      try {
+        // Chama a função que já existe no seu código para salvar no banco
+        // 'A' é o valor para Não Letivo
+        await executarRetificacao(turma, idAluno, 'A');
+      } catch (e) {
+        confirmBox.innerHTML = "<small style='color:red'>Erro ao salvar este.</small>";
       }
-    });
-    toggleMenu(); // Fecha o menu lateral após a ação
+    }
+    
+    st.innerText = "Concluído! Todos marcados como A.";
+    st.style.color = "green";
   }
 }
 
@@ -433,6 +458,7 @@ document.getElementById("data").addEventListener("change", atualizarListaAlunos)
 
 </body>
 </html>
+
 
 
 
