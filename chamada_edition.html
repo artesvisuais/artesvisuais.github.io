@@ -191,6 +191,7 @@ select, input {
 <div id="side-menu" class="side-menu">
   <a href="#" class="btn-voltar-menu" onclick="toggleMenu()">➜</a> 
   <a href="https://artesvisuais.github.io/chamada_index.html">🏠 Voltar para Chamada</a>
+  <a href="#" onclick="marcarTodosNaoLetivo()">Marcar<br> (Não Letivo)🚫</a>
 </div>
 
 <h2>Retificar Registro</h2>
@@ -404,6 +405,26 @@ function atualizarInfoTurma() {
     info.innerHTML = "👩‍🏫 Regente não cadastrado";
   }
 }
+  function marcarTodosNaoLetivo() {
+  // Seleciona todos os botões que possuem a classe btnA (Botão A)
+  const botoesA = document.querySelectorAll('.btnA');
+  
+  if (botoesA.length === 0) {
+    alert("Carregue uma turma primeiro!");
+    return;
+  }
+
+  // Confirmação para evitar cliques acidentais
+  if (confirm("Deseja marcar TODOS os alunos como 'A' (Não Letivo)?")) {
+    botoesA.forEach(botao => {
+      // Só clica se o botão não estiver desativado (para respeitar transferidos)
+      if (!botao.disabled) {
+        botao.click();
+      }
+    });
+    toggleMenu(); // Fecha o menu lateral após a ação
+  }
+}
 
 document.getElementById("turma").addEventListener("change", atualizarListaAlunos);
 document.getElementById("data").addEventListener("change", atualizarListaAlunos);
@@ -412,6 +433,7 @@ document.getElementById("data").addEventListener("change", atualizarListaAlunos)
 
 </body>
 </html>
+
 
 
 
