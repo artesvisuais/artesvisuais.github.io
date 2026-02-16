@@ -229,7 +229,7 @@ select, input {
   </select>
 
   <input type="date" id="data">
-  <button id="btnRefresh" onclick="atualizarListaAlunos()" style="flex: 0; width: auto; padding: 0 15px;">🔄</button>
+  <button id="btnRefresh" onclick="atualizarInfoTurma(); atualizarListaAlunos();" style="flex: 0; width: auto; padding: 0 15px;">🔄</button>
 
 </div>
 <div id="infoTurma" class="info-turma"></div>
@@ -474,6 +474,7 @@ document.getElementById("data").addEventListener("change", atualizarListaAlunos)
 
 </body>
 </html>
+
 
 
 
