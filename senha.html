@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<body style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+
+  <button onclick="copiarEFechar()" style="padding: 20px; font-size: 20px;">
+    COPIAR SENHA E FECHAR
+  </button>
+
+  <script>
+    function copiarEFechar() {
+        const senha = "Aman@ri22";
+        
+        navigator.clipboard.writeText(senha).then(() => {
+            // Tenta fechar a aba automaticamente
+            window.close();
+            // Nota: Alguns navegadores mobile só fecham se a aba foi aberta via script
+            alert("Senha copiada! Pode fechar esta aba."); 
+        });
+    }
+  </script>
+</body>
+</html>
