@@ -119,6 +119,8 @@
   <a href="https://artesvisuais.github.io/chamada2.html" target="_blank">Chamada</a>
   <a href="https://artesvisuais.github.io/1_2_Planejamento_Bim.html" target="_blank">Planejamentos</a>
   <a href="https://jacarei.i-diario.com/" target="_blank">I-diario</a>
+  <!-- O link chama a função e passa o texto e o destino -->
+  <a href="https://site-de-destino.com" onclick="copiarERedirecionar(event, 'Prof_Dom')">I-diario ⛏️</a>
     <a href="https://artesvisuais.github.io/chamada_edition.html" target="_blank">Retificar chamada</a>
   <a href="https://artesvisuais.github.io/Atalho.html" target="_blank">Configurações</a>
   <a href="https://artesvisuais.github.io/cursos/lista1.html" target="_blank">Materiais Referências 📒</a>
@@ -169,10 +171,24 @@
     const menu = document.getElementById("side-menu");
     menu.style.width = (menu.style.width === "250px") ? "0" : "250px";
   }
+  function copiarERedirecionar(event, textoParaCopiar) {
+    event.preventDefault(); // Impede o redirecionamento imediato
+    const urlDestino = event.currentTarget.href;
+
+    // Copia para a área de transferência
+    navigator.clipboard.writeText(textoParaCopiar).then(() => {
+        // Redireciona após a cópia ser bem-sucedida
+        window.location.href = urlDestino;
+    }).catch(err => {
+        console.error('Erro ao copiar: ', err);
+        window.location.href = urlDestino; // Redireciona mesmo se falhar
+    });
+}
 </script>
 
 </body>
 </html>
+
 
 
 
