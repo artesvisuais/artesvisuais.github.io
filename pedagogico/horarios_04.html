@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Horários WebApp</title>
+    <style>
+        :root {
+            --bg-body: #f8f9fa;
+            --azul-app: #007bff;
+            --azul-escuro: #003366;
+            --cinza-borda: #ececec;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background: var(--bg-body); 
+            margin: 0; 
+            padding: 15px; 
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Estilo de Abas de App */
+        .nav-dias { 
+            display: flex; 
+            gap: 10px; 
+            overflow-x: auto; 
+            padding: 5px 2px 20px 2px; 
+            scrollbar-width: none; 
+            sticky; top: 0; background: var(--bg-body); z-index: 10;
+        }
+        .nav-dias::-webkit-scrollbar { display: none; }
+
+        button { 
+            background: #fff; border: none; padding: 10px 22px; 
+            border-radius: 12px; white-space: nowrap; font-weight: 600; color: #777;
+            cursor: pointer; transition: 0.3s; font-size: 14px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        button.active { 
+            background: var(--azul-app); color: white; 
+            box-shadow: 0 4px 12px rgba(0,123,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Container estilo Card de App */
+        .container { 
+            background: white; 
+            border-radius: 20px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06); 
+            overflow: hidden; 
+            border: 1px solid var(--cinza-borda);
+        }
+        
+        .linha { 
+            padding: 18px 20px; 
+            border-bottom: 1px solid #f1f1f1; 
+            font-size: 15px; 
+            color: #2d3436; 
+            line-height: 1.2; 
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        .linha:last-child { border-bottom: none; }
+
+        /* REGRAS DE CORES */
+        .cor-eja1 { background-color: #ffeb3b !important; color: #000 !important; }
+        .cor-eja2 { background-color: #2ecc71 !important; color: #fff !important; }
+        .cor-5dd { background-color: #DB7093 !important; color: #fff !important; }
+        .cor-percurso { background-color: #95a5a6 !important; color: #fff !important; }
+        .cor-padrao-azul { background-color: #3498db !important; color: #fff !important; }
+        
+        /* NOVA REGRA: HA - */
+        .cor-ha { background-color: var(--azul-escuro) !important; color: #ffffff !important; }
+        
+        .vazio { color: #b2bec3; font-style: italic; font-size: 13px; font-weight: 400; background: #fafafa; }
+        
+        .loading { 
+            text-align: center; margin-top: 50%; font-size: 18px; color: #636e72; 
+            font-weight: 500; animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+
+        /* DESIGN MOBILE (App Style) */
+        @media (max-width: 480px) {
+            body { padding: 12px; }
+            .nav-dias { gap: 8px; }
+            button { padding: 8px 18px; font-size: 13px; border-radius: 10px; }
+            .linha { padding: 15px; font-size: 14px; min-height: 50px; }
+            .container { border-radius: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loading" class="loading">Sincronizando...</div>
+    <div id="app" style="display:none">
+        <div class="nav-dias" id="abas"></div>
+        <div class="container" id="lista"></div>
+    </div>
+
+    <script>
+const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzOulxAyCNEiaDIG7jQT5a-CdHvOXcSP7AcK1o1de8ilFs0vlAFrAa3ijqcYDB0MvYr/exec";
+
+function handleResponse(data) {
+    window.planilhaData = data;
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    montarAbas();
+    mostrarDia(0);
+}
+
+function montarAbas() {
+    const dias = window.planilhaData[0]; // Pega a primeira linha da planilha como cabeçalho
+    const abas = document.getElementById('abas');
+    abas.innerHTML = dias.map((dia, i) =>
+        `<button onclick="mostrarDia(${i}, this)">${dia}</button>`
+    ).join('');
+    abas.querySelector('button').classList.add('active');
+}
+
+function definirClasseCSS(texto) {
+    if (!texto || texto === "*" || texto === "Sem Aula" || texto === "Almoço") return "";
+    
+    const t = texto.toUpperCase();
+
+    // Prioridade para "HA -"
+    if (t.startsWith("HA -")) return "cor-ha";
+    
+    if (t.includes("EJA1")) return "cor-eja1";
+    if (t.includes("EJA2")) return "cor-eja2";
+    if (t.includes("5DD_")) return "cor-5dd";
+    if (t.includes("PERCURSO")) return "cor-percurso";
+    
+    const regexPadrao = /[A-Z]\d_|\d[A-Z]_/; 
+    if (regexPadrao.test(t)) return "cor-padrao-azul";
+    
+    return "";
+}
+
+function mostrarDia(colIdx, btn) {
+    if (btn) {
+        document.querySelectorAll('#abas button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    const lista = document.getElementById('lista');
+    let html = "";
+    const dados = window.planilhaData;
+
+    for (let r = 1; r < dados.length; r++) {
+        const textoOriginal = (dados[r][colIdx] || "").trim();
+        const isVazio = textoOriginal === "*" || textoOriginal === "" || textoOriginal === "Sem Aula" || textoOriginal === "Almoço";
+        
+        const classeCor = definirClasseCSS(textoOriginal);
+        const classeFinal = isVazio ? 'vazio' : classeCor;
+
+        html += `<div class="linha ${classeFinal}">
+                    ${isVazio && textoOriginal !== "Almoço" ? 'Sem aula' : textoOriginal}
+                 </div>`;
+    }
+    lista.innerHTML = html;
+}
+
+function carregarDados() {
+    const script = document.createElement('script');
+    script.src = `${URL_SCRIPT}?callback=handleResponse&v=` + Date.now();
+    script.onerror = () => {
+        document.getElementById('loading').innerHTML = "Falha na conexão.";
+    };
+    document.body.appendChild(script);
+}
+
+carregarDados();
+</script>
+</body>
+</html>
