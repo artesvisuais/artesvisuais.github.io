@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sala de Arte</title>
+  <style>
+    /* Reset e Estilo Base para Celular */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; color: #333; padding: 15px; line-height: 1.5; }
+    
+    .container { max-width: 500px; margin: 0 auto; }
+    h2, h3 { color: #1a73e8; margin-bottom: 15px; text-align: center; }
+
+    /* Estilo do Formulário */
+    form { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 25px; }
+    label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9em; color: #555; }
+    input, select, button { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; /* Evita zoom automático no iPhone */ }
+    
+    /* Botões */
+    button { cursor: pointer; border: none; font-weight: bold; transition: opacity 0.2s; }
+    #btnSalvar { background-color: #1a73e8; color: white; }
+    #btnCancelar { background-color: #6c757d; color: white; display: none; }
+    button:active { opacity: 0.8; transform: scale(0.98); }
+
+    /* Lista de Reservas (Cards para Mobile) */
+    .reserva-card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 12px; border-left: 5px solid #1a73e8; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .reserva-header { display: flex; justify-content: space-between; align-items: flex-start; }
+    .reserva-nome { font-weight: bold; font-size: 1.1em; color: #202124; }
+    .reserva-info { font-size: 0.9em; color: #5f6368; margin-top: 5px; }
+    .reserva-acoes { margin-top: 10px; display: flex; gap: 10px; }
+    
+    .btn-small { padding: 8px 12px; font-size: 0.85em; border-radius: 6px; flex: 1; }
+    .btn-edit { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+    .btn-del { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+    /* Loading Overlay */
+    #loading { display: none; text-align: center; padding: 10px; color: #1a73e8; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>📅Sala de Arte Décio 🚀</h2>
+
+  <form id="reservaForm">
+    <input type="hidden" id="reservaId">
+    
+    <label for="professor">Selecione seu Nome:</label>
+    <select id="professor" required>
+      <option value="" disabled selected>Escolha o professor...</option>
+      <option value="Professor Cesar">Professor Cesar</option>
+      <option value="Professora Maria Luiza">Professora Maria Luiza</option>
+      <option value="Professora Raiane">Professora Raiane</option>
+      <option value="Professor Romulo">Professor Romulo</option>
+    </select>
+
+    <label for="data">Data da Reserva:</label>
+    <input type="date" id="data" required>
+
+    <div style="display: flex; gap: 10px;">
+      <div style="flex: 1;">
+        <label for="horaInicio">Hora/Início:</label>
+        <input type="time" id="horaInicio" required>
+      </div>
+      <div style="flex: 1;">
+        <label for="horaFim">Hora/Encerramento</label>
+        <input type="time" id="horaFim" required>
+      </div>
+    </div>
+
+    <button type="submit" id="btnSalvar">Confirmar Reserva</button>
+    <button type="button" id="btnCancelar" onclick="limparFormulario()">Cancelar Edição</button>
+  </form>
+
+  <div id="loading">Processando...</div>
+
+  <h3>Próximas Reservas</h3>
+  <div id="listaReservas">
+    <!-- Cards de reserva entrarão aqui -->
+  </div>
+</div>
+
+<script>
+  const URL_WEB_APP = "https://script.google.com/macros/s/AKfycbwujFQuYfhCC35Z3ZkfDY2Yz4cmsquFHiTysmM_4t0Tom7hnw1rZyQ6wphgJCKddgs/exec"; // COLE SUA URL AQUI
+
+  window.onload = carregarReservas;
+
+  async function carregarReservas() {
+    const lista = document.getElementById("listaReservas");
+    lista.innerHTML = "<p style='text-align:center;'>Carregando...</p>";
+    
+    try {
+      const resp = await fetch(URL_WEB_APP, { method: 'POST', body: JSON.stringify({ acao: "consultar" }) });
+      const dados = await resp.json();
+      
+      lista.innerHTML = "";
+      if (dados.length === 0) lista.innerHTML = "<p style='text-align:center; color:#888;'>Nenhuma reserva para hoje.</p>";
+
+      dados.forEach(res => {
+        const card = document.createElement("div");
+        card.className = "reserva-card";
+        card.innerHTML = `
+          <div class="reserva-header">
+            <div class="reserva-nome">${res.prof}</div>
+          </div>
+          <div class="reserva-info">
+            📅 ${res.data} | ⏰ ${res.inicio} às ${res.fim}
+          </div>
+          <div class="reserva-acoes">
+            <button class="btn-small btn-edit" onclick="prepararEdicao('${res.id}', '${res.prof}', '${res.data}', '${res.inicio}', '${res.fim}')">Editar</button>
+            <button class="btn-small btn-del" onclick="excluirReserva('${res.id}')">Excluir</button>
+          </div>
+        `;
+        lista.appendChild(card);
+      });
+    } catch (e) {
+      lista.innerHTML = "Erro ao carregar dados.";
+    }
+  }
+
+  document.getElementById("reservaForm").onsubmit = async (e) => {
+    e.preventDefault();
+    document.getElementById("loading").style.display = "block";
+    
+    const id = document.getElementById("reservaId").value;
+    const payload = {
+      acao: id ? "editar" : "gravar",
+      id: id,
+      professor: document.getElementById("professor").value,
+      data: document.getElementById("data").value,
+      horaInicio: document.getElementById("horaInicio").value,
+      horaFim: document.getElementById("horaFim").value
+    };
+
+    try {
+      const resp = await fetch(URL_WEB_APP, { method: 'POST', body: JSON.stringify(payload) });
+      const resultado = await resp.json();
+      alert(resultado.msg);
+      if (resultado.status === "sucesso") {
+        limparFormulario();
+        carregarReservas();
+      }
+    } catch (err) {
+      alert("Erro na conexão.");
+    } finally {
+      document.getElementById("loading").style.display = "none";
+    }
+  };
+
+  async function excluirReserva(id) {
+    if (!confirm("Excluir esta reserva?")) return;
+    const resp = await fetch(URL_WEB_APP, { method: 'POST', body: JSON.stringify({ acao: "excluir", id: id }) });
+    const res = await resp.json();
+    alert(res.msg);
+    carregarReservas();
+  }
+
+  function prepararEdicao(id, prof, data, inicio, fim) {
+    document.getElementById("reservaId").value = id;
+    document.getElementById("professor").value = prof;
+    const dataFormatada = data.split('/').reverse().join('-');
+    document.getElementById("data").value = dataFormatada;
+    document.getElementById("horaInicio").value = inicio;
+    document.getElementById("horaFim").value = fim;
+    
+    document.getElementById("btnSalvar").innerText = "Salvar Alterações";
+    document.getElementById("btnCancelar").style.display = "block";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function limparFormulario() {
+    document.getElementById("reservaForm").reset();
+    document.getElementById("reservaId").value = "";
+    document.getElementById("btnSalvar").innerText = "Confirmar Reserva";
+    document.getElementById("btnCancelar").style.display = "none";
+  }
+</script>
+
+</body>
+</html>
