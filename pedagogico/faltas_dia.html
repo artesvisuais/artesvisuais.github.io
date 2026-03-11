@@ -2,6 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Relatório de Faltas - Dias</title>
    <style>
     /* Configurações Gerais do Corpo da Página */
@@ -144,15 +145,39 @@
     }
 
     /* AJUSTE PARA CELULARES MUITO PEQUENOS */
-    @media (max-width: 480px) {
-        .no-print {
-            padding: 15px;
-            justify-content: center; /* Centraliza os itens no celular */
+       /* AJUSTES PARA DISPOSITIVOS MÓVEIS (Celulares e Tablets) */
+    @media (max-width: 768px) {
+        body { 
+            margin: 10px; /* Reduz margem lateral para ganhar espaço */
+            font-size: 16px; /* Aumenta base do texto para leitura */
         }
-        .btn, input, select {
-            flex-grow: 1; /* Faz os itens ocuparem o espaço disponível igualmente */
+
+        .no-print {
+            flex-direction: column; /* Empilha filtros e botões verticalmente */
+            align-items: stretch;   /* Faz ocupar a largura total */
+            padding: 15px;
+            gap: 10px;
+        }
+
+        .btn, .btn2, input, select {
+            width: 100%;       /* Botões e inputs ocupam a largura toda */
+            height: 48px;      /* Altura maior para facilitar o toque (dedo) */
+            font-size: 16px;   /* Evita o zoom automático do iOS ao focar no input */
+        }
+
+        /* TABELA RESPONSIVA: Cria rolagem lateral para não esmagar os dados */
+        table {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        
+        th, td {
+            padding: 10px 8px;
+            font-size: 14px;
         }
     }
+
 </style>
 </head>
 <body>
@@ -283,4 +308,5 @@
     
 </body>
 </html>
+
 
