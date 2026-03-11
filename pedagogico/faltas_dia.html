@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório de Faltas - Dias</title>
+   <style>
+    /* Configurações Gerais do Corpo da Página */
+    body { 
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        margin: 30px; 
+        color: #2c3e50; 
+        background-color: #f4f7f6; /* Cor de fundo leve para contraste */
+    }
+
+    /* CONTAINER PRINCIPAL (Filtros e Botões) */
+    .no-print { 
+        background: #ecf0f1; 
+        padding: 20px; 
+        border-radius: 10px; 
+        margin-bottom: 30px; 
+        border: 1px solid #bdc3c7; 
+        
+        /* FLEXBOX: Resolve o empilhamento no celular */
+        display: flex;          /* Coloca os itens lado a lado */
+        flex-wrap: wrap;       /* Se não couber na tela, pula para a linha de baixo */
+        gap: 12px;             /* Cria espaçamento uniforme entre os elementos */
+        align-items: center;    /* Alinha todos verticalmente ao centro */
+        justify-content: flex-start; /* Alinha o conteúdo à esquerda */
+    }
+
+    /* TABELAS */
+    table { 
+        width: 100%; 
+        border-collapse: collapse; 
+        margin-top: 20px; 
+        background: white; 
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Sombra leve na tabela */
+    }
+    th, td { 
+        border: 1px solid #dee2e6; 
+        padding: 12px; 
+        text-align: left; 
+    }
+    th { 
+        background: #34495e; 
+        color: white; 
+    }
+    tr:nth-child(even) { 
+        background-color: #f8f9fa; 
+    }
+
+    /* CABEÇALHO DO RELATÓRIO (Invisível na tela, visível na impressão) */
+    .header-relatorio { 
+        text-align: center; 
+        margin-bottom: 30px; 
+        display: none; 
+        border-bottom: 2px solid #333; 
+        padding-bottom: 10px; 
+    }
+
+    /* BOTÕES GERAIS */
+    .btn { 
+        padding: 0 20px; 
+        cursor: pointer; 
+        background: #2980b9; 
+        color: white; 
+        border: none; 
+        border-radius: 5px; 
+        font-weight: bold; 
+        height: 42px; 
+        vertical-align: middle; 
+        display: inline-flex;   /* Melhora o alinhamento do texto interno */
+        align-items: center;
+        text-decoration: none;  /* Caso você use a tag <a> como botão */
+        transition: background 0.3s; /* Efeito suave ao passar o mouse */
+    }
+    .btn:hover {
+        background: #1f6391;    /* Cor levemente mais escura no hover */
+    }
+.btn2 { 
+        padding: 0 20px; 
+        cursor: pointer; 
+        background: #DAA520; 
+        color: white; 
+        border: none; 
+        border-radius: 5px; 
+        font-weight: bold; 
+        height: 42px; 
+        vertical-align: middle; 
+        display: inline-flex;   /* Melhora o alinhamento do texto interno */
+        align-items: center;
+        text-decoration: none;  /* Caso você use a tag <a> como botão */
+        transition: background 0.3s; /* Efeito suave ao passar o mouse */
+    }
+    .btn2:hover {
+        background: #B8860B;    /* Cor levemente mais escura no hover */
+    }
+
+    /* BOTÃO DE IMPRIMIR (Cor Diferenciada) */
+    .btn-print { 
+        background: #27ae60; 
+    }
+    .btn-print:hover {
+        background: #219150;
+    }
+
+    /* INPUTS E SELECTS */
+    input, select { 
+        padding: 0 10px; 
+        border: 1px solid #ccc; 
+        border-radius: 4px; 
+        outline: none; 
+        height: 42px; 
+        font-size: 14px; 
+        box-sizing: border-box; /* Garante que o padding não aumente o tamanho final */
+        min-width: 150px;       /* Evita que fiquem muito pequenos no celular */
+    }
+
+    /* ESTILO ESPECÍFICO PARA INPUT DATE */
+    input[type="date"] {
+        min-width: 180px; /* Um pouco mais largo para o calendário */
+        padding: 8px 10px; /* Ajuste de padding para melhor aparência */
+    }
+
+    /* ESTILO ESPECÍFICO DO SELECT TURMA */
+    #turma { 
+        font-weight: bold; 
+        color: white; 
+        background-color: #7f8c8d; 
+        cursor: pointer; 
+    }
+    option { 
+        color: #333; /* Texto das opções escuro para leitura */
+        font-weight: normal; 
+    }
+
+    /* CONFIGURAÇÕES DE IMPRESSÃO */
+    @media print {
+        .no-print { display: none !important; } /* Esconde filtros e botões */
+        .header-relatorio { display: block; }  /* Mostra título do relatório */
+        body { margin: 0; padding: 0; background: white; }
+        table { border: 1px solid #000; width: 100%; }
+        th { background: #eee !important; color: black !important; }
+    }
+
+    /* AJUSTE PARA CELULARES MUITO PEQUENOS */
+    @media (max-width: 480px) {
+        .no-print {
+            padding: 15px;
+            justify-content: center; /* Centraliza os itens no celular */
+        }
+        .btn, input, select {
+            flex-grow: 1; /* Faz os itens ocuparem o espaço disponível igualmente */
+        }
+    }
+</style>
+</head>
+<body>
+
+<h3 style="margin-top:0">Gerador de Relatório de Faltas por Dia</h3>
+    <div class="no-print">
+           <select id="turma" onchange="atualizarInfoTurma(); atualizarListaAlunos();">
+            <option value="" style="background-color: #7f8c8d;">-- Escolha a turma --</option>
+            <option style="background-color: blue ;" value="1E">1E</option>
+            <option style="background-color: blue ;" value="2G">2G</option>
+            <option style="background-color: blue ;" value="3E">3E</option>
+            <option style="background-color: blue ;" value="5E">5E</option>
+            <option style="background-color: blue ;" value="5F">5F</option>
+            <option style="background-color: blue ;" value="4A">4A</option>
+            <option style="background-color: blue ;" value="4B">4B</option>
+            <option style="background-color: blue ;" value="5A">5A</option>
+            <option style="background-color: blue ;" value="5B">5B</option>
+            <option style="background-color: blue ;" value="5C">5C</option>
+            <option style="background-color: #FF00FF ;" value="5DD">5DD</option>
+            <option style="background-color: #FFFF00 ; color: black;" value="EJA1">EJA1</option>
+            <option style="background-color: #00FF00 ; color: black;" value="EJA2">EJA2</option>
+        </select>
+
+        <!-- NOVO INPUT CALENDÁRIO NATIVO -->
+        <input type="date" id="data" style="min-width: 180px;">
+        </div> <div class="no-print">
+        <button class="btn" onclick="buscarDados()">Gerar Relatório</button>
+        <button class="btn btn-print" onclick="window.print()">Imprimir PDF</button>
+        <button class="btn2" onclick="window.open('faltas_periodo2.html', '_blank')">Falta por periodo</button>
+    </div>
+
+    <div id="conteudoRelatorio">
+        <div class="header-relatorio">
+            <h1>RELATÓRIO DE AUSÊNCIAS (F)</h1>
+            <p><strong>TURMA:</strong> <span id="resTurma">-</span> | <strong>DATA:</strong> <span id="resData">-</span></p>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 80px;">ID</th>
+                    <th>NOME COMPLETO DO ESTUDANTE</th>
+                    <th style="width: 120px; text-align: center;">REGISTRO</th>
+                </tr>
+            </thead>
+            <tbody id="tabelaCorpo">
+                <tr><td colspan="3" style="text-align:center">Selecione os filtros acima e clique em "Gerar Relatório".</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+<script>
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbyZTRtxAcPdj-qx0IC9bJ_yWELubfsPJEpUPFrqL5tYe2YPzZ3k98ReEB4kIe--ZA/exec";
+
+    function atualizarInfoTurma() {
+        const select = document.getElementById('turma');
+        const opSelecionada = select.options[select.selectedIndex];
+        const corFundo = opSelecionada.style.backgroundColor;
+        const corTexto = opSelecionada.style.color;
+
+        // Aplica a cor do option no select principal
+        select.style.backgroundColor = corFundo || "#7f8c8d";
+        select.style.color = corTexto || "white";
+    }
+
+    function atualizarListaAlunos() { 
+        // Reservado para lógica de limpeza ou pré-carregamento se necessário
+    }
+
+    async function buscarDados() {
+        const turma = document.getElementById('turma').value;
+        const dataInput = document.getElementById('data').value;
+
+        if (!turma || !dataInput) {
+            alert("Por favor, preencha a Turma e selecione uma Data.");
+            return;
+        }
+
+        // ✅ CORRIGIDO: Extrai dia e mês DIRETAMENTE da string YYYY-MM-DD
+        const [ano, mes, dia] = dataInput.split('-');
+        
+        const corpo = document.getElementById('tabelaCorpo');
+        corpo.innerHTML = "<tr><td colspan='3' style='text-align:center'>Consultando diário eletrônico...</td></tr>";
+
+        try {
+            const endpoint = `${URL_SCRIPT}?turma=${encodeURIComponent(turma)}&dia=${dia}&mes=${mes}`;
+            const response = await fetch(endpoint);
+            const result = await response.json();
+
+            if (result.erro) {
+                corpo.innerHTML = `<tr><td colspan='3' style='text-align:center; color:red;'><b>Erro:</b> ${result.erro}</td></tr>`;
+                return;
+            }
+
+            document.getElementById('resTurma').innerText = turma.toUpperCase();
+            document.getElementById('resData').innerText = result.data;
+            
+            // Filtra apenas registros com a letra "F" (independente de maiúscula/minúscula)
+            const faltantes = result.registros.filter(r => r.valor && r.valor.trim().toUpperCase() === "F");
+
+            corpo.innerHTML = "";
+            if (faltantes.length === 0) {
+                corpo.innerHTML = "<tr><td colspan='3' style='text-align:center'>✅ <b>100% de Presença!</b> Nenhuma falta registrada para esta data.</td></tr>";
+            } else {
+                faltantes.forEach(aluno => {
+                    corpo.innerHTML += `
+                        <tr>
+                            <td>${aluno.id}</td>
+                            <td>${aluno.nome}</td>
+                            <td style="text-align:center; font-weight:bold; color:#e74c3c;">FALTA (F)</td>
+                        </tr>
+                    `;
+                });
+            }
+        } catch (e) {
+            alert("Erro ao conectar com o Google Sheets. Verifique sua internet ou a implantação do Script.");
+            console.error(e);
+        }
+    }
+
+    // Define a data atual como padrão ao carregar a página
+    window.onload = function() {
+        const hoje = new Date().toISOString().split('T')[0];
+        document.getElementById('data').value = hoje;
+    };
+</script>
+
+    
+</body>
+</html>

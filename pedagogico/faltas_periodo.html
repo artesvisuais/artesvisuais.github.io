@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório de Faltas por Período</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 30px; color: #2c3e50; }
+        .no-print { background: #ecf0f1; padding: 20px; border-radius: 10px; margin-bottom: 30px; border: 1px solid #bdc3c7; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #dee2e6; padding: 10px; text-align: left; }
+        th { background: #34495e; color: white; }
+        .header-relatorio { text-align: center; margin-bottom: 30px; display: none; border-bottom: 2px solid #333; }
+        .btn { padding: 10px 20px; cursor: pointer; background: #2980b9; color: white; border: none; border-radius: 5px; font-weight: bold; height: 40px; }
+        input, select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-right: 5px; height: 40px; box-sizing: border-box; }
+        .assinatura { margin-top: 50px; display: none; text-align: center; }
+        .linha-assinatura { border-top: 1px solid #000; width: 300px; margin: 50px auto 10px; }
+        #status { font-weight: bold; color: #e67e22; margin-top: 10px; display: block; }
+        
+        @media print {
+            .no-print { display: none; }
+            .header-relatorio, .assinatura { display: block; }
+            body { margin: 0; }
+            table { font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="no-print">
+        <h3>Relatório de Faltas Acumuladas em Arte (F)</h3>
+        <select id="turma" onchange="atualizarInfoTurma()">
+            <option value="">-- Turma --</option>
+            <option style="background-color: blue; color:white;" value="1E">1E</option>
+            <option style="background-color: blue; color:white;" value="2G">2G</option>
+            <option style="background-color: blue; color:white;" value="3E">3E</option>
+            <option style="background-color: blue; color:white;" value="5E">5E</option>
+            <option style="background-color: blue; color:white;" value="5F">5F</option>
+            <option style="background-color: blue; color:white;" value="4A">4A</option>
+            <option style="background-color: blue; color:white;" value="4B">4B</option>
+            <option style="background-color: blue; color:white;" value="5A">5A</option>
+            <option style="background-color: blue; color:white;" value="5B">5B</option>
+            <option style="background-color: blue; color:white;" value="5C">5C</option>
+            <option style="background-color: #FF00FF; color:white;" value="5DD">5DD</option>
+            <option style="background-color: #FFFF00; color:black;" value="EJA1">EJA1</option>
+            <option style="background-color: #00FF00; color:black;" value="EJA2">EJA2</option>
+        </select>
+
+        <span>De:</span> <input type="date" id="dataInicio">
+        <span>Até:</span> <input type="date" id="dataFim">
+        
+        <button class="btn" onclick="gerarRelatorioPeriodo()">Gerar Relatório</button>
+        <button class="btn" style="background:#27ae60" onclick="window.print()">Imprimir/PDF</button> 
+        <button class="btn" onclick="window.open('faltas3.html', '_blank')">Falta por dia</button>
+        <div id="status"></div>
+    </div>
+
+    <div id="conteudoRelatorio">
+        <div class="header-relatorio">
+            <h2>RELATÓRIO DE AUSÊNCIAS ACUMULADAS EM ARTE</h2>
+            <p>Turma: <span id="resTurma">-</span> | Período: <span id="resPeriodo">-</span></p>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 60px;">ID</th>
+                    <th>Nome do Aluno</th>
+                    <th>Datas das Faltas</th>
+                    <th style="width: 60px; text-align:center">Total</th>
+                </tr>
+            </thead>
+            <tbody id="tabelaCorpo">
+                <tr><td colspan="4" style="text-align:center">Configure o período e a turma.</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="assinatura">
+        <div class="linha-assinatura"></div>
+        <p>Assinatura do Responsável</p>
+    </div>
+
+    <script>
+        const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbyZTRtxAcPdj-qx0IC9bJ_yWELubfsPJEpUPFrqL5tYe2YPzZ3k98ReEB4kIe--ZA/exec";
+
+        function atualizarInfoTurma() {
+            const s = document.getElementById('turma');
+            const opt = s.options[s.selectedIndex];
+            if(opt.value !== "") {
+                s.style.backgroundColor = opt.style.backgroundColor;
+                s.style.color = opt.style.color;
+            }
+        }
+
+        async function gerarRelatorioPeriodo() {
+            const turma = document.getElementById('turma').value;
+            const dataInicioStr = document.getElementById('dataInicio').value;
+            const dataFimStr = document.getElementById('dataFim').value;
+            const status = document.getElementById('status');
+
+            if (!turma || !dataInicioStr || !dataFimStr) {
+                alert("Preencha Turma e Datas!");
+                return;
+            }
+
+            status.innerText = "🔍 Coletando dados do Google Sheets...";
+            const corpo = document.getElementById('tabelaCorpo');
+            corpo.innerHTML = "<tr><td colspan='4' style='text-align:center'>Processando...</td></tr>";
+
+            const d1 = new Date(dataInicioStr + "T12:00:00");
+            const d2 = new Date(dataFimStr + "T12:00:00");
+            
+            const promises = [];
+            for (let d = new Date(d1); d <= d2; d.setDate(d.getDate() + 1)) {
+                const dia = d.getDate();
+                const mes = d.getMonth() + 1;
+                const dataFormat = `${dia < 10 ? '0'+dia : dia}/${mes < 10 ? '0'+mes : mes}`;
+                
+                // Cria uma lista de tarefas (promises)
+                promises.push(
+                    fetch(`${URL_SCRIPT}?turma=${encodeURIComponent(turma)}&dia=${dia}&mes=${mes}`)
+                    .then(r => r.json())
+                    .catch(e => ({ erro: true, data: dataFormat }))
+                );
+            }
+
+            try {
+                // Executa todas as consultas ao mesmo tempo (Paralelo)
+                const resultados = await Promise.all(promises);
+                let mapaFaltas = {};
+
+                resultados.forEach(res => {
+                    if (res && res.registros) {
+                        const dataDaFalta = res.data.split('/')[0] + '/' + res.data.split('/')[1];
+                        res.registros.forEach(r => {
+                            if (r.valor && r.valor.toString().toUpperCase() === "F") {
+                                if (!mapaFaltas[r.id]) {
+                                    mapaFaltas[r.id] = { nome: r.nome, datas: [] };
+                                }
+                                mapaFaltas[r.id].datas.push(dataDaFalta);
+                            }
+                        });
+                    }
+                });
+
+                status.innerText = "✅ Concluído!";
+                exibirResultados(mapaFaltas, turma, dataInicioStr, dataFimStr);
+            } catch (err) {
+                status.innerText = "❌ Erro ao buscar dados.";
+                console.error(err);
+            }
+        }
+
+        function exibirResultados(mapa, turma, inicio, fim) {
+            const corpo = document.getElementById('tabelaCorpo');
+            document.getElementById('resTurma').innerText = turma;
+            document.getElementById('resPeriodo').innerText = `${inicio.split('-').reverse().join('/')} até ${fim.split('-').reverse().join('/')}`;
+            
+            corpo.innerHTML = "";
+            const ids = Object.keys(mapa).sort((a, b) => mapa[a].nome.localeCompare(mapa[b].nome));
+
+            if (ids.length === 0) {
+                corpo.innerHTML = "<tr><td colspan='4' style='text-align:center'>Nenhum registro de falta 'F' encontrado neste período.</td></tr>";
+                return;
+            }
+
+            ids.forEach(id => {
+                const aluno = mapa[id];
+                corpo.innerHTML += `
+                    <tr>
+                        <td>${id}</td>
+                        <td>${aluno.nome}</td>
+                        <td style="font-size: 0.85em; color: #444;">${aluno.datas.join(', ')}</td>
+                        <td style="text-align:center; font-weight:bold; background: #fdf2f2;">${aluno.datas.length}</td>
+                    </tr>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
