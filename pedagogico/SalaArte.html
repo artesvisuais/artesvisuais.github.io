@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sala de Arte</title>
+  <title>Sala de Arte_v3</title>
   <style>
     /* Reset e Estilo Base para Celular */
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -15,7 +15,7 @@
     /* Estilo do Formulário */
     form { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 25px; }
     label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9em; color: #555; }
-    input, select, button { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; /* Evita zoom automático no iPhone */ }
+    input, select, button { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
     
     /* Botões */
     button { cursor: pointer; border: none; font-weight: bold; transition: opacity 0.2s; }
@@ -36,6 +36,28 @@
 
     /* Loading Overlay */
     #loading { display: none; text-align: center; padding: 10px; color: #1a73e8; font-weight: bold; }
+.dia-negrito {
+  font-weight: bold;
+  color: #1a73e8; /* Opcional: deixa na cor azul do seu tema */
+  margin-right: 4px;
+}
+.data-negrito {
+  font-weight: bold;
+  color: #080500; /* Cor da data */
+  margin-right: 4px;
+}
+
+.periodo-badge {
+  background-color: #e8f0fe; /* Azul bem clarinho */
+  color: #1a73e8;            /* Azul do seu tema */
+  padding: 2px 8px;          /* Espaçamento interno */
+  border-radius: 12px;       /* Bordas arredondadas */
+  font-size: 0.85em;         /* Um pouco menor para não brigar com a hora */
+  text-transform: uppercase; /* Deixa em MAIÚSCULO */
+  letter-spacing: 0.5px;     /* Espaçamento entre letras */
+  display: inline-block;     /* Garante que o fundo apareça corretamente */
+}
+
   </style>
 </head>
 <body>
@@ -82,9 +104,30 @@
 </div>
 
 <script>
-  const URL_WEB_APP = "https://script.google.com/macros/s/AKfycbwujFQuYfhCC35Z3ZkfDY2Yz4cmsquFHiTysmM_4t0Tom7hnw1rZyQ6wphgJCKddgs/exec"; // COLE SUA URL AQUI
+  const URL_WEB_APP = "https://script.google.com/macros/s/AKfycbwujFQuYfhCC35Z3ZkfDY2Yz4cmsquFHiTysmM_4t0Tom7hnw1rZyQ6wphgJCKddgs/exec"; 
 
   window.onload = carregarReservas;
+
+  // Função para descobrir o dia da semana a partir de "DD/MM/AAAA"
+  function obterDiaSemana(dataStr) {
+    const partes = dataStr.split('/');
+    // Cria data (mês no JS começa em 0)
+    const dataObj = new Date(partes[2], partes[1] - 1, partes[0]);
+    const dias = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+    return dias[dataObj.getDay()];
+  }
+
+function identificarPeriodo(inicio, fim) {
+  const horaInicio = parseInt(inicio.split(':')[0]);
+  const horaFim = parseInt(fim.split(':')[0]);
+
+  const startsMorning = horaInicio < 12;
+  const endsAfternoon = horaFim >= 12;
+
+  if (startsMorning && endsAfternoon) return "Manhã/Tarde";
+  if (startsMorning) return "Manhã";
+  return "Tarde";
+}
 
   async function carregarReservas() {
     const lista = document.getElementById("listaReservas");
@@ -98,6 +141,9 @@
       if (dados.length === 0) lista.innerHTML = "<p style='text-align:center; color:#888;'>Nenhuma reserva para hoje.</p>";
 
       dados.forEach(res => {
+        const diaSemana = obterDiaSemana(res.data); // Pega a abreviação
+         const periodo = identificarPeriodo(res.inicio, res.fim); // Pega o período
+
         const card = document.createElement("div");
         card.className = "reserva-card";
         card.innerHTML = `
@@ -105,7 +151,7 @@
             <div class="reserva-nome">${res.prof}</div>
           </div>
           <div class="reserva-info">
-            📅 ${res.data} | ⏰ ${res.inicio} às ${res.fim}
+ <span class="dia-negrito">    📅 ${diaSemana} </span><span class="data-negrito"> ${res.data} </span>| <br>⏰ ${res.inicio} às ${res.fim}  <strong class="periodo-badge">(${periodo})</strong>
           </div>
           <div class="reserva-acoes">
             <button class="btn-small btn-edit" onclick="prepararEdicao('${res.id}', '${res.prof}', '${res.data}', '${res.inicio}', '${res.fim}')">Editar</button>
@@ -179,4 +225,3 @@
 
 </body>
 </html>
-
