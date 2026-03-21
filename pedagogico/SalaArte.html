@@ -46,7 +46,7 @@
 <body>
 
 <div class="container">
-  <h2>📅Sala de Arte Décio, 🚀</h2>
+  <h2>📅Sala de Arte Décio 🚀</h2>
   <form id="reservaForm">
     <input type="hidden" id="reservaId">
     <label for="professor">Selecione seu Nome:</label>
@@ -83,7 +83,7 @@
   // 2. Função que verifica se o código no GitHub mudou
   async function checarVersao() {
     try {
-      const resp = await fetch('version.json?t=' + Date.now(), { cache: 'no-store' });
+      const resp = await fetch('./version.json?t=' + Date.now(), { cache: 'no-store' });
       const data = await resp.json();
       if (data.v > VERSAO_LOCAL) {
         console.log("Nova versão detectada! Atualizando código...");
