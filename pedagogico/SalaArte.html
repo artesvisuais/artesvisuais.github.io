@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sala de Arte_v4</title>
+  <title>Sala de Arte_v5</title>
   <style>
     /* Reset e Estilo Base para Celular */
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -72,9 +72,8 @@
 <script>
   const URL_WEB_APP = "https://script.google.com/macros/s/AKfycbwujFQuYfhCC35Z3ZkfDY2Yz4cmsquFHiTysmM_4t0Tom7hnw1rZyQ6wphgJCKddgs/exec";
 
- window.onload = carregarReservas;
+  window.onload = carregarReservas;
 
-  // FUNÇÃO DE TRATAMENTO DE DATA (Suporta Ordenação)
   function tratarData(dataEntrada) {
     let dataObj;
     if (dataEntrada instanceof Date) {
@@ -92,7 +91,7 @@
     return {
       diaSemana: (dataObj && !isNaN(dataObj)) ? dias[dataObj.getDay()] : "Data",
       dataTexto: (dataObj && !isNaN(dataObj)) ? dataObj.toLocaleDateString('pt-BR') : dataEntrada,
-      dataObj: dataObj // Retorna o objeto para poder ordenar
+      dataObj: dataObj 
     };
   }
 
@@ -110,23 +109,38 @@
       const resp = await fetch(URL_WEB_APP, { method: 'POST', body: JSON.stringify({ acao: "consultar" }) });
       let dados = await resp.json();
       
-      // --- ORDENAÇÃO POR DATA E HORA ---
+      const agora = new Date(); // Captura data e hora atual
+
       dados.sort((a, b) => {
         const infoA = tratarData(a.data);
         const infoB = tratarData(b.data);
-        
-        // Compara as datas (timestamp)
         if (infoA.dataObj.getTime() !== infoB.dataObj.getTime()) {
           return infoA.dataObj - infoB.dataObj;
         }
-        // Se as datas forem iguais, compara pelo horário de início
         return a.inicio.localeCompare(b.inicio);
       });
 
       lista.innerHTML = "";
-      if (dados.length === 0) lista.innerHTML = "<p style='text-align:center; color:#888;'>Nenhuma reserva.</p>";
+      
+      // Filtrar para mostrar apenas o que não passou
+      const reservasFuturas = dados.filter(res => {
+        const infoData = tratarData(res.data);
+        if (!infoData.dataObj) return true;
+        
+        // Cria data de término combinando dia + hora fim
+        const dataTermino = new Date(infoData.dataObj);
+        const [horas, minutos] = res.fim.split(':');
+        dataTermino.setHours(parseInt(horas), parseInt(minutos), 0);
+        
+        return dataTermino >= agora; // Só mantém se o término for depois de "agora"
+      });
 
-      dados.forEach(res => {
+      if (reservasFuturas.length === 0) {
+        lista.innerHTML = "<p style='text-align:center; color:#888;'>Nenhuma reserva ativa.</p>";
+        return;
+      }
+
+      reservasFuturas.forEach(res => {
         const infoData = tratarData(res.data);
         const periodo = identificarPeriodo(res.inicio, res.fim);
         const card = document.createElement("div");
@@ -177,7 +191,9 @@
   function prepararEdicao(id, prof, data, inicio, fim) {
     document.getElementById("reservaId").value = id;
     document.getElementById("professor").value = prof;
-    document.getElementById("data").value = data.split('/').reverse().join('-');
+    // Converte DD/MM/AAAA para AAAA-MM-DD para o input date
+    const partes = data.split('/');
+    document.getElementById("data").value = `${partes[2]}-${partes[1]}-${partes[0]}`;
     document.getElementById("horaInicio").value = inicio;
     document.getElementById("horaFim").value = fim;
     document.getElementById("btnSalvar").innerText = "Salvar Alterações";
