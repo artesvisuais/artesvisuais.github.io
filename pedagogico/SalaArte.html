@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sala de Arte_v3</title>
+  <title>Sala de Arte_v4</title>
   <style>
     /* Reset e Estilo Base para Celular */
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -17,13 +17,12 @@
     label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9em; color: #555; }
     input, select, button { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
     
-    /* Botões */
     button { cursor: pointer; border: none; font-weight: bold; transition: opacity 0.2s; }
     #btnSalvar { background-color: #1a73e8; color: white; }
     #btnCancelar { background-color: #6c757d; color: white; display: none; }
     button:active { opacity: 0.8; transform: scale(0.98); }
 
-    /* Lista de Reservas (Cards para Mobile) */
+    /* Lista de Reservas */
     .reserva-card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 12px; border-left: 5px solid #1a73e8; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
     .reserva-header { display: flex; justify-content: space-between; align-items: flex-start; }
     .reserva-nome { font-weight: bold; font-size: 1.1em; color: #202124; }
@@ -34,40 +33,20 @@
     .btn-edit { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
     .btn-del { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
 
-    /* Loading Overlay */
+    /* Classes de Personalização que você pediu */
+    .dia-negrito { font-weight: bold; color: #1a73e8; }
+    .data-negrito { font-weight: bold; margin-left: 5px; }
+    .periodo-badge { background-color: #e8f0fe; color: #1a73e8; padding: 2px 8px; border-radius: 12px; font-size: 0.85em; display: inline-block; margin-left: 5px; }
+
     #loading { display: none; text-align: center; padding: 10px; color: #1a73e8; font-weight: bold; }
-.dia-negrito {
-  font-weight: bold;
-  color: #1a73e8; /* Opcional: deixa na cor azul do seu tema */
-  margin-right: 4px;
-}
-.data-negrito {
-  font-weight: bold;
-  color: #080500; /* Cor da data */
-  margin-right: 4px;
-}
-
-.periodo-badge {
-  background-color: #e8f0fe; /* Azul bem clarinho */
-  color: #1a73e8;            /* Azul do seu tema */
-  padding: 2px 8px;          /* Espaçamento interno */
-  border-radius: 12px;       /* Bordas arredondadas */
-  font-size: 0.85em;         /* Um pouco menor para não brigar com a hora */
-  text-transform: uppercase; /* Deixa em MAIÚSCULO */
-  letter-spacing: 0.5px;     /* Espaçamento entre letras */
-  display: inline-block;     /* Garante que o fundo apareça corretamente */
-}
-
   </style>
 </head>
 <body>
 
 <div class="container">
   <h2>📅Sala de Arte Décio 🚀</h2>
-
   <form id="reservaForm">
     <input type="hidden" id="reservaId">
-    
     <label for="professor">Selecione seu Nome:</label>
     <select id="professor" required>
       <option value="" disabled selected>Escolha o professor...</option>
@@ -76,140 +55,131 @@
       <option value="Professora Raiane">Professora Rayana</option>
       <option value="Professor Romulo">Professor Rômulo Cesar</option>
     </select>
-
     <label for="data">Data da Reserva:</label>
     <input type="date" id="data" required>
-
     <div style="display: flex; gap: 10px;">
-      <div style="flex: 1;">
-        <label for="horaInicio">Hora/Início:</label>
-        <input type="time" id="horaInicio" required>
-      </div>
-      <div style="flex: 1;">
-        <label for="horaFim">Encerramento</label>
-        <input type="time" id="horaFim" required>
-      </div>
+      <div style="flex: 1;"><label for="horaInicio">Hora/Início:</label><input type="time" id="horaInicio" required></div>
+      <div style="flex: 1;"><label for="horaFim">Encerramento</label><input type="time" id="horaFim" required></div>
     </div>
-
     <button type="submit" id="btnSalvar">Confirmar Reserva</button>
     <button type="button" id="btnCancelar" onclick="limparFormulario()">Cancelar Edição</button>
   </form>
-
   <div id="loading">Processando...</div>
-
   <h3>Agendado</h3>
-  <div id="listaReservas">
-    <!-- Cards de reserva entrarão aqui -->
-  </div>
+  <div id="listaReservas"></div>
 </div>
 
 <script>
-  const URL_WEB_APP = "https://script.google.com/macros/s/AKfycbwujFQuYfhCC35Z3ZkfDY2Yz4cmsquFHiTysmM_4t0Tom7hnw1rZyQ6wphgJCKddgs/exec"; 
+  const URL_WEB_APP = "https://script.google.com/macros/s/AKfycbwujFQuYfhCC35Z3ZkfDY2Yz4cmsquFHiTysmM_4t0Tom7hnw1rZyQ6wphgJCKddgs/exec";
 
-  window.onload = carregarReservas;
+ window.onload = carregarReservas;
 
-  // Função para descobrir o dia da semana a partir de "DD/MM/AAAA"
-  function obterDiaSemana(dataStr) {
-    const partes = dataStr.split('/');
-    // Cria data (mês no JS começa em 0)
-    const dataObj = new Date(partes[2], partes[1] - 1, partes[0]);
+  // FUNÇÃO DE TRATAMENTO DE DATA (Suporta Ordenação)
+  function tratarData(dataEntrada) {
+    let dataObj;
+    if (dataEntrada instanceof Date) {
+      dataObj = dataEntrada;
+    } else if (typeof dataEntrada === 'string' && dataEntrada.includes('/')) {
+      const p = dataEntrada.split('/');
+      dataObj = new Date(p[2], p[1] - 1, p[0]);
+    } else if (typeof dataEntrada === 'string' && dataEntrada.includes('-')) {
+      dataObj = new Date(dataEntrada + "T00:00:00");
+    } else if (typeof dataEntrada === 'number') {
+      dataObj = new Date((dataEntrada - 25569) * 86400 * 1000);
+    }
+
     const dias = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-    return dias[dataObj.getDay()];
+    return {
+      diaSemana: (dataObj && !isNaN(dataObj)) ? dias[dataObj.getDay()] : "Data",
+      dataTexto: (dataObj && !isNaN(dataObj)) ? dataObj.toLocaleDateString('pt-BR') : dataEntrada,
+      dataObj: dataObj // Retorna o objeto para poder ordenar
+    };
   }
 
-function identificarPeriodo(inicio, fim) {
-  const horaInicio = parseInt(inicio.split(':')[0]);
-  const horaFim = parseInt(fim.split(':')[0]);
-
-  const startsMorning = horaInicio < 12;
-  const endsAfternoon = horaFim >= 12;
-
-  if (startsMorning && endsAfternoon) return "Manhã/Tarde";
-  if (startsMorning) return "Manhã";
-  return "Tarde";
-}
+  function identificarPeriodo(inicio, fim) {
+    const hI = parseInt(inicio.split(':'));
+    const hF = parseInt(fim.split(':'));
+    if (hI < 12 && hF >= 12) return "Manhã/Tarde";
+    return hI < 12 ? "Manhã" : "Tarde";
+  }
 
   async function carregarReservas() {
     const lista = document.getElementById("listaReservas");
     lista.innerHTML = "<p style='text-align:center;'>Carregando...</p>";
-    
     try {
       const resp = await fetch(URL_WEB_APP, { method: 'POST', body: JSON.stringify({ acao: "consultar" }) });
-      const dados = await resp.json();
+      let dados = await resp.json();
       
+      // --- ORDENAÇÃO POR DATA E HORA ---
+      dados.sort((a, b) => {
+        const infoA = tratarData(a.data);
+        const infoB = tratarData(b.data);
+        
+        // Compara as datas (timestamp)
+        if (infoA.dataObj.getTime() !== infoB.dataObj.getTime()) {
+          return infoA.dataObj - infoB.dataObj;
+        }
+        // Se as datas forem iguais, compara pelo horário de início
+        return a.inicio.localeCompare(b.inicio);
+      });
+
       lista.innerHTML = "";
-      if (dados.length === 0) lista.innerHTML = "<p style='text-align:center; color:#888;'>Nenhuma reserva para hoje.</p>";
+      if (dados.length === 0) lista.innerHTML = "<p style='text-align:center; color:#888;'>Nenhuma reserva.</p>";
 
       dados.forEach(res => {
-        const diaSemana = obterDiaSemana(res.data); // Pega a abreviação
-         const periodo = identificarPeriodo(res.inicio, res.fim); // Pega o período
-
+        const infoData = tratarData(res.data);
+        const periodo = identificarPeriodo(res.inicio, res.fim);
         const card = document.createElement("div");
         card.className = "reserva-card";
         card.innerHTML = `
-          <div class="reserva-header">
-            <div class="reserva-nome">${res.prof}</div>
-          </div>
+          <div class="reserva-header"><div class="reserva-nome">${res.prof}</div></div>
           <div class="reserva-info">
- <span class="dia-negrito">    📅 ${diaSemana} </span><span class="data-negrito"> ${res.data} </span>| <br>⏰ ${res.inicio} às ${res.fim}  <strong class="periodo-badge">(${periodo})</strong>
+            <span class="dia-negrito">📅 ${infoData.diaSemana}</span> 
+            <span class="data-negrito">${infoData.dataTexto}</span> | <br>
+            ⏰ ${res.inicio} às ${res.fim} <strong class="periodo-badge">(${periodo})</strong>
           </div>
           <div class="reserva-acoes">
-            <button class="btn-small btn-edit" onclick="prepararEdicao('${res.id}', '${res.prof}', '${res.data}', '${res.inicio}', '${res.fim}')">Editar</button>
+            <button class="btn-small btn-edit" onclick="prepararEdicao('${res.id}', '${res.prof}', '${infoData.dataTexto}', '${res.inicio}', '${res.fim}')">Editar</button>
             <button class="btn-small btn-del" onclick="excluirReserva('${res.id}')">Excluir</button>
           </div>
         `;
         lista.appendChild(card);
       });
-    } catch (e) {
-      lista.innerHTML = "Erro ao carregar dados.";
-    }
+    } catch (e) { lista.innerHTML = "Erro ao carregar dados."; }
   }
 
   document.getElementById("reservaForm").onsubmit = async (e) => {
     e.preventDefault();
     document.getElementById("loading").style.display = "block";
-    
-    const id = document.getElementById("reservaId").value;
     const payload = {
-      acao: id ? "editar" : "gravar",
-      id: id,
+      acao: document.getElementById("reservaId").value ? "editar" : "gravar",
+      id: document.getElementById("reservaId").value,
       professor: document.getElementById("professor").value,
       data: document.getElementById("data").value,
       horaInicio: document.getElementById("horaInicio").value,
       horaFim: document.getElementById("horaFim").value
     };
-
     try {
       const resp = await fetch(URL_WEB_APP, { method: 'POST', body: JSON.stringify(payload) });
-      const resultado = await resp.json();
-      alert(resultado.msg);
-      if (resultado.status === "sucesso") {
-        limparFormulario();
-        carregarReservas();
-      }
-    } catch (err) {
-      alert("Erro na conexão.");
-    } finally {
-      document.getElementById("loading").style.display = "none";
-    }
+      const res = await resp.json();
+      alert(res.msg);
+      if (res.status === "sucesso") { limparFormulario(); carregarReservas(); }
+    } catch (err) { alert("Erro na conexão."); }
+    finally { document.getElementById("loading").style.display = "none"; }
   };
 
   async function excluirReserva(id) {
-    if (!confirm("Excluir esta reserva?")) return;
-    const resp = await fetch(URL_WEB_APP, { method: 'POST', body: JSON.stringify({ acao: "excluir", id: id }) });
-    const res = await resp.json();
-    alert(res.msg);
+    if (!confirm("Excluir?")) return;
+    await fetch(URL_WEB_APP, { method: 'POST', body: JSON.stringify({ acao: "excluir", id: id }) });
     carregarReservas();
   }
 
   function prepararEdicao(id, prof, data, inicio, fim) {
     document.getElementById("reservaId").value = id;
     document.getElementById("professor").value = prof;
-    const dataFormatada = data.split('/').reverse().join('-');
-    document.getElementById("data").value = dataFormatada;
+    document.getElementById("data").value = data.split('/').reverse().join('-');
     document.getElementById("horaInicio").value = inicio;
     document.getElementById("horaFim").value = fim;
-    
     document.getElementById("btnSalvar").innerText = "Salvar Alterações";
     document.getElementById("btnCancelar").style.display = "block";
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -222,6 +192,5 @@ function identificarPeriodo(inicio, fim) {
     document.getElementById("btnCancelar").style.display = "none";
   }
 </script>
-
 </body>
 </html>
