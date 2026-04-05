@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Gestão Pedagógica</title>
+  <style>
+  /* --- VARIÁVEIS E BASE --- */
+  :root { 
+    --primary: #2c3e50; 
+    --accent: #3498db; 
+    --bg: #f4f7f6; 
+    --white: #ffffff; 
+    --shadow: 0 4px 6px rgba(0,0,0,0.05);
+  }
+
+  body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    background: var(--bg); 
+    color: var(--primary); 
+    padding: 20px; 
+    margin: 0; 
+    line-height: 1.5;
+  }
+
+  /* --- CABEÇALHO E FILTROS --- */
+  .filtros-container { 
+    background: var(--white); 
+    padding: 15px; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+    margin-bottom: 20px; 
+    display: flex; 
+    gap: 15px; 
+    flex-wrap: wrap; 
+    align-items: flex-end; 
+    position: sticky; 
+    top: 0; 
+    z-index: 100; 
+  }
+
+  .campo-filtro { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 5px; 
+    flex: 1; 
+    min-width: 150px; 
+  }
+
+  label {
+    font-size: 12px;
+    font-weight: bold;
+    color: #7f8c8d;
+  }
+
+  /* --- ELEMENTOS DE FORMULÁRIO --- */
+  select, input, textarea { 
+    padding: 10px; 
+    border: 1px solid #ddd; 
+    border-radius: 6px; 
+    font-family: inherit; 
+    font-size: 14px; 
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  button { 
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    color: white; 
+    font-weight: bold; 
+    transition: all 0.2s ease;
+    background: var(--accent);
+  }
+
+  button:hover { 
+    filter: brightness(1.1); 
+    transform: translateY(-1px);
+  }
+
+  /* --- GRID DE ATIVIDADES E CARDS --- */
+  #containerAtividades { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
+    gap: 20px; 
+  }
+
+  .card { 
+    background: var(--white); 
+    border-radius: 10px; 
+    border-top: 5px solid var(--accent); 
+    padding: 20px; 
+    box-shadow: var(--shadow); 
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .card-titulo {
+    font-weight: bold;
+    font-size: 16px;
+    color: var(--primary);
+  }
+
+  .label { 
+    font-weight: bold; 
+    font-size: 10px; 
+    color: #95a5a6; 
+    text-transform: uppercase; 
+    margin-top: 5px; 
+  }
+
+  .conteudo { 
+    font-size: 13px; 
+    background: #f9f9f9; 
+    padding: 10px; 
+    border-radius: 6px; 
+    white-space: pre-line; 
+    color: #444; 
+    border-left: 3px solid #eee;
+  }
+
+  /* --- MODAL E COMPONENTES AUXILIARES --- */
+  .modal { 
+    display: none; 
+    position: fixed; 
+    z-index: 200; 
+    left: 0; top: 0; width: 100%; height: 100%; 
+    background: rgba(0,0,0,0.7); 
+    overflow-y: auto; 
+  }
+
+  .modal-content { 
+    background: white; 
+    margin: 30px auto; 
+    padding: 30px; 
+    width: 90%; 
+    max-width: 700px; 
+    border-radius: 12px; 
+  }
+
+  .form-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 15px; 
+  }
+
+  #areaConsulta, #listaParaMesclar { 
+    background: #fff9db; 
+    border: 1px solid #f59f00; 
+    padding: 10px; 
+    margin: 10px 0; 
+    border-radius: 8px; 
+    font-size: 13px; 
+    max-height: 200px; 
+    overflow-y: auto; 
+  }
+
+  .item-sugerido { 
+    cursor: pointer; 
+    padding: 8px; 
+    border-bottom: 1px solid rgba(0,0,0,0.05); 
+  }
+
+  .item-sugerido:hover { background: #fef9e7; }
+
+  /* --- REGRAS DE IMPRESSÃO (BACKUP) --- */
+  @media print {
+    .filtros-container, button, .label:last-of-type, input[type="number"] { 
+      display: none !important; 
+    }
+    body { background: white; padding: 0; }
+    #containerAtividades { display: block; }
+    .card { 
+      box-shadow: none; 
+      border: 1px solid #eee; 
+      margin-bottom: 30px; 
+      break-inside: avoid; 
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="filtros-container">
+    <div class="campo-filtro"><label>Série</label><select id="fAno"><option value="">Todos</option></select></div>
+    <div class="campo-filtro"><label>Bimestre</label><select id="fBimestre"><option value="">Todos</option></select></div>
+    <button style="background:#e74c3c" onclick="location.reload()">Limpar</button>
+    <button style="background:#27ae60" onclick="abrirModal()">+ Atividade</button>
+    <button style="background:#8e44ad" onclick="abrirModalMescla()">+ Mesclar ID</button>
+</div>
+
+<div id="containerAtividades">Carregando dados...</div>
+
+<!-- MODAL CADASTRO ATIVIDADE -->
+<div id="modalForm" class="modal">
+  <div class="modal-content">
+    <h3>Nova Atividade</h3>
+    <form id="formAtividade">
+      <div class="form-grid">
+
+        <select type="text" name="Bimestre" placeholder="Bimestre" required>
+<option><label>Bimestre</label></option>
+<option>1º</option>
+<option>2º</option>
+<option>3º</option>
+<option>4º</option>
+</select>
+        <select type="text" name="Ano/serie" placeholder="Série" required>
+<option><label>Ano/série</label></option>
+<option>1º ano</option>
+<option>2º ano</option>
+<option>3º ano</option>
+<option>4º ano</option>
+<option>5º ano</option>
+<option>Eja</option>
+</select>
+<div class="campo-filtro">
+  <label>Linguagem/Unidade</label>
+  <select id="fUnidadeModal">
+    <option value="">Selecione...</option>
+    <option value="Artes Visuais">Artes Visuais</option>
+    <option value="Musica">Musica</option>
+    <option value="Dança">Dança</option>
+    <option value="Teatro">Teatro</option>
+    <option value="Artes Integradas">Artes Integradas</option>
+  </select>
+</div>
+
+<!-- E adicione um campo invisível (ou visível se preferir) para levar o dado da Unidade para a Planilha -->
+<input type="hidden" name="Unidade Temática"> 
+
+        <div id="areaConsulta" style="grid-column: span 2;"></div>
+        <input type="text" name="ID_Unico" id="idInput" placeholder="ID da Habilidade" required>
+       <div class="campo-filtro">
+  <label>Versão</label>
+  <input type="text" name="Versão" id="inputVersaoAtividade" placeholder="Versão" required>
+  <!-- Label para mostrar as versões existentes -->
+  <span id="labelVersoes" style="font-size: 10px; color: #e67e22; display: block; margin-top: 2px;"></span>
+</div>
+        <input type="text" name="Componente" placeholder="Componente">
+        <input type="text" name="Propósito" placeholder="Propósito">
+        <input type="text" name="Nome da Atividade" style="grid-column: span 2;" placeholder="Título" required>
+        <textarea name="Orientação Didática" rows="3" style="grid-column: span 2;" placeholder="Orientação"></textarea>
+        <textarea name="Critérios Avaliativos" rows="2" style="grid-column: span 2;" placeholder="Avaliação"></textarea>
+        <input type="number" name="Quant.Aulas" placeholder="Aulas">
+      </div>
+      <div style="margin-top:15px; display:flex; gap:10px;">
+        <button type="submit" id="btnSalvar" style="background:#27ae60; flex:1;">Salvar Atividade</button>
+        <button type="button" onclick="fecharModal()" style="background:#95a5a6;">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL MESCLAGEM -->
+<div id="modalMescla" class="modal">
+  <div class="modal-content">
+    <h3>Construtor de IDs Mesclados</h3>
+    <div class="form-grid">
+      <div class="campo-filtro"><label>Série</label><select id="mAno" onchange="atualizarListaMescla()"></select></div>
+      <div class="campo-filtro"><label>Bimestre</label><select id="mBim" onchange="atualizarListaMescla()"></select></div>
+    </div>
+    <div id="listaParaMesclar" style="display:block; background:#f9f9f9; border:1px solid #ccc; height:150px;"></div>
+    <div style="margin-top:10px; background:#e8f4fd; padding:10px; border-radius:5px;">
+      <label class="label">ID Gerado:</label>
+      <input type="text" id="idGerado" style="width:100%; font-weight:bold;" readonly>
+      <label class="label">Descrição Combinada:</label>
+      <textarea id="descGerada" rows="4" style="width:100%; font-size:11px;"></textarea>
+    </div>
+    <div style="margin-top:15px; display:flex; gap:10px;">
+      <button onclick="salvarMescla()" id="btnSalvarMescla" style="background:#27ae60; flex:1;">Cadastrar Combo</button>
+      <button onclick="fecharModalMescla()" style="background:#95a5a6;">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 1. COLOQUE SUA URL DE IMPLANTAÇÃO AQUI (Certifique-se de que termina em /exec)
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwRet1yzQLIa4dmHKzG3xbzDnEQ6lXBVTSUOcpWZI6CIaz7DiqlOOqtr_2Gidc5xnU/exec"; 
+
+  let dadosOriginais = [], baseIDs = [], dadosPlanejamento = [], selecionadasMescla = [];
+
+  async function carregarDados() {
+    try {
+      const response = await fetch(WEB_APP_URL);
+      const json = await response.json();
+      dadosOriginais = json.atividades || [];
+      baseIDs = json.baseIDs || [];
+      dadosPlanejamento = json.planejamento || [];
+      popularFiltros();
+      renderizarLayout(dadosOriginais);
+      configurarConsultaID();
+    } catch (e) { console.error(e); }
+  }
+
+  function renderizarLayout(dados) {
+    const container = document.getElementById('containerAtividades');
+    container.innerHTML = "";
+    dados.forEach(item => {
+      const infoHab = baseIDs.find(h => String(h.ID_Unico) === String(item.ID_Unico)) || {};
+      const desc = item.Descrição || infoHab.Descrição || "-";
+      
+      // BUSCA O PLANEJAMENTO PARA PEGAR AS DATAS
+      const plan = dadosPlanejamento.find(p => 
+        String(p["ID Habilidade"]) === String(item.ID_Unico) && 
+        String(p["Ano/serie"]) === String(item["Ano/serie"])
+      );
+
+      // CRIA O TEXTO DO PERÍODO
+      const periodo = plan ? `${plan["Data inicial"]} a ${plan["Data final"]}` : "A definir";
+
+      // 🔽 AGORA COM PRECISÃO TOTAL: ID + VERSÃO
+const semPlan = dadosPlanejamento.filter(p => 
+  String(p["ID Habilidade"]).trim() === String(item.ID_Unico).trim() && 
+  String(p["Versão"]).trim() === String(item.Versão).trim()
+).map(p => p.Semana);
+      
+      container.innerHTML += `
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; font-size:11px; color:#7f8c8d; border-bottom:1px solid #eee; padding-bottom:5px;">
+            <span>${item.Bimestre} | <b>ID: ${item.ID_Unico}</b></span>
+                <span style="font-weight:bold; color:${semPlan.length ? '#27ae60' : '#e67e22'}">${semPlan.length ? '✅ Semana: '+semPlan.join(",") : '⚠️ Disponível'}</span>
+          </div>
+          <div class="card-titulo">${item["Nome da Atividade"]}</div>
+          <div style="font-size:12px; margin-bottom:10px;">
+            <strong>Série:</strong> ${item["Ano/serie"]} | <strong>Versão:</strong> ${item.Versão} |
+<strong>Propósito</strong> ${item.Propósito}|
+<strong>Und. Temática:</strong> ${item['Unidade Temática']} | <strong>Aulas:</strong> ${item["Quant.Aulas"]} <br><strong>Período:</strong> ${periodo}
+
+          </div>
+          <span class="label">Habilidade</span> 
+          <div class="conteudo" style="max-height:50px; overflow-y:auto; font-size:11px;">${desc}
+          </div> 
+<span class="label">Orientação Didática</span>
+<div class="conteudo" style="max-height:50px; overflow-y:auto; font-size:11px;">
+  ${item["Orientação Didática"] || "Não informada."}
+</div>
+
+          <div style="margin-top:12px; display:flex; gap:5px; background:#f0f7ff; padding:8px; border-radius:6px;">
+            <input type="number" id="s_${item.ID_Unico}_${item["Ano/serie"].replace(/\s/g,'')}" placeholder="Semana" style="width:60px;">
+            <button onclick="enviarParaPlanejamento('${item.ID_Unico}', '${item["Ano/serie"]}', '${item.Versão}')" style="background:#3498db; flex:1; font-size:11px;">Confirmar</button>
+          </div>
+        </div>`;
+    });
+  }
+
+  // --- CONSULTA E AUTO-PREENCHIMENTO NO MODAL ---
+
+function configurarConsultaID() {
+  const inAno = document.querySelector('[name="Ano/serie"]');
+  const inBim = document.querySelector('[name="Bimestre"]');
+  const inUnidade = document.getElementById('fUnidadeModal'); // Novo select que criaremos
+  const area = document.getElementById('areaConsulta');
+
+  const filtrar = () => {
+    const a = inAno.value, b = inBim.value, u = inUnidade.value;
+    
+    // Só filtra se os 3 campos principais estiverem preenchidos
+    if(a && b && u) {
+      const m = baseIDs.filter(i => 
+        String(i["Ano/serie"]) === a && 
+        String(i["Bimestre"]) === b &&
+        String(i["Unidade Temática"]).includes(u)
+      );
+      
+      area.style.display = m.length ? "block" : "none";
+      
+      // Renderiza com a Descrição COMPLETA
+      area.innerHTML = m.map(h => `
+        <div class="item-sugerido" onclick="selecionarID('${h.ID_Unico}')" style="border-bottom: 2px solid #3498db; padding: 10px; background: #fff;">
+          <div style="color: #2c3e50; font-weight: bold; border-bottom: 1px solid #eee; margin-bottom: 5px;">
+            ${h.Código} | ${h.Obj_Conhec}
+          </div>
+          <div style="font-size: 11px; color: #555; line-height: 1.4;">
+            ${h.Descrição}
+          </div>
+        </div>`).join("");
+    } else {
+      area.style.display = "none";
+    }
+  };
+
+  inAno.onchange = filtrar;
+  inBim.onchange = filtrar;
+  inUnidade.onchange = filtrar;
+}
+
+function selecionarID(id) {
+  const h = baseIDs.find(x => x.ID_Unico === id);
+  const serie = document.querySelector('#formAtividade [name="Ano/serie"]').value;
+  const labelV = document.getElementById('labelVersoes');
+
+  if (h) {
+    document.getElementById('idInput').value = h.ID_Unico;
+
+    // --- 1. BUSCA VERSÕES EXISTENTES E ATUALIZA A LABEL ---
+    const versoesExistentes = dadosOriginais
+      .filter(item => String(item.ID_Unico) === String(id) && String(item["Ano/serie"]) === String(serie))
+      .map(item => item.Versão)
+      .filter(Boolean)
+      .sort((a, b) => a - b);
+
+    if (versoesExistentes.length > 0) {
+      labelV.innerHTML = `Já existem as versões: <b>${versoesExistentes.join(", ")}</b>`;
+      // Sugere a próxima versão disponível (maior número + 1)
+      const proxima = Math.max(...versoesExistentes.map(Number)) + 1;
+      document.querySelector('#formAtividade [name="Versão"]').value = proxima;
+    } else {
+      labelV.innerHTML = "Nenhuma versão cadastrada ainda.";
+      document.querySelector('#formAtividade [name="Versão"]').value = "1";
+    }
+
+    // --- 2. PREENCHE DEMAIS CAMPOS AUTOMÁTICOS ---
+    const campoUnidade = document.querySelector('[name="Unidade Temática"]');
+    if (campoUnidade) {
+      campoUnidade.value = h["Unidade Temática"] || "";
+    }
+
+    document.querySelector('#formAtividade [name="Componente"]').value = "Arte";
+    document.querySelector('#formAtividade [name="Quant.Aulas"]').value = "2";
+    
+    // Limpa campos de texto para nova entrada manual da atividade
+    document.querySelector('#formAtividade [name="Nome da Atividade"]').value = "";
+    document.querySelector('#formAtividade [name="Orientação Didática"]').value = "";
+    document.querySelector('#formAtividade [name="Critérios Avaliativos"]').value = "";
+    document.querySelector('#formAtividade [name="Propósito"]').value = "Padrão";
+
+    // Esconde a área de consulta e avisa o usuário
+    document.getElementById('areaConsulta').style.display = "none";
+    console.log("Habilidade selecionada: " + id + " | Unidade: " + h["Unidade Temática"]);
+  }
+}
+
+    // --- LÓGICA DE MESCLAGEM ---
+  function abrirModalMescla() {
+    document.getElementById('modalMescla').style.display = 'block';
+    document.getElementById('mAno').innerHTML = document.getElementById('fAno').innerHTML;
+    document.getElementById('mBim').innerHTML = document.getElementById('fBimestre').innerHTML;
+    limparMescla();
+  }
+
+  function limparMescla() {
+    selecionadasMescla = [];
+    document.getElementById('idGerado').value = "";
+    document.getElementById('descGerada').value = "";
+    document.querySelectorAll('.item-sugerido').forEach(el => el.style.background = "");
+  }
+
+  function atualizarListaMescla() {
+    const ano = document.getElementById('mAno').value, bim = document.getElementById('mBim').value;
+    const lista = document.getElementById('listaParaMesclar');
+    lista.innerHTML = ""; selecionadasMescla = [];
+    if(!ano || !bim) return;
+    baseIDs.filter(h => String(h["Ano/serie"]) === ano && String(h["Bimestre"]) === bim).forEach(h => {
+      const d = document.createElement('div');
+      d.className = 'item-sugerido';
+      d.innerHTML = `<b>${h.ID_Unico}</b> - ${h.Obj_Conhec || ''}`;
+      d.onclick = () => {
+        const idx = selecionadasMescla.indexOf(h);
+        if(idx > -1) { selecionadasMescla.splice(idx, 1); d.style.background = ""; }
+        else { selecionadasMescla.push(h); d.style.background = "#d1e7ff"; }
+        montarIDMesclado();
+      };
+      lista.appendChild(d);
+    });
+  }
+
+  function montarIDMesclado() {
+    if(!selecionadasMescla.length) { limparMescla(); return; }
+    selecionadasMescla.sort((a, b) => a.ID_Unico.localeCompare(b.ID_Unico));
+    const primeira = selecionadasMescla[0].ID_Unico;
+    const base = primeira.split("-")[0];
+    const sufixo = primeira.split("-")[1] || "";
+    let novoID = base;
+    for(let i=1; i < selecionadasMescla.length; i++) {
+      const numHab = selecionadasMescla[i].ID_Unico.split("AR")[1].split("-")[0];
+      if(!novoID.includes(numHab)) novoID += "|" + numHab;
+    }
+    document.getElementById('idGerado').value = sufixo ? `${novoID}-${sufixo}` : novoID;
+    document.getElementById('descGerada').value = selecionadasMescla.map(s => `[${s.ID_Unico}]: ${s.Descrição}`).join("\n\n");
+  }
+
+  async function salvarMescla() {
+    const id = document.getElementById('idGerado').value;
+    if(!id) return alert("Selecione habilidades!");
+    if(baseIDs.find(h => h.ID_Unico === id)) return alert("Este ID já existe!");
+    const btn = document.getElementById('btnSalvarMescla'); btn.disabled = true;
+    const p = new URLSearchParams();
+    p.append("acao", "salvar_id_mesclado");
+    p.append("ID_Unico", id);
+    p.append("Ano/serie", document.getElementById('mAno').value);
+    p.append("Bimestre", document.getElementById('mBim').value);
+    p.append("Descrição", document.getElementById('descGerada').value);
+    p.append("Unidade Temática", selecionadasMescla[0]["Unidade Temática"] || "");
+    p.append("Obj_Conhec", "Habilidades Integradas");
+
+    try {
+      const res = await fetch(WEB_APP_URL, { method: "POST", body: p });
+      alert(await res.text()); fecharModalMescla(); carregarDados();
+    } catch (e) { alert("Erro ao salvar."); }
+    finally { btn.disabled = false; }
+  }
+
+  // --- FUNÇÕES DE ENVIO ---
+  async function enviarParaPlanejamento(id, ano, ver) {
+    const sem = document.getElementById(`s_${id}_${ano.replace(/\s/g,'')}`).value;
+    if(!sem) return alert("Indique a semana!");
+    const p = new URLSearchParams();
+    p.append("acao", "planejar"); p.append("semana", sem); p.append("ano", ano); p.append("id", id); p.append("versao", ver);
+    try {
+      const res = await fetch(WEB_APP_URL, { method: "POST", body: p });
+      alert(await res.text()); carregarDados();
+    } catch (e) { alert("Erro."); }
+  }
+
+  document.getElementById('formAtividade').onsubmit = async function(e) {
+  e.preventDefault();
+  
+  const idInf = document.getElementById('idInput').value;
+  const verInf = document.querySelector('#formAtividade [name="Versão"]').value;
+  const serInf = document.querySelector('#formAtividade [name="Ano/serie"]').value;
+
+  // --- TRAVA DE DUPLICIDADE ---
+  const duplicado = dadosOriginais.find(item => 
+    String(item.ID_Unico) === String(idInf) && 
+    String(item.Versão) === String(verInf) &&
+    String(item["Ano/serie"]) === String(serInf)
+  );
+
+  if (duplicado) {
+    alert(`⚠️ Erro: A Versão ${verInf} já existe para este ID nesta série. Use a Versão ${parseInt(verInf) + 1} ou outra disponível.`);
+    return; 
+  }
+  // -----------------------------
+
+  const btn = document.getElementById('btnSalvar');
+  btn.disabled = true;
+  const p = new URLSearchParams(new FormData(this));
+  p.append("acao", "cadastrar");
+
+  try {
+    const res = await fetch(WEB_APP_URL, { method: "POST", body: p });
+    alert(await res.text());
+    fecharModal();
+    carregarDados();
+  } catch (err) {
+    alert("Erro ao cadastrar.");
+  } finally {
+    btn.disabled = false;
+  }
+};
+
+
+  function popularFiltros() {
+    const fA = document.getElementById('fAno'), fB = document.getElementById('fBimestre');
+    const anos = [...new Set(dadosOriginais.map(d => d["Ano/serie"]))].filter(Boolean).sort();
+    const bims = [...new Set(dadosOriginais.map(d => d["Bimestre"]))].filter(Boolean).sort();
+    fA.innerHTML = '<option value="">Todas as Séries</option>' + anos.map(a => `<option value="${a}">${a}</option>`).join("");
+    fB.innerHTML = '<option value="">Todos os Bimestres</option>' + bims.map(b => `<option value="${b}">${b}</option>`).join("");
+    const f = () => {
+      let d = dadosOriginais;
+      if(fA.value) d = d.filter(x => String(x["Ano/serie"]) === fA.value);
+      if(fB.value) d = d.filter(x => String(x["Bimestre"]) === fB.value);
+      renderizarLayout(d);
+    };
+    fA.onchange = f; fB.onchange = f;
+  }
+
+  function abrirModal() { document.getElementById('modalForm').style.display = 'block'; }
+
+  function fecharModal() { 
+  // 1. Esconde o modal
+  document.getElementById('modalForm').style.display = 'none'; 
+  
+  // 2. Reseta os campos do formulário
+  document.getElementById('formAtividade').reset(); 
+  
+  // 3. Limpa a label de versões (agora dentro da função)
+  const labelV = document.getElementById('labelVersoes');
+  if (labelV) labelV.innerHTML = "";
+  
+  // 4. Esconde a área de consulta se estiver aberta
+  const areaC = document.getElementById('areaConsulta');
+  if (areaC) areaC.style.display = "none";
+}
+
+function fecharModalMescla() { 
+  document.getElementById('modalMescla').style.display = 'none'; 
+}
+  carregarDados();
+</script>
+
+</body>
+</html>

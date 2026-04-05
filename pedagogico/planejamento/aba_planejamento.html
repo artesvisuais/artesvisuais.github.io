@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Planejamento</title>
+<style>
+  /* --- 1. VARIÁVEIS E BASE --- */
+  :root { 
+    --primary: #2c3e50; 
+    --accent: #1a73e8; 
+    --bg: #f4f6f8; 
+    --white: #ffffff; 
+  }
+
+  body { 
+    font-family: Arial, sans-serif; 
+    background: var(--bg); 
+    padding: 0; 
+    margin: 0; 
+    color: #333;
+  }
+
+  /* --- 2. ÁREA FIXA NO TOPO (BOTÃO + FILTROS) --- */
+  .topo-fixo {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    background: var(--white);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+
+  .btn-toggle {
+    width: 100%;
+    padding: 15px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+    display: block;
+  }
+
+  .filtros { 
+    padding: 20px; 
+    display: flex; 
+    gap: 15px; 
+    flex-wrap: wrap; 
+    align-items: flex-end;
+    background: var(--white);
+    
+    /* Animação de Abrir/Fechar */
+    transition: all 0.4s ease-in-out;
+    overflow: hidden;
+    max-height: 600px; 
+    opacity: 1;
+  }
+
+  /* Estado Escondido */
+  .filtros.escondido {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* --- 3. ELEMENTOS DE FORMULÁRIO --- */
+  .filtros label { font-size: 12px; font-weight: bold; color: #7f8c8d; display: block; margin-bottom: 5px; }
+  
+  select { padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; width: 100%; min-width: 150px; }
+
+  .btn-acao { padding: 10px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; color: white; flex: 1; min-width: 120px; }
+
+  /* --- 4. CONTEÚDO (CARDS) --- */
+  #conteudo, #containerAtividades {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--white);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-top: 5px solid var(--accent);
+  }
+
+  /* --- 5. REGRAS DE IMPRESSÃO --- */
+  @media print {
+    .topo-fixo, .btn-toggle, .btn-acao, .filtros { display: none !important; }
+    body { background: white; }
+    #conteudo, #containerAtividades { display: block !important; padding: 0; }
+    .card { box-shadow: none !important; border: 1px solid #ccc !important; margin-bottom: 30px !important; break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="topo-fixo">
+  <button onclick="toggleMenu()" class="btn-toggle">✕ Esconder Filtros e Opções</button>
+  
+  <div class="filtros" id="menuFiltros">
+    <div style="flex: 1;">
+      <label>Ano/Série</label>
+      <select id="filtroAno"><option value="">Todos</option></select>
+    </div>
+    <div style="flex: 1;">
+      <label>Semana</label>
+      <select id="filtroSemana"><option value="">Todas</option></select>
+    </div>
+    <button class="btn-acao" onclick="window.print()" style="background: #27ae60;">🖨️ PDF</button>
+    <button class="btn-acao" onclick="exportarHTML()" style="background: #e67e22;">💾 Backup HTML</button>
+  </div>
+</div>
+
+<div id="conteudo"></div>
+<script>
+  // 1. URL DA SUA NOVA PLANILHA (A mesma do outro HTML)
+  const URL = "https://script.google.com/macros/s/AKfycbwRet1yzQLIa4dmHKzG3xbzDnEQ6lXBVTSUOcpWZI6CIaz7DiqlOOqtr_2Gidc5xnU/exec";
+
+  let dadosGlobais = [];
+
+  // 🔽 Copiar para área de transferência
+  function copiar(texto) {
+    navigator.clipboard.writeText(texto);
+    alert("Copiado!");
+  }
+
+  function renderizar(dados) {
+  const container = document.getElementById("conteudo");
+  container.innerHTML = "";
+
+  if (!dados || dados.length === 0) {
+    container.innerHTML = "<p style='text-align:center;'>Nenhum planejamento encontrado.</p>";
+    return;
+  }
+
+  dados.forEach((item, index) => {
+    let div = document.createElement("div");
+    div.className = "card";
+
+    // Criamos IDs únicos para cada campo desta linha
+    const idDesc = `desc-${index}`;
+    const idAtiv = `ativ-${index}`;
+    const idOrient = `orient-${index}`;
+    const idAval = `aval-${index}`;
+
+    div.innerHTML = `
+      <h3>Semana ${item["Semana"] || "-"}</h3>
+
+      <div class="info">
+        <strong>Período:</strong> ${item["Data inicial"] || "A definir"} até ${item["Data final"] || "A definir"}<br>
+        <strong>Ano/Série:</strong> ${item["Ano/serie"] || ""}<br>
+        <strong>Versão da atividade:</strong> ${item["Versão"] || ""}<br>
+        <strong>Linguagem:</strong> ${item["Linguagem"] || ""}<br>
+        <strong>Propósito:</strong> ${item["Propósito"] || ""}<br>
+        <strong>Objeto do conhecimento:</strong> ${item["Obj._Conhecimento"] || ""}
+      </div>
+
+      <div class="bloco">
+        <strong>Descrição da Habilidade</strong><br>
+        <div id="${idDesc}" style="font-size:13px; color:#444; margin-bottom:5px;">${item["Descrição"] || "-"}</div>
+        <button onclick="copiarTexto('${idDesc}')">Copiar Descrição</button>
+      </div>
+
+      <div class="bloco">
+        <strong>Atividade</strong><br>
+        <div id="${idAtiv}" style="font-size:13px; color:#444; margin-bottom:5px;">${item["Atividade (Auto)"] || "-"}</div>
+        <button onclick="copiarTexto('${idAtiv}')">Copiar Atividade</button>
+      </div>
+
+      <div class="bloco">
+        <strong>Sequência Didática</strong><br>
+        <div id="${idOrient}" style="font-size:13px; color:#444; margin-bottom:5px;">${item["Orientação (Auto)"] || "-"}</div>
+        <button onclick="copiarTexto('${idOrient}')">Copiar Sequência</button>
+      </div>
+
+      <div class="bloco">
+        <strong>Avaliação</strong><br>
+        <div id="${idAval}" style="font-size:13px; color:#444; margin-bottom:5px;">${item["Avaliação"] || "-"}</div>
+        <button onclick="copiarTexto('${idAval}')">Copiar Avaliação</button>
+      </div>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+// 🔽 Nova função de copiar ultra-segura
+function copiarTexto(idElemento) {
+  const texto = document.getElementById(idElemento).innerText;
+  navigator.clipboard.writeText(texto).then(() => {
+    alert("Copiado com sucesso!");
+  }).catch(err => {
+    alert("Erro ao copiar. Tente selecionar o texto manualmente.");
+    console.error(err);
+  });
+}
+
+  // 🔽 Criar filtros dinâmicos
+  function popularFiltros(dados) {
+    const anos = [...new Set(dados.map(d => d["Ano/serie"]).filter(Boolean))].sort();
+    const semanas = [...new Set(dados.map(d => d["Semana"]).filter(Boolean))].sort((a,b) => a-b);
+
+    const selectAno = document.getElementById("filtroAno");
+    const selectSemana = document.getElementById("filtroSemana");
+
+    // Limpa opções anteriores (exceto a primeira)
+    selectAno.innerHTML = '<option value="">Todos os Anos</option>';
+    selectSemana.innerHTML = '<option value="">Todas as Semanas</option>';
+
+    anos.forEach(a => {
+      let op = document.createElement("option");
+      op.value = a; op.textContent = a;
+      selectAno.appendChild(op);
+    });
+
+    semanas.forEach(s => {
+      let op = document.createElement("option");
+      op.value = s; op.textContent = "Semana " + s;
+      selectSemana.appendChild(op);
+    });
+  }
+
+  // 🔽 Aplicar filtros na lista
+  function aplicarFiltros() {
+    const ano = document.getElementById("filtroAno").value;
+    const semana = document.getElementById("filtroSemana").value;
+
+    let filtrados = dadosGlobais.filter(item => {
+      return (!ano || String(item["Ano/serie"]) === String(ano)) &&
+             (!semana || String(item["Semana"]) === String(semana));
+    });
+
+    renderizar(filtrados);
+  }
+
+  // 🔽 Eventos dos filtros
+  document.getElementById("filtroAno").addEventListener("change", aplicarFiltros);
+  document.getElementById("filtroSemana").addEventListener("change", aplicarFiltros);
+
+  // 🔽 Buscar dados da nova Planilha
+  async function carregarDados() {
+    try {
+      const response = await fetch(URL + "?t=" + new Date().getTime());
+      const json = await response.json();
+      
+      // Acessando a chave correta do seu novo JSON
+      dadosGlobais = json.planejamento || [];
+
+      popularFiltros(dadosGlobais);
+      renderizar(dadosGlobais);
+    } catch (e) {
+      console.error(e);
+      document.getElementById("conteudo").innerHTML = "<h3>Erro ao carregar dados da Planilha 😢</h3>";
+    }
+  }
+function toggleMenu() {
+  const menu = document.getElementById('menuFiltros');
+  
+  // Verifica se o menu está escondido ou visível
+  if (menu.style.display === "none") {
+    menu.style.display = "block";
+    document.querySelector('.btn-toggle').innerHTML = "✕ Esconder Filtros";
+  } else {
+    menu.style.display = "none";
+    document.querySelector('.btn-toggle').innerHTML = "☰ Mostrar Filtros";
+  }
+}
+// Melhore sua função de exportarHTML para garantir que o menu nunca vá para o backup
+function exportarHTML() {
+  // 1. Pega o container correto (conteudo)
+  const container = document.getElementById("conteudo");
+  
+  if (!container || container.innerHTML.trim() === "") {
+    alert("Não há dados para exportar! Filtre algo primeiro.");
+    return;
+  }
+
+  // 2. Tira uma cópia para limpar sem mexer na tela atual
+  const clone = container.cloneNode(true);
+  
+  // Remove qualquer botão que possa ter sido clonado por engano
+  clone.querySelectorAll('button').forEach(b => b.remove());
+
+  // 3. Pega os estilos atuais para o backup ficar bonito
+  const estilos = document.querySelector('style') ? document.querySelector('style').innerHTML : "";
+
+  // 4. Monta o arquivo HTML final
+  const htmlFinal = `
+    <!DOCTYPE html>
+    <html lang="pt-br">
+    <head>
+      <meta charset="UTF-8">
+      <title>Backup Planejamento</title>
+      <style>${estilos}</style>
+      <style>
+        /* Estilos extras para o backup ficar limpo */
+        body { padding: 40px; background: white !important; }
+        .topo-fixo, .btn-toggle, .btn-acao, button { display: none !important; }
+        #conteudo { display: block !important; padding: 0; }
+        .card { box-shadow: none; border: 1px solid #eee; margin-bottom: 20px; }
+      </style>
+    </head>
+    <body>
+      <h2 style="text-align:center; color:#2c3e50;">Relatório de Planejamento - ${new Date().toLocaleDateString()}</h2>
+      <div id="conteudo">${clone.innerHTML}</div>
+    </body>
+    </html>`;
+
+  // 5. Gera o download forçado
+  const blob = new Blob([htmlFinal], { type: 'text/html;charset=utf-8' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  
+  a.href = url;
+  a.download = `Planejamento_Bimestre_${new Date().getTime()}.html`;
+  document.body.appendChild(a);
+  a.click();
+  
+  // Limpeza
+  document.body.removeChild(a);
+  window.URL.revokeObjectURL(url);
+}
+  carregarDados();
+
+</script>
+
+
+</body>
+</html>
