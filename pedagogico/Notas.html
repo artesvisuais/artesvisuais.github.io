@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Relatório Arte - Prof. César Domingues</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f7f7f7; margin: 0; padding: 15px; }
+  h2 { text-align: center; margin-bottom: 10px; margin-top: 50px; color: #333; }
+  select, button { width: 100%; padding: 12px; margin-top: 10px; font-size: 16px; border-radius: 8px; border: 1px solid #ccc; }
+  
+  .card-relatorio { background: #fff; border-radius: 10px; margin: 15px 0; padding: 20px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+  
+  .bloco { border-radius: 8px; margin-bottom: 15px; padding: 12px; border-left: 8px solid #ccc; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .bloco-O { border-left-color: #5cb85c; } 
+  .bloco-B { border-left-color: #f0ad4e; } 
+  .bloco-S { border-left-color: #5bc0de; } 
+  
+  .titulo-bloco { font-weight: bold; font-size: 1.1rem; margin-bottom: 8px; color: #333; display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px; }
+  .aluno-item { padding: 4px 0; border-bottom: 1px solid #eee; font-size: 0.95rem; color: #444; }
+  
+  #top-controls { display: flex; gap: 8px; }
+  #top-controls > * { flex: 1; }
+
+  /* Estilo do Menu Lateral */
+  .menu-mobile { cursor: pointer; display: inline-block; padding: 10px; position: absolute; top: 10px; left: 10px; }
+  .bar { width: 25px; height: 3px; background-color: #333; margin: 4px 0; border-radius: 2px; }
+  .side-menu { height: 100%; width: 0; position: fixed; z-index: 100; top: 0; left: 0; background-color: #fff; overflow-x: hidden; transition: 0.4s; padding-top: 60px; box-shadow: 2px 0 5px rgba(0,0,0,0.2); }
+  .side-menu a { padding: 15px 25px; text-decoration: none; font-size: 20px; color: #333; display: block; border-bottom: 1px solid #eee; }
+  .btn-voltar { display: inline-block; transform: rotate(180deg); font-size: 30px !important; color: #d9534f !important; border-bottom: none !important; }
+
+  /* NOVO CABEÇALHO SOLICITADO */
+  .header-relatorio { text-align: left; color: #222; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #333; }
+  .header-linha { font-size: 1.1rem; margin: 5px 0; line-height: 1.4; }
+  .header-stats { font-size: 1rem; color: #555; font-weight: bold; margin-top: 10px; }
+
+  @media print {
+    .menu-mobile, #top-controls, .btn-voltar, .side-menu, button { display: none; }
+    body { background: white; padding: 0; }
+    .card-relatorio { box-shadow: none; margin: 0; padding: 0; }
+    h2 { display: none; } /* O cabeçalho interno já cumpre o papel */
+    .bloco { break-inside: avoid; border-width: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="menu-mobile" onclick="toggleMenu()">
+  <div class="bar"></div>
+  <div class="bar"></div>
+  <div class="bar"></div>
+</div>
+
+<div id="side-menu" class="side-menu">
+  <a href="#" class="btn-voltar" onclick="toggleMenu()">➜</a> 
+  <a href="https://github.io">Home🏠</a>
+  <a href="#" onclick="window.print()">Imprimir / PDF 🖨️</a>
+</div>
+
+<h2>Gerador de Relatório</h2>
+
+<div id="top-controls">
+  <select id="turma">
+    <option value="">-- Turma --</option>
+    <option value="1E">1E</option>
+    <option value="2G">2G</option>
+    <option value="3E">3E</option>
+    <option value="4A">4A</option>
+    <option value="4B">4B</option>
+    <option value="5A">5A</option>
+    <option value="5B">5B</option>
+    <option value="5C">5C</option>
+    <option value="5E">5E</option>
+    <option value="5F">5F</option>
+    <option value="EJA1">EJA1</option>
+    <option value="EJA2">EJA2</option>
+  </select>
+  <select id="bimestre">
+    <option value="1">1º Bimestre</option>
+    <option value="2">2º Bimestre</option>
+    <option value="3">3º Bimestre</option>
+    <option value="4">4º Bimestre</option>
+  </select>
+</div>
+<button onclick="gerarRelatorio()" style="background: #5cb85c; color: white; border: none; font-weight: bold;">Gerar Relatório</button>
+
+<div id="resultado"></div>
+
+<script>
+  const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbxvGDAIGfH7RfsfVrZjGWnATye6DMdsGawWnfrrQ2_CC8z3kWHcc1DB1OZhRwxRXZ8/exec";
+
+  function toggleMenu() {
+    const m = document.getElementById("side-menu");
+    m.style.width = m.style.width === "250px" ? "0" : "250px";
+  }
+
+  function jsonp(url) {
+    return new Promise((resolve, reject) => {
+      const callbackName = '_cb_' + Math.random().toString(36).substr(2, 9);
+      window[callbackName] = function (data) { resolve(data); cleanup(); };
+      function cleanup() { delete window[callbackName]; const s = document.getElementById(callbackName); if (s) s.remove(); }
+      const s = document.createElement('script');
+      s.src = url + (url.indexOf('?') === -1 ? '?' : '&') + 'callback=' + callbackName;
+      s.id = callbackName;
+      s.onerror = () => { cleanup(); reject(new Error('Erro na rede')); };
+      document.body.appendChild(s);
+    });
+  }
+
+  async function gerarRelatorio() {
+    const turma = document.getElementById("turma").value;
+    const bi = document.getElementById("bimestre").value;
+    const divRes = document.getElementById("resultado");
+
+    if (!turma) return alert("Selecione a turma.");
+
+    divRes.innerHTML = "<p style='text-align:center'>Buscando registros...</p>";
+
+    try {
+      const resp = await jsonp(`${URL_SCRIPT}?turma=${turma}`);
+      
+      if (resp.erro) {
+        divRes.innerHTML = `<p style='color:red; text-align:center'>Erro: ${resp.erro}</p>`;
+        return;
+      }
+
+      const ativos = resp.registros.filter(a => !a.nome.startsWith('***'));
+      
+      const grupos = {
+        O: { titulo: "Ótimo (O)", classe: "bloco-O", alunos: [] },
+        B: { titulo: "Bom (B)", classe: "bloco-B", alunos: [] },
+        S: { titulo: "Satisfatório (S / -S)", classe: "bloco-S", alunos: [] },
+        Outros: { titulo: "Outras Situações", classe: "", alunos: [] }
+      };
+
+      ativos.forEach(aluno => {
+        const nota = (aluno.nota || "").toUpperCase().trim();
+        if (nota === "O") grupos.O.alunos.push(aluno.nome);
+        else if (nota === "B") grupos.B.alunos.push(aluno.nome);
+        else if (nota === "S" || nota === "-S") grupos.S.alunos.push(aluno.nome);
+        else grupos.Outros.alunos.push(aluno.nome);
+      });
+
+      // HTML DO CABEÇALHO CONFORME SOLICITADO
+      let html = `<div class="card-relatorio">
+                    <div class="header-relatorio">
+                      <div class="header-linha"><strong>Turma:</strong> ${turma} - ${bi}º Bimestre - Arte - Professor César Domingues.</div>
+                      <div class="header-stats">Alunos Ativos: ${ativos.length}</div>
+                    </div>`;
+
+      ["O", "B", "S", "Outros"].forEach(chave => {
+        const g = grupos[chave];
+        if (g.alunos.length > 0) {
+          html += `<div class="bloco ${g.classe}">
+                    <div class="titulo-bloco"><span>${g.titulo}</span> <span>${g.alunos.length}</span></div>
+                    <div style="column-count: 2; column-gap: 20px;">
+                      ${g.alunos.sort().map(n => `<div class="aluno-item">${n}</div>`).join('')}
+                    </div>
+                   </div>`;
+        }
+      });
+
+      html += `</div>`;
+      divRes.innerHTML = html;
+
+    } catch (err) {
+      divRes.innerHTML = `<p style='color:red; text-align:center'>Falha na conexão com a planilha.</p>`;
+    }
+  }
+</script>
+</body>
+</html>
