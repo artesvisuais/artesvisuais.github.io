@@ -195,13 +195,30 @@ function atualizarVisual(id) {
 
 async function registrar(turma, id, valor) {
   try {
-    const resp = await jsonp(`${URL_SCRIPT}?turma=${turma}&id=${id}&valor=${valor}`);
+    // 1. Pega a data que está no input
+    const dataVal = document.getElementById("dataConsulta").value;
+    if (!dataVal) {
+      alert("Selecione uma data antes de registrar.");
+      return;
+    }
+    const partes = dataVal.split("-");
+    const dia = parseInt(partes[2]);
+    const mes = parseInt(partes[1]);
+
+    // 2. Envia a URL com dia e mes (igual ao arquivo de retificar)
+    const resp = await jsonp(`${URL_SCRIPT}?turma=${turma}&id=${id}&valor=${valor}&dia=${dia}&mes=${mes}`);
+    
     if (!resp.erro) { 
       registros[id] = valor; 
       atualizarVisual(id); 
+    } else {
+      alert("Erro do servidor: " + resp.erro);
     }
-  } catch (e) { alert("Erro ao registrar."); }
+  } catch (e) { 
+    alert("Erro ao registrar. Verifique a conexão."); 
+  }
 }
+
 
 function verificarPendencias() {
   const divs = document.querySelectorAll('.aluno');
