@@ -34,6 +34,39 @@
   .info-turma { margin-top: 8px; font-weight: bold; font-size: 16px; color: #444; }
 
   @media (max-width: 480px) { h2 { margin-top: 50px; } #dataConsulta { width: 120px; font-size: 14px; } }
+
+/* 🔘 efeito padrão */
+.botoes button {
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+/* 👇 clique imediato (efeito físico) */
+.botoes button:active {
+  transform: scale(0.92);
+  filter: brightness(0.9);
+}
+
+/* ⏳ estado carregando */
+.botoes button.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* ✨ efeito de "pulso" */
+.botoes button.loading::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+  animation: pulse 0.8s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(0,0,0,0.2); }
+  70% { box-shadow: 0 0 0 6px rgba(0,0,0,0); }
+  100% { box-shadow: 0 0 0 0 rgba(0,0,0,0); }
+}
 </style>
 </head>
 <body>
@@ -53,7 +86,7 @@
   <a href="#" style="font-size:30px; color:#d9534f; transform: rotate(180deg); display:inline-block; text-decoration:none;" onclick="toggleMenu()">➜</a>
   <a href="https://artesvisuais.github.io/chamada_index.html">Home 🏠</a>
   <a href="#" onclick="verificarPendencias()">Verificar Pendências 🔍</a>
-  <a href="https://artesvisuais.github.io/chamada_edition.html">Editar ⚙️</a>
+  <a href="https://github.io">Editar ⚙️</a>
   <a href="#" onclick="marcarTodosNaoLetivo()">Marcar (Não Letivo) 🚫</a>
 </div>
 
@@ -182,11 +215,11 @@ async function carregarTurma() {
         div.innerHTML = `
           <strong>${a.nome}</strong><br>
           <div class="botoes">
-            <button class="btnA" data-valor="A" onclick="registrar('${turma}', ${a.id}, 'A')">A</button>
-            <button class="btnF" data-valor="F" onclick="registrar('${turma}', ${a.id}, 'F')">F</button>
-            <button class="btn1" data-valor="1" onclick="registrar('${turma}', ${a.id}, '1')">1</button>
-            <button class="btn2" data-valor="2" onclick="registrar('${turma}', ${a.id}, '2')">2</button>
-            <button class="btn3" data-valor="3" onclick="registrar('${turma}', ${a.id}, '3')">3</button>
+            <button class="btnA" data-valor="A" onclick="registrar(event, '${turma}', ${a.id}, 'A')">A</button>
+<button class="btnF" data-valor="F" onclick="registrar(event, '${turma}', ${a.id}, 'F')">F</button>
+<button class="btn1" data-valor="1" onclick="registrar(event, '${turma}', ${a.id}, '1')">1</button>
+<button class="btn2" data-valor="2" onclick="registrar(event, '${turma}', ${a.id}, '2')">2</button>
+<button class="btn3" data-valor="3" onclick="registrar(event, '${turma}', ${a.id}, '3')">3</button>
           </div>
         `;
       }
@@ -215,12 +248,17 @@ function atualizarVisual(id) {
   });
 }
 
-async function registrar(turma, id, valor) {
+async function registrar(event, turma, id, valor) {
+  const btn = event?.target;
+
+  if (btn) btn.classList.add("loading");
+
   try {
     const dataVal = document.getElementById("dataConsulta").value;
 
     if (!dataVal) {
       alert("Selecione uma data antes de registrar.");
+      if (btn) btn.classList.remove("loading");
       return;
     }
 
@@ -240,6 +278,8 @@ async function registrar(turma, id, valor) {
   } catch (e) {
     alert("Erro ao registrar. Verifique a conexão.");
   }
+
+  if (btn) btn.classList.remove("loading");
 }
 
 function verificarPendencias() {
