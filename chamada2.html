@@ -84,9 +84,9 @@
 <div id="lista"></div>
 
 <script>
-//const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwJBgFQaku7_42sFeOvVIIv2uJzuxHPJDZda8rY5K85p2Ng05f-7V_MEzi_Fev9zA0/exec";
+//const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbz4gGZHU6qtpFXMCQQn0b8yjtuK4ZTZVG45mchiB7gn8XGdIIoxF1sQKANxEBEbdTg/exec";
 const URL_SCRIPT = CONFIG.URL_SCRIPT;
-  let registros = {};
+let registros = {};
 let dataAtual = new Date();
 
 const PROFESSORES = {
@@ -103,7 +103,11 @@ function formatarData(d) {
 function jsonp(url) {
   return new Promise((resolve, reject) => {
     const callbackName = '_cb_' + Math.random().toString(36).substr(2, 9);
-    window[callbackName] = (data) => { resolve(data); delete window[callbackName]; document.getElementById(callbackName).remove(); };
+    window[callbackName] = (data) => {
+      resolve(data);
+      delete window[callbackName];
+      document.getElementById(callbackName).remove();
+    };
     const s = document.createElement('script');
     s.src = url + (url.indexOf('?') === -1 ? '?' : '&') + 'callback=' + callbackName;
     s.id = callbackName;
@@ -123,22 +127,21 @@ function setDataAtualFromInput() {
 async function carregarTurma() {
   const turma = document.getElementById("turma").value;
   if (!turma) return;
-  
+
   atualizarInfoTurma();
   setDataAtualFromInput();
 
   const dia = dataAtual.getDate();
   const mes = dataAtual.getMonth() + 1;
+
   const lista = document.getElementById("lista");
   lista.innerHTML = "<p>Carregando estudantes...</p>";
 
   try {
     const resp = await jsonp(`${URL_SCRIPT}?turma=${turma}&dia=${dia}&mes=${mes}`);
-    
-    // TRAVA DE DIA NÃO LETIVO (Sincronizada com o Backend do Backup)
-    // Se o resp.erro existir, o backend identificou que as Linhas 7 e 8 não correspondem à data.
+
     if (resp.erro) {
-      lista.innerHTML = `<div style="color:#d9534f; font-weight:bold; text-align:center; padding:20px; border:2px solid #d9534f; border-radius:10px; background:#fff;">🚫 ${resp.erro}</div>`;
+      lista.innerHTML = `<div style="color:#d9534f; font-weight:bold; text-align:center; padding:20px; border:2px solid #d9534f; border-radius:10px; background:#fff;">${resp.erro}</div>`;
       document.querySelector("h2").innerText = `Chamada Digital (${turma})`;
       return;
     }
@@ -150,19 +153,31 @@ async function carregarTurma() {
 
     document.querySelector("h2").innerText = `Chamada Digital (${resp.data}), (${turma})`;
     lista.innerHTML = "";
+
     registros = {};
 
-    resp.registros.forEach((a) => {
+    // 🔥 ORDENAÇÃO ALFABÉTICA (com transferidos no final)
+    const registrosOrdenados = [...resp.registros].sort((a, b) => {
+      const aTransferido = a.nome.startsWith('*');
+      const bTransferido = b.nome.startsWith('*');
+
+      if (aTransferido && !bTransferido) return 1;
+      if (!aTransferido && bTransferido) return -1;
+
+      return a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' });
+    });
+
+    registrosOrdenados.forEach((a) => {
       const div = document.createElement("div");
       div.className = "aluno";
       div.id = `aluno-${a.id}`;
+
       if (a.nome.startsWith('*')) div.classList.add('transferido');
 
       const valorAtual = (a.valor !== undefined && a.valor !== null) ? String(a.valor) : "";
 
-      // Caso o aluno tenha valor "A" (Anotação de Não Letivo na planilha)
       if (valorAtual === "A") {
-        div.innerHTML = `<strong>${a.nome}</strong><br><div style="color: #5bc0de; font-weight: bold; margin-top: 5px;">🚫 Dia Não Letivo / Atividade Externa</div>`;
+        div.innerHTML = `<strong>${a.nome}</strong><br><div style="color: #5bc0de; font-weight: bold; margin-top: 5px;">Dia Não Letivo / Atividade Externa</div>`;
       } else {
         div.innerHTML = `
           <strong>${a.nome}</strong><br>
@@ -177,6 +192,7 @@ async function carregarTurma() {
       }
 
       lista.appendChild(div);
+
       registros[a.id] = valorAtual;
       atualizarVisual(a.id);
 
@@ -184,12 +200,16 @@ async function carregarTurma() {
         div.querySelectorAll("button").forEach(btn => btn.disabled = true);
       }
     });
-  } catch (err) { lista.innerHTML = `<p>Erro ao carregar dados. Verifique a conexão.</p>`; }
+
+  } catch (err) {
+    lista.innerHTML = `<p>Erro ao carregar dados. Verifique a conexão.</p>`;
+  }
 }
 
 function atualizarVisual(id) {
   const div = document.getElementById(`aluno-${id}`);
   if (!div) return;
+
   div.querySelectorAll(".botoes button").forEach(btn => {
     btn.classList.toggle("selecionado", registros[id] === btn.getAttribute("data-valor"));
   });
@@ -197,30 +217,30 @@ function atualizarVisual(id) {
 
 async function registrar(turma, id, valor) {
   try {
-    // 1. Pega a data que está no input
     const dataVal = document.getElementById("dataConsulta").value;
+
     if (!dataVal) {
       alert("Selecione uma data antes de registrar.");
       return;
     }
+
     const partes = dataVal.split("-");
     const dia = parseInt(partes[2]);
     const mes = parseInt(partes[1]);
 
-    // 2. Envia a URL com dia e mes (igual ao arquivo de retificar)
     const resp = await jsonp(`${URL_SCRIPT}?turma=${turma}&id=${id}&valor=${valor}&dia=${dia}&mes=${mes}`);
-    
-    if (!resp.erro) { 
-      registros[id] = valor; 
-      atualizarVisual(id); 
+
+    if (!resp.erro) {
+      registros[id] = valor;
+      atualizarVisual(id);
     } else {
       alert("Erro do servidor: " + resp.erro);
     }
-  } catch (e) { 
-    alert("Erro ao registrar. Verifique a conexão."); 
+
+  } catch (e) {
+    alert("Erro ao registrar. Verifique a conexão.");
   }
 }
-
 
 function verificarPendencias() {
   const divs = document.querySelectorAll('.aluno');
@@ -228,10 +248,11 @@ function verificarPendencias() {
 
   divs.forEach(div => {
     const nome = div.querySelector('strong').innerText;
-    if (nome.startsWith('***')) return; // Exceção para estudantes especiais
-    
+
+    if (nome.startsWith('***')) return;
+
     const botoesContainer = div.querySelector('.botoes');
-    if (!botoesContainer) return; // Pula quem não tem botões (Dias Não Letivos)
+    if (!botoesContainer) return;
 
     if (!div.querySelector('.selecionado')) {
       pendentes.push(nome);
@@ -242,25 +263,32 @@ function verificarPendencias() {
   });
 
   const overlay = document.getElementById('alertOverlay');
+
   if (pendentes.length > 0) {
-    document.getElementById('alertTitle').innerText = "⚠️ ATENÇÃO!";
+    document.getElementById('alertTitle').innerText = "ATENÇÃO!";
     document.getElementById('alertMsg').innerText = `${pendentes.length} estudantes sem registro (1, 2, 3 ou F):`;
     document.getElementById('alertLista').innerHTML = pendentes.join("<br>");
     document.getElementById('alertLista').style.display = "block";
   } else {
-    document.getElementById('alertTitle').innerText = "✅ TUDO CERTO!";
+    document.getElementById('alertTitle').innerText = "TUDO CERTO!";
     document.getElementById('alertMsg').innerText = "Todos os estudantes válidos foram registrados.";
     document.getElementById('alertLista').style.display = "none";
   }
+
   overlay.style.display = "flex";
 }
 
-function fecharAlerta() { document.getElementById('alertOverlay').style.display = "none"; }
+function fecharAlerta() {
+  document.getElementById('alertOverlay').style.display = "none";
+}
 
 function atualizarInfoTurma() {
   const t = document.getElementById("turma").value;
   const info = document.getElementById("infoTurma");
-  info.innerHTML = (t && PROFESSORES[t]) ? `<div style="font-size:14px;opacity:0.7;">Turma ${t}</div><div>👩‍🏫 ${PROFESSORES[t]}</div>` : "";
+
+  info.innerHTML = (t && PROFESSORES[t])
+    ? `<div style="font-size:14px;opacity:0.7;">Turma ${t}</div><div>${PROFESSORES[t]}</div>`
+    : "";
 }
 
 function toggleMenu() {
@@ -270,6 +298,7 @@ function toggleMenu() {
 
 function marcarTodosNaoLetivo() {
   const btns = document.querySelectorAll('.btnA');
+
   if (btns.length > 0 && confirm("Deseja marcar TODOS como Não Letivo?")) {
     btns.forEach(b => { if (!b.disabled) b.click(); });
     toggleMenu();
@@ -278,8 +307,10 @@ function marcarTodosNaoLetivo() {
 
 document.getElementById("dataConsulta").addEventListener("change", carregarTurma);
 document.getElementById("refreshBtn").addEventListener("click", carregarTurma);
-window.onload = () => { document.getElementById("dataConsulta").value = formatarData(new Date()); };
 
+window.onload = () => {
+  document.getElementById("dataConsulta").value = formatarData(new Date());
+};
 </script>
 </body>
 </html>
