@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download de Arquivos</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h2 { color: #333; margin-bottom: 20px; font-size: 1.5rem; }
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            background-color: #fff;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:disabled { background-color: #ccc; }
+        .loader { font-size: 14px; color: #666; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Baixar Arquivos</h2>
+    <div id="status" class="loader">Carregando lista...</div>
+    <select id="fileSelect" disabled>
+        <option value="">Aguarde...</option>
+    </select>
+    <button id="downloadBtn" disabled>Baixar Agora</button>
+</div>
+
+<script>
+    // A SUA URL DO GOOGLE APPS SCRIPT
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx_MnCSdUT7Zd00up403KuHFvGFVo4Z_uGDNRRL39VIkQjJOWv8Xf03ubaLTo5Jd0E/exec'; 
+
+    const selectEl = document.getElementById('fileSelect');
+    const btnEl = document.getElementById('downloadBtn');
+    const statusEl = document.getElementById('status');
+
+    async function loadFiles() {
+        try {
+            // Chamada direta para o seu Script
+            const response = await fetch(SCRIPT_URL);
+            const data = await response.json();
+
+            if (data && data.length > 0) {
+                selectEl.innerHTML = '<option value="">Selecione um arquivo...</option>';
+                data.forEach(file => {
+                    const option = document.createElement('option');
+                    option.value = file.id; 
+                    option.textContent = file.name;
+                    selectEl.appendChild(option);
+                });
+                
+                selectEl.disabled = false;
+                statusEl.textContent = "Arquivos prontos!";
+            } else {
+                statusEl.textContent = "Nenhum arquivo encontrado na pasta.";
+            }
+        } catch (error) {
+            console.error(error);
+            statusEl.textContent = "Erro ao conectar com o Google Script.";
+        }
+    }
+
+    selectEl.addEventListener('change', () => {
+        btnEl.disabled = !selectEl.value;
+    });
+
+        // Função para disparar o download direto
+    btnEl.addEventListener('click', () => {
+    const fileId = selectEl.value;
+    if (fileId) {
+        const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+        window.open(downloadUrl, '_blank');
+    }
+});
+
+
+    loadFiles();
+</script>
+
+</body>
+</html>
