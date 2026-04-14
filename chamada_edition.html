@@ -2,6 +2,7 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8" />
+<script src="config.js"></script>  
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Retificar Registro - Chamada Digital</title>
 
@@ -238,8 +239,8 @@ select, input {
 
 <script>
 
-const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwJBgFQaku7_42sFeOvVIIv2uJzuxHPJDZda8rY5K85p2Ng05f-7V_MEzi_Fev9zA0/exec";
-
+//const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwJBgFQaku7_42sFeOvVIIv2uJzuxHPJDZda8rY5K85p2Ng05f-7V_MEzi_Fev9zA0/exec";
+const URL_SCRIPT = CONFIG.URL_SCRIPT;
 function toggleMenu() {
   const menu = document.getElementById("side-menu");
   menu.style.width = (menu.style.width === "250px") ? "0" : "250px";
