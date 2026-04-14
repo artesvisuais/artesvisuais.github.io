@@ -2,6 +2,7 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8" />
+<script src="/config.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Chamada Digital_V10</title>
 <style>
@@ -83,8 +84,9 @@
 <div id="lista"></div>
 
 <script>
-const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwJBgFQaku7_42sFeOvVIIv2uJzuxHPJDZda8rY5K85p2Ng05f-7V_MEzi_Fev9zA0/exec";
-let registros = {};
+//const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwJBgFQaku7_42sFeOvVIIv2uJzuxHPJDZda8rY5K85p2Ng05f-7V_MEzi_Fev9zA0/exec";
+const URL_SCRIPT = CONFIG.URL_SCRIPT;
+  let registros = {};
 let dataAtual = new Date();
 
 const PROFESSORES = {
