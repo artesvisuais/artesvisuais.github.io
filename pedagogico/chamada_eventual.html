@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <script src="config.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chamada Digital - Eventual</title>
+    <style>
+        /* CSS Original Mantido para Responsividade e Estilo */
+        body { font-family: Arial, sans-serif; background: #f7f7f7; margin: 0; padding: 15px; }
+        h2 { text-align: center; margin-bottom: 10px; }
+        select, button { width: 100%; padding: 10px; margin-top: 10px; font-size: 16px; border-radius: 8px; }
+        .aluno { background: #fff; border-radius: 10px; margin: 8px 0; padding: 10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); border: 2px solid transparent; }
+        .botoes { margin-top: 8px; display: flex; justify-content: space-between; }
+        .botoes button { flex: 1; margin: 0 2px; padding: 10px; border: none; border-radius: 6px; color: #fff; font-weight: bold; cursor: pointer; transition: all 0.15s ease; position: relative; }
+        .btnA { background: #B0E0E6; } .btnF { background: #d9534f; } .btn1 { background: #f0ad4e; }
+        .btn2 { background: #5bc0de; } .btn3 { background: #5cb85c; }
+        .botoes button.selecionado { box-shadow: 0 0 8px 3px #333 inset; transform: scale(1.1); z-index: 1; }
+        .botoes button:active { transform: scale(0.92); filter: brightness(0.9); }
+        .botoes button.loading { opacity: 0.6; pointer-events: none; }
+        .transferido { opacity: 0.4; color: #555; }
+        #top-controls { display: flex; flex-direction: column; gap: 8px; }
+        .info-turma { margin-top: 8px; font-weight: bold; font-size: 16px; color: #444; text-align: center; }
+        .data-label { text-align: center; background: #eee; padding: 8px; border-radius: 8px; font-weight: bold; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<h2>Chamada Digital - Eventual</h2>
+
+<div id="top-controls">
+    <!-- Label com a data do dia -->
+    <div id="displayData" class="data-label"></div>
+    
+    <select id="turma" onchange="carregarTurma()">
+        <option value="">-- Escolha a turma --</option>
+        <option value="1E">1E</option>
+        <option value="2G">2G</option>
+        <option value="3E">3E</option>
+        <option value="4A">4A</option>
+        <option value="4B">4B</option>
+        <option value="5A">5A</option>
+        <option value="5B">5B</option>
+        <option value="5C">5C</option>
+        <option value="5E">5E</option>
+        <option value="5F">5F</option>
+        <option value="5DD">5DD</option>
+        <option value="EJA1">EJA1</option>
+        <option value="EJA2">EJA2</option>
+    </select>
+</div>
+
+<div id="infoTurma" class="info-turma"></div>
+<div id="lista"></div>
+
+<script>
+const URL_SCRIPT = CONFIG.URL_SCRIPT;
+let registros = {};
+let dataHoje = new Date();
+
+const PROFESSORES = {
+    "1E": "Profª Mônica", "2G": "Profª Renata", "3E": "Profª Marta",
+    "4A": "Profª Margareth", "4B": "Profª Simone", "5A": "Profª Tania Morais",
+    "5B": "Profª Flavia", "5C": "Profª Erika", "5E": "Profª Liza",
+    "5F": "Prof Lucas", "5DD": "Prof. Donizete", "EJA1": "Prof. ", "EJA2": "Profª "
+};
+
+// Exibe a data formatada na label
+function exibirData() {
+    const opcoes = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById("displayData").innerText = dataHoje.toLocaleDateString('pt-BR', opcoes);
+}
+
+function jsonp(url) {
+    return new Promise((resolve, reject) => {
+        const callbackName = '_cb_' + Math.random().toString(36).substr(2, 9);
+        window[callbackName] = (data) => {
+            resolve(data);
+            delete window[callbackName];
+            document.getElementById(callbackName).remove();
+        };
+        const s = document.createElement('script');
+        s.src = url + (url.indexOf('?') === -1 ? '?' : '&') + 'callback=' + callbackName;
+        s.id = callbackName;
+        s.onerror = () => reject(new Error('Erro JSONP'));
+        document.body.appendChild(s);
+    });
+}
+
+async function carregarTurma() {
+    const turma = document.getElementById("turma").value;
+    if (!turma) return;
+
+    atualizarInfoTurma();
+    const dia = dataHoje.getDate();
+    const mes = dataHoje.getMonth() + 1;
+    const lista = document.getElementById("lista");
+    lista.innerHTML = "<p style='text-align:center;'>Carregando estudantes...</p>";
+
+    try {
+        const resp = await jsonp(`${URL_SCRIPT}?turma=${turma}&dia=${dia}&mes=${mes}`);
+        if (resp.erro) {
+            lista.innerHTML = `<div style="color:#d9534f; text-align:center; padding:20px;">${resp.erro}</div>`;
+            return;
+        }
+
+        lista.innerHTML = "";
+        registros = {};
+
+        // Ordenação alfabética
+        const registrosOrdenados = [...resp.registros].sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+
+        registrosOrdenados.forEach((a) => {
+            const div = document.createElement("div");
+            div.className = "aluno";
+            div.id = `aluno-${a.id}`;
+            if (a.nome.startsWith('*')) div.classList.add('transferido');
+
+            const valorAtual = (a.valor !== undefined && a.valor !== null) ? String(a.valor) : "";
+            
+            div.innerHTML = `
+                <strong>${a.nome}</strong><br>
+                <div class="botoes">
+                    <button class="btnA" data-valor="A" onclick="registrar(event, '${turma}', ${a.id}, 'A')">A</button>
+                    <button class="btnF" data-valor="F" onclick="registrar(event, '${turma}', ${a.id}, 'F')">F</button>
+                    <button class="btn1" data-valor="1" onclick="registrar(event, '${turma}', ${a.id}, '1')">1</button>
+                    <button class="btn2" data-valor="2" onclick="registrar(event, '${turma}', ${a.id}, '2')">2</button>
+                    <button class="btn3" data-valor="3" onclick="registrar(event, '${turma}', ${a.id}, '3')">3</button>
+                </div>
+            `;
+            lista.appendChild(div);
+            registros[a.id] = valorAtual;
+            atualizarVisual(a.id);
+        });
+    } catch (err) {
+        lista.innerHTML = `<p style='text-align:center;'>Erro ao carregar dados.</p>`;
+    }
+}
+
+function atualizarVisual(id) {
+    const div = document.getElementById(`aluno-${id}`);
+    if (!div) return;
+    div.querySelectorAll(".botoes button").forEach(btn => {
+        btn.classList.toggle("selecionado", registros[id] === btn.getAttribute("data-valor"));
+    });
+}
+
+async function registrar(event, turma, id, valor) {
+    const btn = event?.target;
+    if (btn) btn.classList.add("loading");
+    const dia = dataHoje.getDate();
+    const mes = dataHoje.getMonth() + 1;
+
+    try {
+        const resp = await jsonp(`${URL_SCRIPT}?turma=${turma}&id=${id}&valor=${valor}&dia=${dia}&mes=${mes}`);
+        if (!resp.erro) {
+            registros[id] = valor;
+            atualizarVisual(id);
+        } else {
+            alert("Erro: " + resp.erro);
+        }
+    } catch (e) {
+        alert("Erro na conexão.");
+    }
+    if (btn) btn.classList.remove("loading");
+}
+
+function atualizarInfoTurma() {
+    const t = document.getElementById("turma").value;
+    const info = document.getElementById("infoTurma");
+    info.innerHTML = (t && PROFESSORES[t]) ? `<div>${PROFESSORES[t]}</div>` : "";
+}
+
+window.onload = exibirData;
+</script>
+</body>
+</html>
