@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chamada Digital - Eventual</title>
     <style>
-        /* CSS Original Mantido para Responsividade e Estilo */
         body { font-family: Arial, sans-serif; background: #f7f7f7; margin: 0; padding: 15px; }
         h2 { text-align: center; margin-bottom: 10px; }
         select, button { width: 100%; padding: 10px; margin-top: 10px; font-size: 16px; border-radius: 8px; }
@@ -19,7 +18,8 @@
         .botoes button:active { transform: scale(0.92); filter: brightness(0.9); }
         .botoes button.loading { opacity: 0.6; pointer-events: none; }
         .transferido { opacity: 0.4; color: #555; }
-        #top-controls { display: flex; flex-direction: column; gap: 8px; }
+        #top-controls { display: flex; gap: 8px; }
+  #top-controls > * { flex: 1; }
         .info-turma { margin-top: 8px; font-weight: bold; font-size: 16px; color: #444; text-align: center; }
         .data-label { text-align: center; background: #eee; padding: 8px; border-radius: 8px; font-weight: bold; margin-top: 10px; }
     </style>
@@ -27,10 +27,9 @@
 <body>
 
 <h2>Chamada Digital - Eventual</h2>
-
+<div id="displayData" class="data-label"></div>
 <div id="top-controls">
-    <!-- Label com a data do dia -->
-    <div id="displayData" class="data-label"></div>
+    
     
     <select id="turma" onchange="carregarTurma()">
         <option value="">-- Escolha a turma --</option>
@@ -48,6 +47,7 @@
         <option value="EJA1">EJA1</option>
         <option value="EJA2">EJA2</option>
     </select>
+ <button id="refreshBtn">Atualizar</button>
 </div>
 
 <div id="infoTurma" class="info-turma"></div>
@@ -55,6 +55,7 @@
 
 <script>
 const URL_SCRIPT = CONFIG.URL_SCRIPT;
+const TELEGRAM_BASE_URL = "https://telegram.org";
 let registros = {};
 let dataHoje = new Date();
 
@@ -65,7 +66,6 @@ const PROFESSORES = {
     "5F": "Prof Lucas", "5DD": "Prof. Donizete", "EJA1": "Prof. ", "EJA2": "Profª "
 };
 
-// Exibe a data formatada na label
 function exibirData() {
     const opcoes = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     document.getElementById("displayData").innerText = dataHoje.toLocaleDateString('pt-BR', opcoes);
@@ -107,25 +107,22 @@ async function carregarTurma() {
         lista.innerHTML = "";
         registros = {};
 
-        // Ordenação alfabética
         const registrosOrdenados = [...resp.registros].sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
 
         registrosOrdenados.forEach((a) => {
             const div = document.createElement("div");
             div.className = "aluno";
             div.id = `aluno-${a.id}`;
-            if (a.nome.startsWith('*')) div.classList.add('transferido');
-
             const valorAtual = (a.valor !== undefined && a.valor !== null) ? String(a.valor) : "";
             
             div.innerHTML = `
                 <strong>${a.nome}</strong><br>
                 <div class="botoes">
-                    <button class="btnA" data-valor="A" onclick="registrar(event, '${turma}', ${a.id}, 'A')">A</button>
-                    <button class="btnF" data-valor="F" onclick="registrar(event, '${turma}', ${a.id}, 'F')">F</button>
-                    <button class="btn1" data-valor="1" onclick="registrar(event, '${turma}', ${a.id}, '1')">1</button>
-                    <button class="btn2" data-valor="2" onclick="registrar(event, '${turma}', ${a.id}, '2')">2</button>
-                    <button class="btn3" data-valor="3" onclick="registrar(event, '${turma}', ${a.id}, '3')">3</button>
+                    <button class="btnA" data-valor="A" onclick="registrar(event, '${turma}', ${a.id}, '${a.nome}', 'A')">A</button>
+                    <button class="btnF" data-valor="F" onclick="registrar(event, '${turma}', ${a.id}, '${a.nome}', 'F')">F</button>
+                    <button class="btn1" data-valor="1" onclick="registrar(event, '${turma}', ${a.id}, '${a.nome}', '1')">1</button>
+                    <button class="btn2" data-valor="2" onclick="registrar(event, '${turma}', ${a.id}, '${a.nome}', '2')">2</button>
+                    <button class="btn3" data-valor="3" onclick="registrar(event, '${turma}', ${a.id}, '${a.nome}', '3')">3</button>
                 </div>
             `;
             lista.appendChild(div);
@@ -145,7 +142,24 @@ function atualizarVisual(id) {
     });
 }
 
-async function registrar(event, turma, id, valor) {
+async function registrar(event, turma, id, nomeAluno, valor) {
+    // 1. DISPARO TELEGRAM (URL DIRETA)
+    const mensagem = encodeURIComponent(`📍 Chamada Eventual\nTurma: ${turma}\nEstudante: ${nomeAluno}\nRegistro: ${valor}`);
+    
+    // A URL que você testou no navegador está exatamente aqui:
+    const telegramUrl = `https://api.telegram.org/bot647898423:AAGJPakEKeG3iob5JUsVcHvXzd0OUOvJEus/sendMessage?chat_id=-1001290396284&text=${mensagem}`;
+
+    // Executa a URL através de um iframe invisível para evitar bloqueios do navegador
+    let iframe = document.getElementById("telegram_iframe");
+    if (!iframe) {
+        iframe = document.createElement("iframe");
+        iframe.id = "telegram_iframe";
+        iframe.style.display = "none";
+        document.body.appendChild(iframe);
+    }
+    iframe.src = telegramUrl; 
+
+    // 2. LÓGICA DO APP SCRIPT (Para salvar na planilha)
     const btn = event?.target;
     if (btn) btn.classList.add("loading");
     const dia = dataHoje.getDate();
@@ -156,11 +170,9 @@ async function registrar(event, turma, id, valor) {
         if (!resp.erro) {
             registros[id] = valor;
             atualizarVisual(id);
-        } else {
-            alert("Erro: " + resp.erro);
         }
     } catch (e) {
-        alert("Erro na conexão.");
+        console.error("Erro no Apps Script");
     }
     if (btn) btn.classList.remove("loading");
 }
@@ -170,6 +182,7 @@ function atualizarInfoTurma() {
     const info = document.getElementById("infoTurma");
     info.innerHTML = (t && PROFESSORES[t]) ? `<div>${PROFESSORES[t]}</div>` : "";
 }
+document.getElementById("refreshBtn").addEventListener("click", carregarTurma);
 
 window.onload = exibirData;
 </script>
