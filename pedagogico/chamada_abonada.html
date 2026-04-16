@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<script src="config.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chamada Digital - Eventual</title>
+
+<style>
+body { font-family: Arial, sans-serif; background: #f7f7f7; margin: 0; padding: 15px; }
+h2 { text-align: center; margin-bottom: 10px; }
+
+select, button {
+ width: 100%;
+ padding: 10px;
+ margin-top: 10px;
+ font-size: 16px;
+ border-radius: 8px;
+}
+
+.aluno {
+ background: #fff;
+ border-radius: 10px;
+ margin: 8px 0;
+ padding: 10px;
+ box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+ border: 2px solid transparent;
+}
+
+.botoes {
+ margin-top: 8px;
+ display: flex;
+}
+
+.botoes button {
+ flex: 1;
+ margin: 0 2px;
+ padding: 10px;
+ border: none;
+ border-radius: 6px;
+ color: #fff;
+ font-weight: bold;
+ cursor: pointer;
+ transition: all 0.15s ease;
+}
+
+.btnF { background: #d9534f; }
+.btn2 { background: #5bc0de; }
+
+.botoes button.selecionado {
+ box-shadow: 0 0 8px 3px #333 inset;
+ transform: scale(1.1);
+}
+
+.botoes button.loading {
+ opacity: 0.6;
+ pointer-events: none;
+}
+
+#top-controls { display: flex; gap: 8px; }
+#top-controls > * { flex: 1; }
+
+.info-turma {
+ margin-top: 8px;
+ font-weight: bold;
+ text-align: center;
+}
+
+.data-label {
+ text-align: center;
+ background: #eee;
+ padding: 8px;
+ border-radius: 8px;
+ font-weight: bold;
+ margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Chamada Digital - Eventual</h2>
+
+<div id="displayData" class="data-label"></div>
+
+<div id="top-controls">
+<select id="turma" onchange="carregarTurma()">
+<option value="">-- Escolha a turma --</option>
+<option value="1E">1E</option>
+<option value="2G">2G</option>
+<option value="3E">3E</option>
+<option value="4A">4A</option>
+<option value="4B">4B</option>
+<option value="5A">5A</option>
+<option value="5B">5B</option>
+<option value="5C">5C</option>
+<option value="5E">5E</option>
+<option value="5F">5F</option>
+<option value="5DD">5DD</option>
+<option value="EJA1">EJA1</option>
+<option value="EJA2">EJA2</option>
+</select>
+
+<button id="refreshBtn">Atualizar</button>
+</div>
+
+<button onclick="finalizarChamada()">Finalizar Chamada</button>
+
+<div id="infoTurma" class="info-turma"></div>
+<div id="lista"></div>
+
+<script>
+
+const URL_SCRIPT = CONFIG.URL_SCRIPT;
+
+let registros = {};
+let dataHoje = new Date();
+
+const PROFESSORES = {
+ "1E": "Profª Mônica", "2G": "Profª Renata", "3E": "Profª Marta",
+ "4A": "Profª Margareth", "4B": "Profª Simone", "5A": "Profª Tania Morais",
+ "5B": "Profª Flavia", "5C": "Profª Erika", "5E": "Profª Liza",
+ "5F": "Prof Lucas", "5DD": "Prof. Donizete", "EJA1": "Prof.", "EJA2": "Profª"
+};
+
+function exibirData() {
+ const opcoes = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+ document.getElementById("displayData").innerText =
+   dataHoje.toLocaleDateString('pt-BR', opcoes);
+}
+
+function jsonp(url) {
+ return new Promise((resolve, reject) => {
+   const callbackName = '_cb_' + Math.random().toString(36).substr(2, 9);
+
+   window[callbackName] = (data) => {
+     resolve(data);
+     delete window[callbackName];
+     document.getElementById(callbackName).remove();
+   };
+
+   const s = document.createElement('script');
+   s.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + callbackName;
+   s.id = callbackName;
+   s.onerror = () => reject();
+
+   document.body.appendChild(s);
+ });
+}
+
+async function carregarTurma() {
+ const turma = document.getElementById("turma").value;
+ if (!turma) return;
+
+ atualizarInfoTurma();
+
+ const dia = dataHoje.getDate();
+ const mes = dataHoje.getMonth() + 1;
+
+ const lista = document.getElementById("lista");
+ lista.innerHTML = "Carregando...";
+
+ try {
+   const resp = await jsonp(`${URL_SCRIPT}?turma=${turma}&dia=${dia}&mes=${mes}`);
+
+   lista.innerHTML = "";
+   registros = {};
+
+   const ordenado = [...resp.registros].sort((a,b) =>
+     a.nome.localeCompare(b.nome,'pt-BR')
+   );
+
+   ordenado.forEach(a => {
+     const div = document.createElement("div");
+     div.className = "aluno";
+     div.id = `aluno-${a.id}`;
+
+     const valorAtual = a.valor ? String(a.valor) : "";
+
+     div.innerHTML = `
+       <strong>${a.nome}</strong>
+       <div class="botoes">
+         <button class="btnF" data-valor="F"
+           onclick="registrar(event,'${turma}',${a.id},'${a.nome}','F')">
+           Falta
+         </button>
+
+         <button class="btn2" data-valor="2"
+           onclick="registrar(event,'${turma}',${a.id},'${a.nome}','2')">
+           Compareceu
+         </button>
+       </div>
+     `;
+
+     lista.appendChild(div);
+     registros[a.id] = valorAtual;
+     atualizarVisual(a.id);
+   });
+
+ } catch {
+   lista.innerHTML = "Erro ao carregar.";
+ }
+}
+
+function atualizarVisual(id) {
+ const div = document.getElementById(`aluno-${id}`);
+ if (!div) return;
+
+ div.querySelectorAll("button").forEach(btn => {
+   btn.classList.toggle("selecionado",
+     registros[id] === btn.getAttribute("data-valor"));
+ });
+}
+
+async function registrar(event, turma, id, nomeAluno, valor) {
+
+ const btn = event?.target;
+ if (btn) btn.classList.add("loading");
+
+ const dia = dataHoje.getDate();
+ const mes = dataHoje.getMonth() + 1;
+
+ try {
+   const resp = await jsonp(`${URL_SCRIPT}?turma=${turma}&id=${id}&valor=${valor}&dia=${dia}&mes=${mes}`);
+
+   if (!resp.erro) {
+     registros[id] = valor;
+     atualizarVisual(id);
+   }
+
+ } catch {
+   console.error("Erro ao salvar");
+ }
+
+ if (btn) btn.classList.remove("loading");
+}
+
+function finalizarChamada() {
+
+ const turma = document.getElementById("turma").value;
+ if (!turma) return;
+
+ if (Object.values(registros).includes("")) {
+   alert("Ainda existem estudantes sem registro!");
+   return;
+ }
+
+ let faltas = [];
+ let presentes = [];
+
+ for (let id in registros) {
+   const nome = document
+     .getElementById(`aluno-${id}`)
+     .querySelector("strong").innerText;
+
+   if (registros[id] === "F") faltas.push(nome);
+   if (registros[id] === "2") presentes.push(nome);
+ }
+
+ const mensagem = encodeURIComponent(
+`📊 RESUMO DA CHAMADA
+Turma: ${turma}
+
+❌ Faltas (${faltas.length}):
+${faltas.join("\n") || "Nenhuma"}
+
+✅ Presentes (${presentes.length}):
+${presentes.join("\n") || "Nenhum"}`
+ );
+
+ const url =
+`https://api.telegram.org/bot647898423:AAGJPakEKeG3iob5JUsVcHvXzd0OUOvJEus/sendMessage?chat_id=-1001290396284&text=${mensagem}`;
+
+ let iframe = document.getElementById("telegram_iframe");
+
+ if (!iframe) {
+   iframe = document.createElement("iframe");
+   iframe.style.display = "none";
+   iframe.id = "telegram_iframe";
+   document.body.appendChild(iframe);
+ }
+
+ iframe.src = url;
+}
+
+function atualizarInfoTurma() {
+ const t = document.getElementById("turma").value;
+ const info = document.getElementById("infoTurma");
+
+ info.innerHTML = (t && PROFESSORES[t])
+   ? `<div>${PROFESSORES[t]}</div>` : "";
+}
+
+document.getElementById("refreshBtn").addEventListener("click", carregarTurma);
+window.onload = exibirData;
+
+</script>
+
+</body>
+</html>
