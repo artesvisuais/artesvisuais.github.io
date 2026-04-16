@@ -57,6 +57,10 @@ select, button {
  pointer-events: none;
 }
 
+.transferido {
+ opacity: 0.4;
+}
+
 #top-controls { display: flex; gap: 8px; }
 #top-controls > * { flex: 1; }
 
@@ -171,8 +175,13 @@ async function carregarTurma() {
    );
 
    ordenado.forEach(a => {
+
+     const transferido = a.nome.startsWith("***");
+
      const div = document.createElement("div");
      div.className = "aluno";
+     if (transferido) div.classList.add("transferido");
+
      div.id = `aluno-${a.id}`;
 
      const valorAtual = a.valor ? String(a.valor) : "";
@@ -181,11 +190,13 @@ async function carregarTurma() {
        <strong>${a.nome}</strong>
        <div class="botoes">
          <button class="btnF" data-valor="F"
+           ${transferido ? "disabled" : ""}
            onclick="registrar(event,'${turma}',${a.id},'${a.nome}','F')">
            Falta
          </button>
 
          <button class="btn2" data-valor="2"
+           ${transferido ? "disabled" : ""}
            onclick="registrar(event,'${turma}',${a.id},'${a.nome}','2')">
            Compareceu
          </button>
@@ -193,7 +204,8 @@ async function carregarTurma() {
      `;
 
      lista.appendChild(div);
-     registros[a.id] = valorAtual;
+
+     registros[a.id] = transferido ? "T" : valorAtual;
      atualizarVisual(a.id);
    });
 
@@ -240,7 +252,8 @@ function finalizarChamada() {
  const turma = document.getElementById("turma").value;
  if (!turma) return;
 
- if (Object.values(registros).includes("")) {
+ // ignora transferidos ("T")
+ if (Object.values(registros).some(v => v === "")) {
    alert("Ainda existem estudantes sem registro!");
    return;
  }
@@ -249,17 +262,23 @@ function finalizarChamada() {
  let presentes = [];
 
  for (let id in registros) {
+   const valor = registros[id];
+   if (valor === "T") continue;
+
    const nome = document
      .getElementById(`aluno-${id}`)
      .querySelector("strong").innerText;
 
-   if (registros[id] === "F") faltas.push(nome);
-   if (registros[id] === "2") presentes.push(nome);
+   if (valor === "F") faltas.push(nome);
+   if (valor === "2") presentes.push(nome);
  }
+
+ const dataFormatada = dataHoje.toLocaleDateString('pt-BR');
 
  const mensagem = encodeURIComponent(
 `📊 RESUMO DA CHAMADA
 Turma: ${turma}
+Data: ${dataFormatada}
 
 ❌ Faltas (${faltas.length}):
 ${faltas.join("\n") || "Nenhuma"}
