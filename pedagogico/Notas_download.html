@@ -61,28 +61,31 @@
         <option value="">Aguarde...</option>
     </select>
     <button id="downloadBtn" disabled>Baixar Agora</button>
+   <button id="viewBtn" disabled style="margin-top: 10px; background-color: #34a853;">Abrir no Navegador</button>
 </div>
 
 <script>
-    // A SUA URL DO GOOGLE APPS SCRIPT
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx_MnCSdUT7Zd00up403KuHFvGFVo4Z_uGDNRRL39VIkQjJOWv8Xf03ubaLTo5Jd0E/exec'; 
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwvRgkmK1igKevOV5A6USkkJ776LHoetDW9Gr1SsBS8vJmxHu1Yvyqa4FWzLRH9CTE/exec'; 
 
     const selectEl = document.getElementById('fileSelect');
     const btnEl = document.getElementById('downloadBtn');
+    const viewBtnEl = document.getElementById('viewBtn');
     const statusEl = document.getElementById('status');
+    
+    let filesData = []; // Armazena os dados vindos do Google Script
 
     async function loadFiles() {
         try {
-            // Chamada direta para o seu Script
             const response = await fetch(SCRIPT_URL);
-            const data = await response.json();
+            filesData = await response.json();
 
-            if (data && data.length > 0) {
+            if (filesData && filesData.length > 0) {
                 selectEl.innerHTML = '<option value="">Selecione um arquivo...</option>';
-                data.forEach(file => {
+                
+                filesData.forEach(file => {
                     const option = document.createElement('option');
                     option.value = file.id; 
-                    option.textContent = file.name.substring(0, 2);
+                    option.textContent = file.name.substring(0, 2); // Mostra o nome completo do arquivo
                     selectEl.appendChild(option);
                 });
                 
@@ -97,19 +100,29 @@
         }
     }
 
+    // Gerencia a ativação dos botões
     selectEl.addEventListener('change', () => {
-        btnEl.disabled = !selectEl.value;
+        const hasValue = !!selectEl.value;
+        btnEl.disabled = !hasValue;
+        viewBtnEl.disabled = !hasValue;
     });
 
-        // Função para disparar o download direto
+    // Função para Download Direto
     btnEl.addEventListener('click', () => {
-    const fileId = selectEl.value;
-    if (fileId) {
-        const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
-        window.open(downloadUrl, '_blank');
-    }
-});
+        const fileId = selectEl.value;
+        if (fileId) {
+            const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+            window.open(downloadUrl, '_blank');
+        }
+    });
 
+    // Função para Abrir no Navegador (Visualizar)
+    viewBtnEl.addEventListener('click', () => {
+        const selectedFile = filesData.find(f => f.id === selectEl.value);
+        if (selectedFile && selectedFile.viewUrl) {
+            window.open(selectedFile.viewUrl, '_blank');
+        }
+    });
 
     loadFiles();
 </script>
