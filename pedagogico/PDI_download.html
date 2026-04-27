@@ -65,7 +65,7 @@
 
 <script>
     // A SUA URL DO GOOGLE APPS SCRIPT
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxiKwB-7OEd1OibGdURSpokQo3qsMuzCbX3EYtZhCAIDYTwjA6nynQoE7e4dtIR4-NQ/exec'; 
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzc4SD9OWvyjIOsBpj8nmR5UEcPj5uPKjD7L3j70inmc4GIPLOtQGAq17PIcCDC6jDg/exec'; 
 
     const selectEl = document.getElementById('fileSelect');
     const btnEl = document.getElementById('downloadBtn');
@@ -73,15 +73,17 @@
 
     async function loadFiles() {
         try {
-            // Chamada direta para o seu Script
+            statusEl.textContent = "Carregando lista...";
             const response = await fetch(SCRIPT_URL);
             const data = await response.json();
 
             if (data && data.length > 0) {
                 selectEl.innerHTML = '<option value="">Selecione um arquivo...</option>';
+                
                 data.forEach(file => {
                     const option = document.createElement('option');
-                    option.value = file.id; 
+                    // Agora usamos file.url que vem do novo code.gs
+                    option.value = file.url; 
                     option.textContent = file.name;
                     selectEl.appendChild(option);
                 });
@@ -97,19 +99,20 @@
         }
     }
 
+    // Habilita o botão apenas quando um arquivo é selecionado
     selectEl.addEventListener('change', () => {
         btnEl.disabled = !selectEl.value;
     });
 
-        // Função para disparar o download direto
+    // Função para disparar o download
     btnEl.addEventListener('click', () => {
-    const fileId = selectEl.value;
-    if (fileId) {
-        const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
-        window.open(downloadUrl, '_blank');
-    }
-});
-
+        const downloadUrl = selectEl.value;
+        if (downloadUrl) {
+            // window.location.href é melhor para downloads diretos 
+            // pois evita que o navegador bloqueie o pop-up
+            window.location.href = downloadUrl;
+        }
+    });
 
     loadFiles();
 </script>
