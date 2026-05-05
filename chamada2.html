@@ -29,7 +29,8 @@
   .menu-mobile { cursor: pointer; padding: 10px; position: absolute; top: 10px; left: 10px; z-index: 110; }
   .bar { width: 25px; height: 3px; background-color: #333; margin: 4px 0; border-radius: 2px; }
   .side-menu { height: 100%; width: 0; position: fixed; z-index: 100; top: 0; left: 0; background-color: #fff; overflow-x: hidden; transition: 0.4s; padding-top: 60px; box-shadow: 2px 0 5px rgba(0,0,0,0.2); }
-  .side-menu a { padding: 15px 25px; text-decoration: none; font-size: 18px; color: #333; display: block; border-bottom: 1px solid #eee; }
+  .side-menu a { padding: 15px 25px; text-decoration: none; font-size: 18px; color: #333; display: block; border-bottom: 1px solid #eee; cursor: pointer; }
+  .side-menu a:hover { background: #f0f0f0; }
   
   .info-turma { margin-top: 8px; font-weight: bold; font-size: 16px; color: #444; }
 
@@ -85,9 +86,10 @@
 <div id="side-menu" class="side-menu">
   <a href="#" style="font-size:30px; color:#d9534f; transform: rotate(180deg); display:inline-block; text-decoration:none;" onclick="toggleMenu()">➜</a>
   <a href="https://artesvisuais.github.io/chamada_index.html">Home 🏠</a>
-  <a href="#" onclick="verificarPendencias()">Verificar Pendências 🔍</a>
+  <a href="#" onclick="verificarPendencias(); toggleMenu();">Verificar Pendências 🔍</a>
+  <a href="#" onclick="marcarTransferidosComoN(); toggleMenu();">Marcar Transferidos como N 📝</a>
   <a href="https://github.io">Editar ⚙️</a>
-  <a href="#" onclick="marcarTodosNaoLetivo()">Marcar (Não Letivo) 🚫</a>
+  <a href="#" onclick="marcarTodosNaoLetivo(); toggleMenu();">Marcar (Não Letivo) 🚫</a>
 </div>
 
 <h2>Chamada Digital</h2>
@@ -189,7 +191,7 @@ async function carregarTurma() {
 
     registros = {};
 
-    // 🔥 ORDENAÇÃO ALFABÉTICA (com transferidos no final)
+    // Ordenação alfabética (transferidos no final)
     const registrosOrdenados = [...resp.registros].sort((a, b) => {
       const aTransferido = a.nome.startsWith('*');
       const bTransferido = b.nome.startsWith('*');
@@ -211,15 +213,20 @@ async function carregarTurma() {
 
       if (valorAtual === "A") {
         div.innerHTML = `<strong>${a.nome}</strong><br><div style="color: #5bc0de; font-weight: bold; margin-top: 5px;">Dia Não Letivo / Atividade Externa</div>`;
+      } else if (valorAtual === "N") {
+        div.innerHTML = `<strong>${a.nome}</strong><br><div style="color: #999; font-weight: bold; margin-top: 5px;">📌 Transferido - Não Registrado</div>`;
+        // Esconder botões se for N
+        const botoesDiv = div.querySelector('.botoes');
+        if (botoesDiv) botoesDiv.style.display = "none";
       } else {
         div.innerHTML = `
           <strong>${a.nome}</strong><br>
           <div class="botoes">
             <button class="btnA" data-valor="A" onclick="registrar(event, '${turma}', ${a.id}, 'A')">A</button>
-<button class="btnF" data-valor="F" onclick="registrar(event, '${turma}', ${a.id}, 'F')">F</button>
-<button class="btn1" data-valor="1" onclick="registrar(event, '${turma}', ${a.id}, '1')">1</button>
-<button class="btn2" data-valor="2" onclick="registrar(event, '${turma}', ${a.id}, '2')">2</button>
-<button class="btn3" data-valor="3" onclick="registrar(event, '${turma}', ${a.id}, '3')">3</button>
+            <button class="btnF" data-valor="F" onclick="registrar(event, '${turma}', ${a.id}, 'F')">F</button>
+            <button class="btn1" data-valor="1" onclick="registrar(event, '${turma}', ${a.id}, '1')">1</button>
+            <button class="btn2" data-valor="2" onclick="registrar(event, '${turma}', ${a.id}, '2')">2</button>
+            <button class="btn3" data-valor="3" onclick="registrar(event, '${turma}', ${a.id}, '3')">3</button>
           </div>
         `;
       }
@@ -229,7 +236,7 @@ async function carregarTurma() {
       registros[a.id] = valorAtual;
       atualizarVisual(a.id);
 
-      if (a.nome.startsWith('*')) {
+      if (a.nome.startsWith('*') && valorAtual !== "N") {
         div.querySelectorAll("button").forEach(btn => btn.disabled = true);
       }
     });
@@ -282,6 +289,104 @@ async function registrar(event, turma, id, valor) {
   if (btn) btn.classList.remove("loading");
 }
 
+// Função para marcar todos os transferidos (***) como "N"
+async function marcarTransferidosComoN() {
+  const turma = document.getElementById("turma").value;
+  if (!turma) {
+    alert("Selecione uma turma primeiro.");
+    return;
+  }
+
+  // Verificar se a data está selecionada
+  const dataVal = document.getElementById("dataConsulta").value;
+  if (!dataVal) {
+    alert("Selecione uma data antes de marcar os transferidos.");
+    return;
+  }
+
+  // Encontrar todos os alunos com nome começando com ***
+  const divs = document.querySelectorAll('.aluno');
+  const transferidos = [];
+  
+  divs.forEach(div => {
+    const nomeStrong = div.querySelector('strong');
+    if (nomeStrong && nomeStrong.innerText.startsWith('***')) {
+      transferidos.push(div);
+    }
+  });
+
+  if (transferidos.length === 0) {
+    alert("Nenhum aluno transferido (***) encontrado nesta turma.");
+    return;
+  }
+
+  const confirmar = confirm(`Deseja marcar ${transferidos.length} aluno(s) transferido(s) como "N" (Transferido - Não Registrado) na data ${dataVal}?`);
+  
+  if (!confirmar) return;
+
+  // Mostrar loading visual no botão do menu via toast
+  const menuOpcao = event?.target;
+  if (menuOpcao) menuOpcao.style.opacity = "0.5";
+  
+  let sucesso = 0;
+  let erros = 0;
+
+  for (const div of transferidos) {
+    const idMatch = div.id.match(/\d+$/);
+    if (!idMatch) continue;
+    
+    const id = parseInt(idMatch[0]);
+    const nome = div.querySelector('strong').innerText;
+    
+    try {
+      const partes = dataVal.split("-");
+      const dia = parseInt(partes[2]);
+      const mes = parseInt(partes[1]);
+      
+      const resp = await jsonp(`${URL_SCRIPT}?turma=${turma}&id=${id}&valor=N&dia=${dia}&mes=${mes}`);
+      
+      if (!resp.erro) {
+        registros[id] = "N";
+        sucesso++;
+        // Atualizar visualmente a div
+        const botoesDiv = div.querySelector('.botoes');
+        if (botoesDiv) {
+          // Esconder botões
+          botoesDiv.style.display = "none";
+          // Adicionar texto indicativo
+          const statusDiv = document.createElement('div');
+          statusDiv.style.cssText = "color: #999; font-weight: bold; margin-top: 5px; font-size: 12px;";
+          statusDiv.innerText = "📌 Transferido - Não Registrado";
+          const antigo = div.querySelector('.status-transferido');
+          if (antigo) antigo.remove();
+          statusDiv.className = "status-transferido";
+          div.appendChild(statusDiv);
+        }
+      } else {
+        erros++;
+        console.error(`Erro ao marcar ${nome}:`, resp.erro);
+      }
+      
+      // Pequena pausa para não sobrecarregar
+      await new Promise(r => setTimeout(r, 100));
+      
+    } catch (e) {
+      erros++;
+      console.error(`Erro ao marcar ${nome}:`, e);
+    }
+  }
+  
+  if (menuOpcao) menuOpcao.style.opacity = "";
+  
+  // Mostrar resultado
+  alert(`✅ Finalizado!\n\nSucesso: ${sucesso} aluno(s) marcado(s) como N\n❌ Erros: ${erros}`);
+  
+  // Recarregar para mostrar o status atualizado
+  if (sucesso > 0) {
+    setTimeout(() => carregarTurma(), 500);
+  }
+}
+
 function verificarPendencias() {
   const divs = document.querySelectorAll('.aluno');
   let pendentes = [];
@@ -289,12 +394,15 @@ function verificarPendencias() {
   divs.forEach(div => {
     const nome = div.querySelector('strong').innerText;
 
+    // Ignorar transferidos
     if (nome.startsWith('***')) return;
 
     const botoesContainer = div.querySelector('.botoes');
     if (!botoesContainer) return;
 
-    if (!div.querySelector('.selecionado')) {
+    // Verificar se há algum botão selecionado
+    const temSelecionado = div.querySelector('.selecionado');
+    if (!temSelecionado) {
       pendentes.push(nome);
       div.style.border = "2px solid #d9534f";
     } else {
@@ -305,12 +413,12 @@ function verificarPendencias() {
   const overlay = document.getElementById('alertOverlay');
 
   if (pendentes.length > 0) {
-    document.getElementById('alertTitle').innerText = "ATENÇÃO!";
-    document.getElementById('alertMsg').innerText = `${pendentes.length} estudantes sem registro (1, 2, 3 ou F):`;
+    document.getElementById('alertTitle').innerText = "⚠️ ATENÇÃO!";
+    document.getElementById('alertMsg').innerText = `${pendentes.length} estudante(s) sem registro (1, 2, 3 ou F):`;
     document.getElementById('alertLista').innerHTML = pendentes.join("<br>");
     document.getElementById('alertLista').style.display = "block";
   } else {
-    document.getElementById('alertTitle').innerText = "TUDO CERTO!";
+    document.getElementById('alertTitle').innerText = "✅ TUDO CERTO!";
     document.getElementById('alertMsg').innerText = "Todos os estudantes válidos foram registrados.";
     document.getElementById('alertLista').style.display = "none";
   }
@@ -333,7 +441,11 @@ function atualizarInfoTurma() {
 
 function toggleMenu() {
   const m = document.getElementById("side-menu");
-  m.style.width = (m.style.width === "250px") ? "0" : "250px";
+  if (m.style.width === "250px") {
+    m.style.width = "0";
+  } else {
+    m.style.width = "250px";
+  }
 }
 
 function marcarTodosNaoLetivo() {
