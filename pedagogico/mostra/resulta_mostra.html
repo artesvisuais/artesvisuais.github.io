@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resultados da Votação Preliminar</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f3f7fa;
+      color: #333;
+      padding: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 2.2rem;
+      color: #2c3e50;
+    }
+    .year-selector {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+    .year-btn {
+      background: #fff;
+      border: 2px solid #e67e22;
+      color: #e67e22;
+      padding: 0.5rem 1.5rem;
+      border-radius: 2rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .year-btn:hover { background: #fdf2e9; }
+    .year-btn.active {
+      background: #e67e22;
+      color: white;
+    }
+    .table-container {
+      overflow-x: auto;
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+    }
+    th, td {
+      padding: 0.8rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid #ecf0f1;
+    }
+    th {
+      background: #f8f9fa;
+      font-weight: 700;
+      color: #2c3e50;
+    }
+    tr:last-child td { border-bottom: none; }
+    .rank {
+      font-weight: bold;
+      color: #e67e22;
+    }
+    .name { font-weight: 600; }
+    .votos-count {
+      font-weight: bold;
+      color: #27ae60;
+    }
+    .highlight {
+      background: #fef9e7;
+    }
+    .message {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 1.2rem;
+    }
+    .loading {
+      text-align: center;
+      padding: 3rem;
+      font-size: 1.2rem;
+      color: #7f8c8d;
+    }
+    .total-bar {
+      margin: 1rem 0 2rem;
+      text-align: center;
+      font-size: 1.1rem;
+    }
+
+    /* Responsivo: cards empilhados em telas até 600px */
+    @media screen and (max-width: 600px) {
+      .table-container {
+        overflow-x: visible;
+        background: none;
+        box-shadow: none;
+      }
+      table, thead, tbody, th, td, tr {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      thead {
+        display: none; /* oculta cabeçalho no mobile */
+      }
+      tr {
+        background: white;
+        border-radius: 0.8rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        margin-bottom: 1rem;
+        padding: 0.8rem;
+      }
+      td {
+        display: flex;
+        flex-direction: row;
+        align-items: baseline;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #f0f0f0;
+        text-align: left;
+        word-break: break-word; /* evita estouro com textos longos */
+      }
+      td:last-child {
+        border-bottom: none;
+      }
+      td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #7f8c8d;
+        min-width: 80px;
+        margin-right: 0.5rem;
+        flex-shrink: 0;
+      }
+      .rank {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #e67e22;
+      }
+      .votos-count {
+        color: #27ae60;
+        font-weight: bold;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>🏆 Resultados da Votação</h1>
+
+  <div class="year-selector" id="yearSelector">
+    <button class="year-btn active" data-year="todos">Todos</button>
+    <button class="year-btn" data-year="1ano">1º ano</button>
+    <button class="year-btn" data-year="2ano">2º ano</button>
+    <button class="year-btn" data-year="3ano">3º ano</button>
+    <button class="year-btn" data-year="4ano">4º ano</button>
+    <button class="year-btn" data-year="5ano">5º ano</button>
+  </div>
+
+  <div id="content" class="loading">Carregando resultados...</div>
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxFWWxFau0rG9WhRrvGoVwuA02M9F0ESnBCYPOeOKeU2OMmQh9-7V4xiCjPDt43-PI/exec';
+
+    let allData = {};
+
+    // Busca os dados via API
+    async function fetchResults() {
+      try {
+        const response = await fetch(`${API_URL}?action=getStudents`);
+        if (!response.ok) throw new Error('Erro na requisição');
+        const data = await response.json();
+        if (data.error) throw new Error(data.error);
+        allData = data;
+        renderTable('todos');
+      } catch (err) {
+        document.getElementById('content').innerHTML = `❌ Erro: ${err.message}`;
+      }
+    }
+
+    // Formata ano e turma
+    function formatClass(ano, turma) {
+      const num = ano.match(/\d+/);
+      return num ? `${num[0]}º ano ${turma}` : `${ano} ${turma}`;
+    }
+
+    // Renderiza a tabela com filtro
+    function renderTable(filter) {
+      const container = document.getElementById('content');
+      let students = [];
+
+      if (filter === 'todos') {
+        for (const ano in allData) {
+          students = students.concat(allData[ano]);
+        }
+      } else {
+        students = allData[filter] || [];
+      }
+
+      if (!students.length) {
+        container.innerHTML = '<div class="message">📭 Nenhum dado disponível.</div>';
+        return;
+      }
+
+      // Ordena por votos (decrescente) e depois por nome
+      students.sort((a, b) => b.votos - a.votos || a.nome.localeCompare(b.nome));
+
+      // Soma total de votos do filtro
+      const totalVotos = students.reduce((sum, s) => sum + s.votos, 0);
+
+      let html = `<div class="total-bar">Total de votos nesta categoria: <strong>${totalVotos}</strong></div>`;
+      html += '<div class="table-container"><table>';
+      html += '<thead><tr><th>#</th><th>Aluno</th><th>Turma</th><th>Tema</th><th>Votos</th></tr></thead><tbody>';
+
+      students.forEach((student, index) => {
+        const rowClass = (index === 0 && student.votos > 0) ? ' class="highlight"' : '';
+        html += `<tr${rowClass}>`;
+        html += `<td class="rank" data-label="Posição">${index + 1}º</td>`;
+        html += `<td class="name" data-label="Aluno">${student.nome}</td>`;
+        html += `<td data-label="Turma">${formatClass(student.ano, student.turma)}</td>`;
+        html += `<td data-label="Tema">${student.tema || '-'}</td>`;
+        html += `<td class="votos-count" data-label="Votos">❤️ ${student.votos}</td>`;
+        html += '</tr>';
+      });
+
+      html += '</tbody></table></div>';
+      container.innerHTML = html;
+    }
+
+    // Alterna os filtros
+    document.addEventListener('DOMContentLoaded', () => {
+      const buttons = document.querySelectorAll('.year-btn');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          buttons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderTable(btn.dataset.year);
+        });
+      });
+      fetchResults();
+    });
+  </script>
+</body>
+</html>
