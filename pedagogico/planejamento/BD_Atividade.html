@@ -2,596 +2,1152 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema de Gestão Pedagógica</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Sistema Pedagógico Unificado</title>
   <style>
-  /* --- VARIÁVEIS E BASE --- */
-  :root { 
-    --primary: #2c3e50; 
-    --accent: #3498db; 
-    --bg: #f4f7f6; 
-    --white: #ffffff; 
-    --shadow: 0 4px 6px rgba(0,0,0,0.05);
-  }
-
-  body { 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-    background: var(--bg); 
-    color: var(--primary); 
-    padding: 20px; 
-    margin: 0; 
-    line-height: 1.5;
-  }
-
-  /* --- CABEÇALHO E FILTROS --- */
-  .filtros-container { 
-    background: var(--white); 
-    padding: 15px; 
-    border-radius: 8px; 
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
-    margin-bottom: 20px; 
-    display: flex; 
-    gap: 15px; 
-    flex-wrap: wrap; 
-    align-items: flex-end; 
-    position: sticky; 
-    top: 0; 
-    z-index: 100; 
-  }
-
-  .campo-filtro { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 5px; 
-    flex: 1; 
-    min-width: 150px; 
-  }
-
-  label {
-    font-size: 12px;
-    font-weight: bold;
-    color: #7f8c8d;
-  }
-
-  /* --- ELEMENTOS DE FORMULÁRIO --- */
-  select, input, textarea { 
-    padding: 10px; 
-    border: 1px solid #ddd; 
-    border-radius: 6px; 
-    font-family: inherit; 
-    font-size: 14px; 
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  button { 
-    padding: 10px 20px; 
-    border: none; 
-    border-radius: 6px; 
-    cursor: pointer; 
-    color: white; 
-    font-weight: bold; 
-    transition: all 0.2s ease;
-    background: var(--accent);
-  }
-
-  button:hover { 
-    filter: brightness(1.1); 
-    transform: translateY(-1px);
-  }
-
-  /* --- GRID DE ATIVIDADES E CARDS --- */
-  #containerAtividades { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
-    gap: 20px; 
-  }
-
-  .card { 
-    background: var(--white); 
-    border-radius: 10px; 
-    border-top: 5px solid var(--accent); 
-    padding: 20px; 
-    box-shadow: var(--shadow); 
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .card-titulo {
-    font-weight: bold;
-    font-size: 16px;
-    color: var(--primary);
-  }
-
-  .label { 
-    font-weight: bold; 
-    font-size: 10px; 
-    color: #95a5a6; 
-    text-transform: uppercase; 
-    margin-top: 5px; 
-  }
-
-  .conteudo { 
-    font-size: 13px; 
-    background: #f9f9f9; 
-    padding: 10px; 
-    border-radius: 6px; 
-    white-space: pre-line; 
-    color: #444; 
-    border-left: 3px solid #eee;
-  }
-
-  /* --- MODAL E COMPONENTES AUXILIARES --- */
-  .modal { 
-    display: none; 
-    position: fixed; 
-    z-index: 200; 
-    left: 0; top: 0; width: 100%; height: 100%; 
-    background: rgba(0,0,0,0.7); 
-    overflow-y: auto; 
-  }
-
-  .modal-content { 
-    background: white; 
-    margin: 30px auto; 
-    padding: 30px; 
-    width: 90%; 
-    max-width: 700px; 
-    border-radius: 12px; 
-  }
-
-  .form-grid { 
-    display: grid; 
-    grid-template-columns: 1fr 1fr; 
-    gap: 15px; 
-  }
-
-  #areaConsulta, #listaParaMesclar { 
-    background: #fff9db; 
-    border: 1px solid #f59f00; 
-    padding: 10px; 
-    margin: 10px 0; 
-    border-radius: 8px; 
-    font-size: 13px; 
-    max-height: 200px; 
-    overflow-y: auto; 
-  }
-
-  .item-sugerido { 
-    cursor: pointer; 
-    padding: 8px; 
-    border-bottom: 1px solid rgba(0,0,0,0.05); 
-  }
-
-  .item-sugerido:hover { background: #fef9e7; }
-
-  /* --- REGRAS DE IMPRESSÃO (BACKUP) --- */
-  @media print {
-    .filtros-container, button, .label:last-of-type, input[type="number"] { 
-      display: none !important; 
+    :root {
+      --primary: #2c3e50;
+      --accent: #3498db;
+      --bg: #f4f7f6;
+      --white: #ffffff;
+      --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      --danger: #e74c3c;
+      --success: #27ae60;
+      --purple: #8e44ad;
+      --orange: #e67e22;
+      --gray: #95a5a6;
     }
-    body { background: white; padding: 0; }
-    #containerAtividades { display: block; }
-    .card { 
-      box-shadow: none; 
-      border: 1px solid #eee; 
-      margin-bottom: 30px; 
-      break-inside: avoid; 
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      margin: 0;
+      color: #333;
+      line-height: 1.5;
     }
-  }
-</style>
+
+    .header {
+      background: var(--primary);
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 28px;
+      cursor: pointer;
+      padding: 10px 15px;
+      line-height: 1;
+      transition: background 0.3s;
+      border-radius: 4px;
+      margin: 5px;
+    }
+
+    .hamburger:hover { background: #34495e; }
+
+    .tabs {
+      display: flex;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 14px 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      transition: background 0.3s, border-color 0.3s;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .tab:hover { background: #34495e; }
+    .tab.ativa {
+      background: var(--accent);
+      border-bottom-color: #e67e22;
+    }
+
+    .painel { display: none; padding: 20px; }
+    .painel.ativo { display: block; }
+
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 20px;
+      border-top: 5px solid var(--accent);
+      box-shadow: var(--shadow);
+      word-wrap: break-word;
+    }
+
+    .filtros {
+      background: var(--white);
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-end;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .campo { display: flex; flex-direction: column; gap: 4px; min-width: 120px; }
+    label { font-size: 12px; font-weight: bold; color: #7f8c8d; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    select, input, textarea {
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 14px;
+      min-width: 140px;
+      transition: border-color 0.3s;
+      background: #fff;
+    }
+
+    select:focus, input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.15);
+    }
+
+    button {
+      padding: 10px 18px;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: filter 0.2s, opacity 0.2s, transform 0.1s;
+      font-size: 14px;
+      white-space: nowrap;
+      position: relative;
+    }
+
+    button:hover { filter: brightness(1.08); }
+    button:active { transform: scale(0.97); }
+
+    button.btn-loading {
+      opacity: 0.65;
+      cursor: not-allowed;
+      pointer-events: none;
+      filter: grayscale(30%);
+    }
+
+    button.btn-loading::after {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      top: 50%;
+      left: 50%;
+      margin-top: -8px;
+      margin-left: -8px;
+      border: 2px solid rgba(255, 255, 255, 0.6);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .btn-copiar { background: #3498db; font-size: 12px; padding: 5px 10px; }
+    .btn-success { background: var(--success); }
+    .btn-danger { background: var(--danger); }
+    .btn-purple { background: var(--purple); }
+    .btn-orange { background: var(--orange); }
+    .btn-gray { background: var(--gray); }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 2000;
+      overflow-y: auto;
+      padding: 10px;
+    }
+
+    .modal-content {
+      background: white;
+      margin: 20px auto;
+      padding: 25px;
+      width: 95%;
+      max-width: 750px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      animation: fadeIn 0.25s ease;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .full-width { grid-column: span 2; }
+
+    .tabela-relatorio {
+      width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px;
+    }
+    .tabela-relatorio th, .tabela-relatorio td {
+      border: 1px solid #aaa; padding: 12px; text-align: left; vertical-align: top;
+    }
+    .tabela-relatorio th { background: #f2f2f2; }
+
+    .secaoNovaHabilidade {
+      background: #f3e5f5;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 15px;
+      display: none;
+    }
+
+    .checkbox-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .checkbox-list label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: normal;
+      text-transform: none;
+      color: #333;
+      background: #f9f9f9;
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      cursor: pointer;
+    }
+    .checkbox-list input[type="checkbox"] { margin: 0; }
+
+    @media print {
+      .tabs, .filtros, button, .modal, .hamburger, .header { display: none !important; }
+      body { background: white; }
+      .cards-container { display: block; }
+      .card { box-shadow: none; border: 1px solid #ccc; margin-bottom: 20px; break-inside: avoid; }
+    }
+
+    @media (max-width: 768px) {
+      .hamburger { display: block; flex-shrink: 0; }
+      .tabs { display: none; flex-direction: column; width: 100%; background: #1a252f; }
+      .tabs.expandido { display: flex; }
+      .tab {
+        padding: 12px 15px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1);
+        font-size: 13px; flex: none;
+      }
+      .tab.ativa { border-left: 4px solid #e67e22; border-bottom-color: transparent; }
+      .header { flex-wrap: wrap; }
+      .painel { padding: 12px; }
+      .filtros { flex-direction: column; gap: 10px; }
+      .filtros .campo { width: 100%; }
+      .filtros select, .filtros input { width: 100%; min-width: auto; }
+      .filtros button { width: 100%; margin-top: 5px; }
+      .cards-container { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .full-width { grid-column: span 1; }
+      .modal-content { margin: 15px auto; padding: 18px; width: 98%; max-width: 100%; border-radius: 8px; }
+      .tabela-relatorio { font-size: 12px; }
+      .tabela-relatorio th, .tabela-relatorio td { padding: 8px; }
+      button { padding: 10px 14px; font-size: 13px; }
+    }
+  </style>
 </head>
 <body>
-
-<div class="filtros-container">
-    <div class="campo-filtro"><label>Série</label><select id="fAno"><option value="">Todos</option></select></div>
-    <div class="campo-filtro"><label>Bimestre</label><select id="fBimestre"><option value="">Todos</option></select></div>
-    <button style="background:#e74c3c" onclick="location.reload()">Limpar</button>
-    <button style="background:#27ae60" onclick="abrirModal()">+ Atividade</button>
-    <button style="background:#8e44ad" onclick="abrirModalMescla()">+ Mesclar ID</button>
+<div class="header" id="headerNav">
+  <button class="hamburger" id="btnHamburger" aria-label="Menu" title="Menu">&#9776;</button>
+  <div class="tabs" id="menuAbas">
+    <div class="tab ativa" data-aba="planejamento">📅 Planejamento</div>
+    <div class="tab" data-aba="atividades">🗂️ Banco de Atividades</div>
+    <div class="tab" data-aba="cadastroID">🆔 Cadastro Habilidade</div>
+    <div class="tab" data-aba="relatorio">📊 Relatório</div>
+  </div>
 </div>
 
-<div id="containerAtividades">Carregando dados...</div>
+<!-- ==================== ABA PLANEJAMENTO ==================== -->
+<div id="painel-planejamento" class="painel ativo">
+  <div id="filtrosPlanejamento" class="filtros">
+    <div class="campo"><label>Ano/Série</label><select id="fAnoPlan"><option value="">Todos</option></select></div>
+    <div class="campo"><label>Semana</label><select id="fSemanaPlan"><option value="">Todas</option></select></div>
+    <button type="button" onclick="exportarHTML()" class="btn-success">💾 Backup HTML</button>
+    <button type="button" onclick="window.print()" class="btn-success">🖨️ Imprimir</button>
+    <button type="button" id="btnNovoBimestre" onclick="abrirModalNovoBimestre()" class="btn-danger">🗓️ Novo Bimestre</button>
+    <button type="button" id="btnPlanejamentoRapido" onclick="abrirModalPlanejamentoRapido()" class="btn-orange">⚡ Planejamento Rápido</button>
+  </div>
+  <div id="listaPlanejamento" class="cards-container"></div>
+</div>
 
-<!-- MODAL CADASTRO ATIVIDADE -->
-<div id="modalForm" class="modal">
+<!-- ==================== ABA ATIVIDADES ==================== -->
+<div id="painel-atividades" class="painel">
+  <div class="filtros">
+    <div class="campo"><label>Série</label><select id="fAnoAtiv"><option value="">Todos</option></select></div>
+    <div class="campo"><label>Bimestre</label><select id="fBimAtiv"><option value="">Todos</option></select></div>
+    <div class="campo"><label>Linguagem</label>
+      <select id="fLingAtiv">
+        <option value="">Todas</option>
+        <option>Artes Visuais</option><option>Dança</option><option>Musica</option><option>Teatro</option><option>Artes Integradas</option>
+      </select>
+    </div>
+    <button type="button" id="btnCadastrarAtividade" onclick="abrirModalAtividade()" class="btn-success">+ Cadastrar Atividade</button>
+    <button type="button" id="btnMesclar" onclick="abrirModalMescla()" class="btn-purple">+ Mesclar Habilidades</button>
+  </div>
+  <div id="listaAtividades" class="cards-container">Carregando...</div>
+</div>
+
+<!-- ==================== ABA CADASTRO ID ==================== -->
+<div id="painel-cadastroID" class="painel">
+  <div style="max-width:600px; margin:0 auto; background:white; padding:30px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+    <h2 style="margin-top:0; color:var(--primary);">Cadastrar Nova Habilidade (Base)</h2>
+    <form id="formCadastroID">
+      <div class="form-grid">
+        <div class="campo"><label>ID Único</label><input name="ID_Unico" required></div>
+        <div class="campo"><label>Código</label><input name="Código" required></div>
+        <div class="campo"><label>Ano/Série</label><select name="Ano/serie" required>
+          <option value="">Selecione...</option>
+          <option>1º ano</option><option>2º ano</option><option>3º ano</option><option>4º ano</option><option>5º ano</option><option>Eja</option>
+        </select></div>
+        <div class="campo"><label>Bimestre</label><select name="Bimestre" required>
+          <option value="">Selecione...</option>
+          <option>1º</option><option>2º</option><option>3º</option><option>4º</option>
+        </select></div>
+        <div class="campo"><label>Unidade Temática</label><select name="Unidade Temática" required>
+          <option value="">Selecione...</option>
+          <option>Artes Visuais</option><option>Dança</option><option>Musica</option><option>Teatro</option><option>Artes Integradas</option>
+        </select></div>
+        <div class="campo"><label>Objeto de Conhecimento</label>
+          <select id="selectObjCad" onchange="gerenciarObjetoCadastro()">
+            <option value="">Selecione...</option>
+            <option>Contextos e práticas</option><option>Elementos da linguagem</option><option>Materialidades</option>
+            <option>Processos de criação</option><option>Matrizes estéticas culturais</option><option>Patrimônio cultural</option>
+            <option>Arte e tecnologia</option><option>Notação e registro musical</option><option>OUTRO</option>
+          </select>
+          <div id="outroObjContainer" style="display:none; margin-top:5px;">
+            <input name="Obj_Conhec" id="inputOutroObj" placeholder="Digite o objeto...">
+          </div>
+          <input type="hidden" name="Obj_Conhec" id="objFinal">
+        </div>
+      </div>
+      <div class="campo" style="margin-top:15px;">
+        <label>Descrição da Habilidade</label>
+        <textarea name="Descrição" rows="4" required></textarea>
+      </div>
+      <button type="submit" class="btn-success" style="width:100%; margin-top:15px;" id="btnCadastrarHabilidade">Cadastrar na Planilha</button>
+    </form>
+    <div id="statusCadastroID" style="margin-top:10px; text-align:center;"></div>
+  </div>
+</div>
+
+<!-- ==================== ABA RELATÓRIO ==================== -->
+<div id="painel-relatorio" class="painel">
+  <div class="filtros">
+    <div class="campo"><label>Ano/Série</label><select id="fAnoRel"><option value="">Escolha...</option></select></div>
+    <button type="button" onclick="window.print()" class="btn-success">🖨️ Imprimir</button>
+  </div>
+  <div id="painelErrosRel" style="background:#fff5f5; border:1px solid #feb2b2; color:#c53030; padding:15px; border-radius:8px; margin-bottom:20px; display:none;">
+    <h3>⚠️ Campos vazios detectados:</h3>
+    <ul id="listaErrosRel"></ul>
+  </div>
+  <div style="overflow-x:auto;">
+    <table class="tabela-relatorio">
+      <thead><tr><th>Período</th><th>Descrição da Habilidade</th></tr></thead>
+      <tbody id="corpoTabelaRel"><tr><td colspan="2" style="text-align:center;">Aguardando seleção...</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== MODAIS ==================== -->
+<!-- Modal cadastro de atividade -->
+<div id="modalAtividade" class="modal">
   <div class="modal-content">
     <h3>Nova Atividade</h3>
     <form id="formAtividade">
       <div class="form-grid">
-
-        <select type="text" name="Bimestre" placeholder="Bimestre" required>
-<option><label>Bimestre</label></option>
-<option>1º</option>
-<option>2º</option>
-<option>3º</option>
-<option>4º</option>
-</select>
-        <select type="text" name="Ano/serie" placeholder="Série" required>
-<option><label>Ano/série</label></option>
-<option>1º ano</option>
-<option>2º ano</option>
-<option>3º ano</option>
-<option>4º ano</option>
-<option>5º ano</option>
-<option>Eja</option>
-</select>
-<div class="campo-filtro">
-  <label>Linguagem/Unidade</label>
-  <select id="fUnidadeModal">
-    <option value="">Selecione...</option>
-    <option value="Artes Visuais">Artes Visuais</option>
-    <option value="Musica">Musica</option>
-    <option value="Dança">Dança</option>
-    <option value="Teatro">Teatro</option>
-    <option value="Artes Integradas">Artes Integradas</option>
-  </select>
-</div>
-
-<!-- E adicione um campo invisível (ou visível se preferir) para levar o dado da Unidade para a Planilha -->
-<input type="hidden" name="Unidade Temática"> 
-
-        <div id="areaConsulta" style="grid-column: span 2;"></div>
-        <input type="text" name="ID_Unico" id="idInput" placeholder="ID da Habilidade" required>
-       <div class="campo-filtro">
-  <label>Versão</label>
-  <input type="text" name="Versão" id="inputVersaoAtividade" placeholder="Versão" required>
-  <!-- Label para mostrar as versões existentes -->
-  <span id="labelVersoes" style="font-size: 10px; color: #e67e22; display: block; margin-top: 2px;"></span>
-</div>
-        <input type="text" name="Componente" placeholder="Componente">
+        <select name="Bimestre" required>
+          <option value="">Bimestre</option><option>1º</option><option>2º</option><option>3º</option><option>4º</option>
+        </select>
+        <select name="Ano/serie" required>
+          <option value="">Série</option>
+          <option>1º ano</option><option>2º ano</option><option>3º ano</option><option>4º ano</option><option>5º ano</option><option>Eja</option>
+        </select>
+        <div class="campo"><label>Unidade Temática</label><select id="fUnidModalAtiv"><option value="">Selecione...</option><option>Artes Visuais</option><option>Dança</option><option>Musica</option><option>Teatro</option><option>Artes Integradas</option></select></div>
+        <input type="hidden" name="Unidade Temática" id="unidTematicaAtiv">
+        <div id="areaConsultaID" style="grid-column: span 2; background:#fff9db; padding:10px; border-radius:6px;"></div>
+        <input type="text" name="ID_Unico" id="idHabilidadeAtiv" placeholder="ID da Habilidade" required>
+        <input type="text" name="Versão" placeholder="Versão" required>
+        <input type="text" name="Componente" placeholder="Componente" value="Arte">
         <input type="text" name="Propósito" placeholder="Propósito">
-        <input type="text" name="Nome da Atividade" style="grid-column: span 2;" placeholder="Título" required>
-        <textarea name="Orientação Didática" rows="3" style="grid-column: span 2;" placeholder="Orientação"></textarea>
-        <textarea name="Critérios Avaliativos" rows="2" style="grid-column: span 2;" placeholder="Avaliação"></textarea>
-        <input type="number" name="Quant.Aulas" placeholder="Aulas">
+        <input type="text" name="Nome da Atividade" placeholder="Título" class="full-width" required>
+        <textarea name="Orientação Didática" rows="3" placeholder="Orientação" class="full-width"></textarea>
+        <textarea name="Critérios Avaliativos" rows="2" placeholder="Avaliação" class="full-width"></textarea>
+        <input type="number" name="Quant.Aulas" placeholder="Aulas" value="2">
       </div>
-      <div style="margin-top:15px; display:flex; gap:10px;">
-        <button type="submit" id="btnSalvar" style="background:#27ae60; flex:1;">Salvar Atividade</button>
-        <button type="button" onclick="fecharModal()" style="background:#95a5a6;">Cancelar</button>
+      <div style="margin-top:15px; display:flex; gap:10px; flex-wrap:wrap;">
+        <button type="submit" class="btn-success" style="flex:1; min-width:120px;" id="btnSalvarAtividade">Salvar Atividade</button>
+        <button type="button" onclick="fecharModalAtividade()" class="btn-gray" style="flex:1; min-width:120px;">Cancelar</button>
       </div>
     </form>
   </div>
 </div>
 
-<!-- MODAL MESCLAGEM -->
+<!-- Modal mesclagem -->
 <div id="modalMescla" class="modal">
   <div class="modal-content">
-    <h3>Construtor de IDs Mesclados</h3>
+    <h3>Mesclar Habilidades (Criar Combo)</h3>
     <div class="form-grid">
-      <div class="campo-filtro"><label>Série</label><select id="mAno" onchange="atualizarListaMescla()"></select></div>
-      <div class="campo-filtro"><label>Bimestre</label><select id="mBim" onchange="atualizarListaMescla()"></select></div>
+      <div class="campo"><label>Bimestre</label><select id="mBimMescla" onchange="atualizarListaMescla()"><option value="">Selecione</option><option>1º</option><option>2º</option><option>3º</option><option>4º</option></select></div>
+      <div class="campo"><label>Série</label><select id="mAnoMescla" onchange="atualizarListaMescla()"><option value="">Selecione</option><option>1º ano</option><option>2º ano</option><option>3º ano</option><option>4º ano</option><option>5º ano</option><option>Eja</option></select></div>
+      <div class="campo"><label>Unidade</label><select id="mUnidMescla" onchange="atualizarListaMescla()"><option value="">Selecione</option><option>Artes Visuais</option><option>Dança</option><option>Musica</option><option>Teatro</option><option>Artes Integradas</option></select></div>
     </div>
-    <div id="listaParaMesclar" style="display:block; background:#f9f9f9; border:1px solid #ccc; height:150px;"></div>
-    <div style="margin-top:10px; background:#e8f4fd; padding:10px; border-radius:5px;">
-      <label class="label">ID Gerado:</label>
-      <input type="text" id="idGerado" style="width:100%; font-weight:bold;" readonly>
-      <label class="label">Descrição Combinada:</label>
-      <textarea id="descGerada" rows="4" style="width:100%; font-size:11px;"></textarea>
+    <div id="listaParaMesclar" style="margin-top:10px; border:1px solid #ddd; max-height:200px; overflow-y:auto; background:white;"></div>
+    <div style="margin-top:15px; background:#f3e5f5; padding:15px; border-radius:8px;">
+      <label>ID Gerado</label><input type="text" id="idGeradoMescla" readonly style="width:100%; font-weight:bold;">
+      <label>Descrição Integrada</label><textarea id="descGeradaMescla" rows="5" style="width:100%;"></textarea>
     </div>
-    <div style="margin-top:15px; display:flex; gap:10px;">
-      <button onclick="salvarMescla()" id="btnSalvarMescla" style="background:#27ae60; flex:1;">Cadastrar Combo</button>
-      <button onclick="fecharModalMescla()" style="background:#95a5a6;">Fechar</button>
+    <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+      <button type="button" id="btnSalvarMescla" onclick="salvarMescla()" class="btn-purple" style="flex:1; min-width:120px;">Salvar ID Mesclado</button>
+      <button type="button" onclick="fecharModalMescla()" class="btn-gray" style="flex:1; min-width:120px;">Cancelar</button>
     </div>
   </div>
 </div>
 
-<script>
-  // 1. COLOQUE SUA URL DE IMPLANTAÇÃO AQUI (Certifique-se de que termina em /exec)
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwRet1yzQLIa4dmHKzG3xbzDnEQ6lXBVTSUOcpWZI6CIaz7DiqlOOqtr_2Gidc5xnU/exec"; 
-
-  let dadosOriginais = [], baseIDs = [], dadosPlanejamento = [], selecionadasMescla = [];
-
-  async function carregarDados() {
-    try {
-      const response = await fetch(WEB_APP_URL);
-      const json = await response.json();
-      dadosOriginais = json.atividades || [];
-      baseIDs = json.baseIDs || [];
-      dadosPlanejamento = json.planejamento || [];
-      popularFiltros();
-      renderizarLayout(dadosOriginais);
-      configurarConsultaID();
-    } catch (e) { console.error(e); }
-  }
-
-  function renderizarLayout(dados) {
-    const container = document.getElementById('containerAtividades');
-    container.innerHTML = "";
-    dados.forEach(item => {
-      const infoHab = baseIDs.find(h => String(h.ID_Unico) === String(item.ID_Unico)) || {};
-      const desc = item.Descrição || infoHab.Descrição || "-";
-      
-      // BUSCA O PLANEJAMENTO PARA PEGAR AS DATAS
-      const plan = dadosPlanejamento.find(p => 
-        String(p["ID Habilidade"]) === String(item.ID_Unico) && 
-        String(p["Ano/serie"]) === String(item["Ano/serie"])
-      );
-
-      // CRIA O TEXTO DO PERÍODO
-      const periodo = plan ? `${plan["Data inicial"]} a ${plan["Data final"]}` : "A definir";
-
-      // 🔽 AGORA COM PRECISÃO TOTAL: ID + VERSÃO
-const semPlan = dadosPlanejamento.filter(p => 
-  String(p["ID Habilidade"]).trim() === String(item.ID_Unico).trim() && 
-  String(p["Versão"]).trim() === String(item.Versão).trim()
-).map(p => p.Semana);
-      
-      container.innerHTML += `
-        <div class="card">
-          <div style="display:flex; justify-content:space-between; font-size:11px; color:#7f8c8d; border-bottom:1px solid #eee; padding-bottom:5px;">
-            <span>${item.Bimestre} | <b>ID: ${item.ID_Unico}</b></span>
-                <span style="font-weight:bold; color:${semPlan.length ? '#27ae60' : '#e67e22'}">${semPlan.length ? '✅ Semana: '+semPlan.join(",") : '⚠️ Disponível'}</span>
-          </div>
-          <div class="card-titulo">${item["Nome da Atividade"]}</div>
-          <div style="font-size:12px; margin-bottom:10px;">
-            <strong>Série:</strong> ${item["Ano/serie"]} | <strong>Versão:</strong> ${item.Versão} |
-<strong>Propósito</strong> ${item.Propósito}|
-<strong>Und. Temática:</strong> ${item['Unidade Temática']} | <strong>Aulas:</strong> ${item["Quant.Aulas"]} <br><strong>Período:</strong> ${periodo}
-
-          </div>
-          <span class="label">Habilidade</span> 
-          <div class="conteudo" style="max-height:50px; overflow-y:auto; font-size:11px;">${desc}
-          </div> 
-<span class="label">Orientação Didática</span>
-<div class="conteudo" style="max-height:50px; overflow-y:auto; font-size:11px;">
-  ${item["Orientação Didática"] || "Não informada."}
+<!-- Modal Novo Bimestre -->
+<div id="modalNovoBimestre" class="modal">
+  <div class="modal-content" style="max-width:450px;">
+    <h3 style="margin-top:0;">Configurar novo bimestre</h3>
+    <div class="campo"><label>Data Inicial (segunda-feira):</label><input type="date" id="dataInicioBimestre" style="width:100%;"></div>
+    <div class="campo"><label>Data Final:</label><input type="date" id="dataFimBimestre" style="width:100%;"></div>
+    <div class="campo" style="margin-top:10px;">
+      <label><input type="checkbox" id="chkZerarPlanejamento"> <span style="color:#e74c3c; font-weight:bold;">Zerar planejamentos atuais (apagar IDs de habilidade)</span></label>
+    </div>
+    <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
+      <button type="button" id="btnCriarBimestre" onclick="enviarNovoBimestre()" class="btn-success" style="flex:1; min-width:120px;">✅ Criar Bimestre</button>
+      <button type="button" onclick="fecharModalNovoBimestre()" class="btn-gray" style="flex:1; min-width:120px;">Cancelar</button>
+    </div>
+  </div>
 </div>
 
-          <div style="margin-top:12px; display:flex; gap:5px; background:#f0f7ff; padding:8px; border-radius:6px;">
-            <input type="number" id="s_${item.ID_Unico}_${item["Ano/serie"].replace(/\s/g,'')}" placeholder="Semana" style="width:60px;">
-            <button onclick="enviarParaPlanejamento('${item.ID_Unico}', '${item["Ano/serie"]}', '${item.Versão}')" style="background:#3498db; flex:1; font-size:11px;">Confirmar</button>
+<!-- ==================== MODAL PLANEJAMENTO RÁPIDO (MELHORADO) ==================== -->
+<div id="modalPlanejamentoRapido" class="modal">
+  <div class="modal-content" style="max-width:800px;">
+    <h3 style="margin-top:0;">⚡ Planejamento Rápido – Atividade + Habilidade</h3>
+    <form id="formPlanejamentoRapido">
+      <div class="form-grid">
+        <div class="campo"><label>Bimestre</label><select name="Bimestre" id="prBimestre" required onchange="atualizarSugestoesIDRapido()"><option value="">Selecione</option><option>1º</option><option>2º</option><option>3º</option><option>4º</option></select></div>
+        <div class="campo"><label>Semana (nº)</label><input type="number" name="semana" id="prSemana" placeholder="Ex: 1" required min="1" style="width:80px;"></div>
+        <div class="campo"><label>Ano/Série</label><select id="prAno" required onchange="atualizarSugestoesIDRapido()"><option value="">Selecione</option><option>1º ano</option><option>2º ano</option><option>3º ano</option><option>4º ano</option><option>5º ano</option><option>Eja</option></select></div>
+        <div class="campo"><label>Unidade Temática</label><select id="prUnidade" required onchange="atualizarSugestoesIDRapido()"><option value="">Selecione</option><option>Artes Visuais</option><option>Dança</option><option>Musica</option><option>Teatro</option><option>Artes Integradas</option></select></div>
+      </div>
+
+      <div id="prSugestoesID" style="background:#fff9db; padding:10px; border-radius:6px; margin-top:10px; display:none;">
+        <small>IDs disponíveis (clique para preencher):</small>
+        <div id="prListaIDs" style="max-height:120px; overflow-y:auto; margin-top:5px;"></div>
+      </div>
+
+      <div class="form-grid" style="margin-top:10px;">
+        <div class="campo"><label>ID Habilidade</label><input type="text" id="prIDHabilidade" placeholder="Ex: EF01AR01-1B" required></div>
+        <div class="campo"><label>Versão</label><input type="text" id="prVersao" value="1.0" required></div>
+        <div class="campo"><label>Componente</label><input type="text" id="prComponente" value="Arte"></div>
+        <div class="campo"><label>Quant. Aulas</label><input type="number" id="prQuantAulas" value="2" min="1" max="10"></div>
+      </div>
+
+      <div style="margin-top:10px;">
+        <label><input type="checkbox" id="prNovaHabilidade" onchange="toggleSecaoNovaHabilidade()"> <strong>Cadastrar nova habilidade na aba ID_Unico</strong> (preencha os campos abaixo)</label>
+      </div>
+
+      <!-- Seção de nova habilidade com múltipla seleção de Objeto de Conhecimento -->
+      <div id="prSecaoNovaHabilidade" class="secaoNovaHabilidade">
+        <h4 style="margin-top:0;">📌 Dados da nova habilidade</h4>
+        <div class="form-grid">
+          <div class="campo"><label>Código</label><input type="text" id="prCodigo" placeholder="Ex: EF15AR01"></div>
+          <div class="campo"><label>Unidade Temática (confirme)</label><select id="prUnidadeNova"><option value="">Selecione...</option><option>Artes Visuais</option><option>Dança</option><option>Musica</option><option>Teatro</option><option>Artes Integradas</option></select></div>
+        </div>
+        <div class="campo" style="margin-top:10px;">
+          <label>Objeto de Conhecimento (marque quantos desejar)</label>
+          <div class="checkbox-list" id="prObjetoCheckboxes">
+            <label><input type="checkbox" value="Contextos e práticas"> Contextos e práticas</label>
+            <label><input type="checkbox" value="Elementos da linguagem"> Elementos da linguagem</label>
+            <label><input type="checkbox" value="Materialidades"> Materialidades</label>
+            <label><input type="checkbox" value="Processos de criação"> Processos de criação</label>
+            <label><input type="checkbox" value="Matrizes estéticas culturais"> Matrizes estéticas culturais</label>
+            <label><input type="checkbox" value="Patrimônio cultural"> Patrimônio cultural</label>
+            <label><input type="checkbox" value="Arte e tecnologia"> Arte e tecnologia</label>
+            <label><input type="checkbox" value="Notação e registro musical"> Notação e registro musical</label>
+            <label><input type="checkbox" value="OUTRO" id="prCheckOutro"> OUTRO</label>
           </div>
-        </div>`;
-    });
+          <div id="prOutroObjContainer" style="display:none; margin-top:8px;">
+            <input type="text" id="prOutroObj" placeholder="Digite o objeto adicional...">
+          </div>
+          <input type="hidden" id="prObjetoHidden">
+          <small style="color:#555;">Os itens selecionados serão enviados separados por quebra de linha.</small>
+        </div>
+        <div class="campo" style="margin-top:10px;">
+          <label>Descrição da Habilidade</label>
+          <textarea id="prDescricaoHabilidade" rows="4" placeholder="Descreva a habilidade..."></textarea>
+        </div>
+      </div>
+
+      <div class="form-grid" style="margin-top:15px;">
+        <div class="campo full-width"><label>Nome da Atividade</label><input type="text" id="prNomeAtividade" placeholder="Título da atividade" required class="full-width"></div>
+      </div>
+      <div class="campo" style="margin-top:5px;"><label>Propósito</label><input type="text" id="prProposito" placeholder="Ex: Diagnóstica, Padrão..."></div>
+      <div class="campo" style="margin-top:10px;"><label>Orientação Didática</label><textarea id="prOrientacao" rows="4" placeholder="Descreva o passo a passo..."></textarea></div>
+      <div class="campo" style="margin-top:10px;"><label>Critérios Avaliativos</label><textarea id="prAvaliacao" rows="3" placeholder="O que será avaliado..."></textarea></div>
+
+      <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
+        <button type="submit" class="btn-orange" style="flex:1; min-width:140px;" id="btnCadastrarPlanejar">⚡ Cadastrar e Planejar</button>
+        <button type="button" onclick="fecharModalPlanejamentoRapido()" class="btn-gray" style="flex:1; min-width:140px;">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+// ======================= CONFIGURAÇÃO =======================
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzyYDC-dip6l9aMdLsFkArk7YS9o0VlJcLdTlXTzDm6Q5fAiCXR-8ksjX-kvRF5Bw/exec";
+
+let planejamento = [];
+let atividades = [];
+let baseIDs = [];
+
+// ======================= UTILITÁRIOS =======================
+function setButtonLoading(button, isLoading) {
+  if (!button) return;
+  if (isLoading) {
+    button.classList.add('btn-loading');
+    button.disabled = true;
+    if (!button.dataset.originalText) button.dataset.originalText = button.textContent.trim();
+    button.textContent = 'Aguarde...';
+  } else {
+    button.classList.remove('btn-loading');
+    button.disabled = false;
+    if (button.dataset.originalText) button.textContent = button.dataset.originalText;
   }
+}
 
-  // --- CONSULTA E AUTO-PREENCHIMENTO NO MODAL ---
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+    document.querySelectorAll('.btn-loading').forEach(b => setButtonLoading(b, false));
+  }
+});
 
-function configurarConsultaID() {
-  const inAno = document.querySelector('[name="Ano/serie"]');
-  const inBim = document.querySelector('[name="Bimestre"]');
-  const inUnidade = document.getElementById('fUnidadeModal'); // Novo select que criaremos
-  const area = document.getElementById('areaConsulta');
+document.querySelectorAll('.modal').forEach(modal => {
+  modal.addEventListener('click', function(e) { if (e.target === this) { this.style.display = 'none'; document.querySelectorAll('.btn-loading').forEach(b => setButtonLoading(b, false)); } });
+});
 
-  const filtrar = () => {
-    const a = inAno.value, b = inBim.value, u = inUnidade.value;
-    
-    // Só filtra se os 3 campos principais estiverem preenchidos
-    if(a && b && u) {
-      const m = baseIDs.filter(i => 
-        String(i["Ano/serie"]) === a && 
-        String(i["Bimestre"]) === b &&
-        String(i["Unidade Temática"]).includes(u)
-      );
-      
-      area.style.display = m.length ? "block" : "none";
-      
-      // Renderiza com a Descrição COMPLETA
-      area.innerHTML = m.map(h => `
-        <div class="item-sugerido" onclick="selecionarID('${h.ID_Unico}')" style="border-bottom: 2px solid #3498db; padding: 10px; background: #fff;">
-          <div style="color: #2c3e50; font-weight: bold; border-bottom: 1px solid #eee; margin-bottom: 5px;">
-            ${h.Código} | ${h.Obj_Conhec}
-          </div>
-          <div style="font-size: 11px; color: #555; line-height: 1.4;">
-            ${h.Descrição}
-          </div>
-        </div>`).join("");
+// Hamburguer
+const btnHamburger = document.getElementById('btnHamburger');
+const menuAbas = document.getElementById('menuAbas');
+btnHamburger.addEventListener('click', function() {
+  menuAbas.classList.toggle('expandido');
+  btnHamburger.innerHTML = menuAbas.classList.contains('expandido') ? '&#10005;' : '&#9776;';
+});
+menuAbas.addEventListener('click', function(e) {
+  if (e.target.classList.contains('tab') && window.innerWidth <= 768) {
+    menuAbas.classList.remove('expandido');
+    btnHamburger.innerHTML = '&#9776;';
+  }
+});
+
+// ======================= INICIALIZAÇÃO =======================
+async function carregarTodosDados() {
+  try {
+    const resp = await fetch(WEB_APP_URL);
+    const json = await resp.json();
+    planejamento = json.planejamento || [];
+    atividades = json.atividades || [];
+    baseIDs = json.baseIDs || [];
+    initAbaPlanejamento();
+    initAbaAtividades();
+    initAbaCadastroID();
+    initAbaRelatorio();
+  } catch (e) { console.error(e); alert("Erro ao carregar dados da planilha."); }
+}
+
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    const aba = this.dataset.aba;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('ativa'));
+    this.classList.add('ativa');
+    document.querySelectorAll('.painel').forEach(p => p.classList.remove('ativo'));
+    document.getElementById('painel-' + aba).classList.add('ativo');
+  });
+});
+
+// ==================== ABA PLANEJAMENTO ====================
+function initAbaPlanejamento() {
+  popularFiltrosPlanejamento();
+  renderizarPlanejamento();
+  document.getElementById('fAnoPlan').onchange = () => aplicarFiltrosPlanejamento();
+  document.getElementById('fSemanaPlan').onchange = () => aplicarFiltrosPlanejamento();
+}
+
+function popularFiltrosPlanejamento() {
+  const anos = [...new Set(planejamento.map(p => p['Ano/serie']).filter(Boolean))].sort();
+  const semanas = [...new Set(planejamento.map(p => p.Semana).filter(Boolean))].sort((a,b)=>a-b);
+  const selAno = document.getElementById('fAnoPlan');
+  selAno.innerHTML = '<option value="">Todos</option>';
+  anos.forEach(a => { let o = document.createElement('option'); o.value = a; o.textContent = a; selAno.appendChild(o); });
+  const selSem = document.getElementById('fSemanaPlan');
+  selSem.innerHTML = '<option value="">Todas</option>';
+  semanas.forEach(s => { let o = document.createElement('option'); o.value = s; o.textContent = 'Semana ' + s; selSem.appendChild(o); });
+}
+
+function aplicarFiltrosPlanejamento() {
+  const ano = document.getElementById('fAnoPlan').value;
+  const semana = document.getElementById('fSemanaPlan').value;
+  renderizarPlanejamento(planejamento.filter(p => (!ano || p['Ano/serie'] === ano) && (!semana || p.Semana == semana)));
+}
+
+function renderizarPlanejamento(dados = planejamento) {
+  const container = document.getElementById('listaPlanejamento');
+  container.innerHTML = dados.length ? '' : '<p>Nenhum planejamento encontrado.</p>';
+  dados.forEach((item, idx) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <h3>Semana ${item.Semana || '-'}</h3>
+      <p><strong>Período:</strong> ${item['Data inicial'] || '?'} a ${item['Data final'] || '?'}<br>
+      <strong>Série:</strong> ${item['Ano/serie'] || ''}<br>
+      <strong>ID Habilidade:</strong> ${item['ID Habilidade'] || '—'}<br>
+      <strong>Versão:</strong> ${item.Versão || '—'}</p>
+      <div><strong>Habilidade:</strong> <span id="descPlan${idx}">${item.Descrição || '-'}</span> <button class="btn-copiar" onclick="copiarTexto('descPlan${idx}')">Copiar</button></div>
+      <div><strong>Atividade:</strong> <span id="ativPlan${idx}">${item['Atividade (Auto)'] || '-'}</span> <button class="btn-copiar" onclick="copiarTexto('ativPlan${idx}')">Copiar</button></div>
+      <div><strong>Sequência:</strong> <span id="orientPlan${idx}">${item['Orientação (Auto)'] || '-'}</span> <button class="btn-copiar" onclick="copiarTexto('orientPlan${idx}')">Copiar</button></div>
+      <div><strong>Avaliação:</strong> <span id="avalPlan${idx}">${item.Avaliação || '-'}</span> <button class="btn-copiar" onclick="copiarTexto('avalPlan${idx}')">Copiar</button></div>
+      <div style="margin-top:10px; display:flex; justify-content: flex-end;">
+        <button onclick="removerPlanejamento('${item.Semana}', '${item['Ano/serie']}', this)" style="background:#e74c3c; font-size:12px;">🗑️ Remover</button>
+      </div>`;
+    container.appendChild(card);
+  });
+}
+
+function copiarTexto(id) {
+  const el = document.getElementById(id);
+  navigator.clipboard.writeText(el.innerText).then(() => {
+    el.style.backgroundColor = '#d4edda';
+    setTimeout(() => el.style.backgroundColor = '', 600);
+  }).catch(() => alert('Erro ao copiar'));
+}
+
+function exportarHTML() {
+  const conteudo = document.getElementById('listaPlanejamento').innerHTML;
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Backup Planejamento</title><style>body{font-family:Arial;padding:20px;}.card{border:1px solid #ccc;padding:15px;margin-bottom:15px;border-top:5px solid #3498db;}</style></head><body><h1>Backup Planejamento</h1>${conteudo}</body></html>`;
+  const blob = new Blob([html], {type:'text/html'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'planejamento_backup.html';
+  a.click();
+}
+
+function abrirModalNovoBimestre() {
+  document.getElementById('modalNovoBimestre').style.display = 'block';
+  document.getElementById('dataInicioBimestre').value = '';
+  document.getElementById('dataFimBimestre').value = '';
+  document.getElementById('chkZerarPlanejamento').checked = false;
+  setButtonLoading(document.getElementById('btnCriarBimestre'), false);
+}
+function fecharModalNovoBimestre() { document.getElementById('modalNovoBimestre').style.display = 'none'; }
+
+async function enviarNovoBimestre() {
+  const btn = document.getElementById('btnCriarBimestre');
+  if (btn.disabled) return;
+  const inicio = document.getElementById('dataInicioBimestre').value;
+  const fim = document.getElementById('dataFimBimestre').value;
+  const zerar = document.getElementById('chkZerarPlanejamento').checked;
+  if (!inicio || !fim) { alert('Preencha as duas datas.'); return; }
+  if (zerar && !confirm('ATENÇÃO: Todos os planejamentos serão apagados. Continuar?')) return;
+  setButtonLoading(btn, true);
+  const params = new URLSearchParams();
+  params.append('acao', 'novo_bimestre');
+  params.append('dataInicio', inicio);
+  params.append('dataFim', fim);
+  params.append('zerar', zerar ? 'sim' : 'nao');
+  try {
+    const resp = await fetch(WEB_APP_URL, { method: 'POST', body: params });
+    const texto = await resp.text();
+    alert(texto);
+    if (texto.startsWith('✅')) { fecharModalNovoBimestre(); carregarTodosDados(); }
+  } catch (erro) { alert('Erro ao configurar bimestre.'); }
+  finally { setButtonLoading(btn, false); }
+}
+
+async function removerPlanejamento(semana, ano, botao) {
+  if (botao && botao.disabled) return;
+  if (!confirm(`Apagar planejamento Semana ${semana} - ${ano}?`)) return;
+  if (botao) setButtonLoading(botao, true);
+  const params = new URLSearchParams();
+  params.append('acao', 'limpar_planejamento');
+  params.append('semana', semana);
+  params.append('ano', ano);
+  try {
+    const resp = await fetch(WEB_APP_URL, { method: 'POST', body: params });
+    alert(await resp.text());
+    carregarTodosDados();
+  } catch (e) { alert('Erro ao remover.'); }
+  finally { if (botao) setButtonLoading(botao, false); }
+}
+
+// ==================== ABA ATIVIDADES ====================
+function initAbaAtividades() {
+  popularFiltrosAtividades();
+  renderizarAtividades();
+  document.getElementById('fAnoAtiv').onchange = () => aplicarFiltrosAtividades();
+  document.getElementById('fBimAtiv').onchange = () => aplicarFiltrosAtividades();
+  document.getElementById('fLingAtiv').onchange = () => aplicarFiltrosAtividades();
+  configurarConsultaIDNaAtividade();
+}
+
+function popularFiltrosAtividades() {
+  const anos = [...new Set(atividades.map(a => a['Ano/serie']).filter(Boolean))].sort();
+  const bims = [...new Set(atividades.map(a => a.Bimestre).filter(Boolean))].sort();
+  const selAno = document.getElementById('fAnoAtiv');
+  selAno.innerHTML = '<option value="">Todos</option>';
+  anos.forEach(a => selAno.innerHTML += `<option>${a}</option>`);
+  const selBim = document.getElementById('fBimAtiv');
+  selBim.innerHTML = '<option value="">Todos</option>';
+  bims.forEach(b => selBim.innerHTML += `<option>${b}</option>`);
+}
+
+function aplicarFiltrosAtividades() {
+  const ano = document.getElementById('fAnoAtiv').value;
+  const bim = document.getElementById('fBimAtiv').value;
+  const ling = document.getElementById('fLingAtiv').value;
+  renderizarAtividades(atividades.filter(a => (!ano || a['Ano/serie'] === ano) && (!bim || a.Bimestre === bim) && (!ling || (a['Unidade Temática']||'').includes(ling))));
+}
+
+function renderizarAtividades(dados = atividades) {
+  const container = document.getElementById('listaAtividades');
+  if (!dados.length) { container.innerHTML = '<p>Nenhuma atividade.</p>'; return; }
+  container.innerHTML = '';
+  dados.forEach(item => {
+    const infoHab = baseIDs.find(h => h.ID_Unico === item.ID_Unico) || {};
+    const desc = item.Descrição || infoHab.Descrição || '-';
+    const planAssoc = planejamento.filter(p => p['ID Habilidade'] === item.ID_Unico && p['Ano/serie'] === item['Ano/serie']);
+    const semanas = planAssoc.map(p => p.Semana).join(', ');
+    const labelSemana = semanas ? '✅ Semana: ' + semanas : '⚠️ Disponível';
+    container.innerHTML += `
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; font-size:12px; flex-wrap:wrap;">
+          <span>${item.Bimestre} | ID: ${item.ID_Unico}</span>
+          <span style="color:${semanas ? '#27ae60' : '#e67e22'}">${labelSemana}</span>
+        </div>
+        <div style="font-weight:bold; font-size:1.1em; margin:5px 0;">${item['Nome da Atividade']}</div>
+        <div style="font-size:13px;">Série: ${item['Ano/serie']} | Versão: ${item.Versão}<br>Unid. Temática: ${item['Unidade Temática']} | Aulas: ${item['Quant.Aulas']}</div>
+        <div style="font-size:12px; margin:5px 0;">${desc}</div>
+        <div style="margin-top:10px; display:flex; gap:5px; flex-wrap:wrap; align-items:center;">
+          <input type="number" class="input-semana-card" placeholder="Semana" style="width:70px;">
+          <button onclick="enviarParaPlanejamento(this, '${item.ID_Unico}', '${item['Ano/serie']}', '${item.Versão}')" class="btn-copiar" style="flex:1; min-width:120px;">Confirmar no Planejamento</button>
+        </div>
+      </div>`;
+  });
+}
+
+async function enviarParaPlanejamento(botao, id, ano, ver) {
+  if (botao.disabled) return;
+  const inputSemana = botao.parentElement.querySelector('.input-semana-card');
+  const semana = inputSemana.value;
+  if (!semana) { alert("Informe a semana!"); return; }
+  setButtonLoading(botao, true);
+  const params = new URLSearchParams();
+  params.append('acao', 'planejar');
+  params.append('semana', semana);
+  params.append('ano', ano);
+  params.append('id', id);
+  params.append('versao', ver);
+  try {
+    const resp = await fetch(WEB_APP_URL, { method: 'POST', body: params });
+    alert(await resp.text());
+    carregarTodosDados();
+  } catch (e) { alert('Erro ao planejar.'); }
+  finally { setButtonLoading(botao, false); }
+}
+
+function abrirModalAtividade() {
+  document.getElementById('modalAtividade').style.display = 'block';
+  document.getElementById('formAtividade').reset();
+  document.getElementById('areaConsultaID').innerHTML = '';
+  setButtonLoading(document.getElementById('btnSalvarAtividade'), false);
+}
+function fecharModalAtividade() {
+  document.getElementById('modalAtividade').style.display = 'none';
+  document.getElementById('formAtividade').reset();
+  document.getElementById('areaConsultaID').innerHTML = '';
+}
+
+function configurarConsultaIDNaAtividade() {
+  const serie = document.querySelector('#formAtividade [name="Ano/serie"]');
+  const bim = document.querySelector('#formAtividade [name="Bimestre"]');
+  const unid = document.getElementById('fUnidModalAtiv');
+  const area = document.getElementById('areaConsultaID');
+  const atualizar = () => {
+    if (!serie.value || !bim.value || !unid.value) { area.innerHTML = ''; return; }
+    const filtradas = baseIDs.filter(h => h['Ano/serie'] === serie.value && h.Bimestre === bim.value && h['Unidade Temática'].includes(unid.value));
+    area.innerHTML = filtradas.map(h => `<div class="item-sugerido" onclick="selecionarIDAtiv('${h.ID_Unico}')" style="cursor:pointer;padding:8px;border-bottom:1px solid #eee;">${h.ID_Unico} - ${h.Obj_Conhec||''}<br><small>${h.Descrição||''}</small></div>`).join('');
+  };
+  serie.onchange = atualizar; bim.onchange = atualizar; unid.onchange = atualizar;
+}
+
+function selecionarIDAtiv(id) {
+  const hab = baseIDs.find(h => h.ID_Unico === id);
+  if (!hab) return;
+  document.getElementById('idHabilidadeAtiv').value = id;
+  document.getElementById('unidTematicaAtiv').value = hab['Unidade Temática'] || '';
+  document.querySelector('#formAtividade [name="Componente"]').value = 'Arte';
+  document.querySelector('#formAtividade [name="Versão"]').value = '1';
+  document.getElementById('areaConsultaID').innerHTML = '';
+}
+
+document.getElementById('formAtividade').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('btnSalvarAtividade');
+  if (btn.disabled) return;
+  setButtonLoading(btn, true);
+  const params = new URLSearchParams(new FormData(this));
+  params.append('acao', 'cadastrar');
+  params.set('Unidade Temática', document.getElementById('unidTematicaAtiv').value);
+  try {
+    const resp = await fetch(WEB_APP_URL, { method: 'POST', body: params });
+    alert(await resp.text());
+    fecharModalAtividade();
+    carregarTodosDados();
+  } catch (err) { alert('Erro ao cadastrar.'); }
+  finally { setButtonLoading(btn, false); }
+});
+
+// Mesclagem
+let selecionadasMescla = [];
+function abrirModalMescla() {
+  document.getElementById('modalMescla').style.display = 'block';
+  selecionadasMescla = [];
+  document.getElementById('listaParaMesclar').innerHTML = '';
+  document.getElementById('idGeradoMescla').value = '';
+  document.getElementById('descGeradaMescla').value = '';
+  setButtonLoading(document.getElementById('btnSalvarMescla'), false);
+}
+function fecharModalMescla() {
+  document.getElementById('modalMescla').style.display = 'none';
+  selecionadasMescla = [];
+}
+
+function atualizarListaMescla() {
+  const ano = document.getElementById('mAnoMescla').value;
+  const bim = document.getElementById('mBimMescla').value;
+  const unid = document.getElementById('mUnidMescla').value;
+  if (!ano || !bim) return;
+  const filtradas = baseIDs.filter(h => h['Ano/serie'] === ano && h.Bimestre === bim && (!unid || h['Unidade Temática'].includes(unid)));
+  const container = document.getElementById('listaParaMesclar');
+  container.innerHTML = filtradas.map(h => {
+    const sel = selecionadasMescla.find(s => s.ID_Unico === h.ID_Unico);
+    return `<div style="cursor:pointer; padding:8px; background:${sel?'#d1e7ff':'transparent'};" onclick="toggleSelecaoMescla('${h.ID_Unico}')">${h.ID_Unico} - ${h.Obj_Conhec||''}</div>`;
+  }).join('');
+}
+
+function toggleSelecaoMescla(id) {
+  const hab = baseIDs.find(h => h.ID_Unico === id);
+  if (!hab) return;
+  const idx = selecionadasMescla.findIndex(s => s.ID_Unico === id);
+  if (idx >= 0) selecionadasMescla.splice(idx, 1);
+  else selecionadasMescla.push(hab);
+  atualizarListaMescla();
+  montarIDMesclado();
+}
+
+function montarIDMesclado() {
+  if (!selecionadasMescla.length) {
+    document.getElementById('idGeradoMescla').value = '';
+    document.getElementById('descGeradaMescla').value = '';
+    return;
+  }
+  selecionadasMescla.sort((a,b)=>a.ID_Unico.localeCompare(b.ID_Unico));
+  const primeira = selecionadasMescla[0];
+  const partes = primeira.ID_Unico.split('-');
+  const prefixo = partes[0];
+  const sufixoBim = partes[1] ? '-'+partes[1] : '';
+  let novoID = prefixo;
+  for (let i=1; i<selecionadasMescla.length; i++) {
+    const match = selecionadasMescla[i].ID_Unico.match(/AR(\d+)/);
+    if (match) { const num = match[1].slice(-2); if (!novoID.includes('|'+num)) novoID += '|'+num; }
+  }
+  document.getElementById('idGeradoMescla').value = novoID + sufixoBim;
+  document.getElementById('descGeradaMescla').value = selecionadasMescla.map(s => s.Descrição||'').join('\n');
+}
+
+async function salvarMescla() {
+  const btn = document.getElementById('btnSalvarMescla');
+  if (btn.disabled) return;
+  const idCombo = document.getElementById('idGeradoMescla').value;
+  if (!idCombo || selecionadasMescla.length < 2) { alert('Selecione ao menos 2 habilidades.'); return; }
+  setButtonLoading(btn, true);
+  const params = new URLSearchParams();
+  params.append('acao', 'salvar_id_mesclado');
+  params.append('ID_Unico', idCombo);
+  params.append('Ano/serie', document.getElementById('mAnoMescla').value);
+  params.append('Bimestre', document.getElementById('mBimMescla').value);
+  params.append('Código', selecionadasMescla.map(s=>s.Código).join('\n'));
+  params.append('Unidade Temática', selecionadasMescla[0]['Unidade Temática']||'');
+  params.append('Obj_Conhec', selecionadasMescla.map(s=>s.Obj_Conhec).filter(Boolean).join(' | '));
+  params.append('Descrição', document.getElementById('descGeradaMescla').value);
+  try {
+    const resp = await fetch(WEB_APP_URL, { method: 'POST', body: params });
+    alert(await resp.text());
+    fecharModalMescla();
+    carregarTodosDados();
+  } catch (e) { alert('Erro ao salvar.'); }
+  finally { setButtonLoading(btn, false); }
+}
+
+// ==================== ABA CADASTRO ID ====================
+function initAbaCadastroID() {
+  window.gerenciarObjetoCadastro = function() {
+    const select = document.getElementById('selectObjCad');
+    const outroDiv = document.getElementById('outroObjContainer');
+    const final = document.getElementById('objFinal');
+    if (select.value === 'OUTRO') {
+      outroDiv.style.display = 'block';
+      final.value = document.getElementById('inputOutroObj').value;
     } else {
-      area.style.display = "none";
+      outroDiv.style.display = 'none';
+      final.value = select.value;
     }
   };
-
-  inAno.onchange = filtrar;
-  inBim.onchange = filtrar;
-  inUnidade.onchange = filtrar;
+  document.getElementById('inputOutroObj').addEventListener('input', function() {
+    document.getElementById('objFinal').value = this.value;
+  });
 }
 
-function selecionarID(id) {
-  const h = baseIDs.find(x => x.ID_Unico === id);
-  const serie = document.querySelector('#formAtividade [name="Ano/serie"]').value;
-  const labelV = document.getElementById('labelVersoes');
-
-  if (h) {
-    document.getElementById('idInput').value = h.ID_Unico;
-
-    // --- 1. BUSCA VERSÕES EXISTENTES E ATUALIZA A LABEL ---
-    const versoesExistentes = dadosOriginais
-      .filter(item => String(item.ID_Unico) === String(id) && String(item["Ano/serie"]) === String(serie))
-      .map(item => item.Versão)
-      .filter(Boolean)
-      .sort((a, b) => a - b);
-
-    if (versoesExistentes.length > 0) {
-      labelV.innerHTML = `Já existem as versões: <b>${versoesExistentes.join(", ")}</b>`;
-      // Sugere a próxima versão disponível (maior número + 1)
-      const proxima = Math.max(...versoesExistentes.map(Number)) + 1;
-      document.querySelector('#formAtividade [name="Versão"]').value = proxima;
-    } else {
-      labelV.innerHTML = "Nenhuma versão cadastrada ainda.";
-      document.querySelector('#formAtividade [name="Versão"]').value = "1";
-    }
-
-    // --- 2. PREENCHE DEMAIS CAMPOS AUTOMÁTICOS ---
-    const campoUnidade = document.querySelector('[name="Unidade Temática"]');
-    if (campoUnidade) {
-      campoUnidade.value = h["Unidade Temática"] || "";
-    }
-
-    document.querySelector('#formAtividade [name="Componente"]').value = "Arte";
-    document.querySelector('#formAtividade [name="Quant.Aulas"]').value = "2";
-    
-    // Limpa campos de texto para nova entrada manual da atividade
-    document.querySelector('#formAtividade [name="Nome da Atividade"]').value = "";
-    document.querySelector('#formAtividade [name="Orientação Didática"]').value = "";
-    document.querySelector('#formAtividade [name="Critérios Avaliativos"]').value = "";
-    document.querySelector('#formAtividade [name="Propósito"]').value = "Padrão";
-
-    // Esconde a área de consulta e avisa o usuário
-    document.getElementById('areaConsulta').style.display = "none";
-    console.log("Habilidade selecionada: " + id + " | Unidade: " + h["Unidade Temática"]);
-  }
-}
-
-    // --- LÓGICA DE MESCLAGEM ---
-  function abrirModalMescla() {
-    document.getElementById('modalMescla').style.display = 'block';
-    document.getElementById('mAno').innerHTML = document.getElementById('fAno').innerHTML;
-    document.getElementById('mBim').innerHTML = document.getElementById('fBimestre').innerHTML;
-    limparMescla();
-  }
-
-  function limparMescla() {
-    selecionadasMescla = [];
-    document.getElementById('idGerado').value = "";
-    document.getElementById('descGerada').value = "";
-    document.querySelectorAll('.item-sugerido').forEach(el => el.style.background = "");
-  }
-
-  function atualizarListaMescla() {
-    const ano = document.getElementById('mAno').value, bim = document.getElementById('mBim').value;
-    const lista = document.getElementById('listaParaMesclar');
-    lista.innerHTML = ""; selecionadasMescla = [];
-    if(!ano || !bim) return;
-    baseIDs.filter(h => String(h["Ano/serie"]) === ano && String(h["Bimestre"]) === bim).forEach(h => {
-      const d = document.createElement('div');
-      d.className = 'item-sugerido';
-      d.innerHTML = `<b>${h.ID_Unico}</b> - ${h.Obj_Conhec || ''}`;
-      d.onclick = () => {
-        const idx = selecionadasMescla.indexOf(h);
-        if(idx > -1) { selecionadasMescla.splice(idx, 1); d.style.background = ""; }
-        else { selecionadasMescla.push(h); d.style.background = "#d1e7ff"; }
-        montarIDMesclado();
-      };
-      lista.appendChild(d);
-    });
-  }
-
-  function montarIDMesclado() {
-    if(!selecionadasMescla.length) { limparMescla(); return; }
-    selecionadasMescla.sort((a, b) => a.ID_Unico.localeCompare(b.ID_Unico));
-    const primeira = selecionadasMescla[0].ID_Unico;
-    const base = primeira.split("-")[0];
-    const sufixo = primeira.split("-")[1] || "";
-    let novoID = base;
-    for(let i=1; i < selecionadasMescla.length; i++) {
-      const numHab = selecionadasMescla[i].ID_Unico.split("AR")[1].split("-")[0];
-      if(!novoID.includes(numHab)) novoID += "|" + numHab;
-    }
-    document.getElementById('idGerado').value = sufixo ? `${novoID}-${sufixo}` : novoID;
-    document.getElementById('descGerada').value = selecionadasMescla.map(s => `[${s.ID_Unico}]: ${s.Descrição}`).join("\n\n");
-  }
-
-  async function salvarMescla() {
-    const id = document.getElementById('idGerado').value;
-    if(!id) return alert("Selecione habilidades!");
-    if(baseIDs.find(h => h.ID_Unico === id)) return alert("Este ID já existe!");
-    const btn = document.getElementById('btnSalvarMescla'); btn.disabled = true;
-    const p = new URLSearchParams();
-    p.append("acao", "salvar_id_mesclado");
-    p.append("ID_Unico", id);
-    p.append("Ano/serie", document.getElementById('mAno').value);
-    p.append("Bimestre", document.getElementById('mBim').value);
-    p.append("Descrição", document.getElementById('descGerada').value);
-    p.append("Unidade Temática", selecionadasMescla[0]["Unidade Temática"] || "");
-    p.append("Obj_Conhec", "Habilidades Integradas");
-
-    try {
-      const res = await fetch(WEB_APP_URL, { method: "POST", body: p });
-      alert(await res.text()); fecharModalMescla(); carregarDados();
-    } catch (e) { alert("Erro ao salvar."); }
-    finally { btn.disabled = false; }
-  }
-
-  // --- FUNÇÕES DE ENVIO ---
-  async function enviarParaPlanejamento(id, ano, ver) {
-    const sem = document.getElementById(`s_${id}_${ano.replace(/\s/g,'')}`).value;
-    if(!sem) return alert("Indique a semana!");
-    const p = new URLSearchParams();
-    p.append("acao", "planejar"); p.append("semana", sem); p.append("ano", ano); p.append("id", id); p.append("versao", ver);
-    try {
-      const res = await fetch(WEB_APP_URL, { method: "POST", body: p });
-      alert(await res.text()); carregarDados();
-    } catch (e) { alert("Erro."); }
-  }
-
-  document.getElementById('formAtividade').onsubmit = async function(e) {
+document.getElementById('formCadastroID').addEventListener('submit', async function(e) {
   e.preventDefault();
-  
-  const idInf = document.getElementById('idInput').value;
-  const verInf = document.querySelector('#formAtividade [name="Versão"]').value;
-  const serInf = document.querySelector('#formAtividade [name="Ano/serie"]').value;
+  const btn = document.getElementById('btnCadastrarHabilidade');
+  if (btn.disabled) return;
+  if (!document.getElementById('objFinal').value) { alert('Selecione o Objeto de Conhecimento.'); return; }
+  setButtonLoading(btn, true);
+  const params = new URLSearchParams(new FormData(this));
+  params.append('acao', 'salvar_id_mesclado');
+  try {
+    const resp = await fetch(WEB_APP_URL, { method: 'POST', body: params });
+    document.getElementById('statusCadastroID').innerText = await resp.text();
+    this.reset();
+    document.getElementById('outroObjContainer').style.display = 'none';
+    document.getElementById('objFinal').value = '';
+    carregarTodosDados();
+  } catch (e) { alert('Erro.'); }
+  finally { setButtonLoading(btn, false); }
+});
 
-  // --- TRAVA DE DUPLICIDADE ---
-  const duplicado = dadosOriginais.find(item => 
-    String(item.ID_Unico) === String(idInf) && 
-    String(item.Versão) === String(verInf) &&
-    String(item["Ano/serie"]) === String(serInf)
-  );
+// ==================== ABA RELATÓRIO ====================
+function initAbaRelatorio() {
+  const anos = [...new Set(planejamento.map(p => p['Ano/serie']).filter(Boolean))].sort();
+  const sel = document.getElementById('fAnoRel');
+  sel.innerHTML = '<option value="">Escolha um Ano/Série...</option>';
+  anos.forEach(a => { let opt = document.createElement('option'); opt.value = a; opt.textContent = a; sel.appendChild(opt); });
+  sel.onchange = gerarRelatorio;
+}
 
-  if (duplicado) {
-    alert(`⚠️ Erro: A Versão ${verInf} já existe para este ID nesta série. Use a Versão ${parseInt(verInf) + 1} ou outra disponível.`);
-    return; 
+function gerarRelatorio() {
+  const ano = document.getElementById('fAnoRel').value;
+  const corpo = document.getElementById('corpoTabelaRel');
+  const painelErros = document.getElementById('painelErrosRel');
+  const listaErros = document.getElementById('listaErrosRel');
+  corpo.innerHTML = ''; painelErros.style.display = 'none'; listaErros.innerHTML = '';
+  if (!ano) { corpo.innerHTML = '<tr><td colspan="2">Aguardando seleção...</td></tr>'; return; }
+  const dados = planejamento.filter(p => p['Ano/serie'] === ano);
+  const colunas = ['Semana','Data inicial','Data final','ID Habilidade','Versão','Linguagem','Obj._Conhecimento','Descrição','Propósito','Atividade (Auto)','Orientação (Auto)','Avaliação','Quant.Aulas'];
+  let erros = [];
+  dados.forEach(item => {
+    const vazios = colunas.filter(col => !item[col] || String(item[col]).trim() === '');
+    if (vazios.length) erros.push(`Semana ${item.Semana||'?'}: ${vazios.join(', ')}`);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>Semana ${item.Semana||'?'}<br><small>${item['Data inicial']||''} a ${item['Data final']||''}</small></td><td><strong>${item['ID Habilidade']||'S/ ID'}</strong> - ${item.Linguagem||''}<br>${item.Descrição||'<span style="color:red;">Descrição não preenchida</span>'}<br><small><strong>Objetivo:</strong> ${item['Obj._Conhecimento']||'?'}</small></td>`;
+    corpo.appendChild(tr);
+  });
+  if (erros.length) { painelErros.style.display = 'block'; listaErros.innerHTML = erros.map(e=>`<li>${e}</li>`).join(''); }
+}
+
+// ==================== PLANEJAMENTO RÁPIDO (MELHORADO) ====================
+function abrirModalPlanejamentoRapido() {
+  document.getElementById('modalPlanejamentoRapido').style.display = 'block';
+  document.getElementById('formPlanejamentoRapido').reset();
+  document.getElementById('prComponente').value = 'Arte';
+  document.getElementById('prVersao').value = '1.0';
+  document.getElementById('prQuantAulas').value = '2';
+  document.getElementById('prSugestoesID').style.display = 'none';
+  document.getElementById('prListaIDs').innerHTML = '';
+  document.getElementById('prNovaHabilidade').checked = false;
+  toggleSecaoNovaHabilidade();
+  document.getElementById('prObjetoHidden').value = '';
+  document.querySelectorAll('#prObjetoCheckboxes input[type="checkbox"]').forEach(cb => cb.checked = false);
+  document.getElementById('prOutroObjContainer').style.display = 'none';
+  document.getElementById('prOutroObj').value = '';
+  setButtonLoading(document.getElementById('btnCadastrarPlanejar'), false);
+}
+
+function fecharModalPlanejamentoRapido() {
+  document.getElementById('modalPlanejamentoRapido').style.display = 'none';
+}
+
+function toggleSecaoNovaHabilidade() {
+  const checked = document.getElementById('prNovaHabilidade').checked;
+  document.getElementById('prSecaoNovaHabilidade').style.display = checked ? 'block' : 'none';
+  if (checked) {
+    document.getElementById('prUnidadeNova').value = document.getElementById('prUnidade').value;
   }
-  // -----------------------------
+}
 
-  const btn = document.getElementById('btnSalvar');
-  btn.disabled = true;
-  const p = new URLSearchParams(new FormData(this));
-  p.append("acao", "cadastrar");
+document.getElementById('prUnidade').addEventListener('change', function() {
+  if (document.getElementById('prNovaHabilidade').checked) {
+    document.getElementById('prUnidadeNova').value = this.value;
+  }
+});
+
+// Gerenciamento de múltiplos objetos de conhecimento
+const prObjetoCheckboxes = document.getElementById('prObjetoCheckboxes');
+const prOutroObjContainer = document.getElementById('prOutroObjContainer');
+const prOutroObjInput = document.getElementById('prOutroObj');
+const prObjetoHidden = document.getElementById('prObjetoHidden');
+const prCheckOutro = document.getElementById('prCheckOutro');
+
+function atualizarObjetoHidden() {
+  const checkboxes = prObjetoCheckboxes.querySelectorAll('input[type="checkbox"]:checked');
+  const valores = [];
+  checkboxes.forEach(cb => {
+    if (cb.value === 'OUTRO') {
+      const outroTexto = prOutroObjInput.value.trim();
+      if (outroTexto) valores.push(outroTexto);
+    } else {
+      valores.push(cb.value);
+    }
+  });
+  prObjetoHidden.value = valores.join('\n');
+}
+
+prObjetoCheckboxes.addEventListener('change', function(e) {
+  if (e.target === prCheckOutro) {
+    prOutroObjContainer.style.display = prCheckOutro.checked ? 'block' : 'none';
+    if (!prCheckOutro.checked) prOutroObjInput.value = '';
+  }
+  atualizarObjetoHidden();
+});
+
+prOutroObjInput.addEventListener('input', atualizarObjetoHidden);
+
+function atualizarSugestoesIDRapido() {
+  const bim = document.getElementById('prBimestre').value;
+  const ano = document.getElementById('prAno').value;
+  const unid = document.getElementById('prUnidade').value;
+  const container = document.getElementById('prSugestoesID');
+  const lista = document.getElementById('prListaIDs');
+  if (!bim || !ano || !unid) { container.style.display = 'none'; lista.innerHTML = ''; return; }
+  const filtradas = baseIDs.filter(h => h['Ano/serie'] === ano && h.Bimestre === bim && h['Unidade Temática'].includes(unid));
+  container.style.display = 'block';
+  lista.innerHTML = filtradas.length ? filtradas.map(h => `<div style="cursor:pointer; padding:8px; border-bottom:1px solid #eee;" onclick="selecionarIDRapido('${h.ID_Unico}')"><b>${h.ID_Unico}</b> - ${h.Obj_Conhec||''}<br><small>${h.Descrição||''}</small></div>`).join('') : '<small style="color:#e67e22;">Nenhum ID encontrado.</small>';
+}
+
+function selecionarIDRapido(id) { document.getElementById('prIDHabilidade').value = id; }
+
+document.getElementById('formPlanejamentoRapido').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('btnCadastrarPlanejar');
+  if (btn.disabled) return;
+
+  const semana = document.getElementById('prSemana').value;
+  const ano = document.getElementById('prAno').value;
+  const idHabilidade = document.getElementById('prIDHabilidade').value.trim();
+  const versao = document.getElementById('prVersao').value;
+  const bimestre = document.getElementById('prBimestre').value;
+  const nomeAtividade = document.getElementById('prNomeAtividade').value.trim();
+  const novaHabilidade = document.getElementById('prNovaHabilidade').checked;
+
+  if (!semana || !ano || !idHabilidade || !versao || !bimestre || !nomeAtividade) {
+    alert('Preencha todos os campos obrigatórios.'); return;
+  }
+
+  setButtonLoading(btn, true);
+
+  if (novaHabilidade) {
+    const unidade = document.getElementById('prUnidadeNova').value;
+    const objeto = prObjetoHidden.value;
+    const descricao = document.getElementById('prDescricaoHabilidade').value.trim();
+    const codigo = document.getElementById('prCodigo').value.trim();
+    if (!unidade || !objeto || !descricao || !codigo) {
+      alert('Para nova habilidade, preencha: Código, Unidade Temática, ao menos um Objeto de Conhecimento e Descrição.');
+      setButtonLoading(btn, false); return;
+    }
+    const paramsID = new URLSearchParams();
+    paramsID.append('acao', 'salvar_id_mesclado');
+    paramsID.append('ID_Unico', idHabilidade);
+    paramsID.append('Ano/serie', ano);
+    paramsID.append('Bimestre', bimestre);
+    paramsID.append('Código', codigo);
+    paramsID.append('Unidade Temática', unidade);
+    paramsID.append('Obj_Conhec', objeto);
+    paramsID.append('Descrição', descricao);
+    try {
+      const respID = await fetch(WEB_APP_URL, { method: 'POST', body: paramsID });
+      const msgID = await respID.text();
+      if (!msgID.includes('sucesso')) { alert('Erro ao cadastrar habilidade: ' + msgID); setButtonLoading(btn, false); return; }
+    } catch (err) { alert('Erro de conexão ao cadastrar habilidade.'); setButtonLoading(btn, false); return; }
+  }
+
+  const paramsAtiv = new URLSearchParams();
+  paramsAtiv.append('acao', 'cadastrar');
+  paramsAtiv.append('Bimestre', bimestre);
+  paramsAtiv.append('Componente', document.getElementById('prComponente').value);
+  paramsAtiv.append('ID_Unico', idHabilidade);
+  paramsAtiv.append('Ano/serie', ano);
+  paramsAtiv.append('Versão', versao);
+  paramsAtiv.append('Propósito', document.getElementById('prProposito').value);
+  paramsAtiv.append('Nome da Atividade', nomeAtividade);
+  paramsAtiv.append('Orientação Didática', document.getElementById('prOrientacao').value);
+  paramsAtiv.append('Critérios Avaliativos', document.getElementById('prAvaliacao').value);
+  paramsAtiv.append('Quant.Aulas', document.getElementById('prQuantAulas').value);
+  paramsAtiv.append('Unidade Temática', document.getElementById('prUnidade').value);
 
   try {
-    const res = await fetch(WEB_APP_URL, { method: "POST", body: p });
-    alert(await res.text());
-    fecharModal();
-    carregarDados();
-  } catch (err) {
-    alert("Erro ao cadastrar.");
-  } finally {
-    btn.disabled = false;
-  }
-};
+    const respAtiv = await fetch(WEB_APP_URL, { method: 'POST', body: paramsAtiv });
+    const msgAtiv = await respAtiv.text();
+    if (!msgAtiv.startsWith('Cadastrado')) { alert('Erro ao cadastrar atividade: ' + msgAtiv); setButtonLoading(btn, false); return; }
+  } catch (err) { alert('Erro de conexão ao cadastrar atividade.'); setButtonLoading(btn, false); return; }
 
+  const paramsPlan = new URLSearchParams();
+  paramsPlan.append('acao', 'planejar');
+  paramsPlan.append('semana', semana);
+  paramsPlan.append('ano', ano);
+  paramsPlan.append('id', idHabilidade);
+  paramsPlan.append('versao', versao);
 
-  function popularFiltros() {
-    const fA = document.getElementById('fAno'), fB = document.getElementById('fBimestre');
-    const anos = [...new Set(dadosOriginais.map(d => d["Ano/serie"]))].filter(Boolean).sort();
-    const bims = [...new Set(dadosOriginais.map(d => d["Bimestre"]))].filter(Boolean).sort();
-    fA.innerHTML = '<option value="">Todas as Séries</option>' + anos.map(a => `<option value="${a}">${a}</option>`).join("");
-    fB.innerHTML = '<option value="">Todos os Bimestres</option>' + bims.map(b => `<option value="${b}">${b}</option>`).join("");
-    const f = () => {
-      let d = dadosOriginais;
-      if(fA.value) d = d.filter(x => String(x["Ano/serie"]) === fA.value);
-      if(fB.value) d = d.filter(x => String(x["Bimestre"]) === fB.value);
-      renderizarLayout(d);
-    };
-    fA.onchange = f; fB.onchange = f;
-  }
+  try {
+    const respPlan = await fetch(WEB_APP_URL, { method: 'POST', body: paramsPlan });
+    const msgPlan = await respPlan.text();
+    alert(msgPlan.startsWith('Sucesso') ? '✅ Tudo pronto! Atividade cadastrada e planejada na Semana ' + semana + '.' : '⚠️ Atividade cadastrada, mas houve problema ao planejar: ' + msgPlan);
+  } catch (err) { alert('⚠️ Atividade cadastrada, mas erro ao planejar.'); }
+  finally { setButtonLoading(btn, false); }
 
-  function abrirModal() { document.getElementById('modalForm').style.display = 'block'; }
+  fecharModalPlanejamentoRapido();
+  carregarTodosDados();
+});
 
-  function fecharModal() { 
-  // 1. Esconde o modal
-  document.getElementById('modalForm').style.display = 'none'; 
-  
-  // 2. Reseta os campos do formulário
-  document.getElementById('formAtividade').reset(); 
-  
-  // 3. Limpa a label de versões (agora dentro da função)
-  const labelV = document.getElementById('labelVersoes');
-  if (labelV) labelV.innerHTML = "";
-  
-  // 4. Esconde a área de consulta se estiver aberta
-  const areaC = document.getElementById('areaConsulta');
-  if (areaC) areaC.style.display = "none";
-}
-
-function fecharModalMescla() { 
-  document.getElementById('modalMescla').style.display = 'none'; 
-}
-  carregarDados();
+carregarTodosDados();
 </script>
-
 </body>
 </html>
