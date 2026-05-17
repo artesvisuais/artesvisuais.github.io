@@ -98,11 +98,12 @@ h2 {
       padding-top: 8px; 
     }
     .card:hover { transform: translateY(-4px); }
-       .card img {
+    
+   .card img {
       width: 100%;
-      height: 220px; 
+       aspect-ratio: 1 / 1;   /* altura = largura (quadrado) */
       object-fit: contain; /* <-- Mudança principal: exibe a imagem inteira */
-      background-color: #f0f0f0; /* <-- Adiciona um fundo neutro para onde sobrar barra */
+      background-color: #2F4F4F; /* <-- Adiciona um fundo neutro para onde sobrar barra */
     }
     .card-body {
       padding: 1rem;
