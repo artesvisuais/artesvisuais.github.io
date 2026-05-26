@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes">
+    <title>Chloe Doll Amber Tweep</title>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #1a1a1a;
+            font-family: Arial, sans-serif;
+            padding-bottom: 70px;
+        }
+        .toolbar {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: rgba(0,0,0,0.95); color: white;
+            padding: 12px 15px; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .toolbar h1 {
+            font-size: 16px; margin: 0; flex: 1; text-align: center;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+            padding: 0 10px;
+        }
+        .progress-bar {
+            position: fixed; top: 0; left: 0; height: 3px;
+            background: #4CAF50; z-index: 1001; transition: width 0.3s;
+        }
+        .reader-container {
+            width: 100%; max-width: 900px; margin: 0 auto;
+            padding: 65px 0 20px;
+        }
+        .comic-page {
+            width: 100%; height: auto; display: block;
+            margin-bottom: 4px; border-radius: 2px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            background: #2a2a2a; min-height: 200px;
+        }
+        .navigation {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: rgba(0,0,0,0.95); padding: 10px;
+            display: flex; justify-content: space-around; align-items: center;
+            z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+        }
+        .nav-btn {
+            background: #444; color: white; border: none;
+            padding: 10px 20px; border-radius: 5px; cursor: pointer;
+            font-size: 16px; touch-action: manipulation;
+            transition: background 0.2s;
+        }
+        .nav-btn:active { background: #666; transform: scale(0.95); }
+        @media (max-width: 600px) {
+            .nav-btn { padding: 8px 15px; font-size: 14px; }
+            .toolbar h1 { font-size: 14px; }
+        }
+    </style>
+    
+</head>
+<body>
+    <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+    
+    <div class="toolbar">
+        <span id="page-indicator" style="font-size: 14px;">Página 1 de 249</span>
+        <h1>Chloe Doll Amber Tweep</h1>
+        <span style="font-size: 12px;">249 págs</span>
+    </div>
+    
+    <div class="reader-container">
+        <img id="page-0" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-1.jpg" alt="Página 1" loading="lazy">
+        <img id="page-1" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-10.jpg" alt="Página 2" loading="lazy">
+        <img id="page-2" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-100.jpg" alt="Página 3" loading="lazy">
+        <img id="page-3" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-101.jpg" alt="Página 4" loading="lazy">
+        <img id="page-4" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-102.jpg" alt="Página 5" loading="lazy">
+        <img id="page-5" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-103.jpg" alt="Página 6" loading="lazy">
+        <img id="page-6" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-104.jpg" alt="Página 7" loading="lazy">
+        <img id="page-7" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-105.jpg" alt="Página 8" loading="lazy">
+        <img id="page-8" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-106.jpg" alt="Página 9" loading="lazy">
+        <img id="page-9" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-107.jpg" alt="Página 10" loading="lazy">
+        <img id="page-10" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-108.jpg" alt="Página 11" loading="lazy">
+        <img id="page-11" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-109.jpg" alt="Página 12" loading="lazy">
+        <img id="page-12" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-11.jpg" alt="Página 13" loading="lazy">
+        <img id="page-13" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-110.jpg" alt="Página 14" loading="lazy">
+        <img id="page-14" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-111.jpg" alt="Página 15" loading="lazy">
+        <img id="page-15" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-112.jpg" alt="Página 16" loading="lazy">
+        <img id="page-16" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-113.jpg" alt="Página 17" loading="lazy">
+        <img id="page-17" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-114.jpg" alt="Página 18" loading="lazy">
+        <img id="page-18" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-115.jpg" alt="Página 19" loading="lazy">
+        <img id="page-19" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-116.jpg" alt="Página 20" loading="lazy">
+        <img id="page-20" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-117.jpg" alt="Página 21" loading="lazy">
+        <img id="page-21" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-118.jpg" alt="Página 22" loading="lazy">
+        <img id="page-22" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-119.jpg" alt="Página 23" loading="lazy">
+        <img id="page-23" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-12.jpg" alt="Página 24" loading="lazy">
+        <img id="page-24" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-120.jpg" alt="Página 25" loading="lazy">
+        <img id="page-25" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-121.jpg" alt="Página 26" loading="lazy">
+        <img id="page-26" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-122.jpg" alt="Página 27" loading="lazy">
+        <img id="page-27" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-123.jpg" alt="Página 28" loading="lazy">
+        <img id="page-28" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-124.jpg" alt="Página 29" loading="lazy">
+        <img id="page-29" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-125.jpg" alt="Página 30" loading="lazy">
+        <img id="page-30" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-126.jpg" alt="Página 31" loading="lazy">
+        <img id="page-31" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-127.jpg" alt="Página 32" loading="lazy">
+        <img id="page-32" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-128.jpg" alt="Página 33" loading="lazy">
+        <img id="page-33" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-129.jpg" alt="Página 34" loading="lazy">
+        <img id="page-34" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-13.jpg" alt="Página 35" loading="lazy">
+        <img id="page-35" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-130.jpg" alt="Página 36" loading="lazy">
+        <img id="page-36" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-131.jpg" alt="Página 37" loading="lazy">
+        <img id="page-37" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-132.jpg" alt="Página 38" loading="lazy">
+        <img id="page-38" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-133.jpg" alt="Página 39" loading="lazy">
+        <img id="page-39" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-134.jpg" alt="Página 40" loading="lazy">
+        <img id="page-40" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-135.jpg" alt="Página 41" loading="lazy">
+        <img id="page-41" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-136.jpg" alt="Página 42" loading="lazy">
+        <img id="page-42" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-137.jpg" alt="Página 43" loading="lazy">
+        <img id="page-43" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-138.jpg" alt="Página 44" loading="lazy">
+        <img id="page-44" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-139.jpg" alt="Página 45" loading="lazy">
+        <img id="page-45" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-14.jpg" alt="Página 46" loading="lazy">
+        <img id="page-46" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-140.jpg" alt="Página 47" loading="lazy">
+        <img id="page-47" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-141.jpg" alt="Página 48" loading="lazy">
+        <img id="page-48" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-142.jpg" alt="Página 49" loading="lazy">
+        <img id="page-49" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-143.jpg" alt="Página 50" loading="lazy">
+        <img id="page-50" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-144.jpg" alt="Página 51" loading="lazy">
+        <img id="page-51" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-145.jpg" alt="Página 52" loading="lazy">
+        <img id="page-52" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-146.jpg" alt="Página 53" loading="lazy">
+        <img id="page-53" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-147.jpg" alt="Página 54" loading="lazy">
+        <img id="page-54" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-148.jpg" alt="Página 55" loading="lazy">
+        <img id="page-55" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-149.jpg" alt="Página 56" loading="lazy">
+        <img id="page-56" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-15.jpg" alt="Página 57" loading="lazy">
+        <img id="page-57" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-150.jpg" alt="Página 58" loading="lazy">
+        <img id="page-58" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-151.jpg" alt="Página 59" loading="lazy">
+        <img id="page-59" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-152.jpg" alt="Página 60" loading="lazy">
+        <img id="page-60" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-153.jpg" alt="Página 61" loading="lazy">
+        <img id="page-61" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-154.jpg" alt="Página 62" loading="lazy">
+        <img id="page-62" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-155.jpg" alt="Página 63" loading="lazy">
+        <img id="page-63" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-156.jpg" alt="Página 64" loading="lazy">
+        <img id="page-64" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-157.jpg" alt="Página 65" loading="lazy">
+        <img id="page-65" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-158.jpg" alt="Página 66" loading="lazy">
+        <img id="page-66" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-159.jpg" alt="Página 67" loading="lazy">
+        <img id="page-67" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-16.jpg" alt="Página 68" loading="lazy">
+        <img id="page-68" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-160.jpg" alt="Página 69" loading="lazy">
+        <img id="page-69" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-161.jpg" alt="Página 70" loading="lazy">
+        <img id="page-70" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-162.jpg" alt="Página 71" loading="lazy">
+        <img id="page-71" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-163.jpg" alt="Página 72" loading="lazy">
+        <img id="page-72" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-164.jpg" alt="Página 73" loading="lazy">
+        <img id="page-73" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-165.jpg" alt="Página 74" loading="lazy">
+        <img id="page-74" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-166.jpg" alt="Página 75" loading="lazy">
+        <img id="page-75" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-167.jpg" alt="Página 76" loading="lazy">
+        <img id="page-76" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-168.jpg" alt="Página 77" loading="lazy">
+        <img id="page-77" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-169.jpg" alt="Página 78" loading="lazy">
+        <img id="page-78" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-17.jpg" alt="Página 79" loading="lazy">
+        <img id="page-79" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-170.jpg" alt="Página 80" loading="lazy">
+        <img id="page-80" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-171.jpg" alt="Página 81" loading="lazy">
+        <img id="page-81" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-172.jpg" alt="Página 82" loading="lazy">
+        <img id="page-82" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-173.jpg" alt="Página 83" loading="lazy">
+        <img id="page-83" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-174.jpg" alt="Página 84" loading="lazy">
+        <img id="page-84" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-175.jpg" alt="Página 85" loading="lazy">
+        <img id="page-85" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-176.jpg" alt="Página 86" loading="lazy">
+        <img id="page-86" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-177.jpg" alt="Página 87" loading="lazy">
+        <img id="page-87" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-178.jpg" alt="Página 88" loading="lazy">
+        <img id="page-88" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-179.jpg" alt="Página 89" loading="lazy">
+        <img id="page-89" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-18.jpg" alt="Página 90" loading="lazy">
+        <img id="page-90" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-180.jpg" alt="Página 91" loading="lazy">
+        <img id="page-91" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-181.jpg" alt="Página 92" loading="lazy">
+        <img id="page-92" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-182.jpg" alt="Página 93" loading="lazy">
+        <img id="page-93" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-183.jpg" alt="Página 94" loading="lazy">
+        <img id="page-94" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-184.jpg" alt="Página 95" loading="lazy">
+        <img id="page-95" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-185.jpg" alt="Página 96" loading="lazy">
+        <img id="page-96" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-186.jpg" alt="Página 97" loading="lazy">
+        <img id="page-97" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-187.jpg" alt="Página 98" loading="lazy">
+        <img id="page-98" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-188.jpg" alt="Página 99" loading="lazy">
+        <img id="page-99" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-189.jpg" alt="Página 100" loading="lazy">
+        <img id="page-100" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-19.jpg" alt="Página 101" loading="lazy">
+        <img id="page-101" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-190.jpg" alt="Página 102" loading="lazy">
+        <img id="page-102" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-191.jpg" alt="Página 103" loading="lazy">
+        <img id="page-103" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-192.jpg" alt="Página 104" loading="lazy">
+        <img id="page-104" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-193.jpg" alt="Página 105" loading="lazy">
+        <img id="page-105" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-194.jpg" alt="Página 106" loading="lazy">
+        <img id="page-106" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-195.jpg" alt="Página 107" loading="lazy">
+        <img id="page-107" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-196.jpg" alt="Página 108" loading="lazy">
+        <img id="page-108" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-197.jpg" alt="Página 109" loading="lazy">
+        <img id="page-109" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-198.jpg" alt="Página 110" loading="lazy">
+        <img id="page-110" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-199.jpg" alt="Página 111" loading="lazy">
+        <img id="page-111" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-2.jpg" alt="Página 112" loading="lazy">
+        <img id="page-112" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-20.jpg" alt="Página 113" loading="lazy">
+        <img id="page-113" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-200.jpg" alt="Página 114" loading="lazy">
+        <img id="page-114" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-201.jpg" alt="Página 115" loading="lazy">
+        <img id="page-115" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-202.jpg" alt="Página 116" loading="lazy">
+        <img id="page-116" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-203.jpg" alt="Página 117" loading="lazy">
+        <img id="page-117" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-204.jpg" alt="Página 118" loading="lazy">
+        <img id="page-118" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-205.jpg" alt="Página 119" loading="lazy">
+        <img id="page-119" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-206.jpg" alt="Página 120" loading="lazy">
+        <img id="page-120" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-207.jpg" alt="Página 121" loading="lazy">
+        <img id="page-121" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-208.jpg" alt="Página 122" loading="lazy">
+        <img id="page-122" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-209.jpg" alt="Página 123" loading="lazy">
+        <img id="page-123" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-21.jpg" alt="Página 124" loading="lazy">
+        <img id="page-124" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-210.jpg" alt="Página 125" loading="lazy">
+        <img id="page-125" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-211.jpg" alt="Página 126" loading="lazy">
+        <img id="page-126" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-212.jpg" alt="Página 127" loading="lazy">
+        <img id="page-127" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-213.jpg" alt="Página 128" loading="lazy">
+        <img id="page-128" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-214.jpg" alt="Página 129" loading="lazy">
+        <img id="page-129" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-215.jpg" alt="Página 130" loading="lazy">
+        <img id="page-130" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-216.jpg" alt="Página 131" loading="lazy">
+        <img id="page-131" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-217.jpg" alt="Página 132" loading="lazy">
+        <img id="page-132" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-218.jpg" alt="Página 133" loading="lazy">
+        <img id="page-133" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-219.jpg" alt="Página 134" loading="lazy">
+        <img id="page-134" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-22.jpg" alt="Página 135" loading="lazy">
+        <img id="page-135" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-220.jpg" alt="Página 136" loading="lazy">
+        <img id="page-136" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-221.jpg" alt="Página 137" loading="lazy">
+        <img id="page-137" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-222.jpg" alt="Página 138" loading="lazy">
+        <img id="page-138" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-223.jpg" alt="Página 139" loading="lazy">
+        <img id="page-139" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-224.jpg" alt="Página 140" loading="lazy">
+        <img id="page-140" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-225.jpg" alt="Página 141" loading="lazy">
+        <img id="page-141" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-226.jpg" alt="Página 142" loading="lazy">
+        <img id="page-142" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-227.jpg" alt="Página 143" loading="lazy">
+        <img id="page-143" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-228.jpg" alt="Página 144" loading="lazy">
+        <img id="page-144" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-229.jpg" alt="Página 145" loading="lazy">
+        <img id="page-145" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-23.jpg" alt="Página 146" loading="lazy">
+        <img id="page-146" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-230.jpg" alt="Página 147" loading="lazy">
+        <img id="page-147" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-231.jpg" alt="Página 148" loading="lazy">
+        <img id="page-148" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-232.jpg" alt="Página 149" loading="lazy">
+        <img id="page-149" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-233.jpg" alt="Página 150" loading="lazy">
+        <img id="page-150" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-234.jpg" alt="Página 151" loading="lazy">
+        <img id="page-151" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-235.jpg" alt="Página 152" loading="lazy">
+        <img id="page-152" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-236.jpg" alt="Página 153" loading="lazy">
+        <img id="page-153" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-237.jpg" alt="Página 154" loading="lazy">
+        <img id="page-154" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-238.jpg" alt="Página 155" loading="lazy">
+        <img id="page-155" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-239.jpg" alt="Página 156" loading="lazy">
+        <img id="page-156" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-24.jpg" alt="Página 157" loading="lazy">
+        <img id="page-157" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-240.jpg" alt="Página 158" loading="lazy">
+        <img id="page-158" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-241.jpg" alt="Página 159" loading="lazy">
+        <img id="page-159" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-242.jpg" alt="Página 160" loading="lazy">
+        <img id="page-160" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-243.jpg" alt="Página 161" loading="lazy">
+        <img id="page-161" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-244.jpg" alt="Página 162" loading="lazy">
+        <img id="page-162" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-245.jpg" alt="Página 163" loading="lazy">
+        <img id="page-163" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-246.jpg" alt="Página 164" loading="lazy">
+        <img id="page-164" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-247.jpg" alt="Página 165" loading="lazy">
+        <img id="page-165" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-248.jpg" alt="Página 166" loading="lazy">
+        <img id="page-166" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-249.jpg" alt="Página 167" loading="lazy">
+        <img id="page-167" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-25.jpg" alt="Página 168" loading="lazy">
+        <img id="page-168" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-26.jpg" alt="Página 169" loading="lazy">
+        <img id="page-169" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-27.jpg" alt="Página 170" loading="lazy">
+        <img id="page-170" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-28.jpg" alt="Página 171" loading="lazy">
+        <img id="page-171" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-29.jpg" alt="Página 172" loading="lazy">
+        <img id="page-172" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-3.jpg" alt="Página 173" loading="lazy">
+        <img id="page-173" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-30.jpg" alt="Página 174" loading="lazy">
+        <img id="page-174" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-31.jpg" alt="Página 175" loading="lazy">
+        <img id="page-175" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-32.jpg" alt="Página 176" loading="lazy">
+        <img id="page-176" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-33.jpg" alt="Página 177" loading="lazy">
+        <img id="page-177" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-34.jpg" alt="Página 178" loading="lazy">
+        <img id="page-178" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-35.jpg" alt="Página 179" loading="lazy">
+        <img id="page-179" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-36.jpg" alt="Página 180" loading="lazy">
+        <img id="page-180" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-37.jpg" alt="Página 181" loading="lazy">
+        <img id="page-181" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-38.jpg" alt="Página 182" loading="lazy">
+        <img id="page-182" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-39.jpg" alt="Página 183" loading="lazy">
+        <img id="page-183" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-4.jpg" alt="Página 184" loading="lazy">
+        <img id="page-184" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-40.jpg" alt="Página 185" loading="lazy">
+        <img id="page-185" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-41.jpg" alt="Página 186" loading="lazy">
+        <img id="page-186" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-42.jpg" alt="Página 187" loading="lazy">
+        <img id="page-187" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-43.jpg" alt="Página 188" loading="lazy">
+        <img id="page-188" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-44.jpg" alt="Página 189" loading="lazy">
+        <img id="page-189" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-45.jpg" alt="Página 190" loading="lazy">
+        <img id="page-190" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-46.jpg" alt="Página 191" loading="lazy">
+        <img id="page-191" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-47.jpg" alt="Página 192" loading="lazy">
+        <img id="page-192" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-48.jpg" alt="Página 193" loading="lazy">
+        <img id="page-193" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-49.jpg" alt="Página 194" loading="lazy">
+        <img id="page-194" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-5.jpg" alt="Página 195" loading="lazy">
+        <img id="page-195" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-50.jpg" alt="Página 196" loading="lazy">
+        <img id="page-196" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-51.jpg" alt="Página 197" loading="lazy">
+        <img id="page-197" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-52.jpg" alt="Página 198" loading="lazy">
+        <img id="page-198" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-53.jpg" alt="Página 199" loading="lazy">
+        <img id="page-199" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-54.jpg" alt="Página 200" loading="lazy">
+        <img id="page-200" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-55.jpg" alt="Página 201" loading="lazy">
+        <img id="page-201" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-56.jpg" alt="Página 202" loading="lazy">
+        <img id="page-202" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-57.jpg" alt="Página 203" loading="lazy">
+        <img id="page-203" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-58.jpg" alt="Página 204" loading="lazy">
+        <img id="page-204" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-59.jpg" alt="Página 205" loading="lazy">
+        <img id="page-205" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-6.jpg" alt="Página 206" loading="lazy">
+        <img id="page-206" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-60.jpg" alt="Página 207" loading="lazy">
+        <img id="page-207" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-61.jpg" alt="Página 208" loading="lazy">
+        <img id="page-208" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-62.jpg" alt="Página 209" loading="lazy">
+        <img id="page-209" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-63.jpg" alt="Página 210" loading="lazy">
+        <img id="page-210" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-64.jpg" alt="Página 211" loading="lazy">
+        <img id="page-211" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-65.jpg" alt="Página 212" loading="lazy">
+        <img id="page-212" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-66.jpg" alt="Página 213" loading="lazy">
+        <img id="page-213" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-67.jpg" alt="Página 214" loading="lazy">
+        <img id="page-214" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-68.jpg" alt="Página 215" loading="lazy">
+        <img id="page-215" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-69.jpg" alt="Página 216" loading="lazy">
+        <img id="page-216" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-7.jpg" alt="Página 217" loading="lazy">
+        <img id="page-217" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-70.jpg" alt="Página 218" loading="lazy">
+        <img id="page-218" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-71.jpg" alt="Página 219" loading="lazy">
+        <img id="page-219" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-72.jpg" alt="Página 220" loading="lazy">
+        <img id="page-220" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-73.jpg" alt="Página 221" loading="lazy">
+        <img id="page-221" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-74.jpg" alt="Página 222" loading="lazy">
+        <img id="page-222" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-75.jpg" alt="Página 223" loading="lazy">
+        <img id="page-223" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-76.jpg" alt="Página 224" loading="lazy">
+        <img id="page-224" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-77.jpg" alt="Página 225" loading="lazy">
+        <img id="page-225" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-78.jpg" alt="Página 226" loading="lazy">
+        <img id="page-226" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-79.jpg" alt="Página 227" loading="lazy">
+        <img id="page-227" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-8.jpg" alt="Página 228" loading="lazy">
+        <img id="page-228" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-80.jpg" alt="Página 229" loading="lazy">
+        <img id="page-229" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-81.jpg" alt="Página 230" loading="lazy">
+        <img id="page-230" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-82.jpg" alt="Página 231" loading="lazy">
+        <img id="page-231" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-83.jpg" alt="Página 232" loading="lazy">
+        <img id="page-232" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-84.jpg" alt="Página 233" loading="lazy">
+        <img id="page-233" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-85.jpg" alt="Página 234" loading="lazy">
+        <img id="page-234" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-86.jpg" alt="Página 235" loading="lazy">
+        <img id="page-235" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-87.jpg" alt="Página 236" loading="lazy">
+        <img id="page-236" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-88.jpg" alt="Página 237" loading="lazy">
+        <img id="page-237" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-89.jpg" alt="Página 238" loading="lazy">
+        <img id="page-238" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-9.jpg" alt="Página 239" loading="lazy">
+        <img id="page-239" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-90.jpg" alt="Página 240" loading="lazy">
+        <img id="page-240" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-91.jpg" alt="Página 241" loading="lazy">
+        <img id="page-241" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-92.jpg" alt="Página 242" loading="lazy">
+        <img id="page-242" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-93.jpg" alt="Página 243" loading="lazy">
+        <img id="page-243" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-94.jpg" alt="Página 244" loading="lazy">
+        <img id="page-244" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-95.jpg" alt="Página 245" loading="lazy">
+        <img id="page-245" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-96.jpg" alt="Página 246" loading="lazy">
+        <img id="page-246" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-97.jpg" alt="Página 247" loading="lazy">
+        <img id="page-247" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-98.jpg" alt="Página 248" loading="lazy">
+        <img id="page-248" class="comic-page" src="img_cbr/Chloe-Doll-Amber-Tweep-99.jpg" alt="Página 249" loading="lazy">
+    </div>
+    
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="prevPage()">◄ Anterior</button>
+        <button class="nav-btn" onclick="scrollToPage(0)">⌂ Início</button>
+        <button class="nav-btn" id="next-btn" onclick="nextPage()">Próximo ►</button>
+    </div>
+    
+    
+    <script>
+        const images = ["Chloe-Doll-Amber-Tweep-1.jpg", "Chloe-Doll-Amber-Tweep-10.jpg", "Chloe-Doll-Amber-Tweep-100.jpg", "Chloe-Doll-Amber-Tweep-101.jpg", "Chloe-Doll-Amber-Tweep-102.jpg", "Chloe-Doll-Amber-Tweep-103.jpg", "Chloe-Doll-Amber-Tweep-104.jpg", "Chloe-Doll-Amber-Tweep-105.jpg", "Chloe-Doll-Amber-Tweep-106.jpg", "Chloe-Doll-Amber-Tweep-107.jpg", "Chloe-Doll-Amber-Tweep-108.jpg", "Chloe-Doll-Amber-Tweep-109.jpg", "Chloe-Doll-Amber-Tweep-11.jpg", "Chloe-Doll-Amber-Tweep-110.jpg", "Chloe-Doll-Amber-Tweep-111.jpg", "Chloe-Doll-Amber-Tweep-112.jpg", "Chloe-Doll-Amber-Tweep-113.jpg", "Chloe-Doll-Amber-Tweep-114.jpg", "Chloe-Doll-Amber-Tweep-115.jpg", "Chloe-Doll-Amber-Tweep-116.jpg", "Chloe-Doll-Amber-Tweep-117.jpg", "Chloe-Doll-Amber-Tweep-118.jpg", "Chloe-Doll-Amber-Tweep-119.jpg", "Chloe-Doll-Amber-Tweep-12.jpg", "Chloe-Doll-Amber-Tweep-120.jpg", "Chloe-Doll-Amber-Tweep-121.jpg", "Chloe-Doll-Amber-Tweep-122.jpg", "Chloe-Doll-Amber-Tweep-123.jpg", "Chloe-Doll-Amber-Tweep-124.jpg", "Chloe-Doll-Amber-Tweep-125.jpg", "Chloe-Doll-Amber-Tweep-126.jpg", "Chloe-Doll-Amber-Tweep-127.jpg", "Chloe-Doll-Amber-Tweep-128.jpg", "Chloe-Doll-Amber-Tweep-129.jpg", "Chloe-Doll-Amber-Tweep-13.jpg", "Chloe-Doll-Amber-Tweep-130.jpg", "Chloe-Doll-Amber-Tweep-131.jpg", "Chloe-Doll-Amber-Tweep-132.jpg", "Chloe-Doll-Amber-Tweep-133.jpg", "Chloe-Doll-Amber-Tweep-134.jpg", "Chloe-Doll-Amber-Tweep-135.jpg", "Chloe-Doll-Amber-Tweep-136.jpg", "Chloe-Doll-Amber-Tweep-137.jpg", "Chloe-Doll-Amber-Tweep-138.jpg", "Chloe-Doll-Amber-Tweep-139.jpg", "Chloe-Doll-Amber-Tweep-14.jpg", "Chloe-Doll-Amber-Tweep-140.jpg", "Chloe-Doll-Amber-Tweep-141.jpg", "Chloe-Doll-Amber-Tweep-142.jpg", "Chloe-Doll-Amber-Tweep-143.jpg", "Chloe-Doll-Amber-Tweep-144.jpg", "Chloe-Doll-Amber-Tweep-145.jpg", "Chloe-Doll-Amber-Tweep-146.jpg", "Chloe-Doll-Amber-Tweep-147.jpg", "Chloe-Doll-Amber-Tweep-148.jpg", "Chloe-Doll-Amber-Tweep-149.jpg", "Chloe-Doll-Amber-Tweep-15.jpg", "Chloe-Doll-Amber-Tweep-150.jpg", "Chloe-Doll-Amber-Tweep-151.jpg", "Chloe-Doll-Amber-Tweep-152.jpg", "Chloe-Doll-Amber-Tweep-153.jpg", "Chloe-Doll-Amber-Tweep-154.jpg", "Chloe-Doll-Amber-Tweep-155.jpg", "Chloe-Doll-Amber-Tweep-156.jpg", "Chloe-Doll-Amber-Tweep-157.jpg", "Chloe-Doll-Amber-Tweep-158.jpg", "Chloe-Doll-Amber-Tweep-159.jpg", "Chloe-Doll-Amber-Tweep-16.jpg", "Chloe-Doll-Amber-Tweep-160.jpg", "Chloe-Doll-Amber-Tweep-161.jpg", "Chloe-Doll-Amber-Tweep-162.jpg", "Chloe-Doll-Amber-Tweep-163.jpg", "Chloe-Doll-Amber-Tweep-164.jpg", "Chloe-Doll-Amber-Tweep-165.jpg", "Chloe-Doll-Amber-Tweep-166.jpg", "Chloe-Doll-Amber-Tweep-167.jpg", "Chloe-Doll-Amber-Tweep-168.jpg", "Chloe-Doll-Amber-Tweep-169.jpg", "Chloe-Doll-Amber-Tweep-17.jpg", "Chloe-Doll-Amber-Tweep-170.jpg", "Chloe-Doll-Amber-Tweep-171.jpg", "Chloe-Doll-Amber-Tweep-172.jpg", "Chloe-Doll-Amber-Tweep-173.jpg", "Chloe-Doll-Amber-Tweep-174.jpg", "Chloe-Doll-Amber-Tweep-175.jpg", "Chloe-Doll-Amber-Tweep-176.jpg", "Chloe-Doll-Amber-Tweep-177.jpg", "Chloe-Doll-Amber-Tweep-178.jpg", "Chloe-Doll-Amber-Tweep-179.jpg", "Chloe-Doll-Amber-Tweep-18.jpg", "Chloe-Doll-Amber-Tweep-180.jpg", "Chloe-Doll-Amber-Tweep-181.jpg", "Chloe-Doll-Amber-Tweep-182.jpg", "Chloe-Doll-Amber-Tweep-183.jpg", "Chloe-Doll-Amber-Tweep-184.jpg", "Chloe-Doll-Amber-Tweep-185.jpg", "Chloe-Doll-Amber-Tweep-186.jpg", "Chloe-Doll-Amber-Tweep-187.jpg", "Chloe-Doll-Amber-Tweep-188.jpg", "Chloe-Doll-Amber-Tweep-189.jpg", "Chloe-Doll-Amber-Tweep-19.jpg", "Chloe-Doll-Amber-Tweep-190.jpg", "Chloe-Doll-Amber-Tweep-191.jpg", "Chloe-Doll-Amber-Tweep-192.jpg", "Chloe-Doll-Amber-Tweep-193.jpg", "Chloe-Doll-Amber-Tweep-194.jpg", "Chloe-Doll-Amber-Tweep-195.jpg", "Chloe-Doll-Amber-Tweep-196.jpg", "Chloe-Doll-Amber-Tweep-197.jpg", "Chloe-Doll-Amber-Tweep-198.jpg", "Chloe-Doll-Amber-Tweep-199.jpg", "Chloe-Doll-Amber-Tweep-2.jpg", "Chloe-Doll-Amber-Tweep-20.jpg", "Chloe-Doll-Amber-Tweep-200.jpg", "Chloe-Doll-Amber-Tweep-201.jpg", "Chloe-Doll-Amber-Tweep-202.jpg", "Chloe-Doll-Amber-Tweep-203.jpg", "Chloe-Doll-Amber-Tweep-204.jpg", "Chloe-Doll-Amber-Tweep-205.jpg", "Chloe-Doll-Amber-Tweep-206.jpg", "Chloe-Doll-Amber-Tweep-207.jpg", "Chloe-Doll-Amber-Tweep-208.jpg", "Chloe-Doll-Amber-Tweep-209.jpg", "Chloe-Doll-Amber-Tweep-21.jpg", "Chloe-Doll-Amber-Tweep-210.jpg", "Chloe-Doll-Amber-Tweep-211.jpg", "Chloe-Doll-Amber-Tweep-212.jpg", "Chloe-Doll-Amber-Tweep-213.jpg", "Chloe-Doll-Amber-Tweep-214.jpg", "Chloe-Doll-Amber-Tweep-215.jpg", "Chloe-Doll-Amber-Tweep-216.jpg", "Chloe-Doll-Amber-Tweep-217.jpg", "Chloe-Doll-Amber-Tweep-218.jpg", "Chloe-Doll-Amber-Tweep-219.jpg", "Chloe-Doll-Amber-Tweep-22.jpg", "Chloe-Doll-Amber-Tweep-220.jpg", "Chloe-Doll-Amber-Tweep-221.jpg", "Chloe-Doll-Amber-Tweep-222.jpg", "Chloe-Doll-Amber-Tweep-223.jpg", "Chloe-Doll-Amber-Tweep-224.jpg", "Chloe-Doll-Amber-Tweep-225.jpg", "Chloe-Doll-Amber-Tweep-226.jpg", "Chloe-Doll-Amber-Tweep-227.jpg", "Chloe-Doll-Amber-Tweep-228.jpg", "Chloe-Doll-Amber-Tweep-229.jpg", "Chloe-Doll-Amber-Tweep-23.jpg", "Chloe-Doll-Amber-Tweep-230.jpg", "Chloe-Doll-Amber-Tweep-231.jpg", "Chloe-Doll-Amber-Tweep-232.jpg", "Chloe-Doll-Amber-Tweep-233.jpg", "Chloe-Doll-Amber-Tweep-234.jpg", "Chloe-Doll-Amber-Tweep-235.jpg", "Chloe-Doll-Amber-Tweep-236.jpg", "Chloe-Doll-Amber-Tweep-237.jpg", "Chloe-Doll-Amber-Tweep-238.jpg", "Chloe-Doll-Amber-Tweep-239.jpg", "Chloe-Doll-Amber-Tweep-24.jpg", "Chloe-Doll-Amber-Tweep-240.jpg", "Chloe-Doll-Amber-Tweep-241.jpg", "Chloe-Doll-Amber-Tweep-242.jpg", "Chloe-Doll-Amber-Tweep-243.jpg", "Chloe-Doll-Amber-Tweep-244.jpg", "Chloe-Doll-Amber-Tweep-245.jpg", "Chloe-Doll-Amber-Tweep-246.jpg", "Chloe-Doll-Amber-Tweep-247.jpg", "Chloe-Doll-Amber-Tweep-248.jpg", "Chloe-Doll-Amber-Tweep-249.jpg", "Chloe-Doll-Amber-Tweep-25.jpg", "Chloe-Doll-Amber-Tweep-26.jpg", "Chloe-Doll-Amber-Tweep-27.jpg", "Chloe-Doll-Amber-Tweep-28.jpg", "Chloe-Doll-Amber-Tweep-29.jpg", "Chloe-Doll-Amber-Tweep-3.jpg", "Chloe-Doll-Amber-Tweep-30.jpg", "Chloe-Doll-Amber-Tweep-31.jpg", "Chloe-Doll-Amber-Tweep-32.jpg", "Chloe-Doll-Amber-Tweep-33.jpg", "Chloe-Doll-Amber-Tweep-34.jpg", "Chloe-Doll-Amber-Tweep-35.jpg", "Chloe-Doll-Amber-Tweep-36.jpg", "Chloe-Doll-Amber-Tweep-37.jpg", "Chloe-Doll-Amber-Tweep-38.jpg", "Chloe-Doll-Amber-Tweep-39.jpg", "Chloe-Doll-Amber-Tweep-4.jpg", "Chloe-Doll-Amber-Tweep-40.jpg", "Chloe-Doll-Amber-Tweep-41.jpg", "Chloe-Doll-Amber-Tweep-42.jpg", "Chloe-Doll-Amber-Tweep-43.jpg", "Chloe-Doll-Amber-Tweep-44.jpg", "Chloe-Doll-Amber-Tweep-45.jpg", "Chloe-Doll-Amber-Tweep-46.jpg", "Chloe-Doll-Amber-Tweep-47.jpg", "Chloe-Doll-Amber-Tweep-48.jpg", "Chloe-Doll-Amber-Tweep-49.jpg", "Chloe-Doll-Amber-Tweep-5.jpg", "Chloe-Doll-Amber-Tweep-50.jpg", "Chloe-Doll-Amber-Tweep-51.jpg", "Chloe-Doll-Amber-Tweep-52.jpg", "Chloe-Doll-Amber-Tweep-53.jpg", "Chloe-Doll-Amber-Tweep-54.jpg", "Chloe-Doll-Amber-Tweep-55.jpg", "Chloe-Doll-Amber-Tweep-56.jpg", "Chloe-Doll-Amber-Tweep-57.jpg", "Chloe-Doll-Amber-Tweep-58.jpg", "Chloe-Doll-Amber-Tweep-59.jpg", "Chloe-Doll-Amber-Tweep-6.jpg", "Chloe-Doll-Amber-Tweep-60.jpg", "Chloe-Doll-Amber-Tweep-61.jpg", "Chloe-Doll-Amber-Tweep-62.jpg", "Chloe-Doll-Amber-Tweep-63.jpg", "Chloe-Doll-Amber-Tweep-64.jpg", "Chloe-Doll-Amber-Tweep-65.jpg", "Chloe-Doll-Amber-Tweep-66.jpg", "Chloe-Doll-Amber-Tweep-67.jpg", "Chloe-Doll-Amber-Tweep-68.jpg", "Chloe-Doll-Amber-Tweep-69.jpg", "Chloe-Doll-Amber-Tweep-7.jpg", "Chloe-Doll-Amber-Tweep-70.jpg", "Chloe-Doll-Amber-Tweep-71.jpg", "Chloe-Doll-Amber-Tweep-72.jpg", "Chloe-Doll-Amber-Tweep-73.jpg", "Chloe-Doll-Amber-Tweep-74.jpg", "Chloe-Doll-Amber-Tweep-75.jpg", "Chloe-Doll-Amber-Tweep-76.jpg", "Chloe-Doll-Amber-Tweep-77.jpg", "Chloe-Doll-Amber-Tweep-78.jpg", "Chloe-Doll-Amber-Tweep-79.jpg", "Chloe-Doll-Amber-Tweep-8.jpg", "Chloe-Doll-Amber-Tweep-80.jpg", "Chloe-Doll-Amber-Tweep-81.jpg", "Chloe-Doll-Amber-Tweep-82.jpg", "Chloe-Doll-Amber-Tweep-83.jpg", "Chloe-Doll-Amber-Tweep-84.jpg", "Chloe-Doll-Amber-Tweep-85.jpg", "Chloe-Doll-Amber-Tweep-86.jpg", "Chloe-Doll-Amber-Tweep-87.jpg", "Chloe-Doll-Amber-Tweep-88.jpg", "Chloe-Doll-Amber-Tweep-89.jpg", "Chloe-Doll-Amber-Tweep-9.jpg", "Chloe-Doll-Amber-Tweep-90.jpg", "Chloe-Doll-Amber-Tweep-91.jpg", "Chloe-Doll-Amber-Tweep-92.jpg", "Chloe-Doll-Amber-Tweep-93.jpg", "Chloe-Doll-Amber-Tweep-94.jpg", "Chloe-Doll-Amber-Tweep-95.jpg", "Chloe-Doll-Amber-Tweep-96.jpg", "Chloe-Doll-Amber-Tweep-97.jpg", "Chloe-Doll-Amber-Tweep-98.jpg", "Chloe-Doll-Amber-Tweep-99.jpg"];
+        const totalPages = images.length;
+        let currentPage = 0;
+        
+        function scrollToPage(index) {
+            if (index >= 0 && index < totalPages) {
+                currentPage = index;
+                const page = document.getElementById('page-' + index);
+                if (page) {
+                    page.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    updateProgress();
+                    updateButtons();
+                }
+            }
+        }
+        
+        function nextPage() { if (currentPage < totalPages - 1) scrollToPage(currentPage + 1); }
+        function prevPage() { if (currentPage > 0) scrollToPage(currentPage - 1); }
+        
+        function updateProgress() {
+            document.getElementById('progress-bar').style.width = ((currentPage + 1) / totalPages * 100) + '%';
+            document.getElementById('page-indicator').textContent = 'Página ' + (currentPage + 1) + ' de ' + totalPages;
+        }
+        
+        function updateButtons() {
+            document.getElementById('prev-btn').style.opacity = currentPage === 0 ? '0.5' : '1';
+            document.getElementById('next-btn').style.opacity = currentPage === totalPages - 1 ? '0.5' : '1';
+        }
+        
+        // Observer para detectar página visível
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const pageId = entry.target.id;
+                    const pageNum = parseInt(pageId.split('-')[1]);
+                    if (!isNaN(pageNum)) {
+                        currentPage = pageNum;
+                        updateProgress();
+                        updateButtons();
+                    }
+                }
+            });
+        }, { threshold: 0.6 });
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.comic-page').forEach(page => observer.observe(page));
+            updateProgress();
+            updateButtons();
+        });
+        
+        // Teclado
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); nextPage(); }
+            else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); prevPage(); }
+            else if (e.key === 'Home') { e.preventDefault(); scrollToPage(0); }
+            else if (e.key === 'End') { e.preventDefault(); scrollToPage(totalPages - 1); }
+        });
+        
+        // Touch swipe
+        let touchStartY = 0;
+        document.addEventListener('touchstart', e => { touchStartY = e.changedTouches[0].screenY; }, { passive: true });
+        document.addEventListener('touchend', e => {
+            const diff = touchStartY - e.changedTouches[0].screenY;
+            if (Math.abs(diff) > 50) diff > 0 ? nextPage() : prevPage();
+        }, { passive: true });
+    </script>
+    
+</body>
+</html>
