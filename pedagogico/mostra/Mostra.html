@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Votação de Desenhos – 1º ao 5º ano</title>
+  <title>Nova Votação de Desenhos – 1º ao 5º ano</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -20,7 +20,7 @@
       font-size: 2rem;
       color: #ffffff;
     }
-h2 {
+    h2 {
       text-align: center;
       margin: 1.5rem 0;
       font-size: 1rem;
@@ -73,7 +73,7 @@ h2 {
       text-align: center;
       margin-bottom: 1.5rem;
       font-size: 1.1rem;
-     color: #ecf0f1; 
+      color: #ecf0f1; 
     }
     .votes-info span {
       background: #eaf2f8;
@@ -99,11 +99,11 @@ h2 {
     }
     .card:hover { transform: translateY(-4px); }
     
-   .card img {
+    .card img {
       width: 100%;
-       aspect-ratio: 1 / 1;   /* altura = largura (quadrado) */
-      object-fit: contain; /* <-- Mudança principal: exibe a imagem inteira */
-      background-color: #2F4F4F; /* <-- Adiciona um fundo neutro para onde sobrar barra */
+      aspect-ratio: 1 / 1;   /* altura = largura (quadrado) */
+      object-fit: contain; /* exibe a imagem inteira */
+      background-color: #2F4F4F; /* fundo neutro */
     }
     .card-body {
       padding: 1rem;
@@ -160,8 +160,13 @@ h2 {
   </style>
 </head>
 <body>
+  <!-- Campo honeypot invisível para bots -->
+  <div style="position: absolute; left: -9999px;" aria-hidden="true">
+    <input type="text" id="honeypot" name="honeypot" tabindex="-1" autocomplete="off" />
+  </div>
+
   <h1>🎨 Votação - Mostra de Desenhos dos estudantes, EMEF Décio Moreira 🚀.</h1>
-    <h2> Escolha 2 desenhos de cada ano.</h2>
+  <h2> Escolha 2 desenhos de cada ano.</h2>
 
   <div class="year-selector" id="yearSelector">
     <button class="year-btn" data-year="1ano">1º ano</button>
@@ -176,13 +181,15 @@ h2 {
   <div class="message" id="message"></div>
 
 <script>
-  const API_URL = 'https://script.google.com/macros/s/AKfycbxFWWxFau0rG9WhRrvGoVwuA02M9F0ESnBCYPOeOKeU2OMmQh9-7V4xiCjPDt43-PI/exec';
+  const API_URL = 'https://script.google.com/macros/s/AKfycbwxqNTPiwxJ2Xw0yuxkMqqBC_f4OVNw2yPgwQq_3DZvr7srQ6kPN54UAEMLMgJ-BJdy/exec';
   const MAX_VOTES_PER_YEAR = 2;
   const STORAGE_KEY = 'votacao_desenhos_votos';
 
   let currentYear = '1ano';
   let studentsData = {};
   let userVotes = {};
+  let sessionToken = null;
+  let clientIP = null;
 
   // ---------- localStorage ----------
   function initStorage() {
@@ -213,14 +220,30 @@ h2 {
     return `${ano} ${turma}`;
   }
 
+  // ---------- Obter IP do cliente ----------
+  async function getClientIP() {
+    try {
+      const resp = await fetch('https://api.ipify.org?format=json');
+      const data = await resp.json();
+      clientIP = data.ip;
+    } catch (e) {
+      clientIP = '0.0.0.0';
+    }
+  }
+
   // ---------- Buscar dados da planilha ----------
   async function fetchStudents() {
     try {
-      const response = await fetch(`${API_URL}?action=getStudents`);
+      // Obtém IP antes de carregar os estudantes
+      await getClientIP();
+      const response = await fetch(`${API_URL}?action=getStudents&ip=${encodeURIComponent(clientIP)}`);
       if (!response.ok) throw new Error('Erro na requisição');
       const data = await response.json();
       if (data.error) throw new Error(data.error);
-      studentsData = data;
+      
+      // Agora a resposta contém { students: {...}, token: "..." }
+      studentsData = data.students;
+      sessionToken = data.token;
       renderCurrentYear();
     } catch (err) {
       document.getElementById('message').innerHTML = `❌ Erro ao carregar: ${err.message}`;
@@ -285,40 +308,53 @@ h2 {
 
   // ---------- Enviar voto ----------
   async function handleVote(studentId) {
-  const yearKey = currentYear;
-  if (userVotes[yearKey].length >= MAX_VOTES_PER_YEAR || userVotes[yearKey].includes(studentId)) {
-    alert('Voto não permitido.');
-    return;
+    // Verifica honeypot
+    if (document.getElementById('honeypot').value) {
+      console.log('Bot detectado pelo honeypot');
+      return;
+    }
+
+    const yearKey = currentYear;
+    if (userVotes[yearKey].length >= MAX_VOTES_PER_YEAR || userVotes[yearKey].includes(studentId)) {
+      alert('Voto não permitido.');
+      return;
+    }
+
+    // Verifica se o token de sessão existe
+    if (!sessionToken) {
+      alert('Sessão não iniciada. Recarregue a página.');
+      return;
+    }
+
+    document.querySelectorAll('.vote-btn').forEach(b => b.disabled = true);
+
+    try {
+      const url = `${API_URL}?action=vote&studentId=${encodeURIComponent(studentId)}&token=${encodeURIComponent(sessionToken)}&ip=${encodeURIComponent(clientIP)}`;
+      const response = await fetch(url);
+      const result = await response.json();
+      if (result.error) throw new Error(result.error);
+
+      userVotes[yearKey].push(studentId);
+      saveVotes();
+
+      // Atualiza contagem local
+      const student = studentsData[yearKey].find(s => s.id === studentId);
+      if (student) student.votos = (student.votos || 0) + 1;
+
+      showToast('Obrigado por participar! Seu voto já foi computado.');
+      renderCurrentYear();
+    } catch (err) {
+      alert(`❌ ${err.message}`);
+      console.error(err);
+      // Reabilita botões
+      document.querySelectorAll('.vote-btn').forEach(b => {
+        const id = b.dataset.id;
+        const already = userVotes[yearKey]?.includes(id) || false;
+        const votesLeft = MAX_VOTES_PER_YEAR - (userVotes[yearKey]?.length || 0);
+        b.disabled = !(votesLeft > 0 && !already);
+      });
+    }
   }
-
-  document.querySelectorAll('.vote-btn').forEach(b => b.disabled = true);
-
-  try {
-    // VOTO VIA GET (não dispara preflight CORS)
-    const response = await fetch(`${API_URL}?action=vote&studentId=${encodeURIComponent(studentId)}`);
-    const result = await response.json();
-    if (result.error) throw new Error(result.error);
-
-    userVotes[yearKey].push(studentId);
-    saveVotes();
-
-    const student = studentsData[yearKey].find(s => s.id === studentId);
-    if (student) student.votos = (student.votos || 0) + 1;
-
-    showToast('Obrigado por participar! Seu voto já foi computado.');
-    renderCurrentYear();
-  } catch (err) {
-    alert(`❌ ${err.message}`);
-    console.error(err);
-    // Reabilita botões
-    document.querySelectorAll('.vote-btn').forEach(b => {
-      const id = b.dataset.id;
-      const already = userVotes[yearKey]?.includes(id) || false;
-      const votesLeft = MAX_VOTES_PER_YEAR - (userVotes[yearKey]?.length || 0);
-      b.disabled = !(votesLeft > 0 && !already);
-    });
-  }
-}
 
   function switchYear(year) {
     currentYear = year;
