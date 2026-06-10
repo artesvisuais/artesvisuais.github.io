@@ -165,7 +165,7 @@
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbywycOhh1ChFw8GxINZ43jrj2obOp3tt94hQw0LoZaF6oKFplDx2i8W840ZYuUMJbi1/exec';
 
-    let allData = {};
+   let allData = {};
 
     // Busca os dados via API
     async function fetchResults() {
@@ -174,7 +174,9 @@
         if (!response.ok) throw new Error('Erro na requisição');
         const data = await response.json();
         if (data.error) throw new Error(data.error);
-        allData = data;
+        
+        // CORREÇÃO: Mapeia para pegar apenas a lista de estudantes do novo retorno
+        allData = data.students || {};
         renderTable('todos');
       } catch (err) {
         document.getElementById('content').innerHTML = `❌ Erro: ${err.message}`;
@@ -194,7 +196,10 @@
 
       if (filter === 'todos') {
         for (const ano in allData) {
-          students = students.concat(allData[ano]);
+          // CORREÇÃO: Valida se a propriedade é um array antes de concatenar
+          if (Array.isArray(allData[ano])) {
+            students = students.concat(allData[ano]);
+          }
         }
       } else {
         students = allData[filter] || [];
@@ -209,7 +214,7 @@
       students.sort((a, b) => b.votos - a.votos || a.nome.localeCompare(b.nome));
 
       // Soma total de votos do filtro
-      const totalVotos = students.reduce((sum, s) => sum + s.votos, 0);
+      const totalVotos = students.reduce((sum, s) => sum + Number(s.votos || 0), 0);
 
       let html = `<div class="total-bar">Total de votos nesta categoria: <strong>${totalVotos}</strong></div>`;
       html += '<div class="table-container"><table>';
