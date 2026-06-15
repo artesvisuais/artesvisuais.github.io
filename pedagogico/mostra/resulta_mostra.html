@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RESULTADOS</title>
+  <title>Resultados da Votação Preliminar</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -152,8 +152,8 @@
   <h1>🏆 Resultados da Votação</h1>
 
   <div class="year-selector" id="yearSelector">
-    <button class="year-btn active" data-year="todos">Todos</button>
-    <button class="year-btn" data-year="1ano">1º ano</button>
+    
+    <button class="year-btn active" data-year="1ano">1º ano</button>
     <button class="year-btn" data-year="2ano">2º ano</button>
     <button class="year-btn" data-year="3ano">3º ano</button>
     <button class="year-btn" data-year="4ano">4º ano</button>
@@ -162,26 +162,27 @@
 
   <div id="content" class="loading">Carregando resultados...</div>
 
-  <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbzDPaVi5ll-_yQW88Zyg4H8ZghvIzaigZpFDH6qb8ZwCGyxAnYbGN0T9bnzDPIiCluz/exec';
 
-   let allData = {};
+<script>
+ const API_URL = 'https://script.google.com/macros/s/AKfycbw3KiDb1AVjpilQCOVmPcjnUdvWnsQ96oLrUOuJNotu6RnVmwo7DGHBYQrGapTNlIY/exec';
+    let allData = {};
 
     // Busca os dados via API
-    async function fetchResults() {
+ async function fetchResults() {
       try {
         const response = await fetch(`${API_URL}?action=getStudents`);
         if (!response.ok) throw new Error('Erro na requisição');
         const data = await response.json();
         if (data.error) throw new Error(data.error);
         
-        // CORREÇÃO: Mapeia para pegar apenas a lista de estudantes do novo retorno
-        allData = data.students || {};
-        renderTable('todos');
+        // CORREÇÃO AQUI: Acessa a propriedade .students enviada pelo seu codigo.gs
+        allData = data.students || {}; 
+        
+        renderTable('1ano'); // inicia com 1º ano
       } catch (err) {
         document.getElementById('content').innerHTML = `❌ Erro: ${err.message}`;
       }
-    }
+    }    
 
     // Formata ano e turma
     function formatClass(ano, turma) {
@@ -192,18 +193,7 @@
     // Renderiza a tabela com filtro
     function renderTable(filter) {
       const container = document.getElementById('content');
-      let students = [];
-
-      if (filter === 'todos') {
-        for (const ano in allData) {
-          // CORREÇÃO: Valida se a propriedade é um array antes de concatenar
-          if (Array.isArray(allData[ano])) {
-            students = students.concat(allData[ano]);
-          }
-        }
-      } else {
-        students = allData[filter] || [];
-      }
+      let students = allData[filter] || [];
 
       if (!students.length) {
         container.innerHTML = '<div class="message">📭 Nenhum dado disponível.</div>';
@@ -213,17 +203,34 @@
       // Ordena por votos (decrescente) e depois por nome
       students.sort((a, b) => b.votos - a.votos || a.nome.localeCompare(b.nome));
 
-      // Soma total de votos do filtro
-      const totalVotos = students.reduce((sum, s) => sum + Number(s.votos || 0), 0);
+      // Encontra a maior votação do ano
+      const maxVotos = students.length > 0 ? students[0].votos : 0;
 
-      let html = `<div class="total-bar">Total de votos nesta categoria: <strong>${totalVotos}</strong></div>`;
+      // Soma total de votos do ano
+      const totalVotos = students.reduce((sum, s) => sum + s.votos, 0);
+
+      let html = `<div class="total-bar">Total de votos neste ano: <strong>${totalVotos}</strong></div>`;
       html += '<div class="table-container"><table>';
       html += '<thead><tr><th>#</th><th>Aluno</th><th>Turma</th><th>Tema</th><th>Votos</th></tr></thead><tbody>';
 
+      let rank = 1;
+      let previousVotos = null;
+      let skip = 0;
+
       students.forEach((student, index) => {
-        const rowClass = (index === 0 && student.votos > 0) ? ' class="highlight"' : '';
+        // Define a posição (rank) considerando empates
+        if (previousVotos === null || student.votos !== previousVotos) {
+          rank = index + 1 - skip;
+        } else {
+          skip++;
+        }
+        previousVotos = student.votos;
+
+        const isLeader = (student.votos === maxVotos && maxVotos > 0);
+        const rowClass = isLeader ? ' class="highlight"' : '';
+
         html += `<tr${rowClass}>`;
-        html += `<td class="rank" data-label="Posição">${index + 1}º</td>`;
+        html += `<td class="rank" data-label="Posição">${rank}º</td>`;
         html += `<td class="name" data-label="Aluno">${student.nome}</td>`;
         html += `<td data-label="Turma">${formatClass(student.ano, student.turma)}</td>`;
         html += `<td data-label="Tema">${student.tema || '-'}</td>`;
@@ -248,5 +255,6 @@
       fetchResults();
     });
   </script>
+
 </body>
 </html>
