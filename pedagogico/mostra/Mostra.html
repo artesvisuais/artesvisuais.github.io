@@ -3,63 +3,368 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Votação de Desenhos – EMEF Décio Moreira</title>
+  <title>Votação de Desenhos – 1º ao 5º ano</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #1a1a2e;
-      color: #ffffff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+      color: #333;
       padding: 1rem;
-    }
-    .modal-overlay {
-      background: #2c3e50;
-      border-radius: 2rem;
-      padding: 3rem;
-      max-width: 500px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-      text-align: center;
+      max-width: 1200px;
+      margin: 0 auto;
     }
     h1 {
+      text-align: center;
+      margin: 1.5rem 0;
       font-size: 2rem;
-      margin-bottom: 1.5rem;
-      color: #f1c40f;
+      color: #ffffff;
     }
-    p {
-      font-size: 1.1rem;
-      line-height: 1.6;
+    h2 {
+      text-align: center;
+      margin: 1.5rem 0;
+      font-size: 1rem;
+      color: #fffffd;
+    }
+    .toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #27ae60;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 2rem;
+      font-weight: bold;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 1000;
+      animation: fadeInOut 3s ease forwards;
+    }
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+      10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+      80% { opacity: 1; }
+      100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+    }
+    .year-selector {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
       margin-bottom: 2rem;
-      color: #ecf0f1;
     }
-    .btn {
-      display: inline-block;
+    .year-btn {
+      background: #fff;
+      border: 2px solid #3498db;
+      color: #3498db;
+      padding: 0.6rem 1.5rem;
+      border-radius: 2rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .year-btn:hover { background: #ebf5fb; }
+    .year-btn.active {
       background: #3498db;
       color: white;
-      border: none;
-      padding: 1rem 2.5rem;
-      font-size: 1.2rem;
-      border-radius: 3rem;
-      text-decoration: none;
-      font-weight: bold;
-      transition: background 0.3s;
-      cursor: pointer;
     }
-    .btn:hover {
-      background: #2980b9;
+    .votes-info {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+      color: #ecf0f1;
+    }
+    .votes-info span {
+      background: #eaf2f8;
+      padding: 0.3rem 1rem;
+      border-radius: 1rem;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: white;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s;
+      padding-top: 8px;
+    }
+    .card:hover { transform: translateY(-4px); }
+    .card img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      background-color: #2F4F4F;
+    }
+    .card-body {
+      padding: 1rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-body h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.3rem;
+      color: #2c3e50;
+    }
+    .card-body .meta {
+      font-size: 0.9rem;
+      color: #7f8c8d;
+      margin-bottom: 0.5rem;
+    }
+    .card-body .votos {
+      font-weight: bold;
+      color: #27ae60;
+      margin: 0.5rem 0;
+    }
+    .vote-btn {
+      margin-top: auto;
+      background: #2ecc71;
+      border: none;
+      color: white;
+      padding: 0.6rem;
+      border-radius: 0.8rem;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .vote-btn:disabled {
+      background: #bdc3c7;
+      cursor: not-allowed;
+    }
+    .vote-btn:not(:disabled):hover { background: #27ae60; }
+    .message {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 1.2rem;
+      padding: 1rem;
     }
   </style>
 </head>
 <body>
-  <div class="modal-overlay">
-    <h1>🚀 Atenção</h1>
-    <p>Estamos na reta final da nossa votação!<br>Ela encerra dia <strong>19/06, sexta-feira</strong>.<br><br>
-    Para garantir ainda mais a integridade da votação, agora é necessário estar logado em qualquer conta Google.<br>
-    <small>(Isso dificulta a automação de votos.)</small></p>
-    <a href="https://script.google.com/macros/s/AKfycbyqS5ok16vWstxYJeRgUPp9ZMVZvJY9dXON4FWki_BHTtfftwRNWpBgOvWMpfcOrD1s/exec" class="btn">Click aqui para Votar!</a>
+  <h1>🎨 Votação - Mostra de Desenhos dos estudantes, EMEF Décio Moreira 🚀.</h1>
+  <h2> Escolha 2 desenhos de cada ano.</h2>
+
+  <div class="year-selector" id="yearSelector">
+    <button class="year-btn" data-year="1ano">1º ano</button>
+    <button class="year-btn" data-year="2ano">2º ano</button>
+    <button class="year-btn" data-year="3ano">3º ano</button>
+    <button class="year-btn" data-year="4ano">4º ano</button>
+    <button class="year-btn" data-year="5ano">5º ano</button>
   </div>
+
+  <div class="votes-info" id="votesInfo"></div>
+  <div class="grid" id="studentsGrid"></div>
+  <div class="message" id="message"></div>
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyhU6Cj341YNC3jQTIuCt0VuFH06cele3Ua_eGStBLkwQuMAwZ3IxByRP1-211tERTI/exec';
+    const MAX_VOTES_PER_YEAR = 2;
+    const STORAGE_KEY = 'votacao_desenhos_votos';
+
+    let currentYear = '1ano';
+    let studentsData = {};
+    let userVotes = {};
+    let sessionToken = null;
+    let clientIP = null;
+
+    // ---------- localStorage ----------
+    function initStorage() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        try {
+          userVotes = JSON.parse(stored);
+        } catch(e) {
+          userVotes = {};
+        }
+      }
+      ['1ano','2ano','3ano','4ano','5ano'].forEach(y => {
+        if (!Array.isArray(userVotes[y])) userVotes[y] = [];
+      });
+      saveVotes();
+    }
+
+    function saveVotes() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(userVotes));
+    }
+
+    // ---------- Formatação de ano/turma ----------
+    function formatAnoTurma(ano, turma) {
+      const num = ano.match(/\d+/);
+      if (num) {
+        return `${num[0]}º ano ${turma}`;
+      }
+      return `${ano} ${turma}`;
+    }
+
+    // ---------- Obter IP do cliente ----------
+    async function getClientIP() {
+      try {
+        const resp = await fetch('https://api.ipify.org?format=json');
+        const data = await resp.json();
+        clientIP = data.ip;
+      } catch (e) {
+        clientIP = '0.0.0.0';
+      }
+    }
+
+    // ---------- Buscar dados da planilha ----------
+    async function fetchStudents() {
+      try {
+        await getClientIP();
+        const response = await fetch(`${API_URL}?action=getStudents&ip=${encodeURIComponent(clientIP)}`);
+        if (!response.ok) throw new Error('Erro na requisição');
+        const data = await response.json();
+        if (data.error) throw new Error(data.error);
+        studentsData = data.students;
+        sessionToken = data.token;
+        renderCurrentYear();
+      } catch (err) {
+        document.getElementById('message').innerHTML = `❌ Erro ao carregar: ${err.message}`;
+        console.error(err);
+      }
+    }
+
+    // ---------- Toast ----------
+    function showToast(msg) {
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = msg;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    // ---------- Renderizar grid ----------
+    function renderCurrentYear() {
+      const grid = document.getElementById('studentsGrid');
+      const msgDiv = document.getElementById('message');
+      const infoDiv = document.getElementById('votesInfo');
+      grid.innerHTML = '';
+      msgDiv.innerHTML = '';
+
+      const yearKey = currentYear;
+      const students = studentsData[yearKey];
+      const votesUsed = userVotes[yearKey]?.length || 0;
+      const votesLeft = MAX_VOTES_PER_YEAR - votesUsed;
+      const yearLabel = yearKey.replace('ano','º ano');
+      infoDiv.innerHTML = `Você já usou <span>${votesUsed}</span> de <span>${MAX_VOTES_PER_YEAR}</span> votos para o ${yearLabel}. Restam: <span>${votesLeft}</span>`;
+
+      if (!students || students.length === 0) {
+        msgDiv.innerHTML = '📭 Nenhum desenho cadastrado nesta turma ainda.';
+        return;
+      }
+
+      students.forEach(student => {
+        const alreadyVotedForThis = userVotes[yearKey]?.includes(student.id) || false;
+        const canVote = votesLeft > 0 && !alreadyVotedForThis;
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${student.imagem}" alt="Desenho de ${student.nome}" onerror="this.src='https://placehold.co/400x300/e2e8f0/64748b?text=Sem+Imagem'">
+          <div class="card-body">
+            <h3>${student.nome}</h3>
+            <div class="meta">${formatAnoTurma(student.ano, student.turma)}</div>
+            <div class="meta">Tema: ${student.tema}</div>
+            <div class="votos">❤️ ${student.votos} voto(s)</div>
+            <button class="vote-btn" data-id="${student.id}" ${canVote ? '' : 'disabled'}>
+              ${alreadyVotedForThis ? '✓ Já votou' : (votesLeft === 0 ? 'Sem votos' : 'Votar')}
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      document.querySelectorAll('.vote-btn:not([disabled])').forEach(btn => {
+        btn.addEventListener('click', () => handleVote(btn.dataset.id));
+      });
+    }
+
+    // ---------- Enviar voto (com desafio matemático) ----------
+    async function handleVote(studentId) {
+      const yearKey = currentYear;
+      if (userVotes[yearKey].length >= MAX_VOTES_PER_YEAR || userVotes[yearKey].includes(studentId)) {
+        alert('Voto não permitido.');
+        return;
+      }
+      if (!sessionToken) {
+        alert('Sessão não iniciada. Recarregue a página.');
+        return;
+      }
+
+      document.querySelectorAll('.vote-btn').forEach(b => b.disabled = true);
+
+      try {
+        // 1. Obter desafio matemático
+        const challengeResp = await fetch(`${API_URL}?action=getChallenge`);
+        const challengeData = await challengeResp.json();
+        if (challengeData.error) throw new Error(challengeData.error);
+
+        // 2. Pedir resposta ao usuário
+        const userAnswer = prompt(challengeData.question);
+        if (userAnswer === null) {
+          // Usuário cancelou
+          document.querySelectorAll('.vote-btn').forEach(b => {
+            const id = b.dataset.id;
+            const already = userVotes[yearKey]?.includes(id) || false;
+            const votesLeft = MAX_VOTES_PER_YEAR - (userVotes[yearKey]?.length || 0);
+            b.disabled = !(votesLeft > 0 && !already);
+          });
+          return;
+        }
+
+        // 3. Enviar voto com resposta do desafio
+        const url = `${API_URL}?action=vote&studentId=${encodeURIComponent(studentId)}&token=${encodeURIComponent(sessionToken)}&ip=${encodeURIComponent(clientIP)}&challengeToken=${encodeURIComponent(challengeData.challengeToken)}&challengeAnswer=${encodeURIComponent(userAnswer)}`;
+        const response = await fetch(url);
+        const result = await response.json();
+        if (result.error) throw new Error(result.error);
+
+        userVotes[yearKey].push(studentId);
+        saveVotes();
+
+        const student = studentsData[yearKey].find(s => s.id === studentId);
+        if (student) student.votos = (student.votos || 0) + 1;
+
+        showToast('Obrigado por participar! Seu voto já foi computado.');
+        renderCurrentYear();
+      } catch (err) {
+        alert(`❌ ${err.message}`);
+        console.error(err);
+        // Reabilitar botões
+        document.querySelectorAll('.vote-btn').forEach(b => {
+          const id = b.dataset.id;
+          const already = userVotes[yearKey]?.includes(id) || false;
+          const votesLeft = MAX_VOTES_PER_YEAR - (userVotes[yearKey]?.length || 0);
+          b.disabled = !(votesLeft > 0 && !already);
+        });
+      }
+    }
+
+    function switchYear(year) {
+      currentYear = year;
+      document.querySelectorAll('.year-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.year === year);
+      });
+      renderCurrentYear();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initStorage();
+      document.querySelectorAll('.year-btn').forEach(btn => {
+        btn.addEventListener('click', () => switchYear(btn.dataset.year));
+        if (btn.dataset.year === currentYear) btn.classList.add('active');
+      });
+      fetchStudents();
+    });
+  </script>
 </body>
 </html>
