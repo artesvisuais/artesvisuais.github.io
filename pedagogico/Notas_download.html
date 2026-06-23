@@ -50,6 +50,109 @@
         }
         button:disabled { background-color: #ccc; }
         .loader { font-size: 14px; color: #666; margin-bottom: 10px; }
+
+        /* Modal - ocupando o máximo de espaço */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            width: 100%;
+            height: 100%;
+            max-width: 98vw;
+            max-height: 98vh;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #333;
+            background: none;
+            border: none;
+            z-index: 10;
+            background-color: rgba(255,255,255,0.7);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-close:hover {
+            background-color: rgba(255,255,255,0.9);
+        }
+        .modal-iframe {
+            width: 100%;
+            flex: 1;
+            min-height: 0;
+            border: none;
+            border-radius: 8px;
+            background: #f0f0f0;
+        }
+        .modal-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            flex-shrink: 0;
+        }
+        .modal-actions button {
+            flex: 1;
+            padding: 12px;
+            font-size: 14px;
+            border-radius: 8px;
+        }
+        .btn-download-modal {
+            background-color: #4285f4;
+        }
+        .btn-close-modal {
+            background-color: #ea4335;
+        }
+
+        /* Ajustes para telas pequenas */
+        @media (max-width: 600px) {
+            .modal-content {
+                padding: 10px;
+                border-radius: 10px;
+            }
+            .modal-iframe {
+                border-radius: 5px;
+            }
+            .modal-close {
+                top: 5px;
+                right: 10px;
+                width: 32px;
+                height: 32px;
+                font-size: 22px;
+            }
+            .modal-actions button {
+                font-size: 12px;
+                padding: 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -60,32 +163,49 @@
     <select id="fileSelect" disabled>
         <option value="">Aguarde...</option>
     </select>
-    <button id="downloadBtn" disabled>Baixar Agora</button>
-   <button id="viewBtn" disabled style="margin-top: 10px; background-color: #34a853;">Abrir no Navegador</button>
+    <button id="viewBtn" disabled style="background-color: #34a853;">Visualizar no Modal</button>
+</div>
+
+<!-- Modal -->
+<div id="fileModal" class="modal">
+    <div class="modal-content">
+        <button class="modal-close" id="modalClose">&times;</button>
+        <iframe id="modalIframe" class="modal-iframe" src=""></iframe>
+        <div class="modal-actions">
+            <button id="modalDownloadBtn" class="btn-download-modal">Baixar Arquivo</button>
+            <button id="modalCloseBtn" class="btn-close-modal">Fechar</button>
+        </div>
+    </div>
 </div>
 
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwvRgkmK1igKevOV5A6USkkJ776LHoetDW9Gr1SsBS8vJmxHu1Yvyqa4FWzLRH9CTE/exec'; 
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx_MnCSdUT7Zd00up403KuHFvGFVo4Z_uGDNRRL39VIkQjJOWv8Xf03ubaLTo5Jd0E/exec'; 
 
     const selectEl = document.getElementById('fileSelect');
-    const btnEl = document.getElementById('downloadBtn');
-    const viewBtnEl = document.getElementById('viewBtn');
+    const viewBtn = document.getElementById('viewBtn');
     const statusEl = document.getElementById('status');
-    
-    let filesData = []; // Armazena os dados vindos do Google Script
+
+    const modal = document.getElementById('fileModal');
+    const modalIframe = document.getElementById('modalIframe');
+    const modalDownloadBtn = document.getElementById('modalDownloadBtn');
+    const modalClose = document.getElementById('modalClose');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+    let currentFileId = null;
+    let currentFileName = null;
 
     async function loadFiles() {
         try {
             const response = await fetch(SCRIPT_URL);
-            filesData = await response.json();
+            const data = await response.json();
 
-            if (filesData && filesData.length > 0) {
+            if (data && data.length > 0) {
                 selectEl.innerHTML = '<option value="">Selecione um arquivo...</option>';
-                
-                filesData.forEach(file => {
+                data.forEach(file => {
                     const option = document.createElement('option');
-                    option.value = file.id; 
-                    option.textContent = file.name.substring(0, 2); // Mostra o nome completo do arquivo
+                    option.value = file.id;
+                    option.textContent = file.name.substring(0, 2) + (file.name.length > 2 ? '   📒' : '');
+                    option.dataset.name = file.name;
                     selectEl.appendChild(option);
                 });
                 
@@ -100,27 +220,43 @@
         }
     }
 
-    // Gerencia a ativação dos botões
     selectEl.addEventListener('change', () => {
-        const hasValue = !!selectEl.value;
-        btnEl.disabled = !hasValue;
-        viewBtnEl.disabled = !hasValue;
-    });
-
-    // Função para Download Direto
-    btnEl.addEventListener('click', () => {
-        const fileId = selectEl.value;
-        if (fileId) {
-            const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
-            window.open(downloadUrl, '_blank');
+        const selected = selectEl.value;
+        viewBtn.disabled = !selected;
+        if (selected) {
+            currentFileId = selected;
+            currentFileName = selectEl.options[selectEl.selectedIndex].textContent;
         }
     });
 
-    // Função para Abrir no Navegador (Visualizar)
-    viewBtnEl.addEventListener('click', () => {
-        const selectedFile = filesData.find(f => f.id === selectEl.value);
-        if (selectedFile && selectedFile.viewUrl) {
-            window.open(selectedFile.viewUrl, '_blank');
+    viewBtn.addEventListener('click', () => {
+        if (currentFileId) {
+            const viewerUrl = `https://drive.google.com/file/d/${currentFileId}/preview`;
+            modalIframe.src = viewerUrl;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    });
+
+    function closeModal() {
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        modalIframe.src = '';
+    }
+
+    modalClose.addEventListener('click', closeModal);
+    modalCloseBtn.addEventListener('click', closeModal);
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+
+    modalDownloadBtn.addEventListener('click', () => {
+        if (currentFileId) {
+            const downloadUrl = `https://drive.google.com/uc?export=download&id=${currentFileId}`;
+            window.open(downloadUrl, '_blank');
         }
     });
 
