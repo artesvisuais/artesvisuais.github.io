@@ -204,7 +204,7 @@
                 data.forEach(file => {
                     const option = document.createElement('option');
                     option.value = file.id;
-                    option.textContent = file.name.substring(0, 7) + (file.name.length > 7 ? '   📒' : '');
+                    option.textContent = file.name.substring(0,7) + (file.name.length > 7 ? '   📒' : '');
                     option.dataset.name = file.name;
                     selectEl.appendChild(option);
                 });
