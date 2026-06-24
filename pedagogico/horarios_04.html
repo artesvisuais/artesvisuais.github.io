@@ -137,7 +137,7 @@
 
         <script>
 const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzOulxAyCNEiaDIG7jQT5a-CdHvOXcSP7AcK1o1de8ilFs0vlAFrAa3ijqcYDB0MvYr/exec";
-const CACHE_KEY = "horarios_cache_v1";
+const CACHE_KEY = "horarios_cache_v2";
 const CACHE_TIME = 24 * 60 * 60 * 1000; // 24 horas
 
 // Elementos do DOM
@@ -278,11 +278,51 @@ function mostrarDia(colIdx, btn) {
 
     const dados = window.planilhaData;
     const htmlParts = [];
+    
+    // Arrays para guardar os objetos com { entrada, saida } de cada linha válida
+    const aulasManha = [];
+    const aulasTarde = [];
+
+    // Função interna para padronizar "07H" ou "7" em "07:00" e "12:30" em "12:30"
+    function formatarHoraString(horaBruta) {
+        let formato = horaBruta.toUpperCase().replace('H', '').trim();
+        if (!formato.includes(':')) {
+            formato = formato + ':00';
+        }
+        if (formato.indexOf(':') === 1) {
+            formato = '0' + formato;
+        }
+        return formato;
+    }
 
     for (let r = 1; r < dados.length; r++) {
         const textoOriginal = (dados[r][colIdx] || "").trim();
         const isVazio = textoOriginal === "*" || textoOriginal === "" ||
-                        textoOriginal === "Sem Aula" || textoOriginal === "Almoço";
+                        textoOriginal === "Sem Aula" || textoOriginal === "Almoço" ||
+                        textoOriginal.startsWith("*");
+
+        // Captura o bloco antes e depois de "//" (ex: "11H " e " 12H")
+        const matchComponentes = textoOriginal.match(/([0-9:hH]+)\s*\/\/\s*([0-9:hH\sL]+)/i);
+        
+        if (matchComponentes && !isVazio) {
+            const entradaBruta = matchComponentes[1].trim();
+            // Remove possíveis letras extras como o "L" de intervalo no final da saída
+            const saidaBruta = matchComponentes[2].replace(/[a-zA-Z]/g, '').trim(); 
+            
+            const horaEntradaInteira = parseInt(entradaBruta, 10);
+            
+            const objetoHorario = {
+                entrada: formatarHoraString(entradaBruta),
+                saida: formatarHoraString(saidaBruta)
+            };
+            
+            // Separa os turnos com base na hora de entrada (antes das 12h é Manhã)
+            if (horaEntradaInteira < 12) {
+                aulasManha.push(objetoHorario);
+            } else {
+                aulasTarde.push(objetoHorario);
+            }
+        }
 
         const classeCor = definirClasseCSS(textoOriginal);
         const classeFinal = isVazio ? 'vazio' : classeCor;
@@ -292,7 +332,35 @@ function mostrarDia(colIdx, btn) {
         htmlParts.push('</div>');
     }
 
-    listaEl.innerHTML = htmlParts.join('');
+    // Cria a faixa informativa no topo com a Entrada da primeira aula e a Saída da última
+    let topoInformativo = '';
+    
+    if (aulasManha.length > 0 || aulasTarde.length > 0) {
+        topoInformativo += `<div class="linha" style="background:#f1f2f6; font-size:12px; color:var(--azul-escuro); display:block; height:auto; padding:12px 20px; border-bottom:1px solid var(--cinza-borda);">`;
+        
+        if (aulasManha.length > 0) {
+            // Ordena as aulas pela hora de entrada para garantir a cronologia
+            aulasManha.sort((a, b) => a.entrada.localeCompare(b.entrada));
+            const primeiraA_Manha = aulasManha[0];
+            const ultimaA_Manha = aulasManha[aulasManha.length - 1];
+            
+            topoInformativo += `<div>🌅 <b>Manhã:</b> Primeiro horário às ${primeiraA_Manha.entrada} | Último às ${ultimaA_Manha.saida}</div>`;
+        }
+        
+        if (aulasTarde.length > 0) {
+            // Ordena as aulas pela hora de entrada para garantir a cronologia
+            aulasTarde.sort((a, b) => a.entrada.localeCompare(b.entrada));
+            const primeiraA_Tarde = aulasTarde[0];
+            const ultimaA_Tarde = aulasTarde[aulasTarde.length - 1];
+            
+            if (aulasManha.length > 0) topoInformativo += `<div style="margin-top:4px;"></div>`;
+            topoInformativo += `<div>🌇 <b>Tarde:</b> Primeiro horário às ${primeiraA_Tarde.entrada} | Último às ${ultimaA_Tarde.saida}</div>`;
+        }
+        
+        topoInformativo += `</div>`;
+    }
+
+    listaEl.innerHTML = topoInformativo + htmlParts.join('');
 }
 
 // Iniciar tudo
