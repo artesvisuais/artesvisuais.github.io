@@ -12,78 +12,112 @@
             --cinza-borda: #ececec;
         }
 
-        body { 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            background: var(--bg-body); 
-            margin: 0; 
-            padding: 15px; 
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-body);
+            margin: 0;
+            padding: 15px;
             -webkit-tap-highlight-color: transparent;
+            /* Otimização de renderização */
+            will-change: transform;
+            transform: translateZ(0);
         }
 
-        /* Estilo de Abas de App */
-        .nav-dias { 
-            display: flex; 
-            gap: 10px; 
-            overflow-x: auto; 
-            padding: 5px 2px 20px 2px; 
-            scrollbar-width: none; 
-            sticky; top: 0; background: var(--bg-body); z-index: 10;
+        .nav-dias {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 5px 2px 20px 2px;
+            scrollbar-width: none;
+            position: sticky;
+            top: 0;
+            background: var(--bg-body);
+            z-index: 10;
+            /* Otimização para scroll suave */
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
         }
         .nav-dias::-webkit-scrollbar { display: none; }
 
-        button { 
-            background: #fff; border: none; padding: 10px 22px; 
-            border-radius: 12px; white-space: nowrap; font-weight: 600; color: #777;
-            cursor: pointer; transition: 0.3s; font-size: 14px;
+        button {
+            background: #fff;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 12px;
+            white-space: nowrap;
+            font-weight: 600;
+            color: #777;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+            font-size: 14px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            /* Previne repaint desnecessário */
+            will-change: transform;
         }
-        button.active { 
-            background: var(--azul-app); color: white; 
+        button.active {
+            background: var(--azul-app);
+            color: white;
             box-shadow: 0 4px 12px rgba(0,123,255,0.3);
             transform: translateY(-2px);
         }
 
-        /* Container estilo Card de App */
-        .container { 
-            background: white; 
-            border-radius: 20px; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06); 
-            overflow: hidden; 
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            overflow: hidden;
             border: 1px solid var(--cinza-borda);
+            /* Otimização de renderização */
+            contain: content;
         }
-        
-        .linha { 
-            padding: 18px 20px; 
-            border-bottom: 1px solid #f1f1f1; 
-            font-size: 15px; 
-            color: #2d3436; 
-            line-height: 1.2; 
+       
+        .linha {
+            padding: 18px 20px;
+            border-bottom: 1px solid #f1f1f1;
+            font-size: 15px;
+            color: #2d3436;
+            line-height: 1.2;
             font-weight: 600;
             display: flex;
             align-items: center;
+            /* Previne layout shift */
+            min-height: 57px;
+            box-sizing: border-box;
         }
         .linha:last-child { border-bottom: none; }
 
-        /* REGRAS DE CORES */
         .cor-eja1 { background-color: #ffeb3b !important; color: #000 !important; }
         .cor-eja2 { background-color: #2ecc71 !important; color: #fff !important; }
         .cor-5dd { background-color: #DB7093 !important; color: #fff !important; }
         .cor-percurso { background-color: #95a5a6 !important; color: #fff !important; }
         .cor-padrao-azul { background-color: #3498db !important; color: #fff !important; }
-        
-        /* NOVA REGRA: HA - */
         .cor-ha { background-color: var(--azul-escuro) !important; color: #ffffff !important; }
-        
-        .vazio { color: #b2bec3; font-style: italic; font-size: 13px; font-weight: 400; background: #fafafa; }
-        
-        .loading { 
-            text-align: center; margin-top: 50%; font-size: 18px; color: #636e72; 
-            font-weight: 500; animation: pulse 1.5s infinite;
+       
+        .vazio {
+            color: #b2bec3;
+            font-style: italic;
+            font-size: 13px;
+            font-weight: 400;
+            background: #fafafa;
+        }
+       
+        .loading {
+            text-align: center;
+            margin-top: 50%;
+            font-size: 18px;
+            color: #636e72;
+            font-weight: 500;
+            animation: pulse 1.5s infinite;
+            /* Otimização da animação */
+            will-change: opacity;
         }
 
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
 
-        /* DESIGN MOBILE (App Style) */
         @media (max-width: 480px) {
             body { padding: 12px; }
             .nav-dias { gap: 8px; }
@@ -101,79 +135,168 @@
         <div class="container" id="lista"></div>
     </div>
 
-    <script>
+        <script>
 const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzOulxAyCNEiaDIG7jQT5a-CdHvOXcSP7AcK1o1de8ilFs0vlAFrAa3ijqcYDB0MvYr/exec";
+const CACHE_KEY = "horarios_cache_v1";
+const CACHE_TIME = 24 * 60 * 60 * 1000; // 24 horas
 
-function handleResponse(data) {
+// Elementos do DOM
+const loadingEl = document.getElementById('loading');
+const appEl = document.getElementById('app');
+const abasEl = document.getElementById('abas');
+const listaEl = document.getElementById('lista');
+
+// Cache de classes CSS
+const classCache = new Map();
+
+// Controle para evitar múltiplas requisições simultâneas
+let isLoading = false;
+
+// Função para salvar no cache
+function salvarCache(dados) {
+    try {
+        const cache = { data: dados, timestamp: Date.now() };
+        localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+    } catch (e) { /* silencioso */ }
+}
+
+// Carregar do cache
+function carregarCache() {
+    try {
+        const raw = localStorage.getItem(CACHE_KEY);
+        return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+}
+
+// Exibe a interface com os dados fornecidos
+function exibirDados(data) {
     window.planilhaData = data;
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
+    loadingEl.style.display = 'none';
+    appEl.style.display = 'block';
     montarAbas();
     mostrarDia(0);
 }
 
-function montarAbas() {
-    const dias = window.planilhaData[0]; // Pega a primeira linha da planilha como cabeçalho
-    const abas = document.getElementById('abas');
-    abas.innerHTML = dias.map((dia, i) =>
-        `<button onclick="mostrarDia(${i}, this)">${dia}</button>`
-    ).join('');
-    abas.querySelector('button').classList.add('active');
-}
+// Callback global para o JSONP
+window.handleResponseJSONP = function(data) {
+    isLoading = false;
+    salvarCache(data);
+    exibirDados(data);
+};
 
-function definirClasseCSS(texto) {
-    if (!texto || texto === "*" || texto === "Sem Aula" || texto === "Almoço") return "";
-    
-    const t = texto.toUpperCase();
+// Inicialização: cache primeiro, depois atualização se necessário
+function inicializar() {
+    const cache = carregarCache();
 
-    // Prioridade para "HA -"
-    if (t.startsWith("HA -")) return "cor-ha";
-    
-    if (t.includes("EJA1")) return "cor-eja1";
-    if (t.includes("EJA2")) return "cor-eja2";
-    if (t.includes("5DD_")) return "cor-5dd";
-    if (t.includes("PERCURSO")) return "cor-percurso";
-    
-    const regexPadrao = /[A-Z]\d_|\d[A-Z]_/; 
-    if (regexPadrao.test(t)) return "cor-padrao-azul";
-    
-    return "";
-}
+    if (cache && cache.data) {
+        // Exibe imediatamente o que está em cache
+        exibirDados(cache.data);
 
-function mostrarDia(colIdx, btn) {
-    if (btn) {
-        document.querySelectorAll('#abas button').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+        // Se expirou (>24h), tenta atualizar em segundo plano
+        if (Date.now() - cache.timestamp > CACHE_TIME) {
+            buscarDados(false); // false = sem mostrar loading (background)
+        }
+    } else {
+        // Sem cache: mostra loading e busca
+        loadingEl.style.display = 'block';
+        appEl.style.display = 'none';
+        buscarDados(true); // true = mostra loading (primeira carga)
     }
-
-    const lista = document.getElementById('lista');
-    let html = "";
-    const dados = window.planilhaData;
-
-    for (let r = 1; r < dados.length; r++) {
-        const textoOriginal = (dados[r][colIdx] || "").trim();
-        const isVazio = textoOriginal === "*" || textoOriginal === "" || textoOriginal === "Sem Aula" || textoOriginal === "Almoço";
-        
-        const classeCor = definirClasseCSS(textoOriginal);
-        const classeFinal = isVazio ? 'vazio' : classeCor;
-
-        html += `<div class="linha ${classeFinal}">
-                    ${isVazio && textoOriginal !== "Almoço" ? 'Sem aula' : textoOriginal}
-                 </div>`;
-    }
-    lista.innerHTML = html;
 }
 
-function carregarDados() {
+// Busca dados usando JSONP (evita CORS)
+function buscarDados(mostrarLoading) {
+    if (isLoading) return; // evita requisições duplicadas
+    isLoading = true;
+
     const script = document.createElement('script');
-    script.src = `${URL_SCRIPT}?callback=handleResponse&v=` + Date.now();
-    script.onerror = () => {
-        document.getElementById('loading').innerHTML = "Falha na conexão.";
+    script.src = `${URL_SCRIPT}?callback=handleResponseJSONP&_=${Date.now()}`;
+
+    script.onload = () => {
+        // JSONP bem-sucedido – o callback já tratou os dados
+        script.remove();
     };
+
+    script.onerror = () => {
+        isLoading = false;
+        script.remove();
+        console.error('Falha ao carregar dados via JSONP');
+
+        // Só mostra erro se não havia cache (primeira carga)
+        if (mostrarLoading && !window.planilhaData) {
+            loadingEl.innerHTML = 'Falha ao carregar. Verifique sua conexão.';
+        }
+    };
+
     document.body.appendChild(script);
 }
 
-carregarDados();
-</script>
-</body>
+// Monta as abas dos dias
+function montarAbas() {
+    const dias = window.planilhaData[0];
+    const fragment = document.createDocumentFragment();
+
+    dias.forEach((dia, i) => {
+        const btn = document.createElement('button');
+        btn.textContent = dia;
+        btn.addEventListener('click', (e) => mostrarDia(i, e.currentTarget));
+        fragment.appendChild(btn);
+    });
+
+    abasEl.innerHTML = '';
+    abasEl.appendChild(fragment);
+    abasEl.firstChild.classList.add('active');
+}
+
+// Define a classe CSS da linha
+function definirClasseCSS(texto) {
+    if (!texto || texto === "*" || texto === "Sem Aula" || texto === "Almoço") return "";
+
+    if (classCache.has(texto)) return classCache.get(texto);
+
+    const t = texto.toUpperCase();
+    let classe = "";
+
+    if (t.startsWith("HA -")) classe = "cor-ha";
+    else if (t.includes("EJA1")) classe = "cor-eja1";
+    else if (t.includes("EJA2")) classe = "cor-eja2";
+    else if (t.includes("5DD_")) classe = "cor-5dd";
+    else if (t.includes("PERCURSO")) classe = "cor-percurso";
+    else if (/[A-Z]\d_|\d[A-Z]_/.test(t)) classe = "cor-padrao-azul";
+
+    classCache.set(texto, classe);
+    return classe;
+}
+
+// Exibe o conteúdo do dia selecionado
+function mostrarDia(colIdx, btn) {
+    if (btn) {
+        const buttons = abasEl.querySelectorAll('button');
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    const dados = window.planilhaData;
+    const htmlParts = [];
+
+    for (let r = 1; r < dados.length; r++) {
+        const textoOriginal = (dados[r][colIdx] || "").trim();
+        const isVazio = textoOriginal === "*" || textoOriginal === "" ||
+                        textoOriginal === "Sem Aula" || textoOriginal === "Almoço";
+
+        const classeCor = definirClasseCSS(textoOriginal);
+        const classeFinal = isVazio ? 'vazio' : classeCor;
+
+        htmlParts.push(`<div class="linha ${classeFinal}">`);
+        htmlParts.push(isVazio && textoOriginal !== "Almoço" ? 'Sem aula' : textoOriginal);
+        htmlParts.push('</div>');
+    }
+
+    listaEl.innerHTML = htmlParts.join('');
+}
+
+// Iniciar tudo
+inicializar();
+</script>    
+        </body>
 </html>
