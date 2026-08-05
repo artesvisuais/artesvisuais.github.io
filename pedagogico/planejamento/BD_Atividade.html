@@ -446,7 +446,7 @@
   </div>
 </div>
 
-<!-- ==================== MODAL PLANEJAMENTO RÁPIDO (MELHORADO) ==================== -->
+<!-- ==================== MODAL PLANEJAMENTO RÁPIDO ==================== -->
 <div id="modalPlanejamentoRapido" class="modal">
   <div class="modal-content" style="max-width:800px;">
     <h3 style="margin-top:0;">⚡ Planejamento Rápido – Atividade + Habilidade</h3>
@@ -474,7 +474,6 @@
         <label><input type="checkbox" id="prNovaHabilidade" onchange="toggleSecaoNovaHabilidade()"> <strong>Cadastrar nova habilidade na aba ID_Unico</strong> (preencha os campos abaixo)</label>
       </div>
 
-      <!-- Seção de nova habilidade com múltipla seleção de Objeto de Conhecimento -->
       <div id="prSecaoNovaHabilidade" class="secaoNovaHabilidade">
         <h4 style="margin-top:0;">📌 Dados da nova habilidade</h4>
         <div class="form-grid">
@@ -629,6 +628,7 @@ function renderizarPlanejamento(dados = planejamento) {
       <h3>Semana ${item.Semana || '-'}</h3>
       <p><strong>Período:</strong> ${item['Data inicial'] || '?'} a ${item['Data final'] || '?'}<br>
       <strong>Série:</strong> ${item['Ano/serie'] || ''}<br>
+      <strong>Linguagem:</strong> ${item.Linguagem || item['Unidade Temática'] || '—'}<br>
       <strong>ID Habilidade:</strong> ${item['ID Habilidade'] || '—'}<br>
       <strong>Versão:</strong> ${item.Versão || '—'}</p>
       <div><strong>Habilidade:</strong> <span id="descPlan${idx}">${item.Descrição || '-'}</span> <button class="btn-copiar" onclick="copiarTexto('descPlan${idx}')">Copiar</button></div>
@@ -636,7 +636,7 @@ function renderizarPlanejamento(dados = planejamento) {
       <div><strong>Sequência:</strong> <span id="orientPlan${idx}">${item['Orientação (Auto)'] || '-'}</span> <button class="btn-copiar" onclick="copiarTexto('orientPlan${idx}')">Copiar</button></div>
       <div><strong>Avaliação:</strong> <span id="avalPlan${idx}">${item.Avaliação || '-'}</span> <button class="btn-copiar" onclick="copiarTexto('avalPlan${idx}')">Copiar</button></div>
       <div style="margin-top:10px; display:flex; justify-content: flex-end;">
-        <button onclick="removerPlanejamento('${item.Semana}', '${item['Ano/serie']}', this)" style="background:#e74c3c; font-size:12px;">🗑️ Remover</button>
+        <button onclick="removerPlanejamento('${item.Semana}', '${item['Ano/serie']}', '${item.Versão}', this)" style="background:#e74c3c; font-size:12px;">🗑️ Remover</button>
       </div>`;
     container.appendChild(card);
   });
@@ -692,7 +692,7 @@ async function enviarNovoBimestre() {
   finally { setButtonLoading(btn, false); }
 }
 
-async function removerPlanejamento(semana, ano, botao) {
+async function removerPlanejamento(semana, ano, versao, botao) {
   if (botao && botao.disabled) return;
   if (!confirm(`Apagar planejamento Semana ${semana} - ${ano}?`)) return;
   if (botao) setButtonLoading(botao, true);
@@ -700,6 +700,7 @@ async function removerPlanejamento(semana, ano, botao) {
   params.append('acao', 'limpar_planejamento');
   params.append('semana', semana);
   params.append('ano', ano);
+  params.append('versao', versao);
   try {
     const resp = await fetch(WEB_APP_URL, { method: 'POST', body: params });
     alert(await resp.text());
@@ -743,7 +744,11 @@ function renderizarAtividades(dados = atividades) {
   dados.forEach(item => {
     const infoHab = baseIDs.find(h => h.ID_Unico === item.ID_Unico) || {};
     const desc = item.Descrição || infoHab.Descrição || '-';
-    const planAssoc = planejamento.filter(p => p['ID Habilidade'] === item.ID_Unico && p['Ano/serie'] === item['Ano/serie']);
+    const planAssoc = planejamento.filter(p => 
+      p['ID Habilidade'] === item.ID_Unico && 
+      p['Ano/serie'] === item['Ano/serie'] &&
+      p['Versão'] === item['Versão']
+    );
     const semanas = planAssoc.map(p => p.Semana).join(', ');
     const labelSemana = semanas ? '✅ Semana: ' + semanas : '⚠️ Disponível';
     container.innerHTML += `
@@ -969,22 +974,46 @@ function gerarRelatorio() {
   const corpo = document.getElementById('corpoTabelaRel');
   const painelErros = document.getElementById('painelErrosRel');
   const listaErros = document.getElementById('listaErrosRel');
-  corpo.innerHTML = ''; painelErros.style.display = 'none'; listaErros.innerHTML = '';
-  if (!ano) { corpo.innerHTML = '<tr><td colspan="2">Aguardando seleção...</td></tr>'; return; }
-  const dados = planejamento.filter(p => p['Ano/serie'] === ano);
+  corpo.innerHTML = ''; 
+  painelErros.style.display = 'none'; 
+  listaErros.innerHTML = '';
+  
+  if (!ano) { 
+    corpo.innerHTML = '<tr><td colspan="2">Aguardando seleção...</td></tr>'; 
+    return; 
+  }
+  
+  const dados = planejamento
+    .filter(p => p['Ano/serie'] === ano)
+    .sort((a, b) => (a.Semana || 0) - (b.Semana || 0) || (a.Versão || '').localeCompare(b.Versão || ''));
+  
   const colunas = ['Semana','Data inicial','Data final','ID Habilidade','Versão','Linguagem','Obj._Conhecimento','Descrição','Propósito','Atividade (Auto)','Orientação (Auto)','Avaliação','Quant.Aulas'];
   let erros = [];
+  
   dados.forEach(item => {
     const vazios = colunas.filter(col => !item[col] || String(item[col]).trim() === '');
-    if (vazios.length) erros.push(`Semana ${item.Semana||'?'}: ${vazios.join(', ')}`);
+    if (vazios.length) erros.push(`Semana ${item.Semana||'?'} (v${item.Versão||'?'}): ${vazios.join(', ')}`);
+    
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>Semana ${item.Semana||'?'}<br><small>${item['Data inicial']||''} a ${item['Data final']||''}</small></td><td><strong>${item['ID Habilidade']||'S/ ID'}</strong> - ${item.Linguagem||''}<br>${item.Descrição||'<span style="color:red;">Descrição não preenchida</span>'}<br><small><strong>Objetivo:</strong> ${item['Obj._Conhecimento']||'?'}</small></td>`;
+    tr.innerHTML = `
+      <td>Semana ${item.Semana||'?'}<br><small>${item['Data inicial']||''} a ${item['Data final']||''}</small></td>
+      <td>
+        <strong>${item['ID Habilidade']||'S/ ID'}</strong> 
+        <span style="background:#f0f0f0;padding:2px 6px;border-radius:4px;font-size:12px;">v${item.Versão||'?'}</span> 
+        - ${item.Linguagem||''}<br>
+        ${item.Descrição||'<span style="color:red;">Descrição não preenchida</span>'}<br>
+        <small><strong>Objetivo:</strong> ${item['Obj._Conhecimento']||'?'}</small>
+      </td>`;
     corpo.appendChild(tr);
   });
-  if (erros.length) { painelErros.style.display = 'block'; listaErros.innerHTML = erros.map(e=>`<li>${e}</li>`).join(''); }
+  
+  if (erros.length) { 
+    painelErros.style.display = 'block'; 
+    listaErros.innerHTML = erros.map(e => `<li>${e}</li>`).join(''); 
+  }
 }
 
-// ==================== PLANEJAMENTO RÁPIDO (MELHORADO) ====================
+// ==================== PLANEJAMENTO RÁPIDO ====================
 function abrirModalPlanejamentoRapido() {
   document.getElementById('modalPlanejamentoRapido').style.display = 'block';
   document.getElementById('formPlanejamentoRapido').reset();
@@ -1051,6 +1080,65 @@ prObjetoCheckboxes.addEventListener('change', function(e) {
 
 prOutroObjInput.addEventListener('input', atualizarObjetoHidden);
 
+// Verificar duplicata ao digitar o ID manualmente
+document.getElementById('prIDHabilidade').addEventListener('input', function() {
+  const id = this.value.trim();
+  const versaoAtual = document.getElementById('prVersao').value;
+  
+  if (!id || !versaoAtual) return;
+  
+  const duplicata = atividades.find(a => 
+    a.ID_Unico === id && 
+    a.Versao === versaoAtual
+  );
+  
+  const lista = document.getElementById('prListaIDs');
+  lista.querySelectorAll('.alerta-duplicata').forEach(el => el.remove());
+  
+  if (duplicata) {
+    const alerta = document.createElement('div');
+    alerta.className = 'alerta-duplicata';
+    alerta.style.cssText = 'background:#ffe0e0; padding:10px; margin-top:8px; border-radius:6px; border-left:4px solid #e74c3c; font-size:13px;';
+    alerta.innerHTML = `
+      🚨 <strong>Atenção!</strong> Já existe atividade com:<br>
+      • ID: <strong>${id}</strong> | Versão: <strong>${versaoAtual}</strong><br>
+      • Nome: <strong>${duplicata['Nome da Atividade']}</strong><br>
+      • Série: <strong>${duplicata['Ano/serie']}</strong>
+    `;
+    lista.appendChild(alerta);
+  }
+});
+
+// Verificar duplicata ao digitar a versão manualmente
+document.getElementById('prVersao').addEventListener('input', function() {
+  const id = document.getElementById('prIDHabilidade').value.trim();
+  const versaoDigitada = this.value.trim();
+  
+  if (!id || !versaoDigitada) return;
+  
+  const duplicata = atividades.find(a => 
+    a.ID_Unico === id && 
+    a.Versao === versaoDigitada
+  );
+  
+  const lista = document.getElementById('prListaIDs');
+  lista.querySelectorAll('.alerta-duplicata').forEach(el => el.remove());
+  
+  if (duplicata) {
+    const alerta = document.createElement('div');
+    alerta.className = 'alerta-duplicata';
+    alerta.style.cssText = 'background:#ffe0e0; padding:10px; margin-top:8px; border-radius:6px; border-left:4px solid #e74c3c; font-size:13px;';
+    alerta.innerHTML = `
+      🚨 <strong>Atenção!</strong> Já existe uma atividade com:<br>
+      • ID: <strong>${id}</strong><br>
+      • Versão: <strong>${versaoDigitada}</strong><br>
+      • Nome: <strong>${duplicata['Nome da Atividade']}</strong><br>
+      • Série: <strong>${duplicata['Ano/serie']}</strong>
+    `;
+    lista.appendChild(alerta);
+  }
+});
+
 function atualizarSugestoesIDRapido() {
   const bim = document.getElementById('prBimestre').value;
   const ano = document.getElementById('prAno').value;
@@ -1060,10 +1148,71 @@ function atualizarSugestoesIDRapido() {
   if (!bim || !ano || !unid) { container.style.display = 'none'; lista.innerHTML = ''; return; }
   const filtradas = baseIDs.filter(h => h['Ano/serie'] === ano && h.Bimestre === bim && h['Unidade Temática'].includes(unid));
   container.style.display = 'block';
-  lista.innerHTML = filtradas.length ? filtradas.map(h => `<div style="cursor:pointer; padding:8px; border-bottom:1px solid #eee;" onclick="selecionarIDRapido('${h.ID_Unico}')"><b>${h.ID_Unico}</b> - ${h.Obj_Conhec||''}<br><small>${h.Descrição||''}</small></div>`).join('') : '<small style="color:#e67e22;">Nenhum ID encontrado.</small>';
+  lista.innerHTML = filtradas.length ? filtradas.map(h => {
+    const atividadesDoID = atividades.filter(a => a.ID_Unico === h.ID_Unico);
+    const versoesExistentes = [...new Set(atividadesDoID.map(a => a.Versão))].sort((a, b) => parseFloat(a) - parseFloat(b));
+    const badgeVersao = versoesExistentes.length > 0 
+      ? `<span style="background:#e67e22;color:white;padding:1px 6px;border-radius:8px;font-size:10px;" title="Versões: ${versoesExistentes.join(', ')}">v${versoesExistentes[versoesExistentes.length - 1]}</span>` 
+      : '<span style="color:#95a5a6;font-size:10px;">nova</span>';
+    
+    return `<div style="cursor:pointer; padding:8px; border-bottom:1px solid #eee;" onclick="selecionarIDRapido('${h.ID_Unico}')">
+      <b>${h.ID_Unico}</b> ${badgeVersao} - ${h.Obj_Conhec||''}<br>
+      <small>${h.Descrição||''}</small>
+    </div>`;
+  }).join('') : '<small style="color:#e67e22;">Nenhum ID encontrado.</small>';
 }
 
-function selecionarIDRapido(id) { document.getElementById('prIDHabilidade').value = id; }
+function selecionarIDRapido(id) {
+  document.getElementById('prIDHabilidade').value = id;
+  
+  const existentes = atividades.filter(a => a.ID_Unico === id);
+  
+  // Verificar se a versão atual do campo já existe
+  const versaoAtual = document.getElementById('prVersao').value;
+  const duplicataAtual = atividades.find(a => 
+    a.ID_Unico === id && 
+    a.Versao === versaoAtual
+  );
+  
+  const lista = document.getElementById('prListaIDs');
+  lista.querySelectorAll('.alerta-duplicata').forEach(el => el.remove());
+  
+  if (duplicataAtual) {
+    const alertaDuplicata = document.createElement('div');
+    alertaDuplicata.className = 'alerta-duplicata';
+    alertaDuplicata.style.cssText = 'background:#ffe0e0; padding:10px; margin-top:8px; border-radius:6px; border-left:4px solid #e74c3c; font-size:13px;';
+    alertaDuplicata.innerHTML = `
+      🚨 <strong>Atenção!</strong> A versão <strong>${versaoAtual}</strong> já existe para este ID!<br>
+      • Atividade: <strong>${duplicataAtual['Nome da Atividade']}</strong><br>
+      • Série: <strong>${duplicataAtual['Ano/serie']}</strong>
+    `;
+    lista.appendChild(alertaDuplicata);
+  }
+  
+  if (existentes.length > 0) {
+    const versoes = [...new Set(existentes.map(a => a.Versão))]
+      .sort((a, b) => parseFloat(a) - parseFloat(b));
+    
+    const ultimaVersao = Math.max(...existentes.map(a => parseFloat(a.Versão) || 0));
+    const proximaVersao = (ultimaVersao + 1).toFixed(1);
+    
+    document.getElementById('prVersao').value = proximaVersao;
+    
+    lista.querySelectorAll('.alerta-versao').forEach(el => el.remove());
+    
+    const alerta = document.createElement('div');
+    alerta.className = 'alerta-versao';
+    alerta.style.cssText = 'background:#fff3cd; padding:10px; margin-top:8px; border-radius:6px; border-left:4px solid #f39c12; font-size:13px;';
+    alerta.innerHTML = `
+      ⚠️ <strong>${id}</strong> já possui versão(ões): <strong>${versoes.join(', ')}</strong><br>
+      ✅ Versão sugerida automaticamente: <strong>${proximaVersao}</strong>
+    `;
+    lista.appendChild(alerta);
+  } else {
+    document.getElementById('prVersao').value = '1.0';
+    lista.querySelectorAll('.alerta-versao').forEach(el => el.remove());
+  }
+}
 
 document.getElementById('formPlanejamentoRapido').addEventListener('submit', async function(e) {
   e.preventDefault();
@@ -1080,6 +1229,24 @@ document.getElementById('formPlanejamentoRapido').addEventListener('submit', asy
 
   if (!semana || !ano || !idHabilidade || !versao || !bimestre || !nomeAtividade) {
     alert('Preencha todos os campos obrigatórios.'); return;
+  }
+
+  const duplicata = atividades.find(a => 
+    a.ID_Unico === idHabilidade && 
+    a.Versao === versao
+  );
+
+  if (duplicata) {
+    const confirmar = confirm(
+      `⚠️ Já existe uma atividade "${duplicata['Nome da Atividade']}" com:\n` +
+      `• ID: ${idHabilidade}\n` +
+      `• Versão: ${versao}\n` +
+      `• Série: ${duplicata['Ano/serie']}\n\n` +
+      `Deseja continuar mesmo assim?`
+    );
+    if (!confirmar) {
+      return;
+    }
   }
 
   setButtonLoading(btn, true);
