@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <script src="config.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Chamada Digital_V10</title>
+<title>Chamada_3 Digital_V11</title>
 <style>
   body { font-family: Arial, sans-serif; background: #f7f7f7; margin: 0; padding: 15px; }
   h2 { text-align: center; margin-bottom: 10px; }
@@ -34,40 +34,42 @@
   
   .info-turma { margin-top: 8px; font-weight: bold; font-size: 16px; color: #444; }
 
+  /* NOVO: Botão de Envio em Lote */
+  .btn-enviar-tudo {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 10px 0;
+    transition: all 0.3s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    width: 100%;
+  }
+  .btn-enviar-tudo:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+  .btn-enviar-tudo:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  
+  .progress-bar { width: 100%; height: 4px; background: #e0e0e0; border-radius: 2px; margin-top: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; background: #667eea; transition: width 0.3s; }
+  
+  .status-envio { padding: 8px; margin: 5px 0; border-radius: 5px; font-size: 14px; }
+  .status-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+  .status-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
   @media (max-width: 480px) { h2 { margin-top: 50px; } #dataConsulta { width: 120px; font-size: 14px; } }
 
-/* 🔘 efeito padrão */
-.botoes button {
-  transition: all 0.15s ease;
-  position: relative;
-}
-
-/* 👇 clique imediato (efeito físico) */
-.botoes button:active {
-  transform: scale(0.92);
-  filter: brightness(0.9);
-}
-
-/* ⏳ estado carregando */
-.botoes button.loading {
-  opacity: 0.6;
-  pointer-events: none;
-}
-
-/* ✨ efeito de "pulso" */
-.botoes button.loading::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 6px;
-  animation: pulse 0.8s infinite;
-}
-
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(0,0,0,0.2); }
-  70% { box-shadow: 0 0 0 6px rgba(0,0,0,0); }
-  100% { box-shadow: 0 0 0 0 rgba(0,0,0,0); }
-}
+  .botoes button { transition: all 0.15s ease; position: relative; }
+  .botoes button:active { transform: scale(0.92); filter: brightness(0.9); }
+  .botoes button.loading { opacity: 0.6; pointer-events: none; }
+  .botoes button.loading::after { content: ""; position: absolute; inset: 0; border-radius: 6px; animation: pulse 0.8s infinite; }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(0,0,0,0.2); }
+    70% { box-shadow: 0 0 0 6px rgba(0,0,0,0); }
+    100% { box-shadow: 0 0 0 0 rgba(0,0,0,0); }
+  }
 </style>
 </head>
 <body>
@@ -88,6 +90,7 @@
   <a href="https://artesvisuais.github.io/chamada_index.html">Home 🏠</a>
   <a href="#" onclick="verificarPendencias(); toggleMenu();">Verificar Pendências 🔍</a>
   <a href="#" onclick="marcarTransferidosComoN(); toggleMenu();">Marcar Transferidos como N 📝</a>
+  <a href="#" onclick="enviarTodasAlteracoes(); toggleMenu();">📤 Enviar Tudo de Uma Vez</a>
   <a href="https://github.io">Editar ⚙️</a>
   <a href="#" onclick="marcarTodosNaoLetivo(); toggleMenu();">Marcar (Não Letivo) 🚫</a>
 </div>
@@ -116,13 +119,25 @@
 </div>
 
 <div id="infoTurma" class="info-turma"></div>
+
+<!-- NOVO: Botão de Envio em Lote (só aparece quando há alterações) -->
+<div id="controles-envio" style="margin: 15px 0; display: none;">
+  <button id="btnEnviarTudo" class="btn-enviar-tudo" onclick="enviarTodasAlteracoes()">
+    📤 Enviar Todas as Alterações
+  </button>
+  <div id="progressoEnvio" style="display: none;">
+    <div class="progress-bar"><div id="progressoFill" class="progress-fill" style="width: 0%"></div></div>
+    <div id="statusEnvio"></div>
+  </div>
+</div>
+
 <div id="lista"></div>
 
 <script>
-//const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbz4gGZHU6qtpFXMCQQn0b8yjtuK4ZTZVG45mchiB7gn8XGdIIoxF1sQKANxEBEbdTg/exec";
 const URL_SCRIPT = CONFIG.URL_SCRIPT;
 let registros = {};
 let dataAtual = new Date();
+let alteracoesPendentes = {}; // NOVO: armazena alterações não enviadas
 
 const PROFESSORES = {
   "1E": "Profª Mônica", "2G": "Profª Renata", "3E": "Profª Marta",
@@ -159,6 +174,90 @@ function setDataAtualFromInput() {
   }
 }
 
+// NOVO: Mostrar/esconder botão de envio
+function mostrarBotaoEnvio() {
+  const controles = document.getElementById('controles-envio');
+  if (controles) {
+    if (Object.keys(alteracoesPendentes).length > 0) {
+      controles.style.display = 'block';
+    } else {
+      controles.style.display = 'none';
+    }
+  }
+}
+
+// NOVO: Enviar todas as alterações de uma vez
+async function enviarTodasAlteracoes() {
+  const turma = document.getElementById("turma").value;
+  const dataVal = document.getElementById("dataConsulta").value;
+  
+  if (!turma || !dataVal) {
+    alert("Selecione turma e data primeiro!");
+    return;
+  }
+
+  if (Object.keys(alteracoesPendentes).length === 0) {
+    alert("Nenhuma alteração para enviar!");
+    return;
+  }
+
+  const btnEnviar = document.getElementById('btnEnviarTudo');
+  const progressoDiv = document.getElementById('progressoEnvio');
+  const progressoFill = document.getElementById('progressoFill');
+  const statusDiv = document.getElementById('statusEnvio');
+  
+  btnEnviar.disabled = true;
+  btnEnviar.innerText = '⏳ Enviando...';
+  progressoDiv.style.display = 'block';
+  
+  const partes = dataVal.split("-");
+  const dia = parseInt(partes[2]);
+  const mes = parseInt(partes[1]);
+  
+  let sucessos = 0;
+  let erros = 0;
+  const total = Object.keys(alteracoesPendentes).length;
+  let processados = 0;
+
+  for (const id in alteracoesPendentes) {
+    const valor = alteracoesPendentes[id];
+    
+    try {
+      const resp = await jsonp(`${URL_SCRIPT}?turma=${turma}&id=${id}&valor=${valor}&dia=${dia}&mes=${mes}`);
+      
+      if (!resp.erro) {
+        sucessos++;
+        delete alteracoesPendentes[id];
+      } else {
+        erros++;
+      }
+    } catch (e) {
+      erros++;
+    }
+    
+    processados++;
+    progressoFill.style.width = ((processados / total) * 100) + '%';
+    await new Promise(r => setTimeout(r, 50));
+  }
+
+  statusDiv.innerHTML = `<div class="status-envio ${erros === 0 ? 'status-success' : 'status-error'}">✅ Sucesso: ${sucessos} | ❌ Erros: ${erros}</div>`;
+  
+  btnEnviar.disabled = false;
+  btnEnviar.innerText = '📤 Enviar Todas as Alterações';
+  
+  setTimeout(() => {
+    progressoDiv.style.display = 'none';
+    progressoFill.style.width = '0%';
+    statusDiv.innerHTML = '';
+    mostrarBotaoEnvio();
+  }, 3000);
+
+  if (sucessos > 0) {
+    setTimeout(() => carregarTurma(), 1000);
+  }
+}
+
+// FUNÇÃO ORIGINAL (não modificada)
 async function carregarTurma() {
   const turma = document.getElementById("turma").value;
   if (!turma) return;
@@ -190,15 +289,14 @@ async function carregarTurma() {
     lista.innerHTML = "";
 
     registros = {};
+    alteracoesPendentes = {}; // NOVO: limpar pendências ao carregar
+    mostrarBotaoEnvio(); // NOVO: esconder botão
 
-    // Ordenação alfabética (transferidos no final)
     const registrosOrdenados = [...resp.registros].sort((a, b) => {
       const aTransferido = a.nome.startsWith('*');
       const bTransferido = b.nome.startsWith('*');
-
       if (aTransferido && !bTransferido) return 1;
       if (!aTransferido && bTransferido) return -1;
-
       return a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' });
     });
 
@@ -206,7 +304,6 @@ async function carregarTurma() {
       const div = document.createElement("div");
       div.className = "aluno";
       div.id = `aluno-${a.id}`;
-
       if (a.nome.startsWith('*')) div.classList.add('transferido');
 
       const valorAtual = (a.valor !== undefined && a.valor !== null) ? String(a.valor) : "";
@@ -215,7 +312,6 @@ async function carregarTurma() {
         div.innerHTML = `<strong>${a.nome}</strong><br><div style="color: #5bc0de; font-weight: bold; margin-top: 5px;">Dia Não Letivo / Atividade Externa</div>`;
       } else if (valorAtual === "N") {
         div.innerHTML = `<strong>${a.nome}</strong><br><div style="color: #999; font-weight: bold; margin-top: 5px;">📌 Transferido - Não Registrado</div>`;
-        // Esconder botões se for N
         const botoesDiv = div.querySelector('.botoes');
         if (botoesDiv) botoesDiv.style.display = "none";
       } else {
@@ -232,7 +328,6 @@ async function carregarTurma() {
       }
 
       lista.appendChild(div);
-
       registros[a.id] = valorAtual;
       atualizarVisual(a.id);
 
@@ -249,62 +344,45 @@ async function carregarTurma() {
 function atualizarVisual(id) {
   const div = document.getElementById(`aluno-${id}`);
   if (!div) return;
-
   div.querySelectorAll(".botoes button").forEach(btn => {
     btn.classList.toggle("selecionado", registros[id] === btn.getAttribute("data-valor"));
   });
 }
 
+// MODIFICADO: Agora acumula alterações em vez de enviar imediatamente
 async function registrar(event, turma, id, valor) {
   const btn = event?.target;
-
   if (btn) btn.classList.add("loading");
 
   try {
     const dataVal = document.getElementById("dataConsulta").value;
-
     if (!dataVal) {
       alert("Selecione uma data antes de registrar.");
       if (btn) btn.classList.remove("loading");
       return;
     }
 
-    const partes = dataVal.split("-");
-    const dia = parseInt(partes[2]);
-    const mes = parseInt(partes[1]);
-
-    const resp = await jsonp(`${URL_SCRIPT}?turma=${turma}&id=${id}&valor=${valor}&dia=${dia}&mes=${mes}`);
-
-    if (!resp.erro) {
-      registros[id] = valor;
-      atualizarVisual(id);
-    } else {
-      alert("Erro do servidor: " + resp.erro);
-    }
+    // Salva localmente e adiciona às pendentes
+    registros[id] = valor;
+    alteracoesPendentes[id] = valor;
+    atualizarVisual(id);
+    mostrarBotaoEnvio(); // Mostra o botão de enviar
 
   } catch (e) {
-    alert("Erro ao registrar. Verifique a conexão.");
+    alert("Erro ao marcar. Tente novamente.");
   }
 
   if (btn) btn.classList.remove("loading");
 }
 
-// Função para marcar todos os transferidos (***) como "N"
+// MODIFICADO: Marca localmente em vez de enviar um por um
 async function marcarTransferidosComoN() {
   const turma = document.getElementById("turma").value;
-  if (!turma) {
-    alert("Selecione uma turma primeiro.");
-    return;
-  }
+  if (!turma) { alert("Selecione uma turma primeiro."); return; }
 
-  // Verificar se a data está selecionada
   const dataVal = document.getElementById("dataConsulta").value;
-  if (!dataVal) {
-    alert("Selecione uma data antes de marcar os transferidos.");
-    return;
-  }
+  if (!dataVal) { alert("Selecione uma data antes de marcar os transferidos."); return; }
 
-  // Encontrar todos os alunos com nome começando com ***
   const divs = document.querySelectorAll('.aluno');
   const transferidos = [];
   
@@ -320,71 +398,20 @@ async function marcarTransferidosComoN() {
     return;
   }
 
-  const confirmar = confirm(`Deseja marcar ${transferidos.length} aluno(s) transferido(s) como "N" (Transferido - Não Registrado) na data ${dataVal}?`);
+  if (!confirm(`Deseja marcar ${transferidos.length} aluno(s) transferido(s) como "N" na data ${dataVal}?`)) return;
   
-  if (!confirmar) return;
-
-  // Mostrar loading visual no botão do menu via toast
-  const menuOpcao = event?.target;
-  if (menuOpcao) menuOpcao.style.opacity = "0.5";
-  
-  let sucesso = 0;
-  let erros = 0;
-
-  for (const div of transferidos) {
-    const idMatch = div.id.match(/\d+$/);
-    if (!idMatch) continue;
+  // Marca localmente
+  transferidos.forEach(div => {
+    const id = parseInt(div.id.match(/\d+$/)[0]);
+    registros[id] = "N";
+    alteracoesPendentes[id] = "N";
     
-    const id = parseInt(idMatch[0]);
-    const nome = div.querySelector('strong').innerText;
-    
-    try {
-      const partes = dataVal.split("-");
-      const dia = parseInt(partes[2]);
-      const mes = parseInt(partes[1]);
-      
-      const resp = await jsonp(`${URL_SCRIPT}?turma=${turma}&id=${id}&valor=N&dia=${dia}&mes=${mes}`);
-      
-      if (!resp.erro) {
-        registros[id] = "N";
-        sucesso++;
-        // Atualizar visualmente a div
-        const botoesDiv = div.querySelector('.botoes');
-        if (botoesDiv) {
-          // Esconder botões
-          botoesDiv.style.display = "none";
-          // Adicionar texto indicativo
-          const statusDiv = document.createElement('div');
-          statusDiv.style.cssText = "color: #999; font-weight: bold; margin-top: 5px; font-size: 12px;";
-          statusDiv.innerText = "📌 Transferido - Não Registrado";
-          const antigo = div.querySelector('.status-transferido');
-          if (antigo) antigo.remove();
-          statusDiv.className = "status-transferido";
-          div.appendChild(statusDiv);
-        }
-      } else {
-        erros++;
-        console.error(`Erro ao marcar ${nome}:`, resp.erro);
-      }
-      
-      // Pequena pausa para não sobrecarregar
-      await new Promise(r => setTimeout(r, 100));
-      
-    } catch (e) {
-      erros++;
-      console.error(`Erro ao marcar ${nome}:`, e);
-    }
-  }
+    const botoesDiv = div.querySelector('.botoes');
+    if (botoesDiv) botoesDiv.style.display = "none";
+  });
   
-  if (menuOpcao) menuOpcao.style.opacity = "";
-  
-  // Mostrar resultado
-  alert(`✅ Finalizado!\n\nSucesso: ${sucesso} aluno(s) marcado(s) como N\n❌ Erros: ${erros}`);
-  
-  // Recarregar para mostrar o status atualizado
-  if (sucesso > 0) {
-    setTimeout(() => carregarTurma(), 500);
-  }
+  mostrarBotaoEnvio();
+  alert(`✅ ${transferidos.length} aluno(s) marcado(s) localmente.\nClique em "Enviar Tudo de Uma Vez" para salvar no servidor.`);
 }
 
 function verificarPendencias() {
@@ -393,14 +420,11 @@ function verificarPendencias() {
 
   divs.forEach(div => {
     const nome = div.querySelector('strong').innerText;
-
-    // Ignorar transferidos
     if (nome.startsWith('***')) return;
 
     const botoesContainer = div.querySelector('.botoes');
     if (!botoesContainer) return;
 
-    // Verificar se há algum botão selecionado
     const temSelecionado = div.querySelector('.selecionado');
     if (!temSelecionado) {
       pendentes.push(nome);
@@ -426,14 +450,11 @@ function verificarPendencias() {
   overlay.style.display = "flex";
 }
 
-function fecharAlerta() {
-  document.getElementById('alertOverlay').style.display = "none";
-}
+function fecharAlerta() { document.getElementById('alertOverlay').style.display = "none"; }
 
 function atualizarInfoTurma() {
   const t = document.getElementById("turma").value;
   const info = document.getElementById("infoTurma");
-
   info.innerHTML = (t && PROFESSORES[t])
     ? `<div style="font-size:14px;opacity:0.7;">Turma ${t}</div><div>${PROFESSORES[t]}</div>`
     : "";
@@ -441,16 +462,11 @@ function atualizarInfoTurma() {
 
 function toggleMenu() {
   const m = document.getElementById("side-menu");
-  if (m.style.width === "250px") {
-    m.style.width = "0";
-  } else {
-    m.style.width = "250px";
-  }
+  m.style.width = m.style.width === "250px" ? "0" : "250px";
 }
 
 function marcarTodosNaoLetivo() {
   const btns = document.querySelectorAll('.btnA');
-
   if (btns.length > 0 && confirm("Deseja marcar TODOS como Não Letivo?")) {
     btns.forEach(b => { if (!b.disabled) b.click(); });
     toggleMenu();
