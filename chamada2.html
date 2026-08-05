@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <script src="config.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Chamada_3 Digital_V11</title>
+<title>Chamada_4 Digital_V12</title>
 <style>
   body { font-family: Arial, sans-serif; background: #f7f7f7; margin: 0; padding: 15px; }
   h2 { text-align: center; margin-bottom: 10px; }
@@ -300,6 +300,9 @@ async function carregarTurma() {
       return a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' });
     });
 
+    // 👇 MOSTRA O TOTAL DE ESTUDANTES (aqui está o segredo!)
+    atualizarInfoTurma(registrosOrdenados.length);
+
     registrosOrdenados.forEach((a) => {
       const div = document.createElement("div");
       div.className = "aluno";
@@ -452,14 +455,23 @@ function verificarPendencias() {
 
 function fecharAlerta() { document.getElementById('alertOverlay').style.display = "none"; }
 
-function atualizarInfoTurma() {
+function atualizarInfoTurma(totalEstudantes = null) {
   const t = document.getElementById("turma").value;
   const info = document.getElementById("infoTurma");
-  info.innerHTML = (t && PROFESSORES[t])
-    ? `<div style="font-size:14px;opacity:0.7;">Turma ${t}</div><div>${PROFESSORES[t]}</div>`
-    : "";
+  
+  if (t && PROFESSORES[t]) {
+    let html = `<div style="font-size:14px;opacity:0.7;">Turma ${t}</div>
+                <div>${PROFESSORES[t]}</div>`;
+    
+    if (totalEstudantes !== null && totalEstudantes > 0) {
+      html += `<div style="font-size:14px;opacity:0.8;margin-top:3px;">👥 ${totalEstudantes} estudantes</div>`;
+    }
+    
+    info.innerHTML = html;
+  } else {
+    info.innerHTML = "";
+  }
 }
-
 function toggleMenu() {
   const m = document.getElementById("side-menu");
   m.style.width = m.style.width === "250px" ? "0" : "250px";
