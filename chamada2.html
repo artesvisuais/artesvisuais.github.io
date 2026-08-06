@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <script src="config.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Chamada_4 Digital_V12</title>
+<title>Chamada_5 Digital_V11 - Backup Multituma</title>
 <style>
   body { font-family: Arial, sans-serif; background: #f7f7f7; margin: 0; padding: 15px; }
   h2 { text-align: center; margin-bottom: 10px; }
@@ -34,7 +34,7 @@
   
   .info-turma { margin-top: 8px; font-weight: bold; font-size: 16px; color: #444; }
 
-  /* NOVO: Botão de Envio em Lote */
+  /* Botão de Envio em Lote */
   .btn-enviar-tudo {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -58,8 +58,35 @@
   .status-envio { padding: 8px; margin: 5px 0; border-radius: 5px; font-size: 14px; }
   .status-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
   .status-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+  .status-warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
 
-  @media (max-width: 480px) { h2 { margin-top: 50px; } #dataConsulta { width: 120px; font-size: 14px; } }
+  /* Indicador de status offline */
+  .offline-indicator {
+    display: none;
+    background: #f8d7da;
+    color: #721c24;
+    padding: 8px;
+    text-align: center;
+    border-radius: 8px;
+    margin: 10px 0;
+    font-weight: bold;
+  }
+  .offline-indicator.show { display: block; }
+
+  .backup-info {
+    background: #fff3cd;
+    color: #856404;
+    padding: 8px;
+    text-align: center;
+    border-radius: 8px;
+    margin: 10px 0;
+    font-size: 14px;
+  }
+
+  @media (max-width: 480px) { 
+    h2 { margin-top: 50px; } 
+    #dataConsulta { width: 120px; font-size: 14px; } 
+  }
 
   .botoes button { transition: all 0.15s ease; position: relative; }
   .botoes button:active { transform: scale(0.92); filter: brightness(0.9); }
@@ -91,6 +118,12 @@
   <a href="#" onclick="verificarPendencias(); toggleMenu();">Verificar Pendências 🔍</a>
   <a href="#" onclick="marcarTransferidosComoN(); toggleMenu();">Marcar Transferidos como N 📝</a>
   <a href="#" onclick="enviarTodasAlteracoes(); toggleMenu();">📤 Enviar Tudo de Uma Vez</a>
+  <a href="#" onclick="salvarBackupLocal(); toggleMenu();">💾 Salvar Backup</a>
+  <a href="#" onclick="listarBackups(); toggleMenu();">📋 Listar Backups</a>
+  <a href="#" onclick="exportarBackupArquivo(); toggleMenu();">📥 Exportar Backup</a>
+  <a href="#" onclick="document.getElementById('inputImportar').click(); toggleMenu();">📤 Importar Backup</a>
+  <a href="#" onclick="exportarTodosBackups(); toggleMenu();">📦 Exportar Todos</a>
+  <input type="file" id="inputImportar" style="display:none" accept=".json" onchange="importarBackupArquivo(this.files[0])">
   <a href="https://github.io">Editar ⚙️</a>
   <a href="#" onclick="marcarTodosNaoLetivo(); toggleMenu();">Marcar (Não Letivo) 🚫</a>
 </div>
@@ -118,12 +151,17 @@
   <button id="refreshBtn">Atualizar</button>
 </div>
 
+<div id="offlineIndicator" class="offline-indicator">📡 Sem conexão com a internet - Alterações serão salvas localmente</div>
+<div id="backupInfo" class="backup-info" style="display:none;"></div>
+
 <div id="infoTurma" class="info-turma"></div>
 
-<!-- NOVO: Botão de Envio em Lote (só aparece quando há alterações) -->
 <div id="controles-envio" style="margin: 15px 0; display: none;">
   <button id="btnEnviarTudo" class="btn-enviar-tudo" onclick="enviarTodasAlteracoes()">
     📤 Enviar Todas as Alterações
+  </button>
+  <button class="btn-enviar-tudo" style="background: #f0ad4e; margin-top: 5px;" onclick="salvarBackupLocal()">
+    💾 Salvar Backup Local (sem enviar)
   </button>
   <div id="progressoEnvio" style="display: none;">
     <div class="progress-bar"><div id="progressoFill" class="progress-fill" style="width: 0%"></div></div>
@@ -137,7 +175,7 @@
 const URL_SCRIPT = CONFIG.URL_SCRIPT;
 let registros = {};
 let dataAtual = new Date();
-let alteracoesPendentes = {}; // NOVO: armazena alterações não enviadas
+let alteracoesPendentes = {};
 
 const PROFESSORES = {
   "1E": "Profª Mônica", "2G": "Profª Renata", "3E": "Profª Marta",
@@ -145,6 +183,293 @@ const PROFESSORES = {
   "5B": "Profª Flavia", "5C": "Profª Erika", "5E": "Profª Liza",
   "5F": "Prof Lucas", "5DD": "Prof. Donizete", "EJA1": "Prof. ", "EJA2": "Profª "
 };
+
+// ============= FUNÇÕES DE BACKUP OFFLINE (MULTITURMA) =============
+
+function verificarConexao() {
+  return navigator.onLine;
+}
+
+function atualizarIndicadorOffline() {
+  const indicador = document.getElementById('offlineIndicator');
+  if (!verificarConexao()) {
+    indicador.classList.add('show');
+  } else {
+    indicador.classList.remove('show');
+  }
+}
+
+function adicionarBackupNaLista(turma, data) {
+  let listaBackups = JSON.parse(localStorage.getItem('chamada_lista_backups') || '[]');
+  listaBackups = listaBackups.filter(b => !(b.turma === turma && b.data === data));
+  listaBackups.push({
+    turma: turma,
+    data: data,
+    timestamp: new Date().toISOString(),
+    pendentes: Object.keys(alteracoesPendentes).length
+  });
+  localStorage.setItem('chamada_lista_backups', JSON.stringify(listaBackups));
+}
+
+function salvarBackupLocal() {
+  const turma = document.getElementById("turma").value;
+  const data = document.getElementById("dataConsulta").value;
+  
+  if (!turma || !data) {
+    alert("Selecione turma e data primeiro!");
+    return;
+  }
+  
+  const chave = `chamada_backup_${turma}_${data}`;
+  
+  const backup = {
+    turma: turma,
+    data: data,
+    alteracoes: alteracoesPendentes,
+    registros: registros,
+    timestamp: new Date().toISOString()
+  };
+  
+  try {
+    localStorage.setItem(chave, JSON.stringify(backup));
+    adicionarBackupNaLista(turma, data);
+    
+    const info = document.getElementById('backupInfo');
+    info.style.display = 'block';
+    info.innerHTML = `💾 Backup salvo! Turma: ${turma} - Data: ${data} - Pendentes: ${Object.keys(alteracoesPendentes).length} registros`;
+    
+    setTimeout(() => { info.style.display = 'none'; }, 5000);
+    
+    console.log('Backup salvo:', chave);
+  } catch (e) {
+    if (e.name === 'QuotaExceededError') {
+      limparBackupsAntigos();
+      try {
+        localStorage.setItem(chave, JSON.stringify(backup));
+        adicionarBackupNaLista(turma, data);
+        alert("⚠️ Espaço cheio! Backups antigos foram limpos.");
+      } catch (e2) {
+        alert("Erro ao salvar backup: espaço insuficiente. Exporte para arquivo!");
+      }
+    } else {
+      alert("Erro ao salvar backup: " + e.message);
+    }
+  }
+}
+
+function listarBackups() {
+  const listaBackups = JSON.parse(localStorage.getItem('chamada_lista_backups') || '[]');
+  
+  if (listaBackups.length === 0) {
+    alert("Nenhum backup encontrado!");
+    return;
+  }
+  
+  let mensagem = "📋 Backups disponíveis:\n\n";
+  
+  listaBackups.forEach((b, index) => {
+    mensagem += `${index + 1}. Turma: ${b.turma} | Data: ${b.data} | Pendentes: ${b.pendentes}\n`;
+  });
+  
+  mensagem += "\nDeseja restaurar algum?";
+  
+  if (confirm(mensagem)) {
+    mostrarMenuRestauracao(listaBackups);
+  }
+}
+
+function mostrarMenuRestauracao(listaBackups) {
+  let opcoes = "Digite o número do backup para restaurar:\n\n";
+  
+  listaBackups.forEach((b, index) => {
+    opcoes += `${index + 1}. Turma: ${b.turma} | Data: ${b.data} | Pendentes: ${b.pendentes}\n`;
+  });
+  
+  opcoes += "\n0. Cancelar";
+  
+  const escolha = prompt(opcoes);
+  
+  if (escolha && parseInt(escolha) > 0 && parseInt(escolha) <= listaBackups.length) {
+    const backup = listaBackups[parseInt(escolha) - 1];
+    restaurarBackupPorTurmaData(backup.turma, backup.data);
+  }
+}
+
+function restaurarBackupPorTurmaData(turma, data) {
+  const chave = `chamada_backup_${turma}_${data}`;
+  const backupStr = localStorage.getItem(chave);
+  
+  if (!backupStr) {
+    alert("Backup não encontrado!");
+    return;
+  }
+  
+  const backup = JSON.parse(backupStr);
+  
+  document.getElementById("turma").value = backup.turma;
+  document.getElementById("dataConsulta").value = backup.data;
+  alteracoesPendentes = backup.alteracoes || {};
+  registros = backup.registros || {};
+  
+  carregarTurma();
+  mostrarBotaoEnvio();
+  
+  alert(`✅ Backup restaurado!\nTurma: ${backup.turma}\nData: ${backup.data}\nPendentes: ${Object.keys(backup.alteracoes).length} registros`);
+}
+
+function limparBackupsAntigos() {
+  let listaBackups = JSON.parse(localStorage.getItem('chamada_lista_backups') || '[]');
+  listaBackups.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  
+  const paraRemover = listaBackups.slice(10);
+  
+  paraRemover.forEach(b => {
+    const chave = `chamada_backup_${b.turma}_${b.data}`;
+    localStorage.removeItem(chave);
+  });
+  
+  listaBackups = listaBackups.slice(0, 10);
+  localStorage.setItem('chamada_lista_backups', JSON.stringify(listaBackups));
+}
+
+function salvarBackupSilencioso() {
+  const turma = document.getElementById("turma").value;
+  const data = document.getElementById("dataConsulta").value;
+  
+  if (!turma || !data) return;
+  
+  const chave = `chamada_backup_${turma}_${data}`;
+  
+  const backup = {
+    turma: turma,
+    data: data,
+    alteracoes: alteracoesPendentes,
+    registros: registros,
+    timestamp: new Date().toISOString()
+  };
+  
+  try {
+    localStorage.setItem(chave, JSON.stringify(backup));
+    adicionarBackupNaLista(turma, data);
+    console.log('Backup automático:', chave);
+  } catch (e) {
+    if (e.name === 'QuotaExceededError') {
+      limparBackupsAntigos();
+    }
+  }
+}
+
+function exportarBackupArquivo() {
+  const turma = document.getElementById("turma").value;
+  const data = document.getElementById("dataConsulta").value;
+  
+  if (!turma || !data) {
+    alert("Selecione turma e data primeiro!");
+    return;
+  }
+  
+  const chave = `chamada_backup_${turma}_${data}`;
+  const backupStr = localStorage.getItem(chave);
+  
+  if (!backupStr) {
+    alert("Nenhum backup encontrado para esta turma/data!");
+    return;
+  }
+  
+  const backup = JSON.parse(backupStr);
+  
+  const blob = new Blob([JSON.stringify(backup, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `backup_chamada_${turma}_${data}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function exportarTodosBackups() {
+  const listaBackups = JSON.parse(localStorage.getItem('chamada_lista_backups') || '[]');
+  
+  if (listaBackups.length === 0) {
+    alert("Nenhum backup para exportar!");
+    return;
+  }
+  
+  const todosBackups = [];
+  
+  listaBackups.forEach(b => {
+    const chave = `chamada_backup_${b.turma}_${b.data}`;
+    const backupStr = localStorage.getItem(chave);
+    if (backupStr) {
+      todosBackups.push(JSON.parse(backupStr));
+    }
+  });
+  
+  const blob = new Blob([JSON.stringify(todosBackups, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `backup_chamada_todas_turmas_${formatarData(new Date())}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importarBackupArquivo(file) {
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const dados = JSON.parse(e.target.result);
+      
+      if (!dados.turma || !dados.data) {
+        alert("Arquivo de backup inválido!");
+        return;
+      }
+      
+      document.getElementById("turma").value = dados.turma;
+      document.getElementById("dataConsulta").value = dados.data;
+      alteracoesPendentes = dados.alteracoes || {};
+      registros = dados.registros || {};
+      
+      carregarTurma();
+      mostrarBotaoEnvio();
+      
+      alert(`✅ Backup importado com sucesso!\nTurma: ${dados.turma}\nData: ${dados.data}\nPendentes: ${Object.keys(dados.alteracoes || {}).length} registros`);
+    } catch (e) {
+      alert("Erro ao importar arquivo: " + e.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function verificarBackupsAoIniciar() {
+  const listaBackups = JSON.parse(localStorage.getItem('chamada_lista_backups') || '[]');
+  const backupsPendentes = listaBackups.filter(b => b.pendentes > 0);
+  
+  if (backupsPendentes.length === 0) return;
+  
+  let mensagem = `📋 ${backupsPendentes.length} backup(s) pendente(s):\n\n`;
+  
+  backupsPendentes.forEach((b, index) => {
+    mensagem += `${index + 1}. Turma: ${b.turma} | Data: ${b.data} | Pendentes: ${b.pendentes}\n`;
+  });
+  
+  mensagem += "\nDeseja restaurar algum?";
+  
+  if (confirm(mensagem)) {
+    mostrarMenuRestauracao(backupsPendentes);
+  }
+}
+
+// Backup automático a cada 30 segundos
+setInterval(() => {
+  if (Object.keys(alteracoesPendentes).length > 0) {
+    salvarBackupSilencioso();
+  }
+}, 30000);
+
+// ============= FUNÇÕES ORIGINAIS =============
 
 function formatarData(d) {
   return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, '0') + "-" + String(d.getDate()).padStart(2, '0');
@@ -174,7 +499,6 @@ function setDataAtualFromInput() {
   }
 }
 
-// NOVO: Mostrar/esconder botão de envio
 function mostrarBotaoEnvio() {
   const controles = document.getElementById('controles-envio');
   if (controles) {
@@ -186,7 +510,6 @@ function mostrarBotaoEnvio() {
   }
 }
 
-// NOVO: Enviar todas as alterações de uma vez
 async function enviarTodasAlteracoes() {
   const turma = document.getElementById("turma").value;
   const dataVal = document.getElementById("dataConsulta").value;
@@ -196,10 +519,18 @@ async function enviarTodasAlteracoes() {
     return;
   }
 
+  if (!verificarConexao()) {
+    salvarBackupLocal();
+    alert("❌ Sem conexão com a internet!\n\n💾 Suas alterações foram salvas localmente.\n📤 Quando a internet voltar, clique em 'Enviar Tudo de Uma Vez' novamente.");
+    return;
+  }
+
   if (Object.keys(alteracoesPendentes).length === 0) {
     alert("Nenhuma alteração para enviar!");
     return;
   }
+
+  salvarBackupSilencioso();
 
   const btnEnviar = document.getElementById('btnEnviarTudo');
   const progressoDiv = document.getElementById('progressoEnvio');
@@ -216,6 +547,7 @@ async function enviarTodasAlteracoes() {
   
   let sucessos = 0;
   let erros = 0;
+  let errosConexao = 0;
   const total = Object.keys(alteracoesPendentes).length;
   let processados = 0;
 
@@ -233,6 +565,13 @@ async function enviarTodasAlteracoes() {
       }
     } catch (e) {
       erros++;
+      errosConexao++;
+      
+      if (errosConexao >= 3) {
+        statusDiv.innerHTML = `<div class="status-envio status-warning">⚠️ Muitas falhas de conexão! Salvando backup...</div>`;
+        salvarBackupLocal();
+        break;
+      }
     }
     
     processados++;
@@ -240,7 +579,16 @@ async function enviarTodasAlteracoes() {
     await new Promise(r => setTimeout(r, 50));
   }
 
-  statusDiv.innerHTML = `<div class="status-envio ${erros === 0 ? 'status-success' : 'status-error'}">✅ Sucesso: ${sucessos} | ❌ Erros: ${erros}</div>`;
+  let statusHTML = '';
+  if (erros === 0) {
+    statusHTML = `<div class="status-envio status-success">✅ Sucesso: ${sucessos} registros enviados!</div>`;
+  } else if (errosConexao > 0) {
+    statusHTML = `<div class="status-envio status-warning">⚠️ Envio parcial: ${sucessos} enviados | ${erros} falhas<br>Backup salvo localmente!</div>`;
+  } else {
+    statusHTML = `<div class="status-envio status-error">❌ Sucesso: ${sucessos} | Erros: ${erros}</div>`;
+  }
+  
+  statusDiv.innerHTML = statusHTML;
   
   btnEnviar.disabled = false;
   btnEnviar.innerText = '📤 Enviar Todas as Alterações';
@@ -250,14 +598,18 @@ async function enviarTodasAlteracoes() {
     progressoFill.style.width = '0%';
     statusDiv.innerHTML = '';
     mostrarBotaoEnvio();
-  }, 3000);
+  }, 5000);
+
+  if (Object.keys(alteracoesPendentes).length === 0) {
+    localStorage.removeItem(`chamada_backup_${turma}_${dataVal}`);
+    console.log('Backup removido - todos os dados enviados');
+  }
 
   if (sucessos > 0) {
-    setTimeout(() => carregarTurma(), 1000);
+    setTimeout(() => carregarTurma(), 1500);
   }
 }
 
-// FUNÇÃO ORIGINAL (não modificada)
 async function carregarTurma() {
   const turma = document.getElementById("turma").value;
   if (!turma) return;
@@ -289,8 +641,8 @@ async function carregarTurma() {
     lista.innerHTML = "";
 
     registros = {};
-    alteracoesPendentes = {}; // NOVO: limpar pendências ao carregar
-    mostrarBotaoEnvio(); // NOVO: esconder botão
+    alteracoesPendentes = {};
+    mostrarBotaoEnvio();
 
     const registrosOrdenados = [...resp.registros].sort((a, b) => {
       const aTransferido = a.nome.startsWith('*');
@@ -300,7 +652,6 @@ async function carregarTurma() {
       return a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' });
     });
 
-    // 👇 MOSTRA O TOTAL DE ESTUDANTES (aqui está o segredo!)
     atualizarInfoTurma(registrosOrdenados.length);
 
     registrosOrdenados.forEach((a) => {
@@ -352,7 +703,24 @@ function atualizarVisual(id) {
   });
 }
 
-// MODIFICADO: Agora acumula alterações em vez de enviar imediatamente
+function atualizarInfoTurma(totalEstudantes = null) {
+  const t = document.getElementById("turma").value;
+  const info = document.getElementById("infoTurma");
+  
+  if (t && PROFESSORES[t]) {
+    let html = `<div style="font-size:14px;opacity:0.7;">Turma ${t}</div>
+                <div>${PROFESSORES[t]}</div>`;
+    
+    if (totalEstudantes !== null && totalEstudantes > 0) {
+      html += `<div style="font-size:14px;opacity:0.8;margin-top:3px;">👥 ${totalEstudantes} estudantes</div>`;
+    }
+    
+    info.innerHTML = html;
+  } else {
+    info.innerHTML = "";
+  }
+}
+
 async function registrar(event, turma, id, valor) {
   const btn = event?.target;
   if (btn) btn.classList.add("loading");
@@ -365,11 +733,11 @@ async function registrar(event, turma, id, valor) {
       return;
     }
 
-    // Salva localmente e adiciona às pendentes
     registros[id] = valor;
     alteracoesPendentes[id] = valor;
     atualizarVisual(id);
-    mostrarBotaoEnvio(); // Mostra o botão de enviar
+    mostrarBotaoEnvio();
+    salvarBackupSilencioso();
 
   } catch (e) {
     alert("Erro ao marcar. Tente novamente.");
@@ -378,7 +746,6 @@ async function registrar(event, turma, id, valor) {
   if (btn) btn.classList.remove("loading");
 }
 
-// MODIFICADO: Marca localmente em vez de enviar um por um
 async function marcarTransferidosComoN() {
   const turma = document.getElementById("turma").value;
   if (!turma) { alert("Selecione uma turma primeiro."); return; }
@@ -403,7 +770,6 @@ async function marcarTransferidosComoN() {
 
   if (!confirm(`Deseja marcar ${transferidos.length} aluno(s) transferido(s) como "N" na data ${dataVal}?`)) return;
   
-  // Marca localmente
   transferidos.forEach(div => {
     const id = parseInt(div.id.match(/\d+$/)[0]);
     registros[id] = "N";
@@ -414,6 +780,8 @@ async function marcarTransferidosComoN() {
   });
   
   mostrarBotaoEnvio();
+  salvarBackupSilencioso();
+  
   alert(`✅ ${transferidos.length} aluno(s) marcado(s) localmente.\nClique em "Enviar Tudo de Uma Vez" para salvar no servidor.`);
 }
 
@@ -455,23 +823,6 @@ function verificarPendencias() {
 
 function fecharAlerta() { document.getElementById('alertOverlay').style.display = "none"; }
 
-function atualizarInfoTurma(totalEstudantes = null) {
-  const t = document.getElementById("turma").value;
-  const info = document.getElementById("infoTurma");
-  
-  if (t && PROFESSORES[t]) {
-    let html = `<div style="font-size:14px;opacity:0.7;">Turma ${t}</div>
-                <div>${PROFESSORES[t]}</div>`;
-    
-    if (totalEstudantes !== null && totalEstudantes > 0) {
-      html += `<div style="font-size:14px;opacity:0.8;margin-top:3px;">👥 ${totalEstudantes} estudantes</div>`;
-    }
-    
-    info.innerHTML = html;
-  } else {
-    info.innerHTML = "";
-  }
-}
 function toggleMenu() {
   const m = document.getElementById("side-menu");
   m.style.width = m.style.width === "250px" ? "0" : "250px";
@@ -485,11 +836,28 @@ function marcarTodosNaoLetivo() {
   }
 }
 
+// Event Listeners
 document.getElementById("dataConsulta").addEventListener("change", carregarTurma);
 document.getElementById("refreshBtn").addEventListener("click", carregarTurma);
 
+window.addEventListener('online', () => {
+  atualizarIndicadorOffline();
+  console.log('Conexão restaurada!');
+});
+
+window.addEventListener('offline', () => {
+  atualizarIndicadorOffline();
+  salvarBackupSilencioso();
+  console.log('Conexão perdida! Backup salvo.');
+});
+
 window.onload = () => {
   document.getElementById("dataConsulta").value = formatarData(new Date());
+  atualizarIndicadorOffline();
+  
+  setTimeout(() => {
+    verificarBackupsAoIniciar();
+  }, 1000);
 };
 </script>
 </body>
