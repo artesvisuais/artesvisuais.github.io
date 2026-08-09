@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <base target="_top">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copiar Faltas</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #f0f2f5;
+            padding: 16px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px 20px 30px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        h1 {
+            font-size: 20px;
+            color: #1a1a1a;
+            text-align: center;
+            margin-bottom: 24px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+        .campo {
+            margin-bottom: 16px;
+        }
+        .campo label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 4px;
+        }
+        .campo select,
+        .campo input {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 16px;
+            border: 1px solid #d0d4dd;
+            border-radius: 10px;
+            background: #fafbfc;
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+        .campo select:focus,
+        .campo input:focus {
+            outline: none;
+            border-color: #2e7d32;
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
+        }
+        .campo select {
+            color: #1a1a1a;
+        }
+        .campo select option {
+            padding: 6px;
+        }
+        .btn-copiar {
+            width: 100%;
+            padding: 14px;
+            background: #1a73e8;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 6px;
+        }
+        .btn-copiar:active {
+            transform: scale(0.97);
+        }
+        .btn-copiar:disabled {
+            background: #a0b8d4;
+            transform: none;
+            cursor: not-allowed;
+        }
+        #status {
+            margin-top: 16px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            text-align: center;
+            display: none;
+            line-height: 1.4;
+        }
+        .status-sucesso {
+            background: #e6f7e6;
+            color: #1e5e2e;
+            display: block !important;
+        }
+        .status-erro {
+            background: #fde8e8;
+            color: #a22;
+            display: block !important;
+        }
+        .status-aviso {
+            background: #fff3cd;
+            color: #856404;
+            display: block !important;
+        }
+        .status-info {
+            background: #d6eaf8;
+            color: #1a5276;
+            display: block !important;
+        }
+        .dica {
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+            margin-top: 16px;
+            border-top: 1px solid #eee;
+            padding-top: 14px;
+        }
+        .dica strong {
+            color: #444;
+        }
+        .seletor-turma {
+            background-color: #eef1f5;
+        }
+        #infoColuna {
+            margin-top: 12px;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #555;
+            text-align: center;
+            border: 1px dashed #ccc;
+            display: none;
+        }
+        #infoColuna span {
+            font-weight: 600;
+            color: #1a73e8;
+        }
+        #debugInfo {
+            margin-top: 12px;
+            padding: 8px 12px;
+            background: #f1f1f1;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #555;
+            font-family: monospace;
+            display: none;
+            word-break: break-all;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📋 Copiar Faltas</h1>
+
+    <div class="campo">
+        <label for="turma">Turma</label>
+        <select id="turma" class="seletor-turma">
+            <option value="">— Selecionar —</option>
+            <option value="1E" style="background:#4a90d9;color:#fff;">1E</option>
+            <option value="2G" style="background:#4a90d9;color:#fff;">2G</option>
+            <option value="3E" style="background:#4a90d9;color:#fff;">3E</option>
+            <option value="5E" style="background:#4a90d9;color:#fff;">5E</option>
+            <option value="5F" style="background:#4a90d9;color:#fff;">5F</option>
+            <option value="4A" style="background:#4a90d9;color:#fff;">4A</option>
+            <option value="4B" style="background:#4a90d9;color:#fff;">4B</option>
+            <option value="5A" style="background:#4a90d9;color:#fff;">5A</option>
+            <option value="5B" style="background:#4a90d9;color:#fff;">5B</option>
+            <option value="5C" style="background:#4a90d9;color:#fff;">5C</option>
+            <option value="5DD" style="background:#c71585;color:#fff;">5DD</option>
+            <option value="EJA1" style="background:#ffc107;color:#000;">EJA1</option>
+            <option value="EJA2" style="background:#28a745;color:#fff;">EJA2</option>
+        </select>
+    </div>
+
+    <div class="campo">
+        <label for="dataConsulta">Data da Chamada</label>
+        <input type="date" id="dataConsulta">
+    </div>
+
+    <div id="infoColuna">
+        📅 Buscando coluna referente a <span id="dataFormatada"></span>
+    </div>
+
+    <button class="btn-copiar" id="btnCopiar">📄 Copiar coluna de faltas</button>
+
+    <div id="status"></div>
+    <div id="debugInfo"></div>
+
+    <div class="dica">
+        <strong>Uso:</strong> Copie e cole no formulário de registro.
+    </div>
+</div>
+
+<!-- Configuração da URL -->
+<script src="config.js"></script>
+
+<script>
+    (function() {
+        "use strict";
+
+        // --- URL do Apps Script ---
+        let URL_SCRIPT = "";
+        try {
+            if (typeof CONFIG !== 'undefined' && CONFIG.URL_SCRIPT) {
+                URL_SCRIPT = CONFIG.URL_SCRIPT;
+            } else {
+                console.warn("config.js não encontrado. Usando URL vazia.");
+            }
+        } catch (_) {
+            console.warn("Erro ao ler config.js.");
+        }
+
+        // --- Referências DOM ---
+        const turmaSelect = document.getElementById('turma');
+        const dataInput = document.getElementById('dataConsulta');
+        const btnCopiar = document.getElementById('btnCopiar');
+        const statusDiv = document.getElementById('status');
+        const infoColuna = document.getElementById('infoColuna');
+        const dataFormatadaSpan = document.getElementById('dataFormatada');
+        const debugDiv = document.getElementById('debugInfo');
+
+        // --- Variável dataAtual (IGUAL AO SEU EXEMPLO) ---
+        let dataAtual = new Date();
+
+        // --- FUNÇÃO JSONP (IGUAL AO SEU EXEMPLO) ---
+        function jsonp(url) {
+            return new Promise((resolve, reject) => {
+                const callbackName = '_cb_' + Math.random().toString(36).substr(2, 9);
+                window[callbackName] = (data) => {
+                    resolve(data);
+                    delete window[callbackName];
+                    const script = document.getElementById(callbackName);
+                    if (script) script.remove();
+                };
+                const script = document.createElement('script');
+                script.src = url + (url.indexOf('?') === -1 ? '?' : '&') + 'callback=' + callbackName;
+                script.id = callbackName;
+                script.onerror = () => {
+                    reject(new Error('Erro JSONP'));
+                    delete window[callbackName];
+                    const s = document.getElementById(callbackName);
+                    if (s) s.remove();
+                };
+                document.body.appendChild(script);
+            });
+        }
+
+        // --- FUNÇÃO setDataAtualFromInput (IGUAL AO SEU EXEMPLO) ---
+        function setDataAtualFromInput() {
+            const val = document.getElementById("dataConsulta").value;
+            if (val) {
+                const p = val.split('-');
+                dataAtual = new Date(parseInt(p[0]), parseInt(p[1]) - 1, parseInt(p[2]));
+                console.log('📅 Data definida:', dataAtual);
+                console.log('   Dia:', dataAtual.getDate(), 'Mês:', dataAtual.getMonth() + 1);
+            }
+        }
+
+        // --- Inicialização: data de hoje ---
+        function definirDataHoje() {
+            const hoje = new Date();
+            const ano = hoje.getFullYear();
+            const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+            const dia = String(hoje.getDate()).padStart(2, '0');
+            dataInput.value = `${ano}-${mes}-${dia}`;
+            setDataAtualFromInput(); // ← CRUCIAL: atualiza dataAtual
+            atualizarInfoData();
+        }
+        definirDataHoje();
+
+        // --- Atualiza a informação da data selecionada ---
+        function atualizarInfoData() {
+            const dataVal = dataInput.value;
+            if (dataVal) {
+                const [ano, mes, dia] = dataVal.split('-');
+                const mesNomes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+                const mesNumero = parseInt(mes, 10);
+                const mesNome = mesNomes[mesNumero - 1] || mes;
+                dataFormatadaSpan.textContent = `${parseInt(dia, 10)} de ${mesNome}`;
+                infoColuna.style.display = 'block';
+                // Atualiza dataAtual quando a data muda
+                setDataAtualFromInput();
+            } else {
+                infoColuna.style.display = 'none';
+            }
+        }
+        dataInput.addEventListener('change', atualizarInfoData);
+
+        // --- Atualiza cor do seletor ao mudar ---
+        function atualizarCorSeletor() {
+            const select = turmaSelect;
+            const option = select.options[select.selectedIndex];
+            if (option && option.value) {
+                const bg = option.style.backgroundColor || '#4a90d9';
+                const color = option.style.color || '#fff';
+                select.style.backgroundColor = bg;
+                select.style.color = color;
+            } else {
+                select.style.backgroundColor = '#eef1f5';
+                select.style.color = '#1a1a1a';
+            }
+        }
+        turmaSelect.addEventListener('change', atualizarCorSeletor);
+        setTimeout(atualizarCorSeletor, 10);
+
+        // --- Função para mostrar status ---
+        function mostrarStatus(mensagem, tipo) {
+            statusDiv.textContent = mensagem;
+            statusDiv.className = '';
+            if (tipo === 'sucesso') {
+                statusDiv.classList.add('status-sucesso');
+            } else if (tipo === 'erro') {
+                statusDiv.classList.add('status-erro');
+            } else if (tipo === 'aviso') {
+                statusDiv.classList.add('status-aviso');
+            } else if (tipo === 'info') {
+                statusDiv.classList.add('status-info');
+            }
+            statusDiv.style.display = 'block';
+        }
+
+        function esconderStatus() {
+            statusDiv.style.display = 'none';
+            statusDiv.className = '';
+        }
+
+        function mostrarDebug(mensagem) {
+            debugDiv.style.display = 'block';
+            debugDiv.textContent = mensagem;
+        }
+
+        // --- Validações básicas ---
+        function validar() {
+            const turma = turmaSelect.value.trim();
+            if (!turma) {
+                mostrarStatus('⚠️ Selecione uma turma.', 'erro');
+                return null;
+            }
+            const dataVal = dataInput.value;
+            if (!dataVal) {
+                mostrarStatus('⚠️ Selecione uma data.', 'erro');
+                return null;
+            }
+            if (!URL_SCRIPT) {
+                mostrarStatus('❌ URL do Apps Script não configurada. Verifique config.js', 'erro');
+                return null;
+            }
+            return { turma };
+        }
+
+        // --- Buscar dados da API (IGUAL AO SEU EXEMPLO) ---
+        async function buscarDados(turma) {
+            // 🔥 USA dataAtual (IGUAL AO SEU EXEMPLO)
+            const dia = dataAtual.getDate();
+            const mes = dataAtual.getMonth() + 1;
+
+            const url = `${URL_SCRIPT}?turma=${encodeURIComponent(turma)}&dia=${dia}&mes=${mes}`;
+            
+            const debugMsg = `🔍 Buscando: turma=${turma}, dia=${dia}, mes=${mes}`;
+            console.log(debugMsg);
+            mostrarDebug(debugMsg);
+            console.log('📡 URL:', url);
+            mostrarDebug(`📡 URL: ${url}`);
+
+            mostrarStatus('⏳ Buscando dados da planilha...', 'aviso');
+
+            const resultado = await jsonp(url);
+
+            console.log('📥 Resposta:', resultado);
+            mostrarDebug(`📥 Resposta: ${JSON.stringify(resultado).substring(0, 200)}...`);
+
+            if (resultado.erro) {
+                throw new Error(resultado.erro);
+            }
+            if (!resultado.registros || !Array.isArray(resultado.registros) || resultado.registros.length === 0) {
+                throw new Error('Nenhum aluno encontrado para esta turma/data.');
+            }
+            return resultado;
+        }
+
+        // --- Montar o texto para copiar ---
+        function montarTextoFaltas(turma, dataFormatada, registros) {
+            let linhas = [];
+            for (const aluno of registros) {
+                let valor = aluno.valor || '';
+                linhas.push(String(valor));
+            }
+            return linhas.join('\n');
+        }
+
+        // --- Função principal: buscar + copiar ---
+        async function buscarECopiar() {
+            const valid = validar();
+            if (!valid) return;
+
+            const { turma } = valid;
+
+            try {
+                btnCopiar.disabled = true;
+                btnCopiar.textContent = '⏳ Carregando...';
+                esconderStatus();
+
+                // 🔥 ATUALIZA dataAtual antes de buscar
+                setDataAtualFromInput();
+
+                const resultado = await buscarDados(turma);
+                const texto = montarTextoFaltas(turma, resultado.data || dataInput.value, resultado.registros);
+
+                await navigator.clipboard.writeText(texto);
+
+                const qtd = resultado.registros.length;
+                const dataExibicao = resultado.data || dataInput.value;
+                mostrarStatus(`✅ Copiado! ${qtd} alunos da turma ${turma} em ${dataExibicao}.`, 'sucesso');
+
+            } catch (err) {
+                console.error(err);
+                let msg = err.message || 'Erro desconhecido.';
+                if (msg.includes('Dia Não Letivo')) {
+                    msg = '📅 Dia não letivo para esta turma. Verifique a data.';
+                } else if (msg.includes('Erro JSONP')) {
+                    msg = '❌ Erro de conexão. Verifique a URL do Apps Script.';
+                }
+                mostrarStatus(`❌ ${msg}`, 'erro');
+            } finally {
+                btnCopiar.disabled = false;
+                btnCopiar.textContent = '📄 Copiar coluna de faltas';
+            }
+        }
+
+        // --- Evento do botão ---
+        btnCopiar.addEventListener('click', buscarECopiar);
+
+        // --- Atalho: Enter ---
+        document.querySelectorAll('.campo select, .campo input').forEach(el => {
+            el.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    btnCopiar.click();
+                }
+            });
+        });
+
+        // --- Aviso de configuração ---
+        if (!URL_SCRIPT) {
+            mostrarStatus('⚠️ ATENÇÃO: URL do Apps Script não definida. Edite o arquivo config.js', 'erro');
+        }
+
+        console.log('📋 Copiar Faltas — pronto.');
+        console.log('📅 Usando a mesma lógica de data do seu exemplo que funciona.');
+        console.log('🔧 dataAtual.getDate() e dataAtual.getMonth() + 1');
+    })();
+</script>
+
+</body>
+</html>
