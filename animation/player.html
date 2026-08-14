@@ -3,290 +3,428 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Analisador de Vídeo Duplo - Comparador</title>
+    <title>V5-Analisador de Vídeo</title>
     <style>
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
-            font-family: sans-serif; 
-            text-align: center; 
-            background: #1e1e1e; 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            background: #0a0a0a; 
             color: #fff; 
-            padding: 20px;
-            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
-        .container { 
-            max-width: 1200px; 
-            width: 100%;
-            margin: 0 auto; 
-            padding: 10px;
+        
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            max-height: 100vh;
+            overflow: hidden;
         }
 
-        /* Abas */
-        .tab-container {
+        /* Header minimalista */
+        .header {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: rgba(20,20,20,0.95);
+            border-bottom: 1px solid #333;
+            flex-shrink: 0;
+            z-index: 10;
+            min-height: 44px;
         }
-        .tab-btn {
-            padding: 10px 25px;
-            background: #333;
-            border: 2px solid #555;
-            border-radius: 8px;
+        .header h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #00ffcc;
+            margin: 0;
+        }
+        .header-controls {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .header-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #444;
             color: #fff;
-            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
+            white-space: nowrap;
         }
-        .tab-btn.active {
+        .header-btn:active {
+            transform: scale(0.95);
+            background: rgba(255,255,255,0.2);
+        }
+        .header-btn.active {
             background: #00ffcc;
             color: #000;
             border-color: #00ffcc;
         }
-        .tab-btn:hover {
-            background: #444;
-        }
-        .tab-btn.active:hover {
-            background: #00ccaa;
+        .header-btn-icon {
+            font-size: 18px;
+            padding: 4px 8px;
         }
 
-        /* Layout de Duas Telas Lado a Lado */
-        .comparador-wrapper {
+        /* Área de vídeo - principal */
+        .video-area {
+            flex: 1;
             display: flex;
-            gap: 15px;
-            margin-top: 15px;
-            width: 100%;
-            transition: all 0.3s;
+            gap: 0;
+            overflow: hidden;
+            position: relative;
+            background: #000;
+            min-height: 0;
         }
-        .comparador-wrapper.single-mode {
-            max-width: 600px;
-            margin: 15px auto;
+        .video-area.single-mode .video-container {
+            flex: 1;
         }
-        .video-box {
+        .video-container {
             flex: 1;
             display: flex;
             flex-direction: column;
-            background: #252525;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #444;
             position: relative;
+            background: #000;
+            min-width: 0;
+            min-height: 0;
         }
-        .video-box.hidden {
+        .video-container.hidden {
             display: none;
         }
         .video-wrapper {
-            width: 100%;
-            max-height: 50vh; 
-            background: #000;
-            border: 2px solid #333;
-            border-radius: 6px;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            flex: 1;
             position: relative;
-            cursor: pointer;
+            overflow: hidden;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 0;
         }
-        video { 
+        .video-wrapper video {
             width: 100%;
             height: 100%;
-            max-height: 50vh;
-            object-fit: contain; 
+            object-fit: contain;
+            max-height: 100%;
         }
 
-        /* Badge de vídeo ativo no modo single */
-        .active-badge {
+        /* Badge do vídeo */
+        .video-badge {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 8px;
+            left: 8px;
+            background: rgba(0,0,0,0.7);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #00ffcc;
+            border: 1px solid #00ffcc;
+            backdrop-filter: blur(4px);
+            z-index: 5;
+            pointer-events: none;
+        }
+        .video-badge.active {
             background: #00ffcc;
             color: #000;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
         }
 
-        /* Controles e Painéis */
-        .setup-panel { 
-            display: flex; 
-            justify-content: space-around; 
-            flex-wrap: wrap;
-            margin-bottom: 15px; 
-            gap: 10px;
-        }
-        .upload-group {
-            background: #2a2a2a;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #444;
-            min-width: 150px;
-        }
-        .upload-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 14px;
-        }
-        .controls { 
-            margin-top: 15px; 
+        /* Info do vídeo (sobreposto) */
+        .video-info {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            right: 8px;
             display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .controls-section {
-            background: #2a2a2a;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #444;
-            margin: 5px;
-        }
-        .controls-section strong {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-        button, select, input[type="file"] { 
-            padding: 10px 15px; 
-            margin: 5px; 
-            cursor: pointer; 
-            font-size: 14px; 
-            background: #333; 
-            color: #fff; 
-            border: 1px solid #555; 
-            border-radius: 4px; 
-            transition: all 0.2s;
-        }
-        button:active {
-            transform: scale(0.95);
-        }
-        button:hover { background: #444; }
-        .btn-master {
-            background: #00ffcc;
-            color: #000;
-            font-weight: bold;
-            border: none;
-        }
-        .btn-master:hover { background: #00ccaa; }
-        
-        .btn-video-a {
-            background: #ff6b6b;
-            color: #000;
-            font-weight: bold;
-            border: none;
-        }
-        .btn-video-a:hover { background: #ff5252; }
-        
-        .btn-video-b {
-            background: #4ecdc4;
-            color: #000;
-            font-weight: bold;
-            border: none;
-        }
-        .btn-video-b:hover { background: #45b7aa; }
-        
-        .btn-next-prev {
-            background: #555;
-            color: #fff;
-            font-weight: bold;
-            border: none;
-            padding: 8px 12px;
-        }
-        .btn-next-prev:hover { background: #666; }
-        
-        .info-panel { 
-            margin-top: 15px; 
-            font-size: 16px; 
-            color: #00ffcc; 
-            font-family: monospace; 
-            background: #2a2a2a;
-            padding: 10px;
-            border-radius: 4px;
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .shortcuts-tip {
-            margin-top: 20px;
-            font-size: 12px;
+            justify-content: space-between;
+            font-size: 11px;
+            font-family: monospace;
             color: #aaa;
-            background: #2a2a2a;
-            padding: 10px;
+            background: rgba(0,0,0,0.6);
+            padding: 4px 10px;
             border-radius: 4px;
-            text-align: left;
+            backdrop-filter: blur(4px);
+            z-index: 5;
+            pointer-events: none;
+            gap: 10px;
+            flex-wrap: wrap;
         }
-        .nome-arquivo {
-            font-size: 13px;
+        .video-info span {
+            white-space: nowrap;
+        }
+        .video-filename {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0,0,0,0.7);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 10px;
             color: #ddd;
-            margin-top: 5px;
+            backdrop-filter: blur(4px);
+            z-index: 5;
+            pointer-events: none;
+            max-width: 60%;
+            overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            overflow: hidden;
         }
-        kbd {
-            background: #444;
-            padding: 2px 6px;
-            border-radius: 3px;
-            border: 1px solid #555;
-            font-size: 11px;
+
+        /* Overlay de controles do vídeo */
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 4;
+            pointer-events: none;
+            background: rgba(0,0,0,0.3);
         }
-        .divider {
-            border-top: 1px solid #444;
-            margin: 10px 0;
+        .video-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .overlay-btn {
+            background: rgba(255,255,255,0.15);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: #fff;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: auto;
+        }
+        .overlay-btn:active {
+            transform: scale(0.9);
+            background: rgba(255,255,255,0.25);
+        }
+        .overlay-btn-small {
+            width: 44px;
+            height: 44px;
+            font-size: 18px;
+        }
+        .overlay-controls-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* Controles inferiores - minimalistas */
+        .bottom-controls {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 10px;
+            background: rgba(20,20,20,0.95);
+            border-top: 1px solid #333;
+            flex-shrink: 0;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            z-index: 10;
+            min-height: 48px;
+        }
+        .bottom-controls::-webkit-scrollbar {
+            height: 0;
+        }
+        .ctrl-btn {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid #444;
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+            flex-shrink: 0;
+            min-height: 34px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .ctrl-btn:active {
+            transform: scale(0.95);
+            background: rgba(255,255,255,0.15);
+        }
+        .ctrl-btn.primary {
+            background: #00ffcc;
+            color: #000;
+            border-color: #00ffcc;
+            font-weight: 600;
+        }
+        .ctrl-btn.primary:active {
+            background: #00ccaa;
+        }
+        .ctrl-btn.a-color {
+            border-color: #ff6b6b;
+            color: #ff6b6b;
+        }
+        .ctrl-btn.b-color {
+            border-color: #4ecdc4;
+            color: #4ecdc4;
+        }
+        .ctrl-btn-icon {
+            font-size: 16px;
+        }
+        .ctrl-btn .badge {
+            background: rgba(255,255,255,0.15);
+            padding: 0 6px;
+            border-radius: 8px;
+            font-size: 10px;
+        }
+
+        /* Separador */
+        .ctrl-separator {
+            width: 1px;
+            height: 28px;
+            background: #333;
+            flex-shrink: 0;
+            margin: 0 4px;
+        }
+
+        /* Menu flutuante (overflow) */
+        .float-menu {
+            position: fixed;
+            bottom: 60px;
+            right: 12px;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: flex-end;
+        }
+        .float-menu-btn {
+            background: rgba(0,0,0,0.85);
+            border: 1px solid #444;
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            transform: translateX(120%);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .float-menu-btn.show {
+            transform: translateX(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .float-menu-btn:active {
+            transform: scale(0.95);
+        }
+        .float-menu-btn.primary {
+            background: #00ffcc;
+            color: #000;
+            border-color: #00ffcc;
+        }
+        .float-toggle {
+            background: rgba(0,0,0,0.85);
+            border: 1px solid #444;
+            color: #fff;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .float-toggle:active {
+            transform: scale(0.9);
         }
 
         /* Modal */
         .modal {
             display: none;
             position: fixed;
-            z-index: 1000;
+            z-index: 100;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.95);
             animation: fadeIn 0.3s;
         }
         .modal-content {
-            position: relative;
-            margin: 20px auto;
-            padding: 20px;
-            width: 95%;
-            max-width: 900px;
-            height: 90vh;
+            height: 100%;
             display: flex;
             flex-direction: column;
+            padding: 12px;
+        }
+        .modal-video-wrapper {
+            flex: 1;
+            display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
         }
-        .modal-content video {
+        .modal-video-wrapper video {
             width: 100%;
-            max-height: 80vh;
+            height: 100%;
             object-fit: contain;
-            border-radius: 8px;
+            max-height: 80vh;
         }
         .modal-close {
             position: absolute;
-            top: 10px;
-            right: 25px;
-            font-size: 35px;
+            top: 12px;
+            right: 16px;
+            font-size: 28px;
             color: #fff;
             cursor: pointer;
             background: none;
             border: none;
-        }
-        .modal-close:hover {
-            color: #ff6b6b;
+            z-index: 10;
         }
         .modal-controls {
-            margin-top: 15px;
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+            gap: 8px;
             justify-content: center;
+            padding: 12px;
+            flex-wrap: wrap;
+        }
+        .modal-controls button {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #444;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .modal-controls button:active {
+            transform: scale(0.95);
+            background: rgba(255,255,255,0.2);
         }
 
         @keyframes fadeIn {
@@ -294,294 +432,269 @@
             to { opacity: 1; }
         }
 
-        /* Responsivo - Mobile */
+        /* Upload hidden */
+        .hidden-input {
+            display: none;
+        }
+
+        /* Responsivo */
         @media (max-width: 768px) {
-            .comparador-wrapper {
-                flex-direction: column;
-                gap: 20px;
-            }
-            .comparador-wrapper.single-mode {
-                max-width: 100%;
-            }
-            .video-wrapper {
-                max-height: 40vh;
-            }
-            video {
-                max-height: 40vh;
-            }
-            .controls-section {
-                width: 100%;
-            }
-            .controls-section button {
-                font-size: 12px;
-                padding: 8px 12px;
-            }
-            .setup-panel {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .upload-group {
-                width: 100%;
-            }
-            .info-panel {
-                font-size: 14px;
-            }
-            .tab-btn {
-                padding: 8px 15px;
-                font-size: 13px;
-            }
-            .shortcuts-tip {
-                font-size: 11px;
-            }
-            .modal-content {
-                padding: 10px;
-                height: 95vh;
-            }
-            .modal-content video {
-                max-height: 70vh;
-            }
+            .header h2 { font-size: 14px; }
+            .header-btn { font-size: 11px; padding: 3px 8px; }
+            .video-badge { font-size: 10px; padding: 3px 8px; }
+            .video-info { font-size: 10px; padding: 3px 8px; flex-wrap: wrap; }
+            .video-filename { font-size: 9px; max-width: 50%; }
+            .bottom-controls { padding: 4px 8px; gap: 3px; min-height: 40px; }
+            .ctrl-btn { font-size: 11px; padding: 4px 8px; min-height: 30px; }
+            .ctrl-btn-icon { font-size: 14px; }
+            .overlay-btn { width: 48px; height: 48px; font-size: 20px; }
+            .overlay-btn-small { width: 38px; height: 38px; font-size: 16px; }
+            .float-toggle { width: 40px; height: 40px; font-size: 18px; }
+            .float-menu-btn { font-size: 11px; padding: 6px 12px; }
         }
 
         @media (max-width: 480px) {
-            body { padding: 10px; }
-            .video-wrapper {
-                max-height: 35vh;
-            }
-            video {
-                max-height: 35vh;
-            }
-            button {
-                font-size: 11px;
-                padding: 6px 10px;
-            }
-            .controls-section strong {
-                font-size: 12px;
-            }
+            .header { padding: 4px 8px; min-height: 36px; }
+            .header h2 { font-size: 12px; }
+            .header-btn { font-size: 10px; padding: 2px 6px; }
+            .video-badge { font-size: 9px; padding: 2px 6px; }
+            .video-info { font-size: 9px; padding: 2px 6px; }
+            .video-filename { font-size: 8px; }
+            .bottom-controls { padding: 3px 4px; gap: 2px; min-height: 34px; }
+            .ctrl-btn { font-size: 10px; padding: 3px 6px; min-height: 26px; }
+            .ctrl-btn-icon { font-size: 12px; }
+            .ctrl-separator { margin: 0 2px; }
+            .overlay-btn { width: 40px; height: 40px; font-size: 16px; }
+            .overlay-btn-small { width: 32px; height: 32px; font-size: 14px; }
+            .float-toggle { width: 36px; height: 36px; font-size: 16px; }
+            .float-menu-btn { font-size: 10px; padding: 4px 10px; }
         }
 
-        /* Botões de navegação mobile */
-        .mobile-nav {
-            display: none;
-            gap: 10px;
-            margin: 10px 0;
-            justify-content: center;
+        /* Landscape */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .header { padding: 4px 8px; min-height: 32px; }
+            .header h2 { font-size: 12px; }
+            .bottom-controls { padding: 2px 6px; min-height: 30px; }
+            .ctrl-btn { font-size: 10px; padding: 2px 6px; min-height: 24px; }
+            .video-info { font-size: 9px; padding: 2px 6px; }
+            .overlay-btn { width: 36px; height: 36px; font-size: 14px; }
+            .overlay-btn-small { width: 30px; height: 30px; font-size: 12px; }
         }
-        @media (max-width: 768px) {
-            .mobile-nav {
-                display: flex;
-            }
-            .mobile-nav button {
-                flex: 1;
-                max-width: 150px;
-            }
+
+        /* Indicador de navegação */
+        .nav-indicator {
+            position: absolute;
+            bottom: 50%;
+            transform: translateY(50%);
+            z-index: 3;
+            font-size: 32px;
+            color: rgba(255,255,255,0.3);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
+        .nav-indicator.show {
+            opacity: 1;
+        }
+        .nav-indicator.left { left: 8px; }
+        .nav-indicator.right { right: 8px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Comparador de Vídeo - Tela Dupla com Controles Independentes</h2>
-    
-    <!-- Abas -->
-    <div class="tab-container">
-        <button class="tab-btn active" data-mode="dual" id="tabDual">📺 Tela Dupla</button>
-        <button class="tab-btn" data-mode="single" id="tabSingle">📹 Tela Única</button>
-    </div>
-
-    <div class="setup-panel">
-        <div class="upload-group">
-            <label>Vídeo A (Esquerda):</label>
-            <input type="file" id="uploadA" accept="video/*" multiple>
-        </div>
-        
-        <div style="align-self: center;">
-            <label for="selectFPS">FPS Geral:</label>
-            <select id="selectFPS">
-                <option value="23.976">23.976 (Cinema)</option>
-                <option value="24">24</option>
-                <option value="25">25 (PAL)</option>
-                <option value="29.97">29.97 (NTSC)</option>
-                <option value="30" selected>30 (Padrão Web)</option>
-                <option value="60">60</option>
-            </select>
-        </div>
-
-        <div class="upload-group">
-            <label>Vídeo B (Direita):</label>
-            <input type="file" id="uploadB" accept="video/*" multiple>
+<div class="app-container">
+    <!-- Header Minimalista -->
+    <div class="header">
+        <h2>🎬 Comparador</h2>
+        <div class="header-controls">
+            <button class="header-btn" id="modeToggle">📺 Dupla</button>
+            <button class="header-btn" id="uploadBtnA">📁 A</button>
+            <button class="header-btn" id="uploadBtnB">📁 B</button>
+            <button class="header-btn header-btn-icon" id="menuToggle">⚙️</button>
         </div>
     </div>
 
-    <!-- Navegação Mobile -->
-    <div class="mobile-nav">
-        <button id="btnPrevAMobile" class="btn-next-prev">⬅ Anterior (A)</button>
-        <button id="btnNextAMobile" class="btn-next-prev">Próximo (A) ➡</button>
-        <button id="btnPrevBMobile" class="btn-next-prev">⬅ Anterior (B)</button>
-        <button id="btnNextBMobile" class="btn-next-prev">Próximo (B) ➡</button>
-    </div>
+    <!-- Uploads ocultos -->
+    <input type="file" id="uploadA" class="hidden-input" accept="video/*" multiple>
+    <input type="file" id="uploadB" class="hidden-input" accept="video/*" multiple>
 
-    <div class="comparador-wrapper" id="comparadorWrapper">
-        <div class="video-box" id="videoBoxA">
-            <strong>CENA A <span id="badgeA" class="active-badge" style="display:none;">▶ ATIVO</span></strong>
+    <!-- Área de Vídeo -->
+    <div class="video-area" id="videoArea">
+        <!-- Vídeo A -->
+        <div class="video-container" id="containerA">
             <div class="video-wrapper" id="wrapperA">
                 <video id="videoA" playsinline></video>
+                <div class="video-badge" id="badgeA">▶ A</div>
+                <div class="video-filename" id="filenameA">Nenhum</div>
+                <div class="video-info">
+                    <span>⏱ <span id="timeA">0.000</span>s</span>
+                    <span>🎞 <span id="frameA">0</span></span>
+                    <span>📊 <span id="fpsA">30</span>fps</span>
+                </div>
+                <!-- Overlay de controles -->
+                <div class="video-overlay" id="overlayA">
+                    <div class="overlay-controls-group">
+                        <button class="overlay-btn overlay-btn-small" id="prevFrameA">⏮</button>
+                        <button class="overlay-btn" id="playA">▶</button>
+                        <button class="overlay-btn overlay-btn-small" id="nextFrameA">⏭</button>
+                    </div>
+                </div>
+                <!-- Indicadores de navegação -->
+                <div class="nav-indicator left" id="navLeftA">◀</div>
+                <div class="nav-indicator right" id="navRightA">▶</div>
             </div>
-            <div id="txtArqA" class="nome-arquivo">Nenhum vídeo carregado</div>
         </div>
-        
-        <div class="video-box" id="videoBoxB">
-            <strong>CENA B <span id="badgeB" class="active-badge" style="display:none;">▶ ATIVO</span></strong>
+
+        <!-- Vídeo B -->
+        <div class="video-container" id="containerB">
             <div class="video-wrapper" id="wrapperB">
                 <video id="videoB" playsinline></video>
+                <div class="video-badge" id="badgeB">▶ B</div>
+                <div class="video-filename" id="filenameB">Nenhum</div>
+                <div class="video-info">
+                    <span>⏱ <span id="timeB">0.000</span>s</span>
+                    <span>🎞 <span id="frameB">0</span></span>
+                    <span>📊 <span id="fpsB">30</span>fps</span>
+                </div>
+                <div class="video-overlay" id="overlayB">
+                    <div class="overlay-controls-group">
+                        <button class="overlay-btn overlay-btn-small" id="prevFrameB">⏮</button>
+                        <button class="overlay-btn" id="playB">▶</button>
+                        <button class="overlay-btn overlay-btn-small" id="nextFrameB">⏭</button>
+                    </div>
+                </div>
+                <div class="nav-indicator left" id="navLeftB">◀</div>
+                <div class="nav-indicator right" id="navRightB">▶</div>
             </div>
-            <div id="txtArqB" class="nome-arquivo">Nenhum vídeo carregado</div>
         </div>
     </div>
 
-    <div class="info-panel">
-        <div>TELA A - Tempo: <span id="txtTempoA">0.000</span>s | Frame: <span id="txtFrameA">0</span></div>
-        <div>TELA B - Tempo: <span id="txtTempoB">0.000</span>s | Frame: <span id="txtFrameB">0</span></div>
+    <!-- Barra de Controles Inferior -->
+    <div class="bottom-controls" id="bottomControls">
+        <button class="ctrl-btn primary" id="btnPlayPause">▶</button>
+        <button class="ctrl-btn" id="btnPrev">◀◀</button>
+        <button class="ctrl-btn" id="btnNext">▶▶</button>
+        <div class="ctrl-separator"></div>
+        <button class="ctrl-btn a-color" id="btnPrevA">◀ A</button>
+        <button class="ctrl-btn a-color" id="btnNextA">A ▶</button>
+        <div class="ctrl-separator"></div>
+        <button class="ctrl-btn b-color" id="btnPrevB">◀ B</button>
+        <button class="ctrl-btn b-color" id="btnNextB">B ▶</button>
+        <div class="ctrl-separator"></div>
+        <button class="ctrl-btn" id="btnCapture">📸</button>
+        <button class="ctrl-btn" id="btnNextVideo">⏩🎬</button>
+        <div class="ctrl-separator"></div>
+        <select id="selectFPS" style="background:rgba(255,255,255,0.08);border:1px solid #444;color:#fff;padding:4px 8px;border-radius:4px;font-size:11px;flex-shrink:0;">
+            <option value="23.976">23.976</option>
+            <option value="24">24</option>
+            <option value="25">25</option>
+            <option value="29.97">29.97</option>
+            <option value="30" selected>30</option>
+            <option value="60">60</option>
+        </select>
     </div>
 
-    <!-- Controles Sincronizados (Ambos) -->
-    <div class="controls">
-        <div class="controls-section">
-            <strong>🎮 Controles Sincronizados</strong><br>
-            <button id="btnPlayPause" class="btn-master">▶️ Play/Pause (Ambos)</button>
-            <button id="btnVoltarFrame" class="btn-master">⏮ Frame Anterior (Ambos)</button>
-            <button id="btnAvancarFrame" class="btn-master">Próximo Frame (Ambos) ⏭</button>
-            <button id="btnCapturar" class="btn-master">📸 Capturar Ambos</button>
-            <button id="btnNextVideo" class="btn-master">⏭ Próximo Vídeo (Ambos)</button>
-        </div>
-    </div>
-
-    <!-- Controles Independentes para Vídeo A -->
-    <div class="controls">
-        <div class="controls-section">
-            <strong>🎥 Controles Independentes - Vídeo A</strong><br>
-            <button id="btnPlayPauseA" class="btn-video-a">▶️ Play/Pause A</button>
-            <button id="btnVoltarFrameA" class="btn-video-a">⏮ Frame Anterior A</button>
-            <button id="btnAvancarFrameA" class="btn-video-a">Próximo Frame A ⏭</button>
-            <button id="btnCapturarA" class="btn-video-a">📸 Capturar A</button>
-            <button id="btnNextVideoA" class="btn-video-a">⏭ Próximo Vídeo A</button>
-        </div>
-        
-        <div class="controls-section">
-            <strong>🎥 Controles Independentes - Vídeo B</strong><br>
-            <button id="btnPlayPauseB" class="btn-video-b">▶️ Play/Pause B</button>
-            <button id="btnVoltarFrameB" class="btn-video-b">⏮ Frame Anterior B</button>
-            <button id="btnAvancarFrameB" class="btn-video-b">Próximo Frame B ⏭</button>
-            <button id="btnCapturarB" class="btn-video-b">📸 Capturar B</button>
-            <button id="btnNextVideoB" class="btn-video-b">⏭ Próximo Vídeo B</button>
-        </div>
-    </div>
-
-    <!-- Navegação de Arquivos Desktop -->
-    <div class="controls">
-        <div class="controls-section">
-            <strong>📁 Navegação de Arquivos</strong><br>
-            <button id="btnPrevA" class="btn-next-prev">⬅ Anterior (Lista A)</button>
-            <button id="btnNextA" class="btn-next-prev">Próximo (Lista A) ➡</button>
-            <button id="btnPrevB" class="btn-next-prev">⬅ Anterior (Lista B)</button>
-            <button id="btnNextB" class="btn-next-prev">Próximo (Lista B) ➡</button>
-        </div>
-    </div>
-
-    <div class="shortcuts-tip">
-        <strong>⌨️ Atalhos de Teclado:</strong><br>
-        <strong>Sincronizados:</strong> <kbd>Espaço</kbd> = Play/Pause Ambos | <kbd>←</kbd> = Voltar Frame Ambos | <kbd>→</kbd> = Avançar Frame Ambos | <kbd>C</kbd> = Capturar Ambos | <kbd>N</kbd> = Próximo Vídeo (Ambos)<br>
-        <strong>Independentes:</strong> <kbd>1</kbd> = Play/Pause A | <kbd>2</kbd> = Play/Pause B | <kbd>Shift+←</kbd> = Voltar Frame A | <kbd>Shift+→</kbd> = Avançar Frame A | <kbd>Alt+←</kbd> = Voltar Frame B | <kbd>Alt+→</kbd> = Avançar Frame B<br>
-        <strong>Modo Single:</strong> Clique no vídeo para alternar entre A e B | Toque duas vezes para tela cheia<br>
-        <strong>📱 Uso em Celular:</strong> Use os botões "Próximo Vídeo (Ambos)" ou os botões de navegação abaixo dos uploads. Toque no vídeo para alternar entre A e B no modo tela única.
+    <!-- Menu Flutuante -->
+    <div class="float-menu" id="floatMenu">
+        <button class="float-menu-btn" id="floatCapture">📸 Capturar Ambos</button>
+        <button class="float-menu-btn" id="floatNextVideo">⏩ Próximo Vídeo</button>
+        <button class="float-menu-btn primary" id="floatToggleMode">📺 Alternar Modo</button>
+        <button class="float-toggle" id="floatToggle">⚙️</button>
     </div>
 </div>
 
 <!-- Modal -->
-<div id="modal" class="modal">
+<div class="modal" id="modal">
+    <button class="modal-close" id="modalClose">✕</button>
     <div class="modal-content">
-        <button class="modal-close" id="modalClose">&times;</button>
-        <video id="modalVideo" controls playsinline></video>
+        <div class="modal-video-wrapper">
+            <video id="modalVideo" playsinline></video>
+        </div>
         <div class="modal-controls">
-            <button id="modalPlayPause" class="btn-master">▶️ Play/Pause</button>
-            <button id="modalPrev" class="btn-master">⏮ Frame Anterior</button>
-            <button id="modalNext" class="btn-master">Próximo Frame ⏭</button>
-            <button id="modalCapturar" class="btn-master">📸 Capturar</button>
+            <button id="modalPlay">▶ Play</button>
+            <button id="modalPrev">◀◀ Frame</button>
+            <button id="modalNext">Frame ▶▶</button>
+            <button id="modalCapture">📸 Capturar</button>
         </div>
     </div>
 </div>
 
 <script>
-// DOM Elements
+// ====== DOM REFS ======
 const videoA = document.getElementById('videoA');
 const videoB = document.getElementById('videoB');
-const uploadA = document.getElementById('uploadA');
-const uploadB = document.getElementById('uploadB');
-const selectFPS = document.getElementById('selectFPS');
-
-const txtTempoA = document.getElementById('txtTempoA');
-const txtFrameA = document.getElementById('txtFrameA');
-const txtArqA = document.getElementById('txtArqA');
-
-const txtTempoB = document.getElementById('txtTempoB');
-const txtFrameB = document.getElementById('txtFrameB');
-const txtArqB = document.getElementById('txtArqB');
-
-const comparadorWrapper = document.getElementById('comparadorWrapper');
-const videoBoxA = document.getElementById('videoBoxA');
-const videoBoxB = document.getElementById('videoBoxB');
+const containerA = document.getElementById('containerA');
+const containerB = document.getElementById('containerB');
+const wrapperA = document.getElementById('wrapperA');
+const wrapperB = document.getElementById('wrapperB');
+const videoArea = document.getElementById('videoArea');
+const filenameA = document.getElementById('filenameA');
+const filenameB = document.getElementById('filenameB');
+const timeA = document.getElementById('timeA');
+const timeB = document.getElementById('timeB');
+const frameA = document.getElementById('frameA');
+const frameB = document.getElementById('frameB');
+const fpsA = document.getElementById('fpsA');
+const fpsB = document.getElementById('fpsB');
 const badgeA = document.getElementById('badgeA');
 const badgeB = document.getElementById('badgeB');
+const overlayA = document.getElementById('overlayA');
+const overlayB = document.getElementById('overlayB');
+const navLeftA = document.getElementById('navLeftA');
+const navRightA = document.getElementById('navRightA');
+const navLeftB = document.getElementById('navLeftB');
+const navRightB = document.getElementById('navRightB');
 
-// Modal
-const modal = document.getElementById('modal');
-const modalVideo = document.getElementById('modalVideo');
-const modalClose = document.getElementById('modalClose');
-const modalPlayPause = document.getElementById('modalPlayPause');
-const modalPrev = document.getElementById('modalPrev');
-const modalNext = document.getElementById('modalNext');
-const modalCapturar = document.getElementById('modalCapturar');
+const uploadA = document.getElementById('uploadA');
+const uploadB = document.getElementById('uploadB');
+const uploadBtnA = document.getElementById('uploadBtnA');
+const uploadBtnB = document.getElementById('uploadBtnB');
+const selectFPS = document.getElementById('selectFPS');
 
-// Botões
 const btnPlayPause = document.getElementById('btnPlayPause');
-const btnVoltarFrame = document.getElementById('btnVoltarFrame');
-const btnAvancarFrame = document.getElementById('btnAvancarFrame');
-const btnCapturar = document.getElementById('btnCapturar');
-const btnNextVideo = document.getElementById('btnNextVideo');
-
-const btnPlayPauseA = document.getElementById('btnPlayPauseA');
-const btnVoltarFrameA = document.getElementById('btnVoltarFrameA');
-const btnAvancarFrameA = document.getElementById('btnAvancarFrameA');
-const btnCapturarA = document.getElementById('btnCapturarA');
-const btnNextVideoA = document.getElementById('btnNextVideoA');
-
-const btnPlayPauseB = document.getElementById('btnPlayPauseB');
-const btnVoltarFrameB = document.getElementById('btnVoltarFrameB');
-const btnAvancarFrameB = document.getElementById('btnAvancarFrameB');
-const btnCapturarB = document.getElementById('btnCapturarB');
-const btnNextVideoB = document.getElementById('btnNextVideoB');
-
-// Navegação
+const btnPrev = document.getElementById('btnPrev');
+const btnNext = document.getElementById('btnNext');
 const btnPrevA = document.getElementById('btnPrevA');
 const btnNextA = document.getElementById('btnNextA');
 const btnPrevB = document.getElementById('btnPrevB');
 const btnNextB = document.getElementById('btnNextB');
+const btnCapture = document.getElementById('btnCapture');
+const btnNextVideo = document.getElementById('btnNextVideo');
+const modeToggle = document.getElementById('modeToggle');
+const menuToggle = document.getElementById('menuToggle');
+const floatMenu = document.getElementById('floatMenu');
+const floatToggle = document.getElementById('floatToggle');
+const floatCapture = document.getElementById('floatCapture');
+const floatNextVideo = document.getElementById('floatNextVideo');
+const floatToggleMode = document.getElementById('floatToggleMode');
 
-// Mobile nav
-const btnPrevAMobile = document.getElementById('btnPrevAMobile');
-const btnNextAMobile = document.getElementById('btnNextAMobile');
-const btnPrevBMobile = document.getElementById('btnPrevBMobile');
-const btnNextBMobile = document.getElementById('btnNextBMobile');
+const playA = document.getElementById('playA');
+const playB = document.getElementById('playB');
+const prevFrameA = document.getElementById('prevFrameA');
+const prevFrameB = document.getElementById('prevFrameB');
+const nextFrameA = document.getElementById('nextFrameA');
+const nextFrameB = document.getElementById('nextFrameB');
 
-const tabDual = document.getElementById('tabDual');
-const tabSingle = document.getElementById('tabSingle');
+const modal = document.getElementById('modal');
+const modalVideo = document.getElementById('modalVideo');
+const modalClose = document.getElementById('modalClose');
+const modalPlay = document.getElementById('modalPlay');
+const modalPrev = document.getElementById('modalPrev');
+const modalNext = document.getElementById('modalNext');
+const modalCapture = document.getElementById('modalCapture');
 
-// Estado
-let fps = parseFloat(selectFPS.value);
+// ====== STATE ======
+let fps = 30;
 let tempoPorFrame = 1 / fps;
 let listaA = [], listaB = [];
 let indexA = 0, indexB = 0;
-let currentMode = 'dual'; // 'dual' ou 'single'
-let activeVideo = 'A'; // 'A' ou 'B' no modo single
+let currentMode = 'dual'; // 'dual' | 'single'
+let activeVideo = 'A';
+let floatMenuOpen = false;
+let overlayTimeout = null;
+let touchStartX = 0;
+let touchStartY = 0;
+let isDragging = false;
 
 // ====== FUNÇÕES ======
 
@@ -591,11 +704,12 @@ function carregarVideoA(index) {
     videoA.pause();
     const urlAntiga = videoA.src;
     videoA.src = URL.createObjectURL(listaA[indexA]);
-    txtArqA.textContent = `[${indexA + 1}/${listaA.length}] ${listaA[indexA].name}`;
+    filenameA.textContent = `${indexA+1}/${listaA.length} ${listaA[indexA].name}`;
     videoA.load();
     if (urlAntiga && urlAntiga.startsWith('blob:')) {
         setTimeout(() => URL.revokeObjectURL(urlAntiga), 1000);
     }
+    atualizarBadges();
 }
 
 function carregarVideoB(index) {
@@ -604,140 +718,128 @@ function carregarVideoB(index) {
     videoB.pause();
     const urlAntiga = videoB.src;
     videoB.src = URL.createObjectURL(listaB[indexB]);
-    txtArqB.textContent = `[${indexB + 1}/${listaB.length}] ${listaB[indexB].name}`;
+    filenameB.textContent = `${indexB+1}/${listaB.length} ${listaB[indexB].name}`;
     videoB.load();
     if (urlAntiga && urlAntiga.startsWith('blob:')) {
         setTimeout(() => URL.revokeObjectURL(urlAntiga), 1000);
     }
+    atualizarBadges();
 }
 
-// Próximo vídeo (ambos)
-function proximoVideoAmbos() {
-    if (listaA.length > 0 && indexA < listaA.length - 1) {
-        carregarVideoA(indexA + 1);
-    }
-    if (listaB.length > 0 && indexB < listaB.length - 1) {
-        carregarVideoB(indexB + 1);
-    }
+function atualizarBadges() {
+    const hasA = listaA.length > 0;
+    const hasB = listaB.length > 0;
+    badgeA.textContent = hasA ? `▶ A ${indexA+1}/${listaA.length}` : '▶ A';
+    badgeB.textContent = hasB ? `▶ B ${indexB+1}/${listaB.length}` : '▶ B';
 }
 
-// Alternar modo
-function setMode(mode) {
-    currentMode = mode;
-    if (mode === 'single') {
-        comparadorWrapper.classList.add('single-mode');
-        // Esconde um dos vídeos baseado no ativo
+function toggleMode() {
+    if (currentMode === 'dual') {
+        currentMode = 'single';
+        videoArea.classList.add('single-mode');
         if (activeVideo === 'A') {
-            videoBoxB.classList.add('hidden');
-            videoBoxA.classList.remove('hidden');
-            badgeA.style.display = 'inline';
-            badgeB.style.display = 'none';
+            containerB.classList.add('hidden');
+            containerA.classList.remove('hidden');
+            badgeA.classList.add('active');
+            badgeB.classList.remove('active');
         } else {
-            videoBoxA.classList.add('hidden');
-            videoBoxB.classList.remove('hidden');
-            badgeA.style.display = 'none';
-            badgeB.style.display = 'inline';
+            containerA.classList.add('hidden');
+            containerB.classList.remove('hidden');
+            badgeA.classList.remove('active');
+            badgeB.classList.add('active');
         }
-        document.getElementById('tabDual').classList.remove('active');
-        document.getElementById('tabSingle').classList.add('active');
+        modeToggle.textContent = '📹 Única';
+        floatToggleMode.textContent = '📺 Tela Dupla';
     } else {
-        comparadorWrapper.classList.remove('single-mode');
-        videoBoxA.classList.remove('hidden');
-        videoBoxB.classList.remove('hidden');
-        badgeA.style.display = 'none';
-        badgeB.style.display = 'none';
-        document.getElementById('tabSingle').classList.remove('active');
-        document.getElementById('tabDual').classList.add('active');
+        currentMode = 'dual';
+        videoArea.classList.remove('single-mode');
+        containerA.classList.remove('hidden');
+        containerB.classList.remove('hidden');
+        badgeA.classList.remove('active');
+        badgeB.classList.remove('active');
+        modeToggle.textContent = '📺 Dupla';
+        floatToggleMode.textContent = '📹 Modo Único';
     }
 }
 
-// Alternar vídeo ativo no modo single
 function toggleActiveVideo() {
     if (currentMode !== 'single') return;
     activeVideo = (activeVideo === 'A' ? 'B' : 'A');
     if (activeVideo === 'A') {
-        videoBoxB.classList.add('hidden');
-        videoBoxA.classList.remove('hidden');
-        badgeA.style.display = 'inline';
-        badgeB.style.display = 'none';
+        containerB.classList.add('hidden');
+        containerA.classList.remove('hidden');
+        badgeA.classList.add('active');
+        badgeB.classList.remove('active');
     } else {
-        videoBoxA.classList.add('hidden');
-        videoBoxB.classList.remove('hidden');
-        badgeA.style.display = 'none';
-        badgeB.style.display = 'inline';
+        containerA.classList.add('hidden');
+        containerB.classList.remove('hidden');
+        badgeA.classList.remove('active');
+        badgeB.classList.add('active');
     }
 }
 
-// ====== CONTROLES SINCRONIZADOS ======
+// ====== CONTROLES ======
 
-function alternarPlayPause() {
-    const pausar = !videoA.paused || !videoB.paused;
-    if (pausar) {
-        videoA.pause(); 
-        videoB.pause();
-    } else {
+function togglePlayPause() {
+    if (videoA.paused && videoB.paused) {
         if (videoA.src) videoA.play().catch(()=>{});
         if (videoB.src) videoB.play().catch(()=>{});
-    }
-}
-
-function avancarQuadro() {
-    videoA.pause(); 
-    videoB.pause();
-    if (videoA.src) videoA.currentTime = Math.min(videoA.duration, videoA.currentTime + tempoPorFrame);
-    if (videoB.src) videoB.currentTime = Math.min(videoB.duration, videoB.currentTime + tempoPorFrame);
-}
-
-function voltarQuadro() {
-    videoA.pause(); 
-    videoB.pause();
-    if (videoA.src) videoA.currentTime = Math.max(0, videoA.currentTime - tempoPorFrame);
-    if (videoB.src) videoB.currentTime = Math.max(0, videoB.currentTime - tempoPorFrame);
-}
-
-// ====== CONTROLES INDEPENDENTES - A ======
-
-function alternarPlayPauseA() {
-    if (videoA.paused) {
-        if (videoA.src) videoA.play().catch(()=>{});
+        btnPlayPause.textContent = '⏸';
     } else {
         videoA.pause();
-    }
-}
-
-function avancarQuadroA() {
-    videoA.pause();
-    if (videoA.src) videoA.currentTime = Math.min(videoA.duration, videoA.currentTime + tempoPorFrame);
-}
-
-function voltarQuadroA() {
-    videoA.pause();
-    if (videoA.src) videoA.currentTime = Math.max(0, videoA.currentTime - tempoPorFrame);
-}
-
-// ====== CONTROLES INDEPENDENTES - B ======
-
-function alternarPlayPauseB() {
-    if (videoB.paused) {
-        if (videoB.src) videoB.play().catch(()=>{});
-    } else {
         videoB.pause();
+        btnPlayPause.textContent = '▶';
     }
 }
 
-function avancarQuadroB() {
+function frameStep(direction) {
+    videoA.pause();
     videoB.pause();
-    if (videoB.src) videoB.currentTime = Math.min(videoB.duration, videoB.currentTime + tempoPorFrame);
+    btnPlayPause.textContent = '▶';
+    if (videoA.src) {
+        videoA.currentTime = Math.max(0, Math.min(videoA.duration, videoA.currentTime + (direction * tempoPorFrame)));
+    }
+    if (videoB.src) {
+        videoB.currentTime = Math.max(0, Math.min(videoB.duration, videoB.currentTime + (direction * tempoPorFrame)));
+    }
 }
 
-function voltarQuadroB() {
-    videoB.pause();
-    if (videoB.src) videoB.currentTime = Math.max(0, videoB.currentTime - tempoPorFrame);
+function frameStepA(direction) {
+    videoA.pause();
+    if (videoA.src) {
+        videoA.currentTime = Math.max(0, Math.min(videoA.duration, videoA.currentTime + (direction * tempoPorFrame)));
+    }
 }
 
-// ====== CAPTURA ======
+function frameStepB(direction) {
+    videoB.pause();
+    if (videoB.src) {
+        videoB.currentTime = Math.max(0, Math.min(videoB.duration, videoB.currentTime + (direction * tempoPorFrame)));
+    }
+}
 
-function dispararDownload(videoEl, lista, index, nomePadrao) {
+function togglePlayPauseSingle(video, btn) {
+    if (video.paused) {
+        if (video.src) video.play().catch(()=>{});
+        btn.textContent = '⏸';
+    } else {
+        video.pause();
+        btn.textContent = '▶';
+    }
+}
+
+function proximoVideoAmbos() {
+    if (listaA.length > 0 && indexA < listaA.length - 1) carregarVideoA(indexA + 1);
+    if (listaB.length > 0 && indexB < listaB.length - 1) carregarVideoB(indexB + 1);
+}
+
+function capturarAmbos() {
+    if (!videoA.src && !videoB.src) { alert("Carregue ao menos um vídeo!"); return; }
+    if (videoA.src) capturarVideo(videoA, listaA, indexA, 'A');
+    if (videoB.src) capturarVideo(videoB, listaB, indexB, 'B');
+}
+
+function capturarVideo(videoEl, lista, index, label) {
     if (!videoEl.src || !videoEl.videoWidth) return;
     const canvas = document.createElement('canvas');
     canvas.width = videoEl.videoWidth;
@@ -745,31 +847,44 @@ function dispararDownload(videoEl, lista, index, nomePadrao) {
     const ctx = canvas.getContext('2d');
     ctx.drawImage(videoEl, 0, 0, canvas.width, canvas.height);
     const quadroAtual = Math.floor(videoEl.currentTime * fps);
-    const nomeVideo = lista[index] ? lista[index].name.split('.').slice(0, -1).join('.') : nomePadrao || 'video';
+    const nomeVideo = lista[index] ? lista[index].name.split('.').slice(0, -1).join('.') : `video${label}`;
     const link = document.createElement('a');
     link.download = `${nomeVideo}_quadro_${quadroAtual}.jpg`;
-    link.href = canvas.toDataURL('image/jpeg', 0.95);
+    link.href = canvas.toDataURL('image/jpeg', 0.92);
     link.click();
 }
 
-function capturarAmbos() {
-    if (!videoA.src && !videoB.src) { alert("Carregue ao menos um vídeo!"); return; }
-    dispararDownload(videoA, listaA, indexA, 'videoA');
-    dispararDownload(videoB, listaB, indexB, 'videoB');
+// ====== OVERLAY ======
+
+function showOverlay(wrapper, overlay) {
+    clearTimeout(overlayTimeout);
+    overlay.classList.add('show');
+    overlayTimeout = setTimeout(() => {
+        overlay.classList.remove('show');
+    }, 2000);
+}
+
+function showNavIndicator(element, show) {
+    element.classList.toggle('show', show);
+    clearTimeout(element._timeout);
+    if (show) {
+        element._timeout = setTimeout(() => {
+            element.classList.remove('show');
+        }, 500);
+    }
 }
 
 // ====== MODAL ======
 
-function abrirModal(videoEl, lista, index) {
+let modalVideoRef = null;
+
+function abrirModal(videoEl) {
     if (!videoEl.src) return;
+    modalVideoRef = videoEl;
     modalVideo.src = videoEl.src;
     modalVideo.currentTime = videoEl.currentTime;
     modalVideo.pause();
     modal.style.display = 'block';
-    // Guardar referência para captura
-    modal._videoEl = videoEl;
-    modal._lista = lista;
-    modal._index = index;
 }
 
 function fecharModal() {
@@ -777,230 +892,234 @@ function fecharModal() {
     modalVideo.pause();
 }
 
-// ====== ATUALIZAR PAINÉIS ======
-
-function atualizarPainelA() {
-    txtTempoA.textContent = videoA.currentTime.toFixed(3);
-    txtFrameA.textContent = Math.floor(videoA.currentTime * fps);
-}
-
-function atualizarPainelB() {
-    txtTempoB.textContent = videoB.currentTime.toFixed(3);
-    txtFrameB.textContent = Math.floor(videoB.currentTime * fps);
-}
-
 // ====== EVENTOS DE TECLADO ======
 
-window.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', (e) => {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+    if (modal.style.display === 'block') {
+        if (e.key === 'Escape') fecharModal();
+        return;
+    }
     
-    switch(e.code) {
-        case 'Space':
-            e.preventDefault();
-            alternarPlayPause();
-            break;
-        case 'ArrowLeft':
-            if (e.shiftKey) {
-                e.preventDefault();
-                voltarQuadroA();
-            } else if (e.altKey) {
-                e.preventDefault();
-                voltarQuadroB();
+    switch(e.key) {
+        case ' ': e.preventDefault(); togglePlayPause(); break;
+        case 'ArrowLeft': e.preventDefault(); frameStep(-1); break;
+        case 'ArrowRight': e.preventDefault(); frameStep(1); break;
+        case '1': togglePlayPauseSingle(videoA, playA); break;
+        case '2': togglePlayPauseSingle(videoB, playB); break;
+        case 'c': case 'C': capturarAmbos(); break;
+        case 'n': case 'N': proximoVideoAmbos(); break;
+        case 'm': case 'M': toggleMode(); break;
+        case 'f': case 'F': 
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
             } else {
-                e.preventDefault();
-                voltarQuadro();
+                document.documentElement.requestFullscreen().catch(()=>{});
             }
             break;
-        case 'ArrowRight':
-            if (e.shiftKey) {
-                e.preventDefault();
-                avancarQuadroA();
-            } else if (e.altKey) {
-                e.preventDefault();
-                avancarQuadroB();
+    }
+});
+
+// ====== TOUCH / GESTOS ======
+
+// Swipe para navegar entre vídeos
+document.querySelectorAll('.video-wrapper').forEach(wrapper => {
+    let touchStartX = 0;
+    let touchStartY = 0;
+    
+    wrapper.addEventListener('touchstart', (e) => {
+        const touch = e.touches[0];
+        touchStartX = touch.clientX;
+        touchStartY = touch.clientY;
+    }, { passive: true });
+    
+    wrapper.addEventListener('touchend', (e) => {
+        const touch = e.changedTouches[0];
+        const deltaX = touch.clientX - touchStartX;
+        const deltaY = touch.clientY - touchStartY;
+        
+        if (Math.abs(deltaX) < 30 || Math.abs(deltaX) < Math.abs(deltaY) * 1.5) return;
+        
+        const isA = wrapper.id === 'wrapperA';
+        if (deltaX < 0) {
+            // Swipe esquerda - próximo
+            if (isA) {
+                if (listaA.length > 0 && indexA < listaA.length - 1) carregarVideoA(indexA + 1);
+                showNavIndicator(navRightA, true);
             } else {
-                e.preventDefault();
-                avancarQuadro();
+                if (listaB.length > 0 && indexB < listaB.length - 1) carregarVideoB(indexB + 1);
+                showNavIndicator(navRightB, true);
             }
-            break;
-        case 'KeyC':
-            e.preventDefault();
-            capturarAmbos();
-            break;
-        case 'KeyN':
-            e.preventDefault();
-            proximoVideoAmbos();
-            break;
-        case 'Digit1':
-            e.preventDefault();
-            alternarPlayPauseA();
-            break;
-        case 'Digit2':
-            e.preventDefault();
-            alternarPlayPauseB();
-            break;
-        case 'Escape':
-            if (modal.style.display === 'block') {
-                fecharModal();
+        } else {
+            // Swipe direita - anterior
+            if (isA) {
+                if (listaA.length > 0 && indexA > 0) carregarVideoA(indexA - 1);
+                showNavIndicator(navLeftA, true);
+            } else {
+                if (listaB.length > 0 && indexB > 0) carregarVideoB(indexB - 1);
+                showNavIndicator(navLeftB, true);
             }
-            break;
-    }
+        }
+    }, { passive: true });
 });
 
-// ====== EVENT LISTENERS ======
-
-// Abas
-tabDual.addEventListener('click', () => setMode('dual'));
-tabSingle.addEventListener('click', () => setMode('single'));
-
-// Clique nos vídeos para alternar no modo single e abrir modal
-document.getElementById('wrapperA').addEventListener('click', function(e) {
-    if (currentMode === 'single') {
-        e.stopPropagation();
-        toggleActiveVideo();
-    } else {
-        abrirModal(videoA, listaA, indexA);
-    }
-});
-
-document.getElementById('wrapperB').addEventListener('click', function(e) {
-    if (currentMode === 'single') {
-        e.stopPropagation();
-        toggleActiveVideo();
-    } else {
-        abrirModal(videoB, listaB, indexB);
-    }
-});
-
-// Duplo clique para tela cheia
-document.querySelectorAll('.video-wrapper video').forEach(v => {
-    v.addEventListener('dblclick', function() {
-        if (this.requestFullscreen) {
-            this.requestFullscreen();
-        } else if (this.webkitRequestFullscreen) {
-            this.webkitRequestFullscreen();
+// Toque no vídeo - mostra overlay / toggle no single
+document.querySelectorAll('.video-wrapper').forEach(wrapper => {
+    wrapper.addEventListener('click', (e) => {
+        const isA = wrapper.id === 'wrapperA';
+        const overlay = isA ? overlayA : overlayB;
+        showOverlay(wrapper, overlay);
+        
+        if (currentMode === 'single') {
+            toggleActiveVideo();
+        } else {
+            // Abrir modal no duplo
+            const video = isA ? videoA : videoB;
+            abrirModal(video);
         }
     });
 });
 
-// Modal
-modalClose.addEventListener('click', fecharModal);
-window.addEventListener('click', (e) => {
-    if (e.target === modal) fecharModal();
+// Duplo clique para tela cheia
+document.querySelectorAll('.video-wrapper video').forEach(v => {
+    v.addEventListener('dblclick', () => {
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+        } else {
+            document.documentElement.requestFullscreen().catch(()=>{});
+        }
+    });
 });
 
-modalPlayPause.addEventListener('click', () => {
-    if (modalVideo.paused) {
-        modalVideo.play().catch(()=>{});
-    } else {
-        modalVideo.pause();
-    }
-});
+// ====== ATUALIZAR PAINÉIS ======
 
-modalPrev.addEventListener('click', () => {
-    modalVideo.pause();
-    modalVideo.currentTime = Math.max(0, modalVideo.currentTime - tempoPorFrame);
-});
+function updateInfoA() {
+    timeA.textContent = videoA.currentTime.toFixed(2);
+    frameA.textContent = Math.floor(videoA.currentTime * fps);
+    fpsA.textContent = fps;
+}
 
-modalNext.addEventListener('click', () => {
-    modalVideo.pause();
-    modalVideo.currentTime = Math.min(modalVideo.duration, modalVideo.currentTime + tempoPorFrame);
-});
+function updateInfoB() {
+    timeB.textContent = videoB.currentTime.toFixed(2);
+    frameB.textContent = Math.floor(videoB.currentTime * fps);
+    fpsB.textContent = fps;
+}
 
-modalCapturar.addEventListener('click', () => {
-    if (!modal._videoEl) return;
-    const canvas = document.createElement('canvas');
-    canvas.width = modal._videoEl.videoWidth;
-    canvas.height = modal._videoEl.videoHeight;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(modal._videoEl, 0, 0, canvas.width, canvas.height);
-    const quadroAtual = Math.floor(modal._videoEl.currentTime * fps);
-    const nomeVideo = modal._lista[modal._index] ? modal._lista[modal._index].name.split('.').slice(0, -1).join('.') : 'video';
-    const link = document.createElement('a');
-    link.download = `${nomeVideo}_quadro_${quadroAtual}.jpg`;
-    link.href = canvas.toDataURL('image/jpeg', 0.95);
-    link.click();
-});
+videoA.addEventListener('timeupdate', updateInfoA);
+videoA.addEventListener('seeked', updateInfoA);
+videoB.addEventListener('timeupdate', updateInfoB);
+videoB.addEventListener('seeked', updateInfoB);
 
-// Select FPS
-selectFPS.addEventListener('change', () => { 
-    fps = parseFloat(selectFPS.value); 
-    tempoPorFrame = 1 / fps; 
-    atualizarPainelA(); 
-    atualizarPainelB(); 
-});
+// ====== EVENT LISTENERS ======
 
 // Uploads
-uploadA.addEventListener('change', (e) => { 
-    if (e.target.files.length > 0) { 
-        listaA = Array.from(e.target.files); 
-        carregarVideoA(0); 
-    } 
+uploadBtnA.addEventListener('click', () => uploadA.click());
+uploadBtnB.addEventListener('click', () => uploadB.click());
+
+uploadA.addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+        listaA = Array.from(e.target.files);
+        carregarVideoA(0);
+    }
 });
 
-uploadB.addEventListener('change', (e) => { 
-    if (e.target.files.length > 0) { 
-        listaB = Array.from(e.target.files); 
-        carregarVideoB(0); 
-    } 
+uploadB.addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+        listaB = Array.from(e.target.files);
+        carregarVideoB(0);
+    }
 });
 
-// Time updates
-videoA.addEventListener('timeupdate', atualizarPainelA); 
-videoA.addEventListener('seeked', atualizarPainelA);
-videoB.addEventListener('timeupdate', atualizarPainelB); 
-videoB.addEventListener('seeked', atualizarPainelB);
+// FPS
+selectFPS.addEventListener('change', () => {
+    fps = parseFloat(selectFPS.value);
+    tempoPorFrame = 1 / fps;
+    updateInfoA();
+    updateInfoB();
+});
 
-// Controles sincronizados
-btnPlayPause.addEventListener('click', alternarPlayPause);
-btnVoltarFrame.addEventListener('click', voltarQuadro);
-btnAvancarFrame.addEventListener('click', avancarQuadro);
-btnCapturar.addEventListener('click', capturarAmbos);
+// Controles
+btnPlayPause.addEventListener('click', togglePlayPause);
+btnPrev.addEventListener('click', () => frameStep(-1));
+btnNext.addEventListener('click', () => frameStep(1));
+btnPrevA.addEventListener('click', () => frameStepA(-1));
+btnNextA.addEventListener('click', () => frameStepA(1));
+btnPrevB.addEventListener('click', () => frameStepB(-1));
+btnNextB.addEventListener('click', () => frameStepB(1));
+btnCapture.addEventListener('click', capturarAmbos);
 btnNextVideo.addEventListener('click', proximoVideoAmbos);
-
-// Controles A
-btnPlayPauseA.addEventListener('click', alternarPlayPauseA);
-btnVoltarFrameA.addEventListener('click', voltarQuadroA);
-btnAvancarFrameA.addEventListener('click', avancarQuadroA);
-btnCapturarA.addEventListener('click', () => {
-    if (!videoA.src) { alert("Carregue o Vídeo A!"); return; }
-    dispararDownload(videoA, listaA, indexA, 'videoA');
+modeToggle.addEventListener('click', toggleMode);
+menuToggle.addEventListener('click', () => {
+    floatMenuOpen = !floatMenuOpen;
+    document.querySelectorAll('.float-menu-btn').forEach(b => {
+        b.classList.toggle('show', floatMenuOpen);
+    });
+    menuToggle.textContent = floatMenuOpen ? '✕' : '⚙️';
 });
-btnNextVideoA.addEventListener('click', () => {
-    if (listaA.length > 0 && indexA < listaA.length - 1) {
-        carregarVideoA(indexA + 1);
+floatToggle.addEventListener('click', () => {
+    floatMenuOpen = !floatMenuOpen;
+    document.querySelectorAll('.float-menu-btn').forEach(b => {
+        b.classList.toggle('show', floatMenuOpen);
+    });
+    floatToggle.textContent = floatMenuOpen ? '✕' : '⚙️';
+});
+floatCapture.addEventListener('click', () => { capturarAmbos(); floatMenuOpen = false; document.querySelectorAll('.float-menu-btn').forEach(b => b.classList.remove('show')); menuToggle.textContent = '⚙️'; floatToggle.textContent = '⚙️'; });
+floatNextVideo.addEventListener('click', () => { proximoVideoAmbos(); floatMenuOpen = false; document.querySelectorAll('.float-menu-btn').forEach(b => b.classList.remove('show')); menuToggle.textContent = '⚙️'; floatToggle.textContent = '⚙️'; });
+floatToggleMode.addEventListener('click', () => { toggleMode(); floatMenuOpen = false; document.querySelectorAll('.float-menu-btn').forEach(b => b.classList.remove('show')); menuToggle.textContent = '⚙️'; floatToggle.textContent = '⚙️'; });
+
+// Overlay buttons
+playA.addEventListener('click', (e) => {
+    e.stopPropagation();
+    togglePlayPauseSingle(videoA, playA);
+    showOverlay(wrapperA, overlayA);
+});
+playB.addEventListener('click', (e) => {
+    e.stopPropagation();
+    togglePlayPauseSingle(videoB, playB);
+    showOverlay(wrapperB, overlayB);
+});
+prevFrameA.addEventListener('click', (e) => { e.stopPropagation(); frameStepA(-1); showOverlay(wrapperA, overlayA); });
+nextFrameA.addEventListener('click', (e) => { e.stopPropagation(); frameStepA(1); showOverlay(wrapperA, overlayA); });
+prevFrameB.addEventListener('click', (e) => { e.stopPropagation(); frameStepB(-1); showOverlay(wrapperB, overlayB); });
+nextFrameB.addEventListener('click', (e) => { e.stopPropagation(); frameStepB(1); showOverlay(wrapperB, overlayB); });
+
+// Modal
+modalClose.addEventListener('click', fecharModal);
+modal.addEventListener('click', (e) => { if (e.target === modal) fecharModal(); });
+modalPlay.addEventListener('click', () => {
+    if (modalVideo.paused) {
+        modalVideo.play().catch(()=>{});
+        modalPlay.textContent = '⏸ Pause';
+    } else {
+        modalVideo.pause();
+        modalPlay.textContent = '▶ Play';
     }
 });
-
-// Controles B
-btnPlayPauseB.addEventListener('click', alternarPlayPauseB);
-btnVoltarFrameB.addEventListener('click', voltarQuadroB);
-btnAvancarFrameB.addEventListener('click', avancarQuadroB);
-btnCapturarB.addEventListener('click', () => {
-    if (!videoB.src) { alert("Carregue o Vídeo B!"); return; }
-    dispararDownload(videoB, listaB, indexB, 'videoB');
+modalPrev.addEventListener('click', () => {
+    modalVideo.pause();
+    modalPlay.textContent = '▶ Play';
+    modalVideo.currentTime = Math.max(0, modalVideo.currentTime - tempoPorFrame);
 });
-btnNextVideoB.addEventListener('click', () => {
-    if (listaB.length > 0 && indexB < listaB.length - 1) {
-        carregarVideoB(indexB + 1);
-    }
+modalNext.addEventListener('click', () => {
+    modalVideo.pause();
+    modalPlay.textContent = '▶ Play';
+    modalVideo.currentTime = Math.min(modalVideo.duration, modalVideo.currentTime + tempoPorFrame);
+});
+modalCapture.addEventListener('click', () => {
+    if (!modalVideoRef) return;
+    capturarVideo(modalVideoRef, [], 0, 'modal');
 });
 
-// Navegação
-btnPrevA.addEventListener('click', () => carregarVideoA(indexA - 1));
-btnNextA.addEventListener('click', () => carregarVideoA(indexA + 1));
-btnPrevB.addEventListener('click', () => carregarVideoB(indexB - 1));
-btnNextB.addEventListener('click', () => carregarVideoB(indexB + 1));
+// ====== INICIALIZAÇÃO ======
 
-// Navegação Mobile
-btnPrevAMobile.addEventListener('click', () => carregarVideoA(indexA - 1));
-btnNextAMobile.addEventListener('click', () => carregarVideoA(indexA + 1));
-btnPrevBMobile.addEventListener('click', () => carregarVideoB(indexB - 1));
-btnNextBMobile.addEventListener('click', () => carregarVideoB(indexB + 1));
+atualizarBadges();
+updateInfoA();
+updateInfoB();
 
-// Inicializar modo
-setMode('dual');
+console.log('🎬 Comparador de Vídeo carregado!');
+console.log('📱 Toque no vídeo para controles rápidos');
+console.log('⬅️➡️ Swipe para trocar de vídeo');
+console.log('⌨️ Atalhos: Espaço=Play, ←/→=Frame, 1/2=Play A/B, C=Capturar, N=Próximo, M=Modo');
 </script>
-
 </body>
 </html>
