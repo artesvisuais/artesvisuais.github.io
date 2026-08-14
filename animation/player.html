@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Analisador de Vídeo - Comparador</title>
+    <title>V7 Analisador de Vídeo - Comparador</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
@@ -11,7 +11,7 @@
             background: #0a0a0a; 
             color: #fff; 
             height: 100vh;
-            height: 100dvh; /* dynamic viewport height - melhor para mobile */
+            height: 100dvh;
             overflow: hidden;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
@@ -32,7 +32,7 @@
             position: relative;
         }
 
-        /* Header minimalista */
+        /* Header */
         .header {
             display: flex;
             justify-content: space-between;
@@ -81,7 +81,7 @@
             padding: 4px 8px;
         }
 
-        /* Área de vídeo - principal */
+        /* Área de vídeo */
         .video-area {
             flex: 1;
             display: flex;
@@ -102,10 +102,13 @@
             background: #000;
             min-width: 0;
             min-height: 0;
+            overflow: hidden;
         }
         .video-container.hidden {
             display: none;
         }
+
+        /* Wrapper com zoom - melhorado */
         .video-wrapper {
             flex: 1;
             position: relative;
@@ -115,15 +118,41 @@
             align-items: center;
             justify-content: center;
             min-height: 0;
+            cursor: default;
+            touch-action: none;
         }
-        .video-wrapper video {
+        .video-wrapper.zoomed {
+            cursor: grab;
+        }
+        .video-wrapper.zoomed:active {
+            cursor: grabbing;
+        }
+
+        /* Container do vídeo com zoom */
+        .video-zoom-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform-origin: center center;
+            will-change: transform;
+            transition: none;
+        }
+        .video-zoom-container video {
             width: 100%;
             height: 100%;
             object-fit: contain;
             max-height: 100%;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-drag: none;
         }
 
-        /* Badge do vídeo */
+        /* Badges */
         .video-badge {
             position: absolute;
             top: 8px;
@@ -143,7 +172,7 @@
             color: #000;
         }
 
-        /* Info do vídeo (sobreposto) */
+        /* Info */
         .video-info {
             position: absolute;
             bottom: 8px;
@@ -166,6 +195,29 @@
         .video-info span {
             white-space: nowrap;
         }
+
+        /* Nível de zoom */
+        .zoom-level {
+            position: absolute;
+            bottom: 40px;
+            right: 12px;
+            background: rgba(0,0,0,0.8);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #00ffcc;
+            backdrop-filter: blur(4px);
+            z-index: 5;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-family: monospace;
+            border: 1px solid rgba(0,255,204,0.3);
+        }
+        .zoom-level.show {
+            opacity: 1;
+        }
+
         .video-filename {
             position: absolute;
             top: 8px;
@@ -184,7 +236,7 @@
             white-space: nowrap;
         }
 
-        /* Overlay de controles do vídeo */
+        /* Overlay */
         .video-overlay {
             position: absolute;
             top: 0;
@@ -236,7 +288,52 @@
             align-items: center;
         }
 
-        /* ===== BOTTOM CONTROLS - VERSÃO MELHORADA PARA MOBILE ===== */
+        /* Botões de zoom - melhor posicionados */
+        .zoom-controls {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 6;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .zoom-controls.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .zoom-btn {
+            background: rgba(0,0,0,0.75);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+        }
+        .zoom-btn:active {
+            transform: scale(0.9);
+            background: rgba(255,255,255,0.2);
+        }
+        .zoom-btn:hover {
+            background: rgba(255,255,255,0.15);
+        }
+        .zoom-btn.reset {
+            font-size: 16px;
+        }
+
+        /* Bottom Controls */
         .bottom-controls {
             display: flex;
             align-items: center;
@@ -252,7 +349,6 @@
             z-index: 10;
             min-height: 48px;
             max-height: 64px;
-            /* Garantir que fique visível */
             position: relative;
         }
         .bottom-controls::-webkit-scrollbar {
@@ -299,14 +395,6 @@
         .ctrl-btn-icon {
             font-size: 16px;
         }
-        .ctrl-btn .badge {
-            background: rgba(255,255,255,0.15);
-            padding: 0 6px;
-            border-radius: 8px;
-            font-size: 10px;
-        }
-
-        /* Separador */
         .ctrl-separator {
             width: 1px;
             height: 28px;
@@ -314,8 +402,6 @@
             flex-shrink: 0;
             margin: 0 4px;
         }
-
-        /* Select FPS dentro da barra */
         .ctrl-select {
             background: rgba(255,255,255,0.08);
             border: 1px solid #444;
@@ -334,7 +420,7 @@
             color: #fff;
         }
 
-        /* Menu flutuante */
+        /* Float Menu */
         .float-menu {
             position: fixed;
             bottom: calc(60px + env(safe-area-inset-bottom, 0px));
@@ -425,6 +511,7 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            position: relative;
         }
         .modal-video-wrapper video {
             width: 100%;
@@ -473,143 +560,11 @@
             to { opacity: 1; }
         }
 
-        /* Upload hidden */
         .hidden-input {
             display: none;
         }
 
-        /* ===== RESPONSIVO MOBILE ===== */
-
-        /* Telas pequenas (celular retrato) */
-        @media (max-width: 768px) {
-            .header h2 { font-size: 14px; }
-            .header-btn { font-size: 11px; padding: 3px 8px; }
-            .video-badge { font-size: 10px; padding: 3px 8px; }
-            .video-info { font-size: 10px; padding: 3px 8px; flex-wrap: wrap; }
-            .video-filename { font-size: 9px; max-width: 50%; }
-            
-            /* Barra inferior - MAIORES E MAIS VISÍVEIS */
-            .bottom-controls {
-                padding: 8px 6px;
-                padding-bottom: max(8px, env(safe-area-inset-bottom, 8px));
-                min-height: 56px;
-                max-height: 72px;
-                gap: 6px;
-            }
-            .ctrl-btn {
-                font-size: 13px;
-                padding: 8px 12px;
-                min-height: 40px;
-                border-radius: 6px;
-            }
-            .ctrl-btn-icon {
-                font-size: 18px;
-            }
-            .ctrl-select {
-                font-size: 13px;
-                height: 40px;
-                padding: 4px 8px;
-                min-width: 50px;
-            }
-            .ctrl-separator {
-                height: 32px;
-                margin: 0 2px;
-            }
-            .overlay-btn { width: 52px; height: 52px; font-size: 22px; }
-            .overlay-btn-small { width: 40px; height: 40px; font-size: 16px; }
-            .float-toggle { width: 44px; height: 44px; font-size: 20px; }
-            .float-menu-btn { font-size: 12px; padding: 8px 14px; }
-        }
-
-        @media (max-width: 480px) {
-            .header { padding: 4px 8px; min-height: 36px; }
-            .header h2 { font-size: 12px; }
-            .header-btn { font-size: 10px; padding: 2px 6px; }
-            .video-badge { font-size: 9px; padding: 2px 6px; }
-            .video-info { font-size: 9px; padding: 2px 6px; }
-            .video-filename { font-size: 8px; }
-            
-            /* Barra inferior - AINDA MAIORES */
-            .bottom-controls {
-                padding: 8px 4px;
-                padding-bottom: max(8px, env(safe-area-inset-bottom, 8px));
-                min-height: 60px;
-                max-height: 76px;
-                gap: 4px;
-            }
-            .ctrl-btn {
-                font-size: 12px;
-                padding: 8px 10px;
-                min-height: 44px;
-                border-radius: 6px;
-            }
-            .ctrl-btn-icon {
-                font-size: 16px;
-            }
-            .ctrl-select {
-                font-size: 12px;
-                height: 44px;
-                padding: 4px 6px;
-                min-width: 44px;
-            }
-            .ctrl-separator {
-                height: 30px;
-                margin: 0 2px;
-            }
-            .overlay-btn { width: 44px; height: 44px; font-size: 18px; }
-            .overlay-btn-small { width: 36px; height: 36px; font-size: 14px; }
-            .float-toggle { width: 40px; height: 40px; font-size: 18px; }
-            .float-menu-btn { font-size: 11px; padding: 6px 12px; }
-        }
-
-        /* Orientação paisagem em mobile */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .header { padding: 2px 8px; min-height: 30px; }
-            .header h2 { font-size: 11px; }
-            .header-btn { font-size: 9px; padding: 1px 5px; }
-            .video-info { font-size: 8px; padding: 2px 6px; }
-            .video-filename { font-size: 8px; }
-            
-            .bottom-controls {
-                padding: 4px 6px;
-                padding-bottom: max(4px, env(safe-area-inset-bottom, 4px));
-                min-height: 40px;
-                max-height: 48px;
-                gap: 3px;
-            }
-            .ctrl-btn {
-                font-size: 10px;
-                padding: 4px 8px;
-                min-height: 30px;
-            }
-            .ctrl-btn-icon {
-                font-size: 12px;
-            }
-            .ctrl-select {
-                font-size: 10px;
-                height: 30px;
-                padding: 2px 4px;
-                min-width: 36px;
-            }
-            .ctrl-separator {
-                height: 24px;
-                margin: 0 1px;
-            }
-            .overlay-btn { width: 36px; height: 36px; font-size: 14px; }
-            .overlay-btn-small { width: 30px; height: 30px; font-size: 12px; }
-            .float-toggle { width: 34px; height: 34px; font-size: 16px; }
-            .float-menu { bottom: 50px; }
-            .float-menu-btn { font-size: 10px; padding: 4px 10px; }
-        }
-
-        /* Ajuste para notch/barra de navegação */
-        @supports (padding: max(0px)) {
-            .bottom-controls {
-                padding-bottom: max(8px, env(safe-area-inset-bottom, 8px));
-            }
-        }
-
-        /* Indicador de navegação */
+        /* Nav indicators */
         .nav-indicator {
             position: absolute;
             bottom: 50%;
@@ -626,12 +581,106 @@
         }
         .nav-indicator.left { left: 8px; }
         .nav-indicator.right { right: 8px; }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .header h2 { font-size: 14px; }
+            .header-btn { font-size: 11px; padding: 3px 8px; }
+            .video-badge { font-size: 10px; padding: 3px 8px; }
+            .video-info { font-size: 10px; padding: 3px 8px; flex-wrap: wrap; }
+            .video-filename { font-size: 9px; max-width: 50%; }
+            .bottom-controls {
+                padding: 8px 6px;
+                padding-bottom: max(8px, env(safe-area-inset-bottom, 8px));
+                min-height: 56px;
+                max-height: 72px;
+                gap: 6px;
+            }
+            .ctrl-btn {
+                font-size: 13px;
+                padding: 8px 12px;
+                min-height: 40px;
+                border-radius: 6px;
+            }
+            .ctrl-btn-icon { font-size: 18px; }
+            .ctrl-select { font-size: 13px; height: 40px; padding: 4px 8px; min-width: 50px; }
+            .ctrl-separator { height: 32px; margin: 0 2px; }
+            .overlay-btn { width: 52px; height: 52px; font-size: 22px; }
+            .overlay-btn-small { width: 40px; height: 40px; font-size: 16px; }
+            .float-toggle { width: 44px; height: 44px; font-size: 20px; }
+            .float-menu-btn { font-size: 12px; padding: 8px 14px; }
+            .zoom-btn { width: 40px; height: 40px; font-size: 20px; }
+            .zoom-level { font-size: 12px; padding: 4px 12px; }
+        }
+
+        @media (max-width: 480px) {
+            .header { padding: 4px 8px; min-height: 36px; }
+            .header h2 { font-size: 12px; }
+            .header-btn { font-size: 10px; padding: 2px 6px; }
+            .video-badge { font-size: 9px; padding: 2px 6px; }
+            .video-info { font-size: 9px; padding: 2px 6px; }
+            .video-filename { font-size: 8px; }
+            .bottom-controls {
+                padding: 8px 4px;
+                padding-bottom: max(8px, env(safe-area-inset-bottom, 8px));
+                min-height: 60px;
+                max-height: 76px;
+                gap: 4px;
+            }
+            .ctrl-btn {
+                font-size: 12px;
+                padding: 8px 10px;
+                min-height: 44px;
+                border-radius: 6px;
+            }
+            .ctrl-btn-icon { font-size: 16px; }
+            .ctrl-select { font-size: 12px; height: 44px; padding: 4px 6px; min-width: 44px; }
+            .ctrl-separator { height: 30px; margin: 0 2px; }
+            .overlay-btn { width: 44px; height: 44px; font-size: 18px; }
+            .overlay-btn-small { width: 36px; height: 36px; font-size: 14px; }
+            .float-toggle { width: 40px; height: 40px; font-size: 18px; }
+            .float-menu-btn { font-size: 11px; padding: 6px 12px; }
+            .zoom-btn { width: 36px; height: 36px; font-size: 18px; }
+            .zoom-level { font-size: 10px; padding: 3px 10px; }
+        }
+
+        @media (max-height: 500px) and (orientation: landscape) {
+            .header { padding: 2px 8px; min-height: 30px; }
+            .header h2 { font-size: 11px; }
+            .header-btn { font-size: 9px; padding: 1px 5px; }
+            .video-info { font-size: 8px; padding: 2px 6px; }
+            .video-filename { font-size: 8px; }
+            .bottom-controls {
+                padding: 4px 6px;
+                padding-bottom: max(4px, env(safe-area-inset-bottom, 4px));
+                min-height: 40px;
+                max-height: 48px;
+                gap: 3px;
+            }
+            .ctrl-btn { font-size: 10px; padding: 4px 8px; min-height: 30px; }
+            .ctrl-btn-icon { font-size: 12px; }
+            .ctrl-select { font-size: 10px; height: 30px; padding: 2px 4px; min-width: 36px; }
+            .ctrl-separator { height: 24px; margin: 0 1px; }
+            .overlay-btn { width: 36px; height: 36px; font-size: 14px; }
+            .overlay-btn-small { width: 30px; height: 30px; font-size: 12px; }
+            .float-toggle { width: 34px; height: 34px; font-size: 16px; }
+            .float-menu { bottom: 50px; }
+            .float-menu-btn { font-size: 10px; padding: 4px 10px; }
+            .zoom-btn { width: 30px; height: 30px; font-size: 14px; }
+            .zoom-level { font-size: 9px; padding: 2px 8px; bottom: 30px; }
+        }
+
+        @supports (padding: max(0px)) {
+            .bottom-controls {
+                padding-bottom: max(8px, env(safe-area-inset-bottom, 8px));
+            }
+        }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <!-- Header Minimalista -->
+    <!-- Header -->
     <div class="header">
         <h2>🎬 Comparador</h2>
         <div class="header-controls">
@@ -642,16 +691,17 @@
         </div>
     </div>
 
-    <!-- Uploads ocultos -->
     <input type="file" id="uploadA" class="hidden-input" accept="video/*" multiple>
     <input type="file" id="uploadB" class="hidden-input" accept="video/*" multiple>
 
-    <!-- Área de Vídeo -->
+    <!-- Vídeo Area -->
     <div class="video-area" id="videoArea">
         <!-- Vídeo A -->
         <div class="video-container" id="containerA">
             <div class="video-wrapper" id="wrapperA">
-                <video id="videoA" playsinline></video>
+                <div class="video-zoom-container" id="zoomContainerA">
+                    <video id="videoA" playsinline></video>
+                </div>
                 <div class="video-badge" id="badgeA">▶ A</div>
                 <div class="video-filename" id="filenameA">Nenhum</div>
                 <div class="video-info">
@@ -659,7 +709,7 @@
                     <span>🎞 <span id="frameA">0</span></span>
                     <span>📊 <span id="fpsA">30</span>fps</span>
                 </div>
-                <!-- Overlay de controles -->
+                <div class="zoom-level" id="zoomLevelA">100%</div>
                 <div class="video-overlay" id="overlayA">
                     <div class="overlay-controls-group">
                         <button class="overlay-btn overlay-btn-small" id="prevFrameA">⏮</button>
@@ -667,7 +717,11 @@
                         <button class="overlay-btn overlay-btn-small" id="nextFrameA">⏭</button>
                     </div>
                 </div>
-                <!-- Indicadores de navegação -->
+                <div class="zoom-controls" id="zoomControlsA">
+                    <button class="zoom-btn" id="zoomInA">➕</button>
+                    <button class="zoom-btn reset" id="zoomResetA">⟲</button>
+                    <button class="zoom-btn" id="zoomOutA">➖</button>
+                </div>
                 <div class="nav-indicator left" id="navLeftA">◀</div>
                 <div class="nav-indicator right" id="navRightA">▶</div>
             </div>
@@ -676,7 +730,9 @@
         <!-- Vídeo B -->
         <div class="video-container" id="containerB">
             <div class="video-wrapper" id="wrapperB">
-                <video id="videoB" playsinline></video>
+                <div class="video-zoom-container" id="zoomContainerB">
+                    <video id="videoB" playsinline></video>
+                </div>
                 <div class="video-badge" id="badgeB">▶ B</div>
                 <div class="video-filename" id="filenameB">Nenhum</div>
                 <div class="video-info">
@@ -684,6 +740,7 @@
                     <span>🎞 <span id="frameB">0</span></span>
                     <span>📊 <span id="fpsB">30</span>fps</span>
                 </div>
+                <div class="zoom-level" id="zoomLevelB">100%</div>
                 <div class="video-overlay" id="overlayB">
                     <div class="overlay-controls-group">
                         <button class="overlay-btn overlay-btn-small" id="prevFrameB">⏮</button>
@@ -691,13 +748,18 @@
                         <button class="overlay-btn overlay-btn-small" id="nextFrameB">⏭</button>
                     </div>
                 </div>
+                <div class="zoom-controls" id="zoomControlsB">
+                    <button class="zoom-btn" id="zoomInB">➕</button>
+                    <button class="zoom-btn reset" id="zoomResetB">⟲</button>
+                    <button class="zoom-btn" id="zoomOutB">➖</button>
+                </div>
                 <div class="nav-indicator left" id="navLeftB">◀</div>
                 <div class="nav-indicator right" id="navRightB">▶</div>
             </div>
         </div>
     </div>
 
-    <!-- Barra de Controles Inferior - MELHORADA -->
+    <!-- Bottom Controls -->
     <div class="bottom-controls" id="bottomControls">
         <button class="ctrl-btn primary" id="btnPlayPause">▶</button>
         <button class="ctrl-btn" id="btnPrev">◀◀</button>
@@ -711,6 +773,7 @@
         <div class="ctrl-separator"></div>
         <button class="ctrl-btn" id="btnCapture">📸</button>
         <button class="ctrl-btn" id="btnNextVideo">⏩🎬</button>
+        <button class="ctrl-btn" id="btnResetZoom">⟲ Zoom</button>
         <div class="ctrl-separator"></div>
         <select class="ctrl-select" id="selectFPS">
             <option value="23.976">23.9</option>
@@ -722,7 +785,7 @@
         </select>
     </div>
 
-    <!-- Menu Flutuante -->
+    <!-- Float Menu -->
     <div class="float-menu" id="floatMenu">
         <button class="float-menu-btn" id="floatCapture">📸 Capturar Ambos</button>
         <button class="float-menu-btn" id="floatNextVideo">⏩ Próximo Vídeo</button>
@@ -755,6 +818,8 @@ const containerA = document.getElementById('containerA');
 const containerB = document.getElementById('containerB');
 const wrapperA = document.getElementById('wrapperA');
 const wrapperB = document.getElementById('wrapperB');
+const zoomContainerA = document.getElementById('zoomContainerA');
+const zoomContainerB = document.getElementById('zoomContainerB');
 const videoArea = document.getElementById('videoArea');
 const filenameA = document.getElementById('filenameA');
 const filenameB = document.getElementById('filenameB');
@@ -768,6 +833,10 @@ const badgeA = document.getElementById('badgeA');
 const badgeB = document.getElementById('badgeB');
 const overlayA = document.getElementById('overlayA');
 const overlayB = document.getElementById('overlayB');
+const zoomLevelA = document.getElementById('zoomLevelA');
+const zoomLevelB = document.getElementById('zoomLevelB');
+const zoomControlsA = document.getElementById('zoomControlsA');
+const zoomControlsB = document.getElementById('zoomControlsB');
 const navLeftA = document.getElementById('navLeftA');
 const navRightA = document.getElementById('navRightA');
 const navLeftB = document.getElementById('navLeftB');
@@ -788,6 +857,7 @@ const btnPrevB = document.getElementById('btnPrevB');
 const btnNextB = document.getElementById('btnNextB');
 const btnCapture = document.getElementById('btnCapture');
 const btnNextVideo = document.getElementById('btnNextVideo');
+const btnResetZoom = document.getElementById('btnResetZoom');
 const modeToggle = document.getElementById('modeToggle');
 const menuToggle = document.getElementById('menuToggle');
 const floatMenu = document.getElementById('floatMenu');
@@ -802,6 +872,13 @@ const prevFrameA = document.getElementById('prevFrameA');
 const prevFrameB = document.getElementById('prevFrameB');
 const nextFrameA = document.getElementById('nextFrameA');
 const nextFrameB = document.getElementById('nextFrameB');
+
+const zoomInA = document.getElementById('zoomInA');
+const zoomOutA = document.getElementById('zoomOutA');
+const zoomResetA = document.getElementById('zoomResetA');
+const zoomInB = document.getElementById('zoomInB');
+const zoomOutB = document.getElementById('zoomOutB');
+const zoomResetB = document.getElementById('zoomResetB');
 
 const modal = document.getElementById('modal');
 const modalVideo = document.getElementById('modalVideo');
@@ -821,6 +898,311 @@ let activeVideo = 'A';
 let floatMenuOpen = false;
 let overlayTimeout = null;
 
+// ====== ZOOM STATE - VERSÃO CORRIGIDA ======
+class ZoomManager {
+    constructor(container, wrapper, zoomLevelEl, controlsEl) {
+        this.container = container;
+        this.wrapper = wrapper;
+        this.zoomLevelEl = zoomLevelEl;
+        this.controlsEl = controlsEl;
+        this.scale = 1;
+        this.translateX = 0;
+        this.translateY = 0;
+        this.minScale = 0.5;
+        this.maxScale = 5;
+        this.isDragging = false;
+        this.dragStartX = 0;
+        this.dragStartY = 0;
+        this.dragStartTranslateX = 0;
+        this.dragStartTranslateY = 0;
+        this.initialPinchDistance = 0;
+        this.initialPinchScale = 1;
+        this.isPinching = false;
+        
+        // Estado para animação suave
+        this.isAnimating = false;
+        this.animationId = null;
+
+        // Bind events
+        this.wrapper.addEventListener('wheel', this.onWheel.bind(this), { passive: false });
+        this.wrapper.addEventListener('touchstart', this.onTouchStart.bind(this), { passive: false });
+        this.wrapper.addEventListener('touchmove', this.onTouchMove.bind(this), { passive: false });
+        this.wrapper.addEventListener('touchend', this.onTouchEnd.bind(this), { passive: false });
+        this.wrapper.addEventListener('dblclick', this.onDoubleClick.bind(this));
+        
+        // Mouse drag
+        this.wrapper.addEventListener('mousedown', this.onMouseDown.bind(this));
+        window.addEventListener('mousemove', this.onMouseMove.bind(this));
+        window.addEventListener('mouseup', this.onMouseUp.bind(this));
+        
+        this.updateTransform();
+    }
+
+    updateTransform(animate = false) {
+        if (animate) {
+            this.isAnimating = true;
+            if (this.animationId) cancelAnimationFrame(this.animationId);
+            const startScale = this._prevScale || 1;
+            const startX = this._prevTranslateX || 0;
+            const startY = this._prevTranslateY || 0;
+            const duration = 200;
+            const startTime = performance.now();
+            
+            const animateStep = (currentTime) => {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                // Ease out cubic
+                const eased = 1 - Math.pow(1 - progress, 3);
+                
+                const currentScale = startScale + (this.scale - startScale) * eased;
+                const currentX = startX + (this.translateX - startX) * eased;
+                const currentY = startY + (this.translateY - startY) * eased;
+                
+                this.container.style.transform = `translate(${currentX}px, ${currentY}px) scale(${currentScale})`;
+                
+                if (progress < 1) {
+                    this.animationId = requestAnimationFrame(animateStep);
+                } else {
+                    this.isAnimating = false;
+                    this.container.style.transform = `translate(${this.translateX}px, ${this.translateY}px) scale(${this.scale})`;
+                }
+            };
+            this.animationId = requestAnimationFrame(animateStep);
+        } else {
+            this.container.style.transform = `translate(${this.translateX}px, ${this.translateY}px) scale(${this.scale})`;
+        }
+        
+        // Atualiza nível de zoom
+        const percent = Math.round(this.scale * 100);
+        this.zoomLevelEl.textContent = percent + '%';
+        this.zoomLevelEl.classList.add('show');
+        clearTimeout(this.zoomLevelEl._timeout);
+        this.zoomLevelEl._timeout = setTimeout(() => {
+            this.zoomLevelEl.classList.remove('show');
+        }, 1500);
+        
+        // Atualiza cursor
+        this.wrapper.classList.toggle('zoomed', this.scale > 1.01);
+    }
+
+    zoomIn(animate = true) {
+        this._prevScale = this.scale;
+        this._prevTranslateX = this.translateX;
+        this._prevTranslateY = this.translateY;
+        
+        const newScale = Math.min(this.scale * 1.2, this.maxScale);
+        // Centraliza no centro do wrapper
+        const rect = this.wrapper.getBoundingClientRect();
+        const cx = rect.width / 2;
+        const cy = rect.height / 2;
+        const scaleRatio = newScale / this.scale;
+        this.translateX = cx - (cx - this.translateX) * scaleRatio;
+        this.translateY = cy - (cy - this.translateY) * scaleRatio;
+        this.scale = newScale;
+        this.updateTransform(animate);
+        this.showControls();
+    }
+
+    zoomOut(animate = true) {
+        this._prevScale = this.scale;
+        this._prevTranslateX = this.translateX;
+        this._prevTranslateY = this.translateY;
+        
+        const newScale = Math.max(this.scale / 1.2, this.minScale);
+        const rect = this.wrapper.getBoundingClientRect();
+        const cx = rect.width / 2;
+        const cy = rect.height / 2;
+        const scaleRatio = newScale / this.scale;
+        this.translateX = cx - (cx - this.translateX) * scaleRatio;
+        this.translateY = cy - (cy - this.translateY) * scaleRatio;
+        this.scale = newScale;
+        this.updateTransform(animate);
+        this.showControls();
+        
+        // Se voltou a 100%, centraliza
+        if (this.scale <= 1) {
+            this.reset(animate);
+        }
+    }
+
+    reset(animate = true) {
+        this._prevScale = this.scale;
+        this._prevTranslateX = this.translateX;
+        this._prevTranslateY = this.translateY;
+        this.scale = 1;
+        this.translateX = 0;
+        this.translateY = 0;
+        this.updateTransform(animate);
+        this.showControls();
+    }
+
+    showControls() {
+        this.controlsEl.classList.add('show');
+        clearTimeout(this.controlsEl._timeout);
+        this.controlsEl._timeout = setTimeout(() => {
+            this.controlsEl.classList.remove('show');
+        }, 2000);
+    }
+
+    onWheel(e) {
+        e.preventDefault();
+        this._prevScale = this.scale;
+        this._prevTranslateX = this.translateX;
+        this._prevTranslateY = this.translateY;
+        
+        const rect = this.wrapper.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const delta = e.deltaY > 0 ? -0.08 : 0.08;
+        let newScale = Math.min(Math.max(this.scale + delta, this.minScale), this.maxScale);
+        
+        // Se estiver muito próximo de 1, vai direto para 1
+        if (Math.abs(newScale - 1) < 0.01) newScale = 1;
+        
+        if (newScale !== this.scale) {
+            const scaleRatio = newScale / this.scale;
+            this.translateX = x - (x - this.translateX) * scaleRatio;
+            this.translateY = y - (y - this.translateY) * scaleRatio;
+            this.scale = newScale;
+            this.updateTransform(false);
+            this.showControls();
+        }
+    }
+
+    // Touch events
+    onTouchStart(e) {
+        const touches = e.touches;
+        if (touches.length === 2) {
+            e.preventDefault();
+            this.isPinching = true;
+            const touch1 = touches[0];
+            const touch2 = touches[1];
+            this.initialPinchDistance = this.getDistance(touch1, touch2);
+            this.initialPinchScale = this.scale;
+            this._prevScale = this.scale;
+            this._prevTranslateX = this.translateX;
+            this._prevTranslateY = this.translateY;
+            this.showControls();
+        } else if (touches.length === 1 && this.scale > 1) {
+            e.preventDefault();
+            this.isDragging = true;
+            this.dragStartX = touches[0].clientX;
+            this.dragStartY = touches[0].clientY;
+            this.dragStartTranslateX = this.translateX;
+            this.dragStartTranslateY = this.translateY;
+        }
+    }
+
+    onTouchMove(e) {
+        const touches = e.touches;
+        if (touches.length === 2 && this.isPinching) {
+            e.preventDefault();
+            const touch1 = touches[0];
+            const touch2 = touches[1];
+            const distance = this.getDistance(touch1, touch2);
+            const scaleFactor = distance / this.initialPinchDistance;
+            let newScale = Math.min(Math.max(this.initialPinchScale * scaleFactor, this.minScale), this.maxScale);
+            
+            if (Math.abs(newScale - 1) < 0.01) newScale = 1;
+            
+            const rect = this.wrapper.getBoundingClientRect();
+            const cx = rect.width / 2;
+            const cy = rect.height / 2;
+            const scaleRatio = newScale / this.scale;
+            this.translateX = cx - (cx - this.translateX) * scaleRatio;
+            this.translateY = cy - (cy - this.translateY) * scaleRatio;
+            this.scale = newScale;
+            this.updateTransform(false);
+        } else if (touches.length === 1 && this.isDragging && this.scale > 1) {
+            e.preventDefault();
+            const dx = touches[0].clientX - this.dragStartX;
+            const dy = touches[0].clientY - this.dragStartY;
+            this.translateX = this.dragStartTranslateX + dx;
+            this.translateY = this.dragStartTranslateY + dy;
+            this.updateTransform(false);
+        }
+    }
+
+    onTouchEnd(e) {
+        this.isDragging = false;
+        this.isPinching = false;
+        
+        // Se o zoom for menor ou igual a 1, centraliza
+        if (this.scale <= 1.01) {
+            this.reset(true);
+        }
+    }
+
+    // Mouse drag
+    onMouseDown(e) {
+        if (this.scale <= 1.01 || e.button !== 0) return;
+        this.isDragging = true;
+        this.dragStartX = e.clientX;
+        this.dragStartY = e.clientY;
+        this.dragStartTranslateX = this.translateX;
+        this.dragStartTranslateY = this.translateY;
+        this.wrapper.style.cursor = 'grabbing';
+    }
+
+    onMouseMove(e) {
+        if (!this.isDragging) return;
+        const dx = e.clientX - this.dragStartX;
+        const dy = e.clientY - this.dragStartY;
+        this.translateX = this.dragStartTranslateX + dx;
+        this.translateY = this.dragStartTranslateY + dy;
+        this.updateTransform(false);
+    }
+
+    onMouseUp(e) {
+        if (this.isDragging) {
+            this.isDragging = false;
+            this.wrapper.style.cursor = this.scale > 1.01 ? 'grab' : 'default';
+        }
+    }
+
+    onDoubleClick(e) {
+        this.reset(true);
+    }
+
+    getDistance(touch1, touch2) {
+        const dx = touch1.clientX - touch2.clientX;
+        const dy = touch1.clientY - touch2.clientY;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    // Método para botões
+    zoomButton(amount) {
+        this._prevScale = this.scale;
+        this._prevTranslateX = this.translateX;
+        this._prevTranslateY = this.translateY;
+        
+        let newScale = Math.min(Math.max(this.scale + amount, this.minScale), this.maxScale);
+        if (Math.abs(newScale - 1) < 0.01) newScale = 1;
+        
+        const rect = this.wrapper.getBoundingClientRect();
+        const cx = rect.width / 2;
+        const cy = rect.height / 2;
+        const scaleRatio = newScale / this.scale;
+        this.translateX = cx - (cx - this.translateX) * scaleRatio;
+        this.translateY = cy - (cy - this.translateY) * scaleRatio;
+        this.scale = newScale;
+        this.updateTransform(true);
+        this.showControls();
+    }
+
+    // Destruir (limpar)
+    destroy() {
+        if (this.animationId) cancelAnimationFrame(this.animationId);
+        window.removeEventListener('mousemove', this.onMouseMove);
+        window.removeEventListener('mouseup', this.onMouseUp);
+    }
+}
+
+// ====== INICIALIZAR ZOOM ======
+const zoomA = new ZoomManager(zoomContainerA, wrapperA, zoomLevelA, zoomControlsA);
+const zoomB = new ZoomManager(zoomContainerB, wrapperB, zoomLevelB, zoomControlsB);
+
 // ====== FUNÇÕES ======
 
 function carregarVideoA(index) {
@@ -831,6 +1213,7 @@ function carregarVideoA(index) {
     videoA.src = URL.createObjectURL(listaA[indexA]);
     filenameA.textContent = `${indexA+1}/${listaA.length} ${listaA[indexA].name}`;
     videoA.load();
+    zoomA.reset(false);
     if (urlAntiga && urlAntiga.startsWith('blob:')) {
         setTimeout(() => URL.revokeObjectURL(urlAntiga), 1000);
     }
@@ -845,10 +1228,16 @@ function carregarVideoB(index) {
     videoB.src = URL.createObjectURL(listaB[indexB]);
     filenameB.textContent = `${indexB+1}/${listaB.length} ${listaB[indexB].name}`;
     videoB.load();
+    zoomB.reset(false);
     if (urlAntiga && urlAntiga.startsWith('blob:')) {
         setTimeout(() => URL.revokeObjectURL(urlAntiga), 1000);
     }
     atualizarBadges();
+}
+
+function resetAllZoom() {
+    zoomA.reset(true);
+    zoomB.reset(true);
 }
 
 function atualizarBadges() {
@@ -1017,6 +1406,25 @@ function fecharModal() {
     modalVideo.pause();
 }
 
+// ====== ATUALIZAR PAINÉIS ======
+
+function updateInfoA() {
+    timeA.textContent = videoA.currentTime.toFixed(2);
+    frameA.textContent = Math.floor(videoA.currentTime * fps);
+    fpsA.textContent = fps;
+}
+
+function updateInfoB() {
+    timeB.textContent = videoB.currentTime.toFixed(2);
+    frameB.textContent = Math.floor(videoB.currentTime * fps);
+    fpsB.textContent = fps;
+}
+
+videoA.addEventListener('timeupdate', updateInfoA);
+videoA.addEventListener('seeked', updateInfoA);
+videoB.addEventListener('timeupdate', updateInfoB);
+videoB.addEventListener('seeked', updateInfoB);
+
 // ====== EVENTOS DE TECLADO ======
 
 document.addEventListener('keydown', (e) => {
@@ -1042,6 +1450,9 @@ document.addEventListener('keydown', (e) => {
                 document.documentElement.requestFullscreen().catch(()=>{});
             }
             break;
+        case 'r': case 'R': resetAllZoom(); break;
+        case '+': zoomA.zoomButton(0.1); zoomB.zoomButton(0.1); break;
+        case '-': zoomA.zoomButton(-0.1); zoomB.zoomButton(-0.1); break;
     }
 });
 
@@ -1101,36 +1512,6 @@ document.querySelectorAll('.video-wrapper').forEach(wrapper => {
     });
 });
 
-// Duplo clique para tela cheia
-document.querySelectorAll('.video-wrapper video').forEach(v => {
-    v.addEventListener('dblclick', () => {
-        if (document.fullscreenElement) {
-            document.exitFullscreen();
-        } else {
-            document.documentElement.requestFullscreen().catch(()=>{});
-        }
-    });
-});
-
-// ====== ATUALIZAR PAINÉIS ======
-
-function updateInfoA() {
-    timeA.textContent = videoA.currentTime.toFixed(2);
-    frameA.textContent = Math.floor(videoA.currentTime * fps);
-    fpsA.textContent = fps;
-}
-
-function updateInfoB() {
-    timeB.textContent = videoB.currentTime.toFixed(2);
-    frameB.textContent = Math.floor(videoB.currentTime * fps);
-    fpsB.textContent = fps;
-}
-
-videoA.addEventListener('timeupdate', updateInfoA);
-videoA.addEventListener('seeked', updateInfoA);
-videoB.addEventListener('timeupdate', updateInfoB);
-videoB.addEventListener('seeked', updateInfoB);
-
 // ====== EVENT LISTENERS ======
 
 // Uploads
@@ -1169,7 +1550,10 @@ btnPrevB.addEventListener('click', () => frameStepB(-1));
 btnNextB.addEventListener('click', () => frameStepB(1));
 btnCapture.addEventListener('click', capturarAmbos);
 btnNextVideo.addEventListener('click', proximoVideoAmbos);
+btnResetZoom.addEventListener('click', resetAllZoom);
 modeToggle.addEventListener('click', toggleMode);
+
+// Menu flutuante
 menuToggle.addEventListener('click', () => {
     floatMenuOpen = !floatMenuOpen;
     document.querySelectorAll('.float-menu-btn').forEach(b => {
@@ -1204,6 +1588,14 @@ nextFrameA.addEventListener('click', (e) => { e.stopPropagation(); frameStepA(1)
 prevFrameB.addEventListener('click', (e) => { e.stopPropagation(); frameStepB(-1); showOverlay(wrapperB, overlayB); });
 nextFrameB.addEventListener('click', (e) => { e.stopPropagation(); frameStepB(1); showOverlay(wrapperB, overlayB); });
 
+// Zoom buttons
+zoomInA.addEventListener('click', (e) => { e.stopPropagation(); zoomA.zoomButton(0.1); });
+zoomOutA.addEventListener('click', (e) => { e.stopPropagation(); zoomA.zoomButton(-0.1); });
+zoomResetA.addEventListener('click', (e) => { e.stopPropagation(); zoomA.reset(true); });
+zoomInB.addEventListener('click', (e) => { e.stopPropagation(); zoomB.zoomButton(0.1); });
+zoomOutB.addEventListener('click', (e) => { e.stopPropagation(); zoomB.zoomButton(-0.1); });
+zoomResetB.addEventListener('click', (e) => { e.stopPropagation(); zoomB.reset(true); });
+
 // Modal
 modalClose.addEventListener('click', fecharModal);
 modal.addEventListener('click', (e) => { if (e.target === modal) fecharModal(); });
@@ -1237,10 +1629,11 @@ atualizarBadges();
 updateInfoA();
 updateInfoB();
 
-console.log('🎬 Comparador de Vídeo carregado!');
-console.log('📱 Toque no vídeo para controles rápidos');
-console.log('⬅️➡️ Swipe para trocar de vídeo');
-console.log('⌨️ Atalhos: Espaço=Play, ←/→=Frame, 1/2=Play A/B, C=Capturar, N=Próximo, M=Modo');
+console.log('🎬 Comparador de Vídeo com Zoom Corrigido!');
+console.log('🖱️ Roda do mouse = zoom centralizado');
+console.log('✋ Arraste suave com a mãozinha');
+console.log('📌 Duplo clique = reset do zoom');
+console.log('⌨️ Atalhos: R=Reset Zoom, +=Zoom In, -=Zoom Out');
 </script>
 </body>
 </html>
