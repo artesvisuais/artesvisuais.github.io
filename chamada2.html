@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8" /> 
+<meta charset="UTF-8" />
 <script src="config.js"></script> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Chamada_5 Digital_V11 - Backup Multituma</title>
+<title>Chamada Digital V12 - Backup Avançado</title>
 <style>
   body { font-family: Arial, sans-serif; background: #f7f7f7; margin: 0; padding: 15px; }
   h2 { text-align: center; margin-bottom: 10px; }
@@ -19,13 +19,11 @@
   #top-controls { display: flex; gap: 8px; }
   #top-controls > * { flex: 1; }
 
-  /* Estilo do Modal de Alerta */
   .custom-alert-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 2000; }
   .custom-alert-box { background: #fff; padding: 20px; border-radius: 15px; width: 85%; max-width: 400px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
   .lista-pendentes { text-align: left; max-height: 200px; overflow-y: auto; background: #f9f9f9; padding: 10px; margin: 15px 0; border-radius: 8px; font-size: 14px; border: 1px solid #eee; }
   .btn-fechar-alert { background: #333; color: #fff; border: none; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; }
 
-  /* Menu Lateral */
   .menu-mobile { cursor: pointer; padding: 10px; position: absolute; top: 10px; left: 10px; z-index: 110; }
   .bar { width: 25px; height: 3px; background-color: #333; margin: 4px 0; border-radius: 2px; }
   .side-menu { height: 100%; width: 0; position: fixed; z-index: 100; top: 0; left: 0; background-color: #fff; overflow-x: hidden; transition: 0.4s; padding-top: 60px; box-shadow: 2px 0 5px rgba(0,0,0,0.2); }
@@ -34,7 +32,6 @@
   
   .info-turma { margin-top: 8px; font-weight: bold; font-size: 16px; color: #444; }
 
-  /* Botão de Envio em Lote */
   .btn-enviar-tudo {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -59,29 +56,31 @@
   .status-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
   .status-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
   .status-warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+  .status-info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
 
-  /* Indicador de status offline */
-  .offline-indicator {
-    display: none;
-    background: #f8d7da;
-    color: #721c24;
-    padding: 8px;
-    text-align: center;
-    border-radius: 8px;
-    margin: 10px 0;
-    font-weight: bold;
-  }
+  .offline-indicator { display: none; background: #f8d7da; color: #721c24; padding: 8px; text-align: center; border-radius: 8px; margin: 10px 0; font-weight: bold; }
   .offline-indicator.show { display: block; }
 
-  .backup-info {
-    background: #fff3cd;
-    color: #856404;
-    padding: 8px;
-    text-align: center;
-    border-radius: 8px;
-    margin: 10px 0;
-    font-size: 14px;
-  }
+  .backup-info { background: #fff3cd; color: #856404; padding: 8px; text-align: center; border-radius: 8px; margin: 10px 0; font-size: 14px; }
+  .backup-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+  .backup-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+  /* Gerenciador de Backups */
+  .backup-manager { background: #fff; border-radius: 10px; padding: 15px; margin: 10px 0; }
+  .backup-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
+  .backup-item:last-child { border-bottom: none; }
+  .backup-item .info { flex: 1; }
+  .backup-item .info strong { display: block; }
+  .backup-item .info small { color: #666; font-size: 12px; }
+  .backup-item .acoes { display: flex; gap: 5px; }
+  .backup-item .acoes button { padding: 5px 10px; border: none; border-radius: 4px; font-size: 12px; cursor: pointer; }
+  .btn-restaurar { background: #5bc0de; color: #fff; }
+  .btn-excluir { background: #d9534f; color: #fff; }
+  .btn-exportar { background: #f0ad4e; color: #fff; }
+  .btn-sincronizar { background: #5cb85c; color: #fff; }
+  .backup-status { font-size: 12px; padding: 2px 8px; border-radius: 10px; display: inline-block; }
+  .status-pendente { background: #fff3cd; color: #856404; }
+  .status-sincronizado { background: #d4edda; color: #155724; }
 
   @media (max-width: 480px) { 
     h2 { margin-top: 50px; } 
@@ -91,7 +90,6 @@
   .botoes button { transition: all 0.15s ease; position: relative; }
   .botoes button:active { transform: scale(0.92); filter: brightness(0.9); }
   .botoes button.loading { opacity: 0.6; pointer-events: none; }
-  .botoes button.loading::after { content: ""; position: absolute; inset: 0; border-radius: 6px; animation: pulse 0.8s infinite; }
   @keyframes pulse {
     0% { box-shadow: 0 0 0 0 rgba(0,0,0,0.2); }
     70% { box-shadow: 0 0 0 6px rgba(0,0,0,0); }
@@ -119,7 +117,7 @@
   <a href="#" onclick="marcarTransferidosComoN(); toggleMenu();">Marcar Transferidos como N 📝</a>
   <a href="#" onclick="enviarTodasAlteracoes(); toggleMenu();">📤 Enviar Tudo de Uma Vez</a>
   <a href="#" onclick="salvarBackupLocal(); toggleMenu();">💾 Salvar Backup</a>
-  <a href="#" onclick="listarBackups(); toggleMenu();">📋 Listar Backups</a>
+  <a href="#" onclick="gerenciarBackups(); toggleMenu();">📋 Gerenciar Backups</a>
   <a href="#" onclick="exportarBackupArquivo(); toggleMenu();">📥 Exportar Backup</a>
   <a href="#" onclick="document.getElementById('inputImportar').click(); toggleMenu();">📤 Importar Backup</a>
   <a href="#" onclick="exportarTodosBackups(); toggleMenu();">📦 Exportar Todos</a>
@@ -169,6 +167,17 @@
   </div>
 </div>
 
+<!-- Gerenciador de Backups -->
+<div id="backupManager" style="display: none; margin: 15px 0;">
+  <div style="background: #fff; border-radius: 10px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <h3 style="margin-top: 0;">📋 Gerenciador de Backups</h3>
+    <div id="listaBackups"></div>
+    <div style="margin-top: 15px; text-align: center;">
+      <button onclick="fecharGerenciadorBackups()" style="padding: 10px 30px; border: none; border-radius: 8px; background: #666; color: #fff; cursor: pointer;">Fechar</button>
+    </div>
+  </div>
+</div>
+
 <div id="lista"></div>
 
 <script>
@@ -176,6 +185,7 @@ const URL_SCRIPT = CONFIG.URL_SCRIPT;
 let registros = {};
 let dataAtual = new Date();
 let alteracoesPendentes = {};
+const VERSAO_BACKUP = "2.0";
 
 const PROFESSORES = {
   "1E": "Profª Mônica", "2G": "Profª Renata", "3E": "Profª Marta",
@@ -184,31 +194,12 @@ const PROFESSORES = {
   "5F": "Prof Lucas", "5DD": "Prof. Donizete", "EJA1": "Prof. ", "EJA2": "Profª "
 };
 
-// ============= FUNÇÕES DE BACKUP OFFLINE (MULTITURMA) =============
+// ============= SISTEMA DE BACKUP AVANÇADO =============
 
-function verificarConexao() {
-  return navigator.onLine;
-}
-
-function atualizarIndicadorOffline() {
-  const indicador = document.getElementById('offlineIndicator');
-  if (!verificarConexao()) {
-    indicador.classList.add('show');
-  } else {
-    indicador.classList.remove('show');
-  }
-}
-
-function adicionarBackupNaLista(turma, data) {
-  let listaBackups = JSON.parse(localStorage.getItem('chamada_lista_backups') || '[]');
-  listaBackups = listaBackups.filter(b => !(b.turma === turma && b.data === data));
-  listaBackups.push({
-    turma: turma,
-    data: data,
-    timestamp: new Date().toISOString(),
-    pendentes: Object.keys(alteracoesPendentes).length
-  });
-  localStorage.setItem('chamada_lista_backups', JSON.stringify(listaBackups));
+function gerarNomeBackup(turma, data) {
+  const dataObj = new Date(data + 'T00:00:00');
+  const dataFormatada = dataObj.toLocaleDateString('pt-BR').replace(/\//g, '-');
+  return `backup_${turma}_${dataFormatada}_v${VERSAO_BACKUP}`;
 }
 
 function salvarBackupLocal() {
@@ -219,35 +210,46 @@ function salvarBackupLocal() {
     alert("Selecione turma e data primeiro!");
     return;
   }
-  
-  const chave = `chamada_backup_${turma}_${data}`;
-  
+
   const backup = {
+    versao: VERSAO_BACKUP,
     turma: turma,
     data: data,
     alteracoes: alteracoesPendentes,
     registros: registros,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    status: 'pendente',
+    nomeArquivo: gerarNomeBackup(turma, data)
   };
-  
+
   try {
+    // Salvar na lista principal de backups
+    let listaBackups = JSON.parse(localStorage.getItem('chamada_backups_avancado') || '[]');
+    
+    // Remover backup existente com mesmo turma/data
+    listaBackups = listaBackups.filter(b => !(b.turma === turma && b.data === data));
+    
+    // Adicionar novo backup
+    listaBackups.push(backup);
+    localStorage.setItem('chamada_backups_avancado', JSON.stringify(listaBackups));
+    
+    // Salvar backup individual
+    const chave = `chamada_backup_${turma}_${data}`;
     localStorage.setItem(chave, JSON.stringify(backup));
-    adicionarBackupNaLista(turma, data);
     
-    const info = document.getElementById('backupInfo');
-    info.style.display = 'block';
-    info.innerHTML = `💾 Backup salvo! Turma: ${turma} - Data: ${data} - Pendentes: ${Object.keys(alteracoesPendentes).length} registros`;
+    mostrarMensagemBackup(`💾 Backup salvo! Turma: ${turma} - Data: ${data} - Pendentes: ${Object.keys(alteracoesPendentes).length} registros`, 'success');
     
-    setTimeout(() => { info.style.display = 'none'; }, 5000);
+    console.log('Backup salvo:', backup.nomeArquivo);
     
-    console.log('Backup salvo:', chave);
+    // Limpar backups antigos mantendo apenas os 20 mais recentes
+    limparBackupsAntigos(20);
+    
   } catch (e) {
     if (e.name === 'QuotaExceededError') {
-      limparBackupsAntigos();
+      limparBackupsAntigos(10);
       try {
         localStorage.setItem(chave, JSON.stringify(backup));
-        adicionarBackupNaLista(turma, data);
-        alert("⚠️ Espaço cheio! Backups antigos foram limpos.");
+        mostrarMensagemBackup("⚠️ Espaço cheio! Backups antigos foram limpos.", 'error');
       } catch (e2) {
         alert("Erro ao salvar backup: espaço insuficiente. Exporte para arquivo!");
       }
@@ -257,41 +259,285 @@ function salvarBackupLocal() {
   }
 }
 
-function listarBackups() {
-  const listaBackups = JSON.parse(localStorage.getItem('chamada_lista_backups') || '[]');
+function limparBackupsAntigos(manter = 20) {
+  let listaBackups = JSON.parse(localStorage.getItem('chamada_backups_avancado') || '[]');
   
-  if (listaBackups.length === 0) {
-    alert("Nenhum backup encontrado!");
+  // Ordenar por timestamp (mais recentes primeiro)
+  listaBackups.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  
+  // Separar backups pendentes e sincronizados
+  const pendentes = listaBackups.filter(b => b.status === 'pendente');
+  const sincronizados = listaBackups.filter(b => b.status === 'sincronizado');
+  
+  // Manter todos os pendentes e apenas os mais recentes sincronizados
+  const sincronizadosManter = sincronizados.slice(0, manter);
+  const novaLista = [...pendentes, ...sincronizadosManter];
+  
+  // Remover backups antigos do localStorage
+  const removidos = listaBackups.filter(b => !novaLista.includes(b));
+  removidos.forEach(b => {
+    const chave = `chamada_backup_${b.turma}_${b.data}`;
+    localStorage.removeItem(chave);
+  });
+  
+  localStorage.setItem('chamada_backups_avancado', JSON.stringify(novaLista));
+}
+
+function mostrarMensagemBackup(mensagem, tipo = 'info') {
+  const info = document.getElementById('backupInfo');
+  info.style.display = 'block';
+  info.className = `backup-info backup-${tipo}`;
+  info.innerHTML = mensagem;
+  
+  setTimeout(() => { 
+    info.style.display = 'none';
+    info.className = 'backup-info';
+  }, 5000);
+}
+
+function gerenciarBackups() {
+  const manager = document.getElementById('backupManager');
+  const lista = document.getElementById('listaBackups');
+  
+  if (manager.style.display === 'block') {
+    manager.style.display = 'none';
     return;
   }
   
-  let mensagem = "📋 Backups disponíveis:\n\n";
+  const backups = JSON.parse(localStorage.getItem('chamada_backups_avancado') || '[]');
   
-  listaBackups.forEach((b, index) => {
-    mensagem += `${index + 1}. Turma: ${b.turma} | Data: ${b.data} | Pendentes: ${b.pendentes}\n`;
+  if (backups.length === 0) {
+    lista.innerHTML = '<p style="text-align: center; color: #666;">Nenhum backup encontrado</p>';
+  } else {
+    let html = '';
+    backups.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    
+    backups.forEach((b, index) => {
+      const dataObj = new Date(b.data + 'T00:00:00');
+      const dataFormatada = dataObj.toLocaleDateString('pt-BR');
+      const totalPendentes = Object.keys(b.alteracoes || {}).length;
+      const statusLabel = b.status === 'pendente' ? 
+        '<span class="backup-status status-pendente">⏳ Pendente</span>' : 
+        '<span class="backup-status status-sincronizado">✅ Sincronizado</span>';
+      
+      html += `
+        <div class="backup-item">
+          <div class="info">
+            <strong>${b.turma} - ${dataFormatada}</strong>
+            <small>${statusLabel} | ${totalPendentes} alterações | ${new Date(b.timestamp).toLocaleString()}</small>
+            <small style="display: block; color: #999;">${b.nomeArquivo || 'sem nome'}</small>
+          </div>
+          <div class="acoes">
+            <button class="btn-restaurar" onclick="restaurarBackup(${index})">↺</button>
+            <button class="btn-exportar" onclick="exportarBackupIndividual(${index})">⬇</button>
+            <button class="btn-excluir" onclick="excluirBackup(${index})">✕</button>
+          </div>
+        </div>
+      `;
+    });
+    
+    lista.innerHTML = html;
+  }
+  
+  manager.style.display = 'block';
+}
+
+function fecharGerenciadorBackups() {
+  document.getElementById('backupManager').style.display = 'none';
+}
+
+function restaurarBackup(index) {
+  const backups = JSON.parse(localStorage.getItem('chamada_backups_avancado') || '[]');
+  const backup = backups[index];
+  
+  if (!backup) {
+    alert('Backup não encontrado!');
+    return;
+  }
+  
+  if (!confirm(`Restaurar backup da turma ${backup.turma} - ${backup.data}?`)) return;
+  
+  document.getElementById("turma").value = backup.turma;
+  document.getElementById("dataConsulta").value = backup.data;
+  alteracoesPendentes = backup.alteracoes || {};
+  registros = backup.registros || {};
+  
+  carregarTurma();
+  mostrarBotaoEnvio();
+  
+  mostrarMensagemBackup(`✅ Backup restaurado! Turma: ${backup.turma} - Data: ${backup.data}`, 'success');
+  fecharGerenciadorBackups();
+}
+
+function excluirBackup(index) {
+  const backups = JSON.parse(localStorage.getItem('chamada_backups_avancado') || '[]');
+  const backup = backups[index];
+  
+  if (!backup) return;
+  
+  if (!confirm(`Excluir backup da turma ${backup.turma} - ${backup.data}?`)) return;
+  
+  // Remover da lista
+  backups.splice(index, 1);
+  localStorage.setItem('chamada_backups_avancado', JSON.stringify(backups));
+  
+  // Remover arquivo individual
+  const chave = `chamada_backup_${backup.turma}_${backup.data}`;
+  localStorage.removeItem(chave);
+  
+  mostrarMensagemBackup(`🗑️ Backup excluído: ${backup.turma} - ${backup.data}`, 'info');
+  gerenciarBackups(); // Recarregar lista
+}
+
+function exportarBackupIndividual(index) {
+  const backups = JSON.parse(localStorage.getItem('chamada_backups_avancado') || '[]');
+  const backup = backups[index];
+  
+  if (!backup) return;
+  
+  const blob = new Blob([JSON.stringify(backup, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${backup.nomeArquivo || 'backup'}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function exportarBackupArquivo() {
+  const turma = document.getElementById("turma").value;
+  const data = document.getElementById("dataConsulta").value;
+  
+  if (!turma || !data) {
+    alert("Selecione turma e data primeiro!");
+    return;
+  }
+  
+  const chave = `chamada_backup_${turma}_${data}`;
+  const backupStr = localStorage.getItem(chave);
+  
+  if (!backupStr) {
+    alert("Nenhum backup encontrado para esta turma/data!");
+    return;
+  }
+  
+  const backup = JSON.parse(backupStr);
+  backup.nomeArquivo = gerarNomeBackup(turma, data);
+  
+  const blob = new Blob([JSON.stringify(backup, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${gerarNomeBackup(turma, data)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importarBackupArquivo(file) {
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const dados = JSON.parse(e.target.result);
+      
+      if (!dados.turma || !dados.data) {
+        alert("Arquivo de backup inválido!");
+        return;
+      }
+      
+      // Verificar versão
+      if (dados.versao && dados.versao !== VERSAO_BACKUP) {
+        if (!confirm(`Versão do backup (${dados.versao}) diferente da atual (${VERSAO_BACKUP}). Continuar?`)) return;
+      }
+      
+      // Adicionar à lista de backups
+      let listaBackups = JSON.parse(localStorage.getItem('chamada_backups_avancado') || '[]');
+      listaBackups = listaBackups.filter(b => !(b.turma === dados.turma && b.data === dados.data));
+      listaBackups.push(dados);
+      localStorage.setItem('chamada_backups_avancado', JSON.stringify(listaBackups));
+      
+      // Salvar backup individual
+      const chave = `chamada_backup_${dados.turma}_${dados.data}`;
+      localStorage.setItem(chave, JSON.stringify(dados));
+      
+      document.getElementById("turma").value = dados.turma;
+      document.getElementById("dataConsulta").value = dados.data;
+      alteracoesPendentes = dados.alteracoes || {};
+      registros = dados.registros || {};
+      
+      carregarTurma();
+      mostrarBotaoEnvio();
+      
+      mostrarMensagemBackup(`✅ Backup importado! Turma: ${dados.turma} - Data: ${dados.data}`, 'success');
+    } catch (e) {
+      alert("Erro ao importar arquivo: " + e.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function exportarTodosBackups() {
+  const backups = JSON.parse(localStorage.getItem('chamada_backups_avancado') || '[]');
+  
+  if (backups.length === 0) {
+    alert("Nenhum backup para exportar!");
+    return;
+  }
+  
+  const blob = new Blob([JSON.stringify(backups, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `todos_backups_${formatarData(new Date())}_v${VERSAO_BACKUP}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function marcarBackupSincronizado(turma, data) {
+  let listaBackups = JSON.parse(localStorage.getItem('chamada_backups_avancado') || '[]');
+  const index = listaBackups.findIndex(b => b.turma === turma && b.data === data);
+  
+  if (index !== -1) {
+    listaBackups[index].status = 'sincronizado';
+    localStorage.setItem('chamada_backups_avancado', JSON.stringify(listaBackups));
+    
+    // Atualizar backup individual
+    const chave = `chamada_backup_${turma}_${data}`;
+    const backup = JSON.parse(localStorage.getItem(chave) || '{}');
+    backup.status = 'sincronizado';
+    localStorage.setItem(chave, JSON.stringify(backup));
+  }
+}
+
+function verificarBackupsAoIniciar() {
+  const backups = JSON.parse(localStorage.getItem('chamada_backups_avancado') || '[]');
+  const pendentes = backups.filter(b => b.status === 'pendente' && Object.keys(b.alteracoes || {}).length > 0);
+  
+  if (pendentes.length === 0) return;
+  
+  let mensagem = `📋 ${pendentes.length} backup(s) pendente(s):\n\n`;
+  
+  pendentes.forEach((b, index) => {
+    const dataObj = new Date(b.data + 'T00:00:00');
+    mensagem += `${index + 1}. Turma: ${b.turma} | Data: ${dataObj.toLocaleDateString('pt-BR')} | ${Object.keys(b.alteracoes).length} alterações\n`;
   });
   
   mensagem += "\nDeseja restaurar algum?";
   
   if (confirm(mensagem)) {
-    mostrarMenuRestauracao(listaBackups);
-  }
-}
-
-function mostrarMenuRestauracao(listaBackups) {
-  let opcoes = "Digite o número do backup para restaurar:\n\n";
-  
-  listaBackups.forEach((b, index) => {
-    opcoes += `${index + 1}. Turma: ${b.turma} | Data: ${b.data} | Pendentes: ${b.pendentes}\n`;
-  });
-  
-  opcoes += "\n0. Cancelar";
-  
-  const escolha = prompt(opcoes);
-  
-  if (escolha && parseInt(escolha) > 0 && parseInt(escolha) <= listaBackups.length) {
-    const backup = listaBackups[parseInt(escolha) - 1];
-    restaurarBackupPorTurmaData(backup.turma, backup.data);
+    // Mostrar opções simplificadas
+    let opcoes = "Digite o número do backup para restaurar ou 0 para cancelar:\n\n";
+    pendentes.forEach((b, index) => {
+      const dataObj = new Date(b.data + 'T00:00:00');
+      opcoes += `${index + 1}. Turma: ${b.turma} | Data: ${dataObj.toLocaleDateString('pt-BR')}\n`;
+    });
+    
+    const escolha = prompt(opcoes);
+    if (escolha && parseInt(escolha) > 0 && parseInt(escolha) <= pendentes.length) {
+      const backup = pendentes[parseInt(escolha) - 1];
+      restaurarBackupPorTurmaData(backup.turma, backup.data);
+    }
   }
 }
 
@@ -314,162 +560,21 @@ function restaurarBackupPorTurmaData(turma, data) {
   carregarTurma();
   mostrarBotaoEnvio();
   
-  alert(`✅ Backup restaurado!\nTurma: ${backup.turma}\nData: ${backup.data}\nPendentes: ${Object.keys(backup.alteracoes).length} registros`);
-}
-
-function limparBackupsAntigos() {
-  let listaBackups = JSON.parse(localStorage.getItem('chamada_lista_backups') || '[]');
-  listaBackups.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-  
-  const paraRemover = listaBackups.slice(10);
-  
-  paraRemover.forEach(b => {
-    const chave = `chamada_backup_${b.turma}_${b.data}`;
-    localStorage.removeItem(chave);
-  });
-  
-  listaBackups = listaBackups.slice(0, 10);
-  localStorage.setItem('chamada_lista_backups', JSON.stringify(listaBackups));
-}
-
-function salvarBackupSilencioso() {
-  const turma = document.getElementById("turma").value;
-  const data = document.getElementById("dataConsulta").value;
-  
-  if (!turma || !data) return;
-  
-  const chave = `chamada_backup_${turma}_${data}`;
-  
-  const backup = {
-    turma: turma,
-    data: data,
-    alteracoes: alteracoesPendentes,
-    registros: registros,
-    timestamp: new Date().toISOString()
-  };
-  
-  try {
-    localStorage.setItem(chave, JSON.stringify(backup));
-    adicionarBackupNaLista(turma, data);
-    console.log('Backup automático:', chave);
-  } catch (e) {
-    if (e.name === 'QuotaExceededError') {
-      limparBackupsAntigos();
-    }
-  }
-}
-
-function exportarBackupArquivo() {
-  const turma = document.getElementById("turma").value;
-  const data = document.getElementById("dataConsulta").value;
-  
-  if (!turma || !data) {
-    alert("Selecione turma e data primeiro!");
-    return;
-  }
-  
-  const chave = `chamada_backup_${turma}_${data}`;
-  const backupStr = localStorage.getItem(chave);
-  
-  if (!backupStr) {
-    alert("Nenhum backup encontrado para esta turma/data!");
-    return;
-  }
-  
-  const backup = JSON.parse(backupStr);
-  
-  const blob = new Blob([JSON.stringify(backup, null, 2)], {type: 'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `backup_chamada_${turma}_${data}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-function exportarTodosBackups() {
-  const listaBackups = JSON.parse(localStorage.getItem('chamada_lista_backups') || '[]');
-  
-  if (listaBackups.length === 0) {
-    alert("Nenhum backup para exportar!");
-    return;
-  }
-  
-  const todosBackups = [];
-  
-  listaBackups.forEach(b => {
-    const chave = `chamada_backup_${b.turma}_${b.data}`;
-    const backupStr = localStorage.getItem(chave);
-    if (backupStr) {
-      todosBackups.push(JSON.parse(backupStr));
-    }
-  });
-  
-  const blob = new Blob([JSON.stringify(todosBackups, null, 2)], {type: 'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `backup_chamada_todas_turmas_${formatarData(new Date())}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-function importarBackupArquivo(file) {
-  if (!file) return;
-  
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    try {
-      const dados = JSON.parse(e.target.result);
-      
-      if (!dados.turma || !dados.data) {
-        alert("Arquivo de backup inválido!");
-        return;
-      }
-      
-      document.getElementById("turma").value = dados.turma;
-      document.getElementById("dataConsulta").value = dados.data;
-      alteracoesPendentes = dados.alteracoes || {};
-      registros = dados.registros || {};
-      
-      carregarTurma();
-      mostrarBotaoEnvio();
-      
-      alert(`✅ Backup importado com sucesso!\nTurma: ${dados.turma}\nData: ${dados.data}\nPendentes: ${Object.keys(dados.alteracoes || {}).length} registros`);
-    } catch (e) {
-      alert("Erro ao importar arquivo: " + e.message);
-    }
-  };
-  reader.readAsText(file);
-}
-
-function verificarBackupsAoIniciar() {
-  const listaBackups = JSON.parse(localStorage.getItem('chamada_lista_backups') || '[]');
-  const backupsPendentes = listaBackups.filter(b => b.pendentes > 0);
-  
-  if (backupsPendentes.length === 0) return;
-  
-  let mensagem = `📋 ${backupsPendentes.length} backup(s) pendente(s):\n\n`;
-  
-  backupsPendentes.forEach((b, index) => {
-    mensagem += `${index + 1}. Turma: ${b.turma} | Data: ${b.data} | Pendentes: ${b.pendentes}\n`;
-  });
-  
-  mensagem += "\nDeseja restaurar algum?";
-  
-  if (confirm(mensagem)) {
-    mostrarMenuRestauracao(backupsPendentes);
-  }
+  mostrarMensagemBackup(`✅ Backup restaurado! Turma: ${backup.turma} - Data: ${backup.data}`, 'success');
 }
 
 // Backup automático a cada 30 segundos
 setInterval(() => {
   if (Object.keys(alteracoesPendentes).length > 0) {
-    salvarBackupSilencioso();
+    const turma = document.getElementById("turma").value;
+    const data = document.getElementById("dataConsulta").value;
+    if (turma && data) {
+      salvarBackupLocal();
+    }
   }
 }, 30000);
 
-// ============= FUNÇÕES ORIGINAIS =============
+// ============= FUNÇÕES ORIGINAIS (MODIFICADAS) =============
 
 function formatarData(d) {
   return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, '0') + "-" + String(d.getDate()).padStart(2, '0');
@@ -551,7 +656,9 @@ async function enviarTodasAlteracoes() {
   const total = Object.keys(alteracoesPendentes).length;
   let processados = 0;
 
-  for (const id in alteracoesPendentes) {
+  const idsParaEnviar = Object.keys(alteracoesPendentes);
+  
+  for (const id of idsParaEnviar) {
     const valor = alteracoesPendentes[id];
     
     try {
@@ -582,6 +689,8 @@ async function enviarTodasAlteracoes() {
   let statusHTML = '';
   if (erros === 0) {
     statusHTML = `<div class="status-envio status-success">✅ Sucesso: ${sucessos} registros enviados!</div>`;
+    // Marcar backup como sincronizado
+    marcarBackupSincronizado(turma, dataVal);
   } else if (errosConexao > 0) {
     statusHTML = `<div class="status-envio status-warning">⚠️ Envio parcial: ${sucessos} enviados | ${erros} falhas<br>Backup salvo localmente!</div>`;
   } else {
@@ -601,8 +710,9 @@ async function enviarTodasAlteracoes() {
   }, 5000);
 
   if (Object.keys(alteracoesPendentes).length === 0) {
-    localStorage.removeItem(`chamada_backup_${turma}_${dataVal}`);
-    console.log('Backup removido - todos os dados enviados');
+    // Backup completo, pode remover se quiser manter histórico
+    // localStorage.removeItem(`chamada_backup_${turma}_${dataVal}`);
+    // console.log('Backup removido - todos os dados enviados');
   }
 
   if (sucessos > 0) {
@@ -744,6 +854,56 @@ async function registrar(event, turma, id, valor) {
   }
 
   if (btn) btn.classList.remove("loading");
+}
+
+function salvarBackupSilencioso() {
+  const turma = document.getElementById("turma").value;
+  const data = document.getElementById("dataConsulta").value;
+  
+  if (!turma || !data) return;
+  
+  // Salvar apenas se houver alterações
+  if (Object.keys(alteracoesPendentes).length === 0) return;
+  
+  const backup = {
+    versao: VERSAO_BACKUP,
+    turma: turma,
+    data: data,
+    alteracoes: alteracoesPendentes,
+    registros: registros,
+    timestamp: new Date().toISOString(),
+    status: 'pendente',
+    nomeArquivo: gerarNomeBackup(turma, data)
+  };
+
+  try {
+    let listaBackups = JSON.parse(localStorage.getItem('chamada_backups_avancado') || '[]');
+    listaBackups = listaBackups.filter(b => !(b.turma === turma && b.data === data));
+    listaBackups.push(backup);
+    localStorage.setItem('chamada_backups_avancado', JSON.stringify(listaBackups));
+    
+    const chave = `chamada_backup_${turma}_${data}`;
+    localStorage.setItem(chave, JSON.stringify(backup));
+    
+    console.log('Backup automático:', backup.nomeArquivo);
+  } catch (e) {
+    if (e.name === 'QuotaExceededError') {
+      limparBackupsAntigos(10);
+    }
+  }
+}
+
+function verificarConexao() {
+  return navigator.onLine;
+}
+
+function atualizarIndicadorOffline() {
+  const indicador = document.getElementById('offlineIndicator');
+  if (!verificarConexao()) {
+    indicador.classList.add('show');
+  } else {
+    indicador.classList.remove('show');
+  }
 }
 
 async function marcarTransferidosComoN() {
